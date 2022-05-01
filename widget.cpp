@@ -8,8 +8,6 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("Acqiris TDC 计数程序");
 
-    qDebug() << "Hello";
-
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
     tempDataPath.removeRecursively();
