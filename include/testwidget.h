@@ -15,23 +15,17 @@ class TestWidget : public QWidget
 public:
     explicit TestWidget(QWidget *parent = nullptr, int index = 0);
     ~TestWidget();
+    int index;
 
 private slots:
     void on_buttonStart_released();
     void on_buttonReturn_released();
 
 signals:
-     /* 信号必须有signals关键字来声明
-      * 信号没有返回值，但可以有参数
-      * 信号就是函数的声明，只需声明，无需定义
-      * 使用：emit mySignal();
-      * 信号可以重载
-     */
     void returnSignal(int index);
 
 private:
     Ui::TestWidget *ui;
-    int index;
 };
 
 

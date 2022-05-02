@@ -32,6 +32,31 @@ CoincidenceWidget::~CoincidenceWidget()
     delete ui;
 }
 
+void CoincidenceWidget::fetchUiData()
+{
+    channel1 = ui->coinChannel1->currentText().toInt();
+    channel2 = ui->coinChannel2->currentText().toInt();
+    delay = int(20*ui->delayCoin->text().toDouble());
+    delayAcc = int(20*ui->delayAccCoin->text().toDouble());
+    accumulateTime = ui->accumTimeCoin->text().toDouble();
+    enableAccumulateTime = ui->checkboxAccumlateTime->isChecked();
+    tolerance = int(20*ui->tolerance->text().toDouble());
+
+    pushUiData();
+}
+
+void CoincidenceWidget::pushUiData()
+{
+    ui->coinChannel1->setCurrentText(QString::number(channel1));
+    ui->coinChannel2->setCurrentText(QString::number(channel2));
+    ui->delayCoin->setText(QString::number(delay/20.0));
+    ui->delayAccCoin->setText(QString::number(delayAcc/20.0));
+    ui->checkboxAccumlateTime->setChecked(enableAccumulateTime);
+    ui->accumTimeCoin->setText(QString::number(accumulateTime));
+    ui->accumTimeCoin->setEnabled(!enableAccumulateTime);
+    ui->tolerance->setText(QString::number(tolerance/20.0));
+}
+
 void CoincidenceWidget::on_buttonReturn_released()
 {
     on_buttonStop_released();
@@ -40,14 +65,9 @@ void CoincidenceWidget::on_buttonReturn_released()
 
 void CoincidenceWidget::on_buttonStart_released()
 {
-    // 读取符合配置
-    channel1 = ui->coinChannel1->currentText().toInt();
-    channel2 = ui->coinChannel2->currentText().toInt();
-    tolerance = int(20*ui->tolerance->text().toDouble());
-    delay = int(20*ui->delayCoin->text().toDouble());
-    delayAcc = int(20*ui->delayAccCoin->text().toDouble());
+    fetchUiData();
     emit askDealAcqBankSwitchCoin(index);
-    if (ui->checkboxAccumlateTime->isChecked())
+    if (enableAccumulateTime)
     { // 如果需要与单道计数同步，发送同步请求
         emit coinTimerNeedsSync(index);
     }
@@ -67,7 +87,7 @@ void CoincidenceWidget::on_buttonStart_released()
             << "符合门宽：" << tolerance/20.0 << "ns" << endl
             << "延时：" << delay/20.0 << "ns" << endl
             << "偶然符合额外延时：" << delayAcc/20.0 << "ns" << endl;
-    if (ui->checkboxAccumlateTime->isChecked())
+    if (enableAccumulateTime)
     {
         fStream << "计时与单道计数同步" << endl
                 << endl
@@ -151,13 +171,7 @@ void CoincidenceWidget::on_checkboxAccumlateTime_stateChanged(int checkState)
 
 void CoincidenceWidget::saveToIni()
 {
-    channel1 = ui->coinChannel1->currentText().toInt();
-    channel2 = ui->coinChannel2->currentText().toInt();
-    delay = int(20*ui->delayCoin->text().toDouble());
-    delayAcc = int(20*ui->delayAccCoin->text().toDouble());
-    accumulateTime = ui->accumTimeCoin->text().toDouble();
-    enableAccumulateTime = ui->checkboxAccumlateTime->isChecked();
-    tolerance = int(20*ui->tolerance->text().toDouble());
+    fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
     configIni->setValue("符合计数配置/channel1",channel1);
@@ -182,13 +196,6 @@ void CoincidenceWidget::loadFromIni()
     tolerance = configIni->value("符合计数配置/tolerance").toInt();
     delete configIni;
 
-    ui->coinChannel1->setCurrentText(QString::number(channel1));
-    ui->coinChannel2->setCurrentText(QString::number(channel2));
-    ui->delayCoin->setText(QString::number(delay/20.0));
-    ui->delayAccCoin->setText(QString::number(delayAcc/20.0));
-    ui->checkboxAccumlateTime->setChecked(enableAccumulateTime);
-    ui->accumTimeCoin->setText(QString::number(accumulateTime));
-    ui->accumTimeCoin->setEnabled(!enableAccumulateTime);
-    ui->tolerance->setText(QString::number(tolerance/20.0));
+    pushUiData();
 }
 

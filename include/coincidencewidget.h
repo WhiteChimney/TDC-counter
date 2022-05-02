@@ -59,6 +59,7 @@ private:
     QTextStream fStream;
 
 public:
+    void fetchUiData(), pushUiData(); // 获取与推送 Ui 数据
     void saveToIni(), loadFromIni();  // 保存与读取配置
     void startRecordCoinLocal(), stopRecordCoinLocal(); // 开始与停止保存计数（不与单道同步）
 };

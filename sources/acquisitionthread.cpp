@@ -9,6 +9,7 @@ void AcquisitionThread::run()
 {
     emit acqThreadStarted();
 
+    // 等待传入采集参数
     mutex.lock();
     waitCond.wait(&mutex);
     mutex.unlock();
