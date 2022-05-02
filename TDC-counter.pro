@@ -61,12 +61,4 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    include/Acqiris/AcqrsD1Interface.bas \
-    include/Acqiris/AcqrsD1Interface.vb \
-    include/Acqiris/AcqrsD1Interface_x64.vb \
-    include/Acqiris/AcqrsInterface.bas \
-    include/Acqiris/AcqrsInterface.vb \
-    include/Acqiris/AcqrsInterface_x64.vb \
-    include/Acqiris/AcqrsT3Interface.vb \
-    include/Acqiris/AcqrsT3Interface_x64.vb
+DISTFILES +=
