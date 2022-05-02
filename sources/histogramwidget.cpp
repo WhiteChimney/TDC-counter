@@ -11,6 +11,8 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
 
     qwtHistPlot = new QwtPlotHistogram();
     qwtHistPlot->attach(ui->qwtPlot);
+    setupPlotStyle();
+//    testPlot();
 
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
@@ -28,6 +30,35 @@ HistogramWidget::~HistogramWidget()
 {
     saveToIni();
     delete ui;
+}
+
+void HistogramWidget::setupPlotStyle()
+{
+    qwtHistPlot->setStyle(QwtPlotHistogram::Outline);
+    qwtHistPlot->setBrush(Qt::cyan);
+    qwtHistPlot->setPen(Qt::darkBlue, 1.0, Qt::SolidLine);
+    ui->qwtPlot->setCanvasBackground(Qt::white);
+//    ui->qwtPlot->setTitle("累计值");
+//    ui->qwtPlot->setAxisTitle(QwtPlot::xBottom,"时间（ns）");
+    ui->qwtPlot->setAxisTitle(QwtPlot::yLeft,"计数");
+}
+
+void HistogramWidget::testPlot()
+{
+    int nbrIntervals = 10;
+    int intervalStart = 0, binWidth = 1;
+    binHeight = new int[nbrIntervals]();
+    histIntervals = new QwtInterval[nbrIntervals]();
+    QVector<QwtIntervalSample> histSamples(nbrIntervals);
+    for (int i = 0; i < nbrIntervals; i++)
+    {
+        binHeight[i] = 2*i*i;
+        histIntervals[i] = QwtInterval(intervalStart,intervalStart+binWidth);
+        histSamples[i] = QwtIntervalSample(binHeight[i],histIntervals[i]);
+        intervalStart = intervalStart+binWidth;
+    }
+    qwtHistPlot->setSamples(histSamples);
+    ui->qwtPlot->replot();
 }
 
 void HistogramWidget::fetchUiData()

@@ -49,6 +49,8 @@ private:
     QwtPlotHistogram* qwtHistPlot; // 直方图
     QwtInterval* histIntervals;
     QTimer* timerHist;
+    void setupPlotStyle();         // 设置画图样式
+    void testPlot();               // 画图样式测试
 
     // 配置文件
     QString iniPath, iniName;
