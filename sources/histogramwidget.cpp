@@ -34,13 +34,13 @@ HistogramWidget::~HistogramWidget()
 
 void HistogramWidget::setupPlotStyle()
 {
-    qwtHistPlot->setStyle(QwtPlotHistogram::Outline);
-    qwtHistPlot->setBrush(Qt::cyan);
-    qwtHistPlot->setPen(Qt::darkBlue, 1.0, Qt::SolidLine);
-    ui->qwtPlot->setCanvasBackground(Qt::white);
-//    ui->qwtPlot->setTitle("累计值");
-//    ui->qwtPlot->setAxisTitle(QwtPlot::xBottom,"时间（ns）");
-    ui->qwtPlot->setAxisTitle(QwtPlot::yLeft,"计数");
+    qwtHistPlot->setStyle(QwtPlotHistogram::Outline);          // 直方图样式，Outline, Lines, Columns
+    qwtHistPlot->setBrush(Qt::cyan);                           // 柱填充色
+    qwtHistPlot->setPen(Qt::darkBlue, 1.0, Qt::SolidLine);     // 柱线条色
+    ui->qwtPlot->setCanvasBackground(Qt::white);               // 画布背景色
+//    ui->qwtPlot->setTitle("累计值");                          // 图标题
+//    ui->qwtPlot->setAxisTitle(QwtPlot::xBottom,"时间（ns）"); // 横坐标轴标题
+    ui->qwtPlot->setAxisTitle(QwtPlot::yLeft,"计数");           // 纵坐标轴标题
 }
 
 void HistogramWidget::testPlot()
