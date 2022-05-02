@@ -63,48 +63,12 @@ Widget::~Widget()
     delete ui;
 }
 
-void Widget::on_buttonTempFilePath_released()
-// 打开临时文件目录
+void Widget::fetchUiData()
 {
-    QDesktopServices::openUrl(QUrl::fromLocalFile(iniPath));
-}
-
-void Widget::on_buttonExit_released()
-{
-    on_buttonStopRecord_released();
-    on_buttonStopCount_released();
-    on_buttonStopAcq_released();
-    // Stops the acquisition & close instruments
-    Acqrs_closeAll();
-    this->close();
-}
-
-void Widget::on_buttonTest_released()
-// 生成测试子 widget
-{
-    int index = vTestWidget.count();
-    testW = new TestWidget(this,index);
-    vTestWidget.append(testW);
-    connect(testW,&TestWidget::returnSignal,this,&Widget::dealTestReturn);
-    testW->setWindowTitle("测试"+QString::number(index+1));
-    testW->setWindowState(Qt::WindowActive);
-    testW->show();
-}
-
-void Widget::dealTestReturn(int index)
-// 关闭测试子widget
-{
-    testW = vTestWidget.at(index);
-    testW->setWindowState(Qt::WindowNoState);
-    testW->close();
-}
-
-void Widget::on_buttonApplyConfig_released()
-// 应用 TDC 配置
-{
-    // config TDC
+    // TDC 设置
     freqCOM = int(1000*ui->textFreqCOM->text().toDouble());
-    if (ui->checkboxEnableCountEvents->isChecked())
+    enableCountEvents = ui->checkboxEnableCountEvents->isChecked();
+    if (enableCountEvents)
         countEvents = int(1000*ui->textCountEvents->text().toDouble());
     else
     {
@@ -132,11 +96,106 @@ void Widget::on_buttonApplyConfig_released()
     slope[4] = ui->slopeCN4->currentIndex();
     slope[5] = ui->slopeCN5->currentIndex();
     slope[6] = ui->slopeCN6->currentIndex();
+
+    // 单道计数设置
+    accumulateTime = ui->accumulateTimeText->text().toDouble();
+
+    // 数据保存设置
+    pathName = ui->textDataDirectory->currentText();
+    fileName = ui->textDataFileName->text();
+    QTextDocument* document = ui->textMetaData->document();
+    QTextBlock textBlock = document->begin();
+    QString metaData = "";
+    while (textBlock != document->end())
+    {
+        metaData += textBlock.text();
+        metaData += "\r\n";
+        textBlock = textBlock.next();
+    }
+    enableRecordTime = ui->checkboxRecordTime->isChecked();
+    recordTime = ui->textRecordTime->text().toDouble();
+}
+
+void Widget::pushUiData()
+{
+    // TDC 设置
+    ui->textFreqCOM->setText(QString::number(freqCOM/1000));
+    ui->checkboxEnableCountEvents->setChecked(enableCountEvents);
+    ui->textCountEvents->setEnabled(enableCountEvents);
+    ui->textCountEvents->setText(QString::number(countEvents/1000));
+    ui->checkBoxCN1->setChecked(channelConfig[1]);
+    ui->checkBoxCN2->setChecked(channelConfig[2]);
+    ui->checkBoxCN3->setChecked(channelConfig[3]);
+    ui->checkBoxCN4->setChecked(channelConfig[4]);
+    ui->checkBoxCN5->setChecked(channelConfig[5]);
+    ui->checkBoxCN6->setChecked(channelConfig[6]);
+    ui->levelTextCNCOM->setText(QString::number(level[0]));
+    ui->levelTextCN1->setText(QString::number(level[1]));
+    ui->levelTextCN2->setText(QString::number(level[2]));
+    ui->levelTextCN3->setText(QString::number(level[3]));
+    ui->levelTextCN4->setText(QString::number(level[4]));
+    ui->levelTextCN5->setText(QString::number(level[5]));
+    ui->levelTextCN6->setText(QString::number(level[6]));
+    ui->slopeCNCOM->setCurrentIndex(slope[0]);
+    ui->slopeCN1->setCurrentIndex(slope[1]);
+    ui->slopeCN2->setCurrentIndex(slope[2]);
+    ui->slopeCN3->setCurrentIndex(slope[3]);
+    ui->slopeCN4->setCurrentIndex(slope[4]);
+    ui->slopeCN5->setCurrentIndex(slope[5]);
+    ui->slopeCN6->setCurrentIndex(slope[6]);
+
+    // 单道计数设置
+    ui->accumulateTimeText->setText(QString::number(accumulateTime));
+
+    // 数据保存设置
+    ui->textDataDirectory->setCurrentText(pathName);
+    ui->textDataFileName->setText(fileName);
+    ui->textMetaData->setPlainText(metaData);
+    ui->checkboxRecordTime->setChecked(enableRecordTime);
+    ui->textRecordTime->setEnabled(enableRecordTime);
+    ui->textRecordTime->setText(QString::number(recordTime));
+}
+
+void Widget::on_buttonTempFilePath_released()
+{
+    QDesktopServices::openUrl(QUrl::fromLocalFile(iniPath));
+}
+
+void Widget::on_buttonExit_released()
+{
+    on_buttonStopRecord_released();
+    on_buttonStopCount_released();
+    on_buttonStopAcq_released();
+    // Stops the acquisition & close instruments
+    Acqrs_closeAll();
+    this->close();
+}
+
+void Widget::on_buttonTest_released()
+{
+    int index = vTestWidget.count();
+    testW = new TestWidget(this,index);
+    vTestWidget.append(testW);
+    connect(testW,&TestWidget::returnSignal,this,&Widget::dealTestReturn);
+    testW->setWindowTitle("测试"+QString::number(index+1));
+    testW->setWindowState(Qt::WindowActive);
+    testW->show();
+}
+
+void Widget::dealTestReturn(int index)
+{
+    testW = vTestWidget.at(index);
+    testW->setWindowState(Qt::WindowNoState);
+    testW->close();
+}
+
+void Widget::on_buttonApplyConfig_released()
+{
+    fetchUiData();
     configStatus = configTDC(idInstr, countEvents, channelConfig, level, slope, readParamPtr);
 }
 
 void Widget::on_checkboxEnableCountEvents_released()
-// 配置 TDC 时，未勾选手动设置 Count Events 会将输入框变灰
 {
     if (ui->checkboxEnableCountEvents->isChecked())
         ui->textCountEvents->setEnabled(true);
@@ -145,7 +204,6 @@ void Widget::on_checkboxEnableCountEvents_released()
 }
 
 void Widget::on_buttonStartAcquisition_released()
-// 开始采集
 {
     if (configStatus != VI_SUCCESS)
         on_buttonApplyConfig_released();
@@ -158,14 +216,12 @@ void Widget::on_buttonStartAcquisition_released()
 void Widget::dealAcqThreadStarted()
 {
     *acqStopPtr = false;
-//    TOFDataSavable = true;
     if (configStatus == VI_SUCCESS)
         emit acqParamReady
             (acqStopPtr,idInstr,readParamPtr);  // 收到采集线程的开启信号后，将参数传送过去
 }
 
 void Widget::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
-// 当发生 Bank 切换时，可以处理数据
 {
     ui->labelNumSamples->setText(QString::number(dataDescPtr->nbrSamples));
     long sample = ((long*)dataDescPtr->dataPtr)[0];
@@ -173,14 +229,12 @@ void Widget::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
 }
 
 void Widget::on_buttonStopAcq_released()
-// 停止采集线程
 {
     *acqStopPtr = true;
     configStatus = -1;
 }
 
 void Widget::dealAcqThreadFinished()
-// 采集线程关闭后续
 {
     AcqrsT3_waitForEndOfAcquisition(idInstr, 8000);
     AcqrsT3_stopAcquisition(idInstr);
@@ -189,14 +243,13 @@ void Widget::dealAcqThreadFinished()
 }
 
 void Widget::on_buttonStartCount_released()
-// 开启计数功能
 {
     if (! *acqStopPtr) // 当采集已经开启时
     {
         // 开始计算单道计数
         connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
         // 启动定时器
-        accumulateTime = ui->accumulateTimeText->text().toDouble();
+        fetchUiData();
         timerCount->start(1000.0*accumulateTime);
         // 此时单道计数可被记录，将元数据写入临时文件
         fSingleCount->open(QIODevice::WriteOnly | QIODevice::Text);
@@ -210,13 +263,11 @@ void Widget::on_buttonStartCount_released()
 }
 
 void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
-// 计算单道计数
 {
     algorithmSingleChannelCount(dataDescPtr,nbrSCC);
 }
 
 void Widget::dealCountTimeOut()
-// 定时刷新单道计数
 {
     ui->lcdSPC1->display(nbrSCC[0]);
     ui->lcdSPC2->display(nbrSCC[1]);
@@ -228,14 +279,12 @@ void Widget::dealCountTimeOut()
 }
 
 void Widget::on_buttonStopCount_released()
-// 停止单道计数与计时
 {
     timerCount->stop();
     disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
 }
 
 void Widget::on_buttonCoincidence_released()
-// 开启符合子窗口
 {
     int index = vCoinWidget.count();
     coinW = new CoincidenceWidget(this,index);
@@ -250,7 +299,6 @@ void Widget::on_buttonCoincidence_released()
 }
 
 void Widget::dealCoincidenceReturn(int index)
-// 关闭符合子窗口
 {
     coinW = vCoinWidget.at(index);
     coinW->setWindowState(Qt::WindowNoState);
@@ -262,28 +310,24 @@ void Widget::dealCoincidenceReturn(int index)
 }
 
 void Widget::dealAskDealAcqBankSwitchCoin(int index)
-// 将 Bank 切换信号与符合子窗口的槽对接
 {
     coinW = vCoinWidget.at(index);
     connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchCoin(int index)
-// 停止对接 Bank 切换信号与符合子窗口的槽
 {
     coinW = vCoinWidget.at(index);
     disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealCoinTimerNeedsSync(int index)
-// 将符合子窗口的定时转为单道计数主时钟，以同步
 {
     coinW = vCoinWidget.at(index);
     connect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut); // 同步记录数据
 }
 
 void Widget::on_buttonHistogram_released()
-// 开启直方图子窗口
 {
     int index = vHistWidget.count();
     histW = new HistogramWidget(this, index);
@@ -297,7 +341,6 @@ void Widget::on_buttonHistogram_released()
 }
 
 void Widget::dealHistogramReturn(int index)
-// 关闭直方图子窗口
 {
     histW = vHistWidget.at(index);
     histW->setWindowState(Qt::WindowNoState);
@@ -305,14 +348,12 @@ void Widget::dealHistogramReturn(int index)
 }
 
 void Widget::dealAskDealAcqBankSwitchHist(int index)
-// 对接 Bank 切换与直方图槽函数
 {
     histW = vHistWidget.at(index);
     connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)
-// 停止将数据传入直方图
 {
     histW = vHistWidget.at(index);
     disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
@@ -320,12 +361,11 @@ void Widget::dealAskStopDealAcqBankSwitchHist(int index)
 
 void Widget::on_buttonOpenDataDir_released()
 {
-
-    QDesktopServices::openUrl(QUrl::fromLocalFile(iniPath));
+    fetchUiData();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(pathName));
 }
 
 void Widget::on_buttonDataDirectory_released()
-// 保存文件时路径选择
 {
     pathName = QFileDialog::getExistingDirectory
                         (this,tr("Open Directory"),
@@ -337,8 +377,8 @@ void Widget::on_buttonDataDirectory_released()
 }
 
 void Widget::on_buttonStartRecord_released()
-// 保存数据
 {
+    fetchUiData();
     // 如果选择记录单道
     if (ui->checkboxSCC->isChecked())
     {
@@ -400,7 +440,6 @@ void Widget::on_buttonStartRecord_released()
 }
 
 void Widget::dealRecordSingleCount()
-// 记录单道计数
 {
     fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
     timeToc = dateTime.currentMSecsSinceEpoch();
@@ -415,8 +454,8 @@ void Widget::dealRecordSingleCount()
 }
 
 void Widget::on_buttonStopRecord_released()
-// 停止记录单道计数
 {
+    fetchUiData();
     switch (modeRecord)
     {
     case SingleAndCoinCount:
@@ -428,7 +467,6 @@ void Widget::on_buttonStopRecord_released()
             if (coinW->windowState() != Qt::WindowActive)
                 continue;
             disconnect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealSaveCoinData);
-            coinW->closeRecordFile();
         }
         break;
     case SingleCountOnly:
@@ -442,7 +480,6 @@ void Widget::on_buttonStopRecord_released()
             if (coinW->windowState() != Qt::WindowActive)
                 continue;
             coinW->stopRecordCoinLocal();
-            coinW->closeRecordFile();
         }
         break;
     default:
@@ -450,39 +487,23 @@ void Widget::on_buttonStopRecord_released()
         break;
     }
 
-//    合并数据文件，并保存至指定位置
-    pathName = ui->textDataDirectory->currentText();
-    fileName = pathName + "/" + ui->textDataFileName->text() +
-                "." + ui->comboDataFileSuffix->currentText();
-    QTextDocument* document = ui->textMetaData->document();
-    QTextBlock textBlock = document->begin();
-    QString metaData = "";
-    while (textBlock != document->end())
-    {
-        metaData += textBlock.text();
-        textBlock = textBlock.next();
-    }
-    metaData += "\r\n\r\n";
-
     mergeDataFiles(modeRecord, fileName, metaData, vCoinWidget);
 
     modeRecord = notRecording;
 
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathName));
-    if (ui->checkboxRecordTime->isChecked())
+    if (enableRecordTime)
     {
         timerFile->stop();
     }
 }
 
 void Widget::dealRecordTimeOut()
-// 数据记录倒计时结束
 {
     on_buttonStopRecord_released();
 }
 
 void Widget::on_checkboxRecordTime_released()
-// 当未选择记录时长时，不可更改记录时间
 {
     if (ui->checkboxRecordTime->isChecked())
         ui->textRecordTime->setEnabled(true);
@@ -491,54 +512,8 @@ void Widget::on_checkboxRecordTime_released()
 }
 
 void Widget::saveToIni()
-// 保存当前配置到配置文件
 {
-    freqCOM = int(1000*ui->textFreqCOM->text().toDouble());
-    enableCountEvents = ui->checkboxEnableCountEvents->isChecked();
-    if (enableCountEvents)
-        countEvents = int(1000*ui->textCountEvents->text().toDouble());
-    else
-    {
-        countEvents = freqCOM / 10;
-        ui->textCountEvents->setText(QString::number(countEvents/1000));
-    }
-    channelConfig[0] = true;
-    channelConfig[1] = ui->checkBoxCN1->isChecked();
-    channelConfig[2] = ui->checkBoxCN2->isChecked();
-    channelConfig[3] = ui->checkBoxCN3->isChecked();
-    channelConfig[4] = ui->checkBoxCN4->isChecked();
-    channelConfig[5] = ui->checkBoxCN5->isChecked();
-    channelConfig[6] = ui->checkBoxCN6->isChecked();
-    level[0] = ui->levelTextCNCOM->text().toDouble();
-    level[1] = ui->levelTextCN1->text().toDouble();
-    level[2] = ui->levelTextCN2->text().toDouble();
-    level[3] = ui->levelTextCN3->text().toDouble();
-    level[4] = ui->levelTextCN4->text().toDouble();
-    level[5] = ui->levelTextCN5->text().toDouble();
-    level[6] = ui->levelTextCN6->text().toDouble();
-    slope[0] = ui->slopeCNCOM->currentIndex();
-    slope[1] = ui->slopeCN1->currentIndex();
-    slope[2] = ui->slopeCN2->currentIndex();
-    slope[3] = ui->slopeCN3->currentIndex();
-    slope[4] = ui->slopeCN4->currentIndex();
-    slope[5] = ui->slopeCN5->currentIndex();
-    slope[6] = ui->slopeCN6->currentIndex();
-
-    accumulateTime = ui->accumulateTimeText->text().toDouble();
-
-    pathName = ui->textDataDirectory->currentText();
-    fileName = ui->textDataFileName->text();
-    QTextDocument* document = ui->textMetaData->document();
-    QTextBlock textBlock = document->begin();
-    QString metaData = "";
-    while (textBlock != document->end())
-    {
-        metaData += textBlock.text();
-        metaData += "\r\n";
-        textBlock = textBlock.next();
-    }
-    enableRecordTime = ui->checkboxRecordTime->isChecked();
-    recordTime = ui->textRecordTime->text().toDouble();
+    fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
 
@@ -568,7 +543,6 @@ void Widget::saveToIni()
 }
 
 void Widget::loadFromIni()
-// 从配置文件加载配置
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
 
@@ -595,40 +569,6 @@ void Widget::loadFromIni()
 
     delete configIni;
 
-//    将配置更新到 UI
-    ui->textFreqCOM->setText(QString::number(freqCOM/1000));
-    ui->checkboxEnableCountEvents->setChecked(enableCountEvents);
-    ui->textCountEvents->setEnabled(enableCountEvents);
-    ui->textCountEvents->setText(QString::number(countEvents/1000));
-    ui->checkBoxCN1->setChecked(channelConfig[1]);
-    ui->checkBoxCN2->setChecked(channelConfig[2]);
-    ui->checkBoxCN3->setChecked(channelConfig[3]);
-    ui->checkBoxCN4->setChecked(channelConfig[4]);
-    ui->checkBoxCN5->setChecked(channelConfig[5]);
-    ui->checkBoxCN6->setChecked(channelConfig[6]);
-    ui->levelTextCNCOM->setText(QString::number(level[0]));
-    ui->levelTextCN1->setText(QString::number(level[1]));
-    ui->levelTextCN2->setText(QString::number(level[2]));
-    ui->levelTextCN3->setText(QString::number(level[3]));
-    ui->levelTextCN4->setText(QString::number(level[4]));
-    ui->levelTextCN5->setText(QString::number(level[5]));
-    ui->levelTextCN6->setText(QString::number(level[6]));
-    ui->slopeCNCOM->setCurrentIndex(slope[0]);
-    ui->slopeCN1->setCurrentIndex(slope[1]);
-    ui->slopeCN2->setCurrentIndex(slope[2]);
-    ui->slopeCN3->setCurrentIndex(slope[3]);
-    ui->slopeCN4->setCurrentIndex(slope[4]);
-    ui->slopeCN5->setCurrentIndex(slope[5]);
-    ui->slopeCN6->setCurrentIndex(slope[6]);
-
-    ui->accumulateTimeText->setText(QString::number(accumulateTime));
-
-    ui->textDataDirectory->setCurrentText(pathName);
-    ui->textDataFileName->setText(fileName);
-    ui->textMetaData->setPlainText(metaData);
-    ui->checkboxRecordTime->setChecked(enableRecordTime);
-    ui->textRecordTime->setEnabled(enableRecordTime);
-    ui->textRecordTime->setText(QString::number(recordTime));
-
+    pushUiData();
 }
 

@@ -17,7 +17,6 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
 
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     iniName = iniPath + "/AcqirisTDC_qt/histogramConfigurations" + QString::number(index) +".ini";
-
     QFileInfo iniInfo(iniName);
     if (iniInfo.isFile())
         loadFromIni();
@@ -31,14 +30,7 @@ HistogramWidget::~HistogramWidget()
     delete ui;
 }
 
-void HistogramWidget::on_buttonReturn_released()
-{
-    emit askStopDealAcqBankSwitchHist(index);
-    timerHist->stop();
-    emit returnSignal(index);
-}
-
-void HistogramWidget::on_buttonStart_released()
+void HistogramWidget::fetchUiData()
 {
     channel1 = ui->comboChannel1->currentText().toInt();
     channel2 = ui->comboChannel2->currentText().toInt();
@@ -56,6 +48,30 @@ void HistogramWidget::on_buttonStart_released()
     if (binWidth < 0.05) binWidth = 0.05;
     nbrIntervals = ceil(abs(timeStop-timeStart)/binWidth);
     timeStop = timeStart + nbrIntervals*binWidth;
+
+    pushUiData();
+}
+
+void HistogramWidget::pushUiData()
+{
+    ui->comboChannel1->setCurrentText(QString::number(channel1));
+    ui->comboChannel2->setCurrentText(QString::number(channel2));
+    ui->textAccumlateTime->setText(QString::number(accumulateTime));
+    ui->textDelay->setText(QString::number(delay));
+    ui->textTimeStart->setText(QString::number(timeStart));
+    ui->textTimeStop->setText(QString::number(timeStop));
+    ui->textBinWidth->setText(QString::number(binWidth));
+}
+
+void HistogramWidget::on_buttonReturn_released()
+{
+    on_buttonStop_released();
+    emit returnSignal(index);
+}
+
+void HistogramWidget::on_buttonStart_released()
+{
+    fetchUiData();
     binHeight = new int[nbrIntervals]();
     histIntervals = new QwtInterval[nbrIntervals]();
     for (int i = 0; i < nbrIntervals; i++)
@@ -93,23 +109,7 @@ void HistogramWidget::on_buttonStop_released()
 
 void HistogramWidget::saveToIni()
 {
-
-    channel1 = ui->comboChannel1->currentText().toInt();
-    channel2 = ui->comboChannel2->currentText().toInt();
-    accumulateTime = ui->textAccumlateTime->text().toDouble();
-    delay = ui->textDelay->text().toDouble();
-    timeStart = ui->textTimeStart->text().toDouble();
-    timeStop = ui->textTimeStop->text().toDouble();
-    if (timeStart > timeStop)
-    {
-        double timeTemp = timeStop;
-        timeStop = timeStart;
-        timeStart = timeTemp;
-    }
-    binWidth = abs(ui->textBinWidth->text().toDouble());
-    if (binWidth < 0.05) binWidth = 0.05;
-    nbrIntervals = ceil(abs(timeStop-timeStart)/binWidth);
-    timeStop = timeStart + nbrIntervals*binWidth;
+    fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
     configIni->setValue("直方图配置/channel1",channel1);
@@ -120,7 +120,6 @@ void HistogramWidget::saveToIni()
     configIni->setValue("直方图配置/timeStop",timeStop);
     configIni->setValue("直方图配置/binWidth",binWidth);
     delete configIni;
-
 }
 
 void HistogramWidget::loadFromIni()
@@ -135,12 +134,5 @@ void HistogramWidget::loadFromIni()
     binWidth = configIni->value("直方图配置/binWidth").toDouble();
     delete configIni;
 
-    ui->comboChannel1->setCurrentText(QString::number(channel1));
-    ui->comboChannel2->setCurrentText(QString::number(channel2));
-    ui->textAccumlateTime->setText(QString::number(accumulateTime));
-    ui->textDelay->setText(QString::number(delay));
-    ui->textTimeStart->setText(QString::number(timeStart));
-    ui->textTimeStop->setText(QString::number(timeStop));
-    ui->textBinWidth->setText(QString::number(binWidth));
-
+    pushUiData();
 }

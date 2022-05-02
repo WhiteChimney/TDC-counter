@@ -21,7 +21,6 @@ private:
     AqT3ReadParameters* readParamPtr;
     AqT3DataDescriptor* dataDescPtr; //生成读取数据指针结构AqT3DataDescriptor
     bool acqParamReady = false;
-    QReadWriteLock* lockDataDesc;
     QMutex mutex;
     QWaitCondition waitCond;
 

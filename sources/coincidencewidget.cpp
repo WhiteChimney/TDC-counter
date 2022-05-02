@@ -9,7 +9,7 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
     index = index0;                    // 标记当前符合窗口
 
-    // 时钟
+    // 符合专用时钟
     timerCoin = new QTimer(this);
 
     // 设置配置文件与临时文件名
@@ -27,6 +27,7 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
 
 CoincidenceWidget::~CoincidenceWidget()
 {
+    on_buttonStop_released();
     saveToIni();
     delete ui;
 }
@@ -98,7 +99,7 @@ void CoincidenceWidget::dealSaveCoinData()
     {
         fCoin->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
         if (! ui->checkboxAccumlateTime->isChecked())
-        {
+        {// 如果不与单道同步，则记录时间；否则不记录，之后合并
             timeToc = QDateTime::currentMSecsSinceEpoch();
             fStream << timeToc - timeTic << "\t";
         }
@@ -129,11 +130,6 @@ void CoincidenceWidget::startRecordCoinLocal()
 void CoincidenceWidget::stopRecordCoinLocal()
 {
     disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealSaveCoinData);
-}
-
-void CoincidenceWidget::closeRecordFile()
-{
-    fCoin->close();
 }
 
 void CoincidenceWidget::on_coinChannel1_currentIndexChanged(int index)
@@ -172,7 +168,6 @@ void CoincidenceWidget::saveToIni()
     configIni->setValue("符合计数配置/enableAccumulateTime",enableAccumulateTime);
     configIni->setValue("符合计数配置/tolerance",tolerance);
     delete configIni;
-
 }
 
 void CoincidenceWidget::loadFromIni()
