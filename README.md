@@ -6,7 +6,7 @@
 * 项目备用地址：[Gitee](https://gitee.com/white8chimney/TDC-counter)
 
 # 硬件信息
-* 仪器型号：Agilent Acqiris TC890
+* 仪器型号：Agilent Acqiris TC890 U1051A
 * 系统支持：Windows x86, x64
 
 # Features
