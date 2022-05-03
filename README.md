@@ -20,14 +20,14 @@
 * Widget: 主窗口
 * AcquisitionThread: 采集线程
 * TestWidget: 测试窗口
-* CoincidenceWidget: 符合窗口
+* CoincidenceWidget: 符合计数窗口
 * HistogramWidget: 直方图窗口
 
 ## 子函数
 * testTC890: 测试用子函数
 * configTDC: 配置 TDC 参数
 * algorithmSingleChannelCount: 计算单道计数
-* algorithmCoincidenceCount: 计算符合
+* algorithmCoincidenceCount: 计算符合计数
 * algorithmHistogramCounts: 计算直方图的数据
 * mergeDataFiles: 合并并生成最终数据文件
 > *Copyright Agilent Technologies, Inc. 2006-2008*
