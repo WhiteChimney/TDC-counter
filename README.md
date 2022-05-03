@@ -22,9 +22,9 @@
 * TestWidget: 测试窗口
 * CoincidenceWidget: 符合计数窗口
 * HistogramWidget: 直方图窗口
+* QSimpleLed: 自定义状态指示灯（来自 [CSDN 网友](https://blog.csdn.net/weixin_37818081/article/details/119803320)）
 
 ### 子函数
-* testTC890: 测试用子函数
 * configTDC: 配置 TDC 参数
 * computeSingleChannelCount: 计算单道计数
 * computeCoincidenceCount: 计算符合计数
