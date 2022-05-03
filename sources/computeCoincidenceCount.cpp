@@ -2,6 +2,8 @@
 #include "AcqirisT3Import.h"
 #include <cmath>
 
+// 计算符合计数
+
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
          int* nbrCoin, int* nbrAccCoin,

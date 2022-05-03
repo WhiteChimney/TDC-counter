@@ -12,6 +12,7 @@ RC_ICONS = resources/TDC-Counter.ico
 
 SOURCES += \
     main.cpp \
+    sources/QSimpleLed.cpp \
     sources/acquisitionthread.cpp \
     sources/coincidencewidget.cpp \
     sources/computeCoincidenceCount.cpp \
@@ -20,7 +21,6 @@ SOURCES += \
     sources/configTDC.cpp \
     sources/histogramwidget.cpp \
     sources/mergeDataFiles.cpp \
-    sources/testTC890.cpp \
     sources/testwidget.cpp \
     widget.cpp
 
@@ -37,6 +37,7 @@ HEADERS += \
     include/Acqiris/visa.h \
     include/Acqiris/visatype.h \
     include/Acqiris/vpptype.h \
+    include/QSimpleLed.h \
     include/acquisitionthread.h \
     include/coincidencewidget.h \
     include/histogramwidget.h \

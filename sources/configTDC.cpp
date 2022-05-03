@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+// 配置 TDC 运行参数
+
 ViStatus configTDC(ViSession idInstr, int countEvents, bool *channelConfig, double *level, int *slope, AqT3ReadParameters* readParamPtr)
 {
     //设定连续运行模式并允许内部测试信号

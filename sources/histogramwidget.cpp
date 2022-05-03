@@ -12,7 +12,7 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
     qwtHistPlot = new QwtPlotHistogram();
     qwtHistPlot->attach(ui->qwtPlot);
     setupPlotStyle();
-//    testPlot();
+//    testPlot();                         // 便于查看画图样式
 
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);

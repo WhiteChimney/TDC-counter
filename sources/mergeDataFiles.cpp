@@ -2,6 +2,8 @@
 #include "widget.h"
 #include "coincidencewidget.h"
 
+// 用于合成最终数据文件
+
 void Widget::mergeDataFiles
     (RecordMode modeRecord,
      QString fileName,

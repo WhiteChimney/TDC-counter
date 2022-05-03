@@ -8,6 +8,12 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("Acqiris TDC 计数程序");
 
+    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
+    statusIndicator->setFixedSize(20,20);
+    ui->horizontalLayout->insertWidget(0,statusIndicator);
+    statusIndicator->setStates(QSimpleLed::OFF);
+
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
     if (tempDataPath.isReadable())
@@ -222,6 +228,7 @@ void Widget::on_buttonStartAcquisition_released()
 
 void Widget::dealAcqThreadStarted()
 {
+    statusIndicator->setStates(QSimpleLed::ON);
     *acqStopPtr = false;
     if (configStatus == VI_SUCCESS)
         emit acqParamReady
@@ -247,6 +254,7 @@ void Widget::dealAcqThreadFinished()
     AcqrsT3_stopAcquisition(idInstr);
     acqThread->quit();
     acqThread->wait();
+    statusIndicator->setStates(QSimpleLed::OFF);
 }
 
 void Widget::on_buttonStartCount_released()
@@ -585,4 +593,3 @@ void Widget::loadFromIni()
 
     pushUiData();
 }
-

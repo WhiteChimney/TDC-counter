@@ -120,6 +120,7 @@ private:
     ViStatus status;
     ViStatus configStatus = -1;
     AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+    QSimpleLed *statusIndicator = new QSimpleLed(this);
 
     // 单道计数参数
 private:

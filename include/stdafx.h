@@ -21,6 +21,8 @@
 #include <QSettings>
 #include <QTextCodec>
 
+#include "QSimpleLed.h"
+
 void initializeConfigurations();
 
 ViStatus configTDC
@@ -30,8 +32,6 @@ ViStatus configTDC
          double *level,
          int *slope,
          AqT3ReadParameters* readParamPtr);
-
-QString testTC890();
 
 void computeSingleChannelCount(AqT3DataDescriptor*,int*);
 

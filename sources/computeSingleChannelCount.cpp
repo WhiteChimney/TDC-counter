@@ -1,6 +1,8 @@
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
 
+// 计算单道计数
+
 void computeSingleChannelCount(AqT3DataDescriptor* dataDescPtr, int* nbrSCC)
 {
     long nbrSamples = dataDescPtr->nbrSamples;

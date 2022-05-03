@@ -2,6 +2,8 @@
 #include "AcqirisT3Import.h"
 #include <QDebug>
 
+// 计算统计直方图计数
+
 void countSingle(AqT3DataDescriptor* dataDescPtr, int channel1,
                  double timeStart, double binWidth, int nbrIntervals, int* binHeight)
 {
