@@ -19,6 +19,7 @@
 #include <QTextDocument>
 #include <QThread>
 #include <QSettings>
+#include <QTextCodec>
 
 void initializeConfigurations();
 

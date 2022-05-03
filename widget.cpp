@@ -11,6 +11,8 @@ Widget::Widget(QWidget *parent)
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
     tempDataPath.removeRecursively();
+    QThread::msleep(100);
+    tempDataPath.mkdir(iniPath + "/Data");
 
 //    检查是否存在配置文件（ini）
     QFileInfo iniInfo(iniName);
@@ -253,11 +255,11 @@ void Widget::on_buttonStartCount_released()
         timerCount->start(1000.0*accumulateTime);
         // 此时单道计数可被记录，将元数据写入临时文件
         fSingleCount->open(QIODevice::WriteOnly | QIODevice::Text);
-        fStream << "单道计数" << endl
-                << "当前时间：" << dateTime.currentDateTime().toString() << endl
-                << "计数累计时间：" << accumulateTime << endl
+        fStream << tr("单道计数") << endl
+                << tr("当前时间：") << dateTime.currentDateTime().toString() << endl
+                << tr("计数累计时间：") << accumulateTime << endl
                 << endl
-                << "时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6" << endl;
+                << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << endl;
         fSingleCount->close();
     }
 }
@@ -426,6 +428,8 @@ void Widget::on_buttonStartRecord_released()
             coinW = vCoinWidget.at(i);
             if (coinW->windowState() != Qt::WindowActive)
                 continue;
+//            disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+
             coinW->startRecordCoinLocal();
         }
         break;
@@ -441,7 +445,7 @@ void Widget::on_buttonStartRecord_released()
 
 void Widget::dealRecordSingleCount()
 {
-    fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
+//    fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
     timeToc = dateTime.currentMSecsSinceEpoch();
     timeRelative = timeToc - timeTic;
     fStream << timeRelative;
@@ -450,7 +454,7 @@ void Widget::dealRecordSingleCount()
         fStream << "\t" << nbrSCC[i];
     }
     fStream << endl;
-    fSingleCount->close();
+//    fSingleCount->close();
 }
 
 void Widget::on_buttonStopRecord_released()
@@ -487,7 +491,8 @@ void Widget::on_buttonStopRecord_released()
         break;
     }
 
-    mergeDataFiles(modeRecord, fileName, metaData, vCoinWidget);
+    QString fullFileName = pathName + "/" + fileName + "." + ui->comboDataFileSuffix->currentText();
+    mergeDataFiles(modeRecord, fullFileName, metaData, vCoinWidget);
 
     modeRecord = notRecording;
 

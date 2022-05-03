@@ -68,10 +68,10 @@ void Widget::mergeDataFiles
     {
         fMerge.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream fStream(&fMerge);
-        fStream << metaData.toLocal8Bit().data() << endl
+        fStream << tr(metaData.toStdString().data()) << endl
                 << endl;
         fSingle.open(QIODevice::ReadOnly | QIODevice::Text);
-        line = fSingle.readAll();
+        line = QString::fromLocal8Bit(fSingle.readAll());
         fStream << line;
         fSingle.close();
         fMerge.close();

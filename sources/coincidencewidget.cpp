@@ -16,6 +16,7 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
     iniName = iniPath + "/Configurations/coincidence" + QString::number(index) +".ini";
     tempFileName = iniPath + "/Data/Coincidence" + QString::number(index) +".txt";
+    qDebug() << tempFileName;
     fCoin->setFileName(tempFileName);
     fStream.setDevice(fCoin);
     QFileInfo iniInfo(iniName);
@@ -81,25 +82,25 @@ void CoincidenceWidget::on_buttonStart_released()
 
     // 将配置写入临时文件
     fCoin->open(QIODevice::WriteOnly | QIODevice::Text);
-    fStream << "符合计数" << index << endl
-            << "当前时间：" << QDateTime::currentDateTime().toString() << endl
-            << "符合通道：Channel" << channel1 << "与Channel" << channel2 << endl
-            << "符合门宽：" << tolerance/20.0 << "ns" << endl
-            << "延时：" << delay/20.0 << "ns" << endl
-            << "偶然符合额外延时：" << delayAcc/20.0 << "ns" << endl;
+    fStream << tr("符合计数") << index << endl
+            << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
+            << tr("符合通道：Channel") << channel1 << tr("与Channel") << channel2 << endl
+            << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
+            << tr("延时：") << delay/20.0 << tr("ns") << endl
+            << tr("偶然符合额外延时：") << delayAcc/20.0 << tr("ns") << endl;
     if (enableAccumulateTime)
     {
-        fStream << "计时与单道计数同步" << endl
+        fStream << tr("计时与单道计数同步") << endl
                 << endl
                 << endl
-                << "符合计数" << index << endl;
+                << tr("符合计数") << index << endl;
     }
     else
     {
-        fStream << "计时未与单道计数同步" << endl
-                << "累计时间：" << accumulateTime << endl
+        fStream << tr("计时未与单道计数同步") << endl
+                << tr("累计时间：") << accumulateTime << endl
                 << endl
-                << "时间/ms\t计数" << endl;
+                << tr("时间/ms\t计数") << endl;
     }
     fCoin->close();
     coinSavable = true; // 此时可保存数据
