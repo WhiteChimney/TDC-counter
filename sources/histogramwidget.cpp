@@ -18,7 +18,7 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
 
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    iniName = iniPath + "/AcqirisTDC_qt/histogramConfigurations" + QString::number(index) +".ini";
+    iniName = iniPath + "/AcqirisTDC_qt/Configurations/histogram" + QString::number(index) +".ini";
     QFileInfo iniInfo(iniName);
     if (iniInfo.isFile())
         loadFromIni();

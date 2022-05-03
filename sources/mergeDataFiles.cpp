@@ -19,12 +19,12 @@ void Widget::mergeDataFiles
     {
         fMerge.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream fStream(&fMerge);
-        fStream << metaData.toLocal8Bit().data() << endl
+        fStream << tr(metaData.toStdString().data()) << endl
                 << endl;
         fSingle.open(QIODevice::ReadOnly | QIODevice::Text);
         for (int i = 0; i < 4; i++)
         {
-            line = fSingle.readLine();
+            line = QString::fromLocal8Bit(fSingle.readLine());
             fStream << line;
         }
         QVector<QFile*> vfCoin;
@@ -39,23 +39,23 @@ void Widget::mergeDataFiles
                 fCoin->open(QIODevice::ReadOnly | QIODevice::Text);
                 for (int i = 0; i < 9; i++)
                 {
-                    line = fCoin->readLine();
+                    line = QString::fromLocal8Bit(fCoin->readLine());
                     fStream << line;
                 }
                 vfCoin.append(fCoin);
             }
         }
-        line = fSingle.readLine().trimmed();
+        line = QString::fromLocal8Bit(fSingle.readLine().trimmed());
         while (! line.isNull())
         {
             fStream << line;
             for (int i = 0; i < vfCoin.count(); i++)
             {
-                line = vfCoin.at(i)->readLine().trimmed();
-                fStream << line;
+                line = QString::fromLocal8Bit(vfCoin.at(i)->readLine().trimmed());
+                fStream << "\t" << line;
             }
             fStream << endl;
-            line = fSingle.readLine().trimmed();
+            line = QString::fromLocal8Bit(fSingle.readLine().trimmed());
         }
         fMerge.close();
         fSingle.close();
@@ -82,13 +82,16 @@ void Widget::mergeDataFiles
     {
         for (int i = 0; i < vCoinWidget.count(); i++)
         {
+            QFileInfo fileInfo(fileName);
+            QDir coinPath;
+            coinPath.mkdir(fileInfo.path() + "/Coincidences");
             if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
             {
-                QFileInfo fileInfo(fileName);
-                QString copiedFileName = fileInfo.path() + "/Coincidence" + QString::number(i) +".txt";
+                QString copiedFileName = fileInfo.path() + "/Coincidences/Coincidence" + QString::number(i) +".txt";
                 QFile fCopiedFile(copiedFileName);
+                fCopiedFile.open(QIODevice::WriteOnly | QIODevice::Text);
                 QTextStream fStream(&fCopiedFile);
-                fStream << metaData.toLocal8Bit().data() << endl
+                fStream << tr(metaData.toStdString().data()) << endl
                         << endl;
 
                 QString tempFileName_C = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
@@ -96,7 +99,7 @@ void Widget::mergeDataFiles
                 QFile *fCoin = new QFile();
                 fCoin->setFileName(tempFileName_C);
                 fCoin->open(QIODevice::ReadOnly | QIODevice::Text);
-                line = fCoin->readAll();
+                line = QString::fromLocal8Bit(fCoin->readAll());
                 fStream << line;
 
                 fCoin->close();

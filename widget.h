@@ -118,7 +118,7 @@ private:
     bool* acqStopPtr = new bool();
     ViSession idInstr;
     ViStatus status;
-    ViStatus configStatus = 1;
+    ViStatus configStatus = -1;
     AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
 
     // 单道计数参数
@@ -140,6 +140,7 @@ private:
     QTimer* timerFile;                         // 数据记录用时时钟
     RecordMode modeRecord = notRecording;      // 数据记录模式
 public:
+    void createTempDataFile();
     void mergeDataFiles(RecordMode modeRecord, QString fileName, QString metaData, QVector<CoincidenceWidget*>);
 
     // 保存配置

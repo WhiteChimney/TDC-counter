@@ -16,7 +16,6 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
     iniName = iniPath + "/Configurations/coincidence" + QString::number(index) +".ini";
     tempFileName = iniPath + "/Data/Coincidence" + QString::number(index) +".txt";
-    qDebug() << tempFileName;
     fCoin->setFileName(tempFileName);
     fStream.setDevice(fCoin);
     QFileInfo iniInfo(iniName);
@@ -79,10 +78,14 @@ void CoincidenceWidget::on_buttonStart_released()
         timerCoin->start(1000.0*accumulateTime);
         timeTic = QDateTime::currentMSecsSinceEpoch();
     }
+    coinSavable = true; // 此时可保存数据
+}
 
+void CoincidenceWidget::createTempDataFile()
+{
     // 将配置写入临时文件
     fCoin->open(QIODevice::WriteOnly | QIODevice::Text);
-    fStream << tr("符合计数") << index << endl
+    fStream << tr("符合计数") << index+1 << endl
             << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
             << tr("符合通道：Channel") << channel1 << tr("与Channel") << channel2 << endl
             << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
@@ -93,7 +96,7 @@ void CoincidenceWidget::on_buttonStart_released()
         fStream << tr("计时与单道计数同步") << endl
                 << endl
                 << endl
-                << tr("符合计数") << index << endl;
+                << tr("符合计数") << index+1 << endl;
     }
     else
     {
@@ -103,7 +106,6 @@ void CoincidenceWidget::on_buttonStart_released()
                 << tr("时间/ms\t计数") << endl;
     }
     fCoin->close();
-    coinSavable = true; // 此时可保存数据
 }
 
 void CoincidenceWidget::dealTimeOut()
@@ -145,7 +147,9 @@ void CoincidenceWidget::on_buttonStop_released()
 
 void CoincidenceWidget::startRecordCoinLocal()
 {
+    disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
     connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealSaveCoinData);
+    connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
 }
 
 void CoincidenceWidget::stopRecordCoinLocal()

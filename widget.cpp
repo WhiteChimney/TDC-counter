@@ -10,9 +10,17 @@ Widget::Widget(QWidget *parent)
 
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
-    tempDataPath.removeRecursively();
-    QThread::msleep(100);
-    tempDataPath.mkdir(iniPath + "/Data");
+    if (tempDataPath.isReadable())
+    {
+        if (! tempDataPath.isEmpty())
+        {
+            tempDataPath.removeRecursively();
+            QThread::msleep(100);
+            tempDataPath.mkdir(iniPath + "/Data");
+        }
+    }
+    else
+        tempDataPath.mkdir(iniPath + "/Data");
 
 //    检查是否存在配置文件（ini）
     QFileInfo iniInfo(iniName);
@@ -62,6 +70,10 @@ Widget::~Widget()
 {
     on_buttonExit_released();
     saveToIni();
+    QDir tempDataPath(iniPath + "/Data");
+    tempDataPath.removeRecursively();
+    QThread::msleep(100);
+    tempDataPath.mkdir(iniPath + "/Data");
     delete ui;
 }
 
@@ -105,15 +117,7 @@ void Widget::fetchUiData()
     // 数据保存设置
     pathName = ui->textDataDirectory->currentText();
     fileName = ui->textDataFileName->text();
-    QTextDocument* document = ui->textMetaData->document();
-    QTextBlock textBlock = document->begin();
-    QString metaData = "";
-    while (textBlock != document->end())
-    {
-        metaData += textBlock.text();
-        metaData += "\r\n";
-        textBlock = textBlock.next();
-    }
+    metaData = ui->textMetaData->toPlainText();
     enableRecordTime = ui->checkboxRecordTime->isChecked();
     recordTime = ui->textRecordTime->text().toDouble();
 }
@@ -168,6 +172,7 @@ void Widget::on_buttonExit_released()
     on_buttonStopRecord_released();
     on_buttonStopCount_released();
     on_buttonStopAcq_released();
+    QThread::msleep(100);
     // Stops the acquisition & close instruments
     Acqrs_closeAll();
     this->close();
@@ -253,15 +258,18 @@ void Widget::on_buttonStartCount_released()
         // 启动定时器
         fetchUiData();
         timerCount->start(1000.0*accumulateTime);
-        // 此时单道计数可被记录，将元数据写入临时文件
-        fSingleCount->open(QIODevice::WriteOnly | QIODevice::Text);
-        fStream << tr("单道计数") << endl
-                << tr("当前时间：") << dateTime.currentDateTime().toString() << endl
-                << tr("计数累计时间：") << accumulateTime << endl
-                << endl
-                << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << endl;
-        fSingleCount->close();
     }
+}
+
+void Widget::createTempDataFile()
+{
+    fSingleCount->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream << tr("单道计数") << endl
+            << tr("当前时间：") << dateTime.currentDateTime().toString() << endl
+            << tr("计数累计时间：") << accumulateTime << endl
+            << endl
+            << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << endl;
+    fSingleCount->close();
 }
 
 void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
@@ -400,6 +408,7 @@ void Widget::on_buttonStartRecord_released()
     switch (modeRecord)
     {
     case SingleAndCoinCount:
+        this->createTempDataFile();
         timeTic = dateTime.currentMSecsSinceEpoch();
         fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
         disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
@@ -410,12 +419,14 @@ void Widget::on_buttonStartRecord_released()
             coinW = vCoinWidget.at(i);
             if (coinW->windowState() != Qt::WindowActive)
                 continue;
+            coinW->createTempDataFile();
             disconnect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut);
             connect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealSaveCoinData);
             connect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut);
         }
         break;
     case SingleCountOnly:
+        this->createTempDataFile();
         timeTic = dateTime.currentMSecsSinceEpoch();
         fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
         disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
@@ -428,8 +439,7 @@ void Widget::on_buttonStartRecord_released()
             coinW = vCoinWidget.at(i);
             if (coinW->windowState() != Qt::WindowActive)
                 continue;
-//            disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
-
+            coinW->createTempDataFile();
             coinW->startRecordCoinLocal();
         }
         break;
@@ -445,7 +455,6 @@ void Widget::on_buttonStartRecord_released()
 
 void Widget::dealRecordSingleCount()
 {
-//    fSingleCount->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
     timeToc = dateTime.currentMSecsSinceEpoch();
     timeRelative = timeToc - timeTic;
     fStream << timeRelative;
@@ -454,12 +463,12 @@ void Widget::dealRecordSingleCount()
         fStream << "\t" << nbrSCC[i];
     }
     fStream << endl;
-//    fSingleCount->close();
 }
 
 void Widget::on_buttonStopRecord_released()
 {
     fetchUiData();
+
     switch (modeRecord)
     {
     case SingleAndCoinCount:
