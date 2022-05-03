@@ -13,10 +13,10 @@ RC_ICONS = resources/TDC-Counter.ico
 SOURCES += \
     main.cpp \
     sources/acquisitionthread.cpp \
-    sources/algorithmCoincidenceCount.cpp \
-    sources/algorithmHistogramCounts.cpp \
-    sources/algorithmSingleChannelCount.cpp \
     sources/coincidencewidget.cpp \
+    sources/computeCoincidenceCount.cpp \
+    sources/computeHistogramCounts.cpp \
+    sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/histogramwidget.cpp \
     sources/mergeDataFiles.cpp \

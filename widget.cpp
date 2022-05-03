@@ -274,7 +274,7 @@ void Widget::createTempDataFile()
 
 void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
 {
-    algorithmSingleChannelCount(dataDescPtr,nbrSCC);
+    computeSingleChannelCount(dataDescPtr,nbrSCC);
 }
 
 void Widget::dealCountTimeOut()

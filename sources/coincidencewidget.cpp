@@ -133,7 +133,7 @@ void CoincidenceWidget::dealSaveCoinData()
 
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr)
 {
-    algorithmCoincidenceCount
+    computeCoincidenceCount
         (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
 }
 

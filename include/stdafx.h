@@ -33,16 +33,16 @@ ViStatus configTDC
 
 QString testTC890();
 
-void algorithmSingleChannelCount(AqT3DataDescriptor*,int*);
+void computeSingleChannelCount(AqT3DataDescriptor*,int*);
 
-void algorithmCoincidenceCount
+void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
          int* nbrCoin, int* nbrAccCoin,
          int channel1, int channel2,
          int tolerance,
          int delay, int delayAcc);
 
-void algorithmHistogramCount
+void computeHistogramCount
         (AqT3DataDescriptor* dataDescPtr,
          int channel1, int channel2, double delay,
          double timeStart, double binWidth, int nbrIntervals, int* binHeight);

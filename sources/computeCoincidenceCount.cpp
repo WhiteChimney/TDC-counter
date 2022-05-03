@@ -2,7 +2,7 @@
 #include "AcqirisT3Import.h"
 #include <cmath>
 
-void algorithmCoincidenceCount
+void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
          int* nbrCoin, int* nbrAccCoin,
          int channel1, int channel2,

@@ -129,7 +129,7 @@ void HistogramWidget::dealTimeOut()
 void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr)
 {
     // prepare samples to plot
-    algorithmHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
+    computeHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
 }
 
 void HistogramWidget::on_buttonStop_released()

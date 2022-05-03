@@ -1,7 +1,7 @@
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
 
-void algorithmSingleChannelCount(AqT3DataDescriptor* dataDescPtr, int* nbrSCC)
+void computeSingleChannelCount(AqT3DataDescriptor* dataDescPtr, int* nbrSCC)
 {
     long nbrSamples = dataDescPtr->nbrSamples;
     for (long n = 0 ; n < nbrSamples ; ++n)

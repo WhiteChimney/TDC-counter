@@ -57,7 +57,7 @@ void countDifference(AqT3DataDescriptor* dataDescPtr, int channel1, int channel2
     }
 }
 
-void algorithmHistogramCount(AqT3DataDescriptor* dataDescPtr,
+void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
                              int channel1, int channel2, double delay,
                              double timeStart, double binWidth, int nbrIntervals, int* binHeight)
 {
