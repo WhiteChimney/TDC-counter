@@ -61,10 +61,4 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES += \
-    lib/dll_x64/AqDrv4_x64.dll \
-    lib/dll_x64/Qt5OpenGL.dll \
-    lib/dll_x64/qwt.dll \
-    lib/dll_x86/AqDrv4.dll \
-    lib/dll_x86/Qt5OpenGL.dll \
-    lib/dll_x86/qwt.dll
+DISTFILES +=
