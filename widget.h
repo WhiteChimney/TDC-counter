@@ -32,7 +32,7 @@ public slots:
     // 处理采集线程开启
     void dealAcqThreadFinished();
     // 采集线程关闭后续
-    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
+//    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
     // 计算单道计数
@@ -103,6 +103,7 @@ private:
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
 
 public:
+    void setupAcqIndicator();
     void fetchUiData(), pushUiData();
 
     // 需要配置的 TDC 参数

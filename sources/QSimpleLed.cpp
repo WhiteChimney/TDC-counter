@@ -26,7 +26,7 @@ QSimpleLed::QSimpleLed(QWidget *parent, QSimpleLed::LEDCOLOR color)
     , mColor(color)
 {
     setCheckable(true);
-    setMinimumSize(64, 64);
+    setMinimumSize(20, 20);
 }
 
 void QSimpleLed::setStates(QSimpleLed::LEDSTATES states)

@@ -8,11 +8,7 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("Acqiris TDC 计数程序");
 
-    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
-    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
-    statusIndicator->setFixedSize(20,20);
-    ui->horizontalLayout->insertWidget(0,statusIndicator);
-    statusIndicator->setStates(QSimpleLed::OFF);
+    this->setupAcqIndicator();
 
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
@@ -58,7 +54,7 @@ Widget::Widget(QWidget *parent)
     connect(acqThread,&AcquisitionThread::acqThreadStarted,this,&Widget::dealAcqThreadStarted);
     connect(this,&Widget::acqParamReady,acqThread,&AcquisitionThread::dealAcqParamReady);
     connect(acqThread,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished);
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitch);
+//    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitch);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);
@@ -83,6 +79,18 @@ Widget::~Widget()
     delete ui;
 }
 
+void Widget::setupAcqIndicator()
+{
+    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
+    QSizePolicy p1;
+    p1.setHorizontalPolicy(QSizePolicy::Expanding);
+    p1.setVerticalPolicy(QSizePolicy::Expanding);
+    statusIndicator->setSizePolicy(p1);
+    ui->horizontalLayout_6->insertWidget(0,statusIndicator);
+    statusIndicator->setStates(QSimpleLed::OFF);
+}
+
 void Widget::fetchUiData()
 {
     // TDC 设置
@@ -92,7 +100,7 @@ void Widget::fetchUiData()
         countEvents = int(1000*ui->textCountEvents->text().toDouble());
     else
     {
-        countEvents = freqCOM / 10;
+        countEvents = freqCOM / 100;
         ui->textCountEvents->setText(QString::number(countEvents/1000));
     }
     channelConfig[0] = true;
@@ -235,12 +243,9 @@ void Widget::dealAcqThreadStarted()
             (acqStopPtr,idInstr,readParamPtr);  // 收到采集线程的开启信号后，将参数传送过去
 }
 
-void Widget::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
-{
-    ui->labelNumSamples->setText(QString::number(dataDescPtr->nbrSamples));
-    long sample = ((long*)dataDescPtr->dataPtr)[0];
-    ui->labelSample->setText(QString::number(sample,16));
-}
+//void Widget::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
+//{
+//}
 
 void Widget::on_buttonStopAcq_released()
 {

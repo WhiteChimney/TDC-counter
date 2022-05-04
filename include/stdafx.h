@@ -20,6 +20,7 @@
 #include <QThread>
 #include <QSettings>
 #include <QTextCodec>
+#include <QSizePolicy>
 
 #include "QSimpleLed.h"
 
