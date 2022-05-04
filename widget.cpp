@@ -311,6 +311,7 @@ void Widget::on_buttonCoincidence_released()
     connect(coinW,&CoincidenceWidget::askDealAcqBankSwitchCoin,this,&Widget::dealAskDealAcqBankSwitchCoin);
     connect(coinW,&CoincidenceWidget::askStopDealAcqBankSwitchCoin,this,&Widget::dealAskStopDealAcqBankSwitchCoin);
     connect(coinW,&CoincidenceWidget::coinTimerNeedsSync,this,&Widget::dealCoinTimerNeedsSync);
+    connect(coinW,&CoincidenceWidget::coinTimerStopsSync,this,&Widget::dealCoinTimerStopsSync);
     coinW->setWindowTitle("符合计数"+QString::number(index+1));
     coinW->setWindowState(Qt::WindowActive); // 设置窗口活动状态，以便后续处理，如保存数据
     coinW->show();
@@ -343,6 +344,12 @@ void Widget::dealCoinTimerNeedsSync(int index)
 {
     coinW = vCoinWidget.at(index);
     connect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut); // 同步记录数据
+}
+
+void Widget::dealCoinTimerStopsSync(int index)
+{
+    coinW = vCoinWidget.at(index);
+    disconnect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut);
 }
 
 void Widget::on_buttonHistogram_released()

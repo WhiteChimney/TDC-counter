@@ -46,6 +46,8 @@ public slots:
     // 停止对接 Bank 切换信号与符合子窗口的槽
     void dealCoinTimerNeedsSync(int index);
     // 将符合子窗口的定时转为单道计数主时钟，以同步
+    void dealCoinTimerStopsSync(int index);
+    // 符合子窗口同步停止
     void dealHistogramReturn(int index);
     // 关闭直方图子窗口
     void dealAskDealAcqBankSwitchHist(int index);

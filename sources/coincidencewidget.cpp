@@ -81,6 +81,21 @@ void CoincidenceWidget::on_buttonStart_released()
     coinSavable = true; // 此时可保存数据
 }
 
+void CoincidenceWidget::on_buttonStop_released()
+{
+    coinSavable = false;
+    emit askStopDealAcqBankSwitchCoin(index);
+    if (enableAccumulateTime)
+    { // 如果需要与单道计数同步，发送同步请求
+        emit coinTimerStopsSync(index);
+    }
+    else
+    {// 否则使用自己的时钟
+        disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+        timerCoin->stop();
+    }
+}
+
 void CoincidenceWidget::createTempDataFile()
 {
     // 将配置写入临时文件
@@ -135,14 +150,6 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDesc
 {
     computeCoincidenceCount
         (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
-}
-
-void CoincidenceWidget::on_buttonStop_released()
-{
-    coinSavable = false;
-    emit askStopDealAcqBankSwitchCoin(index);
-    if (! ui->checkboxAccumlateTime->isChecked())
-        timerCoin->stop();
 }
 
 void CoincidenceWidget::startRecordCoinLocal()

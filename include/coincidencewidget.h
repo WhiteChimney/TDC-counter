@@ -22,6 +22,7 @@ signals:
     void askDealAcqBankSwitchCoin(int index);      // 告知主窗口将内存切换信号与本窗口连接
     void askStopDealAcqBankSwitchCoin(int index);  // 告知主窗口断开内存切换信号与本窗口的连接
     void coinTimerNeedsSync(int index);            // 告知主窗口时钟需要同步
+    void coinTimerStopsSync(int index);            // 告知主窗口停止同步时钟
 
 public slots:
     void dealTimeOut();                                     // 累计时间到，刷新计数
