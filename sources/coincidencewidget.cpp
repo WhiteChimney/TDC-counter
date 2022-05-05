@@ -211,3 +211,14 @@ void CoincidenceWidget::loadFromIni()
     pushUiData();
 }
 
+void CoincidenceWidget::on_buttonChangeToMulti_released()
+{
+    ui->stackCoin->setCurrentIndex(1);
+}
+
+
+void CoincidenceWidget::on_buttonChangeToDual_released()
+{
+    ui->stackCoin->setCurrentIndex(0);
+}
+
