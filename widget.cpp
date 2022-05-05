@@ -7,7 +7,6 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
     this->setWindowTitle("Acqiris TDC 计数程序");
-
     this->setupAcqIndicator();
 
 //    清空临时文件
@@ -183,10 +182,24 @@ void Widget::on_buttonTempFilePath_released()
 
 void Widget::on_buttonExit_released()
 {
+    for (int i = vCoinWidget.count()-1; i >= 0; i--)
+    {
+        vCoinWidget.at(i)->saveToIni();
+        if (vCoinWidget.at(i)->windowState() != Qt::WindowNoState)
+            dealCoincidenceReturn(i);
+        vCoinWidget.removeLast();
+    }
+    for (int i = vHistWidget.count()-1; i >= 0; i--)
+    {
+        vHistWidget.at(i)->saveToIni();
+        if (vHistWidget.at(i)->windowState() != Qt::WindowNoState)
+            dealHistogramReturn(i);
+        vHistWidget.removeLast();
+    }
     on_buttonStopRecord_released();
     on_buttonStopCount_released();
     on_buttonStopAcq_released();
-    QThread::msleep(100);
+    QThread::msleep(100);     // 等待进程完全停止
     // Stops the acquisition & close instruments
     Acqrs_closeAll();
     this->close();
@@ -310,7 +323,7 @@ void Widget::on_buttonStopCount_released()
 void Widget::on_buttonCoincidence_released()
 {
     int index = vCoinWidget.count();
-    coinW = new CoincidenceWidget(this,index);
+    coinW = new CoincidenceWidget(0,index);
     vCoinWidget.append(coinW);
     connect(coinW,&CoincidenceWidget::returnSignal,this,&Widget::dealCoincidenceReturn);
     connect(coinW,&CoincidenceWidget::askDealAcqBankSwitchCoin,this,&Widget::dealAskDealAcqBankSwitchCoin);
@@ -360,7 +373,7 @@ void Widget::dealCoinTimerStopsSync(int index)
 void Widget::on_buttonHistogram_released()
 {
     int index = vHistWidget.count();
-    histW = new HistogramWidget(this, index);
+    histW = new HistogramWidget(0, index);
     vHistWidget.append(histW);
     connect(histW,&HistogramWidget::returnSignal,this,&Widget::dealHistogramReturn);
     connect(histW,&HistogramWidget::askDealAcqBankSwitchHist,this,&Widget::dealAskDealAcqBankSwitchHist);

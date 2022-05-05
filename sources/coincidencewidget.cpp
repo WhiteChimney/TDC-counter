@@ -6,7 +6,8 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     ui(new Ui::CoincidenceWidget)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
+    this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
+//    this->setAttribute(Qt::WA_DeleteOnClose);   // 退出时执行析构函数
     index = index0;                    // 标记当前符合窗口
 
     // 符合专用时钟
@@ -28,6 +29,7 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
 CoincidenceWidget::~CoincidenceWidget()
 {
     on_buttonStop_released();
+    on_buttonReturn_released();
     saveToIni();
     delete ui;
 }

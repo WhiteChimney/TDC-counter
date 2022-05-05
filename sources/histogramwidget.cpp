@@ -6,7 +6,8 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
     ui(new Ui::HistogramWidget)
 {
     ui->setupUi(this);
-    setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
+    this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
+//    this->setAttribute(Qt::WA_DeleteOnClose);   // 退出时执行析构函数，有点问题，会导致程序崩溃
     index = index0;
 
     qwtHistPlot = new QwtPlotHistogram();
@@ -28,6 +29,7 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
 
 HistogramWidget::~HistogramWidget()
 {
+    on_buttonReturn_released();
     saveToIni();
     delete ui;
 }
