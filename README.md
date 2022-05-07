@@ -33,3 +33,7 @@
 * computeHistogramCounts: 计算直方图的数据
 * mergeDataFiles: 合并并生成最终数据文件
 > *Copyright Agilent Technologies, Inc. 2006-2008*
+
+## To Be Done
+* 添加多通道符合功能
+* 添加累计计数功能（附加标准差）
