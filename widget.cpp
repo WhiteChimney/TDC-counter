@@ -66,9 +66,6 @@ Widget::Widget(QWidget *parent)
 
     qRegisterMetaType<AqT3DataDescriptor>("AqT3DataDescriptor");
 
-//    初始化统计 Widget
-    statW = new StatisticsWidget(this);
-    connect(statW,&StatisticsWidget::sendReturnSignal,this,&Widget::dealStatisticsReturn);
 }
 
 Widget::~Widget()
@@ -624,15 +621,29 @@ void Widget::loadFromIni()
     pushUiData();
 }
 
-void Widget::on_pushButton_released()
+void Widget::on_buttonStatistics_released()
 {
 //    setupStatUi();
-    statW->show();
+//    初始化统计 Widget
+    if (statWidgetLaunched)
+    {
+        statW->show();
+        statW->activateWindow();
+    }
+    else
+    {
+        statW = new StatisticsWidget(this);
+        connect(statW,&StatisticsWidget::sendReturnSignal,this,&Widget::dealStatisticsReturn);
+        statW->show();
+        statWidgetLaunched = true;
+    }
 }
 
 void Widget::dealStatisticsReturn()
 {
     statW->close();
+    delete (statW);
+    statWidgetLaunched = false;
 }
 
 void Widget::setupStatUi()
