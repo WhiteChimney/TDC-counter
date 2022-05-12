@@ -21,6 +21,7 @@
 #include <QSettings>
 #include <QTextCodec>
 #include <QSizePolicy>
+#include <QLCDNumber>
 
 #include "QSimpleLed.h"
 

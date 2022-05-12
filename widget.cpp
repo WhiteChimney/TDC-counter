@@ -8,6 +8,7 @@ Widget::Widget(QWidget *parent)
     ui->setupUi(this);
     this->setWindowTitle("Acqiris TDC 计数程序");
     this->setupAcqIndicator();
+    ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
 //    清空临时文件
     QDir tempDataPath(iniPath + "/Data");
@@ -65,6 +66,9 @@ Widget::Widget(QWidget *parent)
 
     qRegisterMetaType<AqT3DataDescriptor>("AqT3DataDescriptor");
 
+//    初始化统计 Widget
+    statW = new StatisticsWidget(this);
+    connect(statW,&StatisticsWidget::sendReturnSignal,this,&Widget::dealStatisticsReturn);
 }
 
 Widget::~Widget()
@@ -277,6 +281,7 @@ void Widget::dealAcqThreadFinished()
 
 void Widget::on_buttonStartCount_released()
 {
+    this->dealCountTimeOut();
     if (! *acqStopPtr) // 当采集已经开启时
     {
         // 开始计算单道计数
@@ -617,4 +622,20 @@ void Widget::loadFromIni()
     delete configIni;
 
     pushUiData();
+}
+
+void Widget::on_pushButton_released()
+{
+//    setupStatUi();
+    statW->show();
+}
+
+void Widget::dealStatisticsReturn()
+{
+    statW->close();
+}
+
+void Widget::setupStatUi()
+{
+
 }

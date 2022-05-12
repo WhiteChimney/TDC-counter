@@ -8,6 +8,7 @@
 #include "histogramwidget.h"
 #include "coincidencewidget.h"
 #include "acquisitionthread.h"
+#include "statisticswidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -58,6 +59,8 @@ public slots:
     // 记录单道计数
     void dealRecordTimeOut();
     // 数据记录倒计时结束
+    void dealStatisticsReturn();
+    // 关闭直方图子窗口
 
 private slots:
     void on_buttonTempFilePath_released();
@@ -93,6 +96,8 @@ private slots:
     void on_checkboxRecordTime_released();
     // 当未选择记录时长时，不可更改记录时间
 
+    void on_pushButton_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -101,6 +106,7 @@ private:
     QVector<CoincidenceWidget*> vCoinWidget; CoincidenceWidget *coinW;
     // 直方图子窗口（序列）
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
+    StatisticsWidget *statW;
 
 public:
     void setupAcqIndicator();
@@ -146,6 +152,9 @@ private:
 public:
     void createTempDataFile();
     void mergeDataFiles(RecordMode modeRecord, QString fileName, QString metaData, QVector<CoincidenceWidget*>);
+
+public:
+    void setupStatUi();
 
     // 保存配置
 private:

@@ -21,6 +21,7 @@ SOURCES += \
     sources/configTDC.cpp \
     sources/histogramwidget.cpp \
     sources/mergeDataFiles.cpp \
+    sources/statisticswidget.cpp \
     sources/testwidget.cpp \
     widget.cpp
 
@@ -41,6 +42,7 @@ HEADERS += \
     include/acquisitionthread.h \
     include/coincidencewidget.h \
     include/histogramwidget.h \
+    include/statisticswidget.h \
     include/stdafx.h \
     include/testwidget.h \
     widget.h
@@ -48,6 +50,7 @@ HEADERS += \
 FORMS += \
     forms/coincidencewidget.ui \
     forms/histogramwidget.ui \
+    forms/statisticswidget.ui \
     forms/testwidget.ui \
     widget.ui
 
