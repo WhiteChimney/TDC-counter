@@ -28,7 +28,7 @@ private:
 
 private:
     QVector<QString> vChannelName;
-//    QVector<int*> vCountPtr;
+//    QVector<int*> vCountPtr001;
     QVector<int> vCountStd;
 
 public:
