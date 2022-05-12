@@ -27,9 +27,9 @@ private:
     Ui::StatisticsWidget *ui;
 
 private:
-//    QVector<QString> vChannelName;
+    QVector<QString> vChannelName;
 //    QVector<int*> vCountPtr;
-//    QVector<int> vCountStd;
+    QVector<int> vCountStd;
 
 public:
     void addChannel(QString channelName, int* countPtr);

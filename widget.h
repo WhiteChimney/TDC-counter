@@ -95,8 +95,7 @@ private slots:
     // 停止记录单道计数
     void on_checkboxRecordTime_released();
     // 当未选择记录时长时，不可更改记录时间
-
-    void on_pushButton_released();
+    void on_buttonStatistics_released();
 
 private:
     Ui::Widget *ui;
@@ -106,7 +105,7 @@ private:
     QVector<CoincidenceWidget*> vCoinWidget; CoincidenceWidget *coinW;
     // 直方图子窗口（序列）
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
-    StatisticsWidget *statW;
+    StatisticsWidget *statW; bool statWidgetLaunched = false;
 
 public:
     void setupAcqIndicator();
