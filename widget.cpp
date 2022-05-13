@@ -258,10 +258,6 @@ void Widget::dealAcqThreadStarted()
             (acqStopPtr,idInstr,readParamPtr);  // 收到采集线程的开启信号后，将参数传送过去
 }
 
-//void Widget::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
-//{
-//}
-
 void Widget::on_buttonStopAcq_released()
 {
     *acqStopPtr = true;
@@ -660,6 +656,15 @@ void Widget::setupStatUi()
     for (int i = 0; i < vCoinWidget.count(); i++)
     {
         if (vCoinWidgetSyncState.at(i))
-            statW->addChannel("符合",nbrSCC);
+        {
+            QString coinChannelName;
+            int *nbrCoin = new int();
+            int *nbrAccCoin = new int();
+            vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoin,&nbrAccCoin);
+            statW->addChannel("符合"+coinChannelName,nbrCoin);
+            statW->addChannel("偶然符合"+coinChannelName,nbrAccCoin);
+            delete nbrCoin;
+            delete nbrAccCoin;
+        }
     }
 }

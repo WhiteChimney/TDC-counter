@@ -22,10 +22,6 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
-signals:
-    void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
-    void countParamReady(bool*, int*);
-
 public slots:
     void dealTestReturn(int index);
     // 关闭测试子widget
@@ -108,6 +104,9 @@ private:
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
     StatisticsWidget *statW; bool statWidgetLaunched = false;
 
+signals:
+    void countParamReady(bool*, int*);
+
 public:
     void setupAcqIndicator();
     void fetchUiData(), pushUiData();
@@ -122,6 +121,8 @@ private:
     int slope[7] = {0};
 
     // 采集过程用到的参数
+signals:
+    void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
 private:
     AcquisitionThread *acqThread;
     bool* acqStopPtr = new bool();
@@ -153,6 +154,7 @@ public:
     void createTempDataFile();
     void mergeDataFiles(RecordMode modeRecord, QString fileName, QString metaData, QVector<CoincidenceWidget*>);
 
+    // 统计参数
 public:
     void setupStatUi();
 

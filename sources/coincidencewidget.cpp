@@ -224,3 +224,10 @@ void CoincidenceWidget::on_buttonChangeToDual_released()
     ui->stackCoin->setCurrentIndex(0);
 }
 
+void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr, int **nbrAccCoinPtr)
+{
+    fetchUiData();
+    *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
+    **nbrCoinPtr = nbrCoin;
+    **nbrAccCoinPtr = nbrAccCoin;
+}
