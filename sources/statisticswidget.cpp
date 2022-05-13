@@ -1,7 +1,7 @@
 #include "statisticswidget.h"
 #include "ui_statisticswidget.h"
 
-StatisticsWidget::StatisticsWidget(QWidget *parent) :
+StatisticsWidget::StatisticsWidget(double unitTime0, QWidget *parent) :
     QWidget(parent),
     ui(new Ui::StatisticsWidget)
 {
@@ -9,10 +9,10 @@ StatisticsWidget::StatisticsWidget(QWidget *parent) :
     this->setWindowFlag(Qt::Window);
     this->setWindowTitle("统计");
     ui->labelComment->setWordWrap(true);
+    ui->progressBarStat->setValue(0);
+    unitTime = unitTime0;
+    ui->textUnitTime->setText(QString::number(unitTime));
 
-//    vChannelName.clear();
-//    vCountPtr.clear();
-//    vCountStd.clear();
     vStatChannel.clear();
 }
 
@@ -36,16 +36,34 @@ void StatisticsWidget::addChannel(QString channelName0, int *countPtr0)
     ui->gridLayoutMain->addWidget(newChannel->labelChannelName,nbrRows,1);
     ui->gridLayoutMain->addWidget(newChannel->lcdCount,nbrRows,2);
     ui->gridLayoutMain->addWidget(newChannel->lcdCountStd,nbrRows,3);
-    newChannel->updateLcdCount();
-    newChannel->updateLcdCountStd();
 }
 
 void StatisticsWidget::on_buttonStart_released()
 {
+    statTime = abs(ui->textStatTime->text().toDouble());
+    stepsTotal = ceil(statTime/unitTime);
+    statTime = unitTime*stepsTotal;
+    ui->textStatTime->setText(QString::number(statTime));
+    for (int i = 0; i < vStatChannel.count() ; i++ )
+    {
+        vStatChannel.at(i)->setNbrSteps(stepsTotal);
+    }
+    stepCurrent = 0;
+    emit statisticsRequestSync();
 }
 
 
 void StatisticsWidget::on_buttonStop_released()
 {
+    emit statisticsRequestStopSync();
 }
 
+void StatisticsWidget::dealTimeOut()
+{
+    for (int i = 0; i < vStatChannel.count() ; i++ )
+    {
+        vStatChannel.at(i)->updateLcdCount(stepCurrent);
+    }
+    stepCurrent++;
+    ui->progressBarStat->setValue(100*stepCurrent/stepsTotal);
+}

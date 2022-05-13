@@ -631,9 +631,11 @@ void Widget::on_buttonStatistics_released()
     }
     else
     {
-        statW = new StatisticsWidget(this);
+        statW = new StatisticsWidget(accumulateTime,this);
         setupStatUi();
         connect(statW,&StatisticsWidget::sendReturnSignal,this,&Widget::dealStatisticsReturn);
+        connect(statW,&StatisticsWidget::statisticsRequestSync,this,&Widget::dealStatisticsRequestSync);
+        connect(statW,&StatisticsWidget::statisticsRequestStopSync,this,&Widget::dealStatisticsRequestStopSync);
         statW->show();
         statWidgetLaunched = true;
     }
@@ -667,4 +669,22 @@ void Widget::setupStatUi()
             delete nbrAccCoin;
         }
     }
+}
+
+void Widget::dealStatisticsRequestSync()
+{
+    disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+    for (int i = 0; i < vCoinWidget.count(); i++)
+        if (vCoinWidgetSyncState.at(i))
+            disconnect(timerCount,&QTimer::timeout,vCoinWidget.at(i),&CoincidenceWidget::dealTimeOut);
+    connect(timerCount,&QTimer::timeout,statW,&StatisticsWidget::dealTimeOut);
+    connect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+    for (int i = 0; i < vCoinWidget.count(); i++)
+        if (vCoinWidgetSyncState.at(i))
+            connect(timerCount,&QTimer::timeout,vCoinWidget.at(i),&CoincidenceWidget::dealTimeOut);
+}
+
+void Widget::dealStatisticsRequestStopSync()
+{
+    disconnect(timerCount,&QTimer::timeout,statW,&StatisticsWidget::dealTimeOut);
 }

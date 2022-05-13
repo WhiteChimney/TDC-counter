@@ -11,7 +11,11 @@ public:
 private:
     QString channelName;
     int* countPtr;
-    int countStd;
+    int stepsTotal, stepCurrent;
+    int* counts;
+    double countsAvg, countsAvgOld;
+    double countsVar, countStd;
+    void calcCurrentStats();
 
 public:
     QLabel* labelChannelName;
@@ -19,9 +23,8 @@ public:
     QLCDNumber* lcdCountStd;
     void setChannelName(QString channelName0);
     void setCountPtr(int* countPtr0);
-    void updateLcdCount();
-    void updateLcdCountStd();
-
+    void updateLcdCount(int stepCurrent);
+    void setNbrSteps(int stepsTotal);
 };
 
 #endif // STATISTICSCHANNEL_H

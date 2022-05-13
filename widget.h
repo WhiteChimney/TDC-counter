@@ -57,6 +57,10 @@ public slots:
     // 数据记录倒计时结束
     void dealStatisticsReturn();
     // 关闭直方图子窗口
+    void dealStatisticsRequestSync();
+    // 统计时钟同步
+    void dealStatisticsRequestStopSync();
+    // 统计时钟停止同步
 
 private slots:
     void on_buttonTempFilePath_released();
