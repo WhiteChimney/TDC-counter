@@ -189,6 +189,7 @@ void Widget::on_buttonExit_released()
         if (vCoinWidget.at(i)->windowState() != Qt::WindowNoState)
             dealCoincidenceReturn(i);
         vCoinWidget.removeLast();
+        vCoinWidgetSyncState.removeLast();
     }
     for (int i = vHistWidget.count()-1; i >= 0; i--)
     {
@@ -327,6 +328,7 @@ void Widget::on_buttonCoincidence_released()
     int index = vCoinWidget.count();
     coinW = new CoincidenceWidget(0,index);
     vCoinWidget.append(coinW);
+    vCoinWidgetSyncState.append(false);
     connect(coinW,&CoincidenceWidget::returnSignal,this,&Widget::dealCoincidenceReturn);
     connect(coinW,&CoincidenceWidget::askDealAcqBankSwitchCoin,this,&Widget::dealAskDealAcqBankSwitchCoin);
     connect(coinW,&CoincidenceWidget::askStopDealAcqBankSwitchCoin,this,&Widget::dealAskStopDealAcqBankSwitchCoin);
@@ -363,12 +365,14 @@ void Widget::dealAskStopDealAcqBankSwitchCoin(int index)
 void Widget::dealCoinTimerNeedsSync(int index)
 {
     coinW = vCoinWidget.at(index);
+    vCoinWidgetSyncState.replace(index,true);
     connect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut); // 同步记录数据
 }
 
 void Widget::dealCoinTimerStopsSync(int index)
 {
     coinW = vCoinWidget.at(index);
+    vCoinWidgetSyncState.replace(index,false);
     disconnect(timerCount,&QTimer::timeout,coinW,&CoincidenceWidget::dealTimeOut);
 }
 
@@ -623,7 +627,6 @@ void Widget::loadFromIni()
 
 void Widget::on_buttonStatistics_released()
 {
-//    setupStatUi();
 //    初始化统计 Widget
     if (statWidgetLaunched)
     {
@@ -633,6 +636,7 @@ void Widget::on_buttonStatistics_released()
     else
     {
         statW = new StatisticsWidget(this);
+        setupStatUi();
         connect(statW,&StatisticsWidget::sendReturnSignal,this,&Widget::dealStatisticsReturn);
         statW->show();
         statWidgetLaunched = true;
@@ -642,11 +646,20 @@ void Widget::on_buttonStatistics_released()
 void Widget::dealStatisticsReturn()
 {
     statW->close();
-    delete (statW);
     statWidgetLaunched = false;
 }
 
 void Widget::setupStatUi()
 {
-
+    if (ui->checkBoxCN1->isChecked()) statW->addChannel("单道 1",nbrSCC+0);
+    if (ui->checkBoxCN2->isChecked()) statW->addChannel("单道 2",nbrSCC+1);
+    if (ui->checkBoxCN3->isChecked()) statW->addChannel("单道 3",nbrSCC+2);
+    if (ui->checkBoxCN4->isChecked()) statW->addChannel("单道 4",nbrSCC+3);
+    if (ui->checkBoxCN5->isChecked()) statW->addChannel("单道 5",nbrSCC+4);
+    if (ui->checkBoxCN6->isChecked()) statW->addChannel("单道 6",nbrSCC+5);
+    for (int i = 0; i < vCoinWidget.count(); i++)
+    {
+        if (vCoinWidgetSyncState.at(i))
+            statW->addChannel("符合",nbrSCC);
+    }
 }

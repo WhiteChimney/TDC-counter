@@ -103,6 +103,7 @@ private:
     QVector<TestWidget*> vTestWidget;        TestWidget *testW;
     // 符合子窗口（序列）
     QVector<CoincidenceWidget*> vCoinWidget; CoincidenceWidget *coinW;
+    QVector<bool> vCoinWidgetSyncState;
     // 直方图子窗口（序列）
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
     StatisticsWidget *statW; bool statWidgetLaunched = false;

@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "stdafx.h"
+#include "statisticschannel.h"
 
 namespace Ui {
 class StatisticsWidget;
@@ -22,14 +23,14 @@ signals:
 private slots:
     void on_buttonReturn_released();
     void on_buttonStart_released();
+    void on_buttonStop_released();
 
 private:
     Ui::StatisticsWidget *ui;
 
 private:
-    QVector<QString> vChannelName;
-//    QVector<int*> vCountPtr001;
-    QVector<int> vCountStd;
+    QVector<StatisticsChannel*> vStatChannel;
+
 
 public:
     void addChannel(QString channelName, int* countPtr);
