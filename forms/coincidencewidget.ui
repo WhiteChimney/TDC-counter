@@ -363,8 +363,20 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Box</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
          <property name="digitCount">
           <number>9</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -399,8 +411,14 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
          <property name="digitCount">
           <number>9</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>
@@ -411,7 +429,7 @@
        <item row="0" column="0">
         <layout class="QGridLayout" name="gridLayout_6">
          <item row="3" column="1">
-          <widget class="QLineEdit" name="lineEdit_9">
+          <widget class="QLineEdit" name="textDelayCN3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -431,7 +449,7 @@
           </widget>
          </item>
          <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_10">
+          <widget class="QLineEdit" name="textDelayCN2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -444,7 +462,7 @@
           </widget>
          </item>
          <item row="6" column="1">
-          <widget class="QLineEdit" name="lineEdit_11">
+          <widget class="QLineEdit" name="textDelayCN6">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -457,7 +475,7 @@
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QCheckBox" name="checkBox_8">
+          <widget class="QCheckBox" name="checkBoxCN4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -476,7 +494,7 @@
           </widget>
          </item>
          <item row="5" column="1">
-          <widget class="QLineEdit" name="lineEdit_12">
+          <widget class="QLineEdit" name="textDelayCN5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -489,7 +507,7 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_13">
+          <widget class="QLineEdit" name="textDelayCN1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -502,7 +520,7 @@
           </widget>
          </item>
          <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_14">
+          <widget class="QLineEdit" name="textDelayCN4">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -515,7 +533,7 @@
           </widget>
          </item>
          <item row="6" column="0">
-          <widget class="QCheckBox" name="checkBox_9">
+          <widget class="QCheckBox" name="checkBoxCN6">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -534,7 +552,7 @@
           </widget>
          </item>
          <item row="3" column="0">
-          <widget class="QCheckBox" name="checkBox_10">
+          <widget class="QCheckBox" name="checkBoxCN3">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -553,7 +571,7 @@
           </widget>
          </item>
          <item row="2" column="0">
-          <widget class="QCheckBox" name="checkBox_11">
+          <widget class="QCheckBox" name="checkBoxCN2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -572,7 +590,7 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QCheckBox" name="checkBox_12">
+          <widget class="QCheckBox" name="checkBoxCN1">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -593,7 +611,7 @@
           </widget>
          </item>
          <item row="5" column="0">
-          <widget class="QCheckBox" name="checkBox_13">
+          <widget class="QCheckBox" name="checkBoxCN5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -693,7 +711,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="accumTimeCoin_2">
+           <widget class="QLineEdit" name="accumTimeCoin_Multi">
             <property name="enabled">
              <bool>false</bool>
             </property>
@@ -715,7 +733,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="checkboxAccumlateTime_2">
+           <widget class="QCheckBox" name="checkboxAccumlateTime_Multi">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -751,7 +769,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="tolerance_2">
+           <widget class="QLineEdit" name="tolerance_Multi">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
               <horstretch>0</horstretch>
@@ -773,15 +791,21 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QLCDNumber" name="lcdAccCoin_2">
+        <widget class="QLCDNumber" name="lcdCoin_Multi">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
          <property name="digitCount">
           <number>9</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
          </property>
         </widget>
        </item>

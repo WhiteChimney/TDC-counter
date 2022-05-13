@@ -2,6 +2,7 @@
 #define STATISTICSWIDGET_H
 
 #include <QWidget>
+#include <QSizePolicy>
 #include "stdafx.h"
 #include "statisticschannel.h"
 

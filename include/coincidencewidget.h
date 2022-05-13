@@ -35,9 +35,7 @@ private slots:
     void on_buttonStop_released();                         // 停止按键按下
     void on_coinChannel1_currentIndexChanged(int index);   // 辅助选择符合通道，避免产生两个通道选择一样的情况
     void on_checkboxAccumlateTime_stateChanged(int checkState);  // 勾选同步时，时间输入框不可编辑
-
     void on_buttonChangeToMulti_released();
-
     void on_buttonChangeToDual_released();
 
 private:
@@ -69,6 +67,7 @@ public:
     void saveToIni(), loadFromIni();  // 保存与读取配置
     void startRecordCoinLocal(), stopRecordCoinLocal(); // 开始与停止保存计数（不与单道同步）
     void getCoinParam(QString* coinChannelName, int** nbrCoinPtr, int** nbrAccCoinPtr);
+    void getCoinParam(QString* coinChannelName, int** nbrCoinPtr);
 };
 
 #endif // COINCIDENCEWIDGET_H
