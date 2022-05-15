@@ -47,9 +47,9 @@ void computeCoincidenceCount
                     {
                         for (int j = nCOM+1; j < n; j++)
                         {
-                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay)<tolerance)
+                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay)<tolerance/2.0)
                                 (*nbrCoin)++;
-                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay-delayAcc)<tolerance)
+                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay-delayAcc)<tolerance/2.0)
                                 (*nbrAccCoin)++;
                         }
                     }
