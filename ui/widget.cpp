@@ -662,9 +662,17 @@ void Widget::setupStatUi()
             QString coinChannelName;
             int *nbrCoin = new int();
             int *nbrAccCoin = new int();
-            vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoin,&nbrAccCoin);
-            statW->addChannel("符合"+coinChannelName,nbrCoin);
-            statW->addChannel("偶然符合"+coinChannelName,nbrAccCoin);
+            bool checkMulti;
+            checkMulti = vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoin,&nbrAccCoin);
+            if (checkMulti)
+            {
+                statW->addChannel("符合"+coinChannelName,nbrCoin);
+            }
+            else
+            {
+                statW->addChannel("符合"+coinChannelName,nbrCoin);
+                statW->addChannel("偶然符合"+coinChannelName,nbrAccCoin);
+            }
             delete nbrCoin;
             delete nbrAccCoin;
         }

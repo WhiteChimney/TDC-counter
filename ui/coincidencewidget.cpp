@@ -97,6 +97,7 @@ void CoincidenceWidget::on_buttonStart_released()
     emit askDealAcqBankSwitchCoin(index);
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
+        ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTime)
         { // 如果需要与单道计数同步，发送同步请求
             emit coinTimerNeedsSync(index);
@@ -112,6 +113,7 @@ void CoincidenceWidget::on_buttonStart_released()
     }
     else
     {
+        ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTimeMulti)
         { // 如果需要与单道计数同步，发送同步请求
             emit coinTimerNeedsSync(index);
@@ -332,19 +334,29 @@ void CoincidenceWidget::on_buttonChangeToDual_released()
     ui->stackCoin->setCurrentIndex(0);
 }
 
-void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr, int **nbrAccCoinPtr)
+bool CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr, int **nbrAccCoinPtr)
 {
     fetchUiData();
-    *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
-    **nbrCoinPtr = nbrCoin;
-    **nbrAccCoinPtr = nbrAccCoin;
+    if (ui->stackCoin->currentIndex()==0)
+    {
+        *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
+        **nbrCoinPtr = nbrCoin;
+        **nbrAccCoinPtr = nbrAccCoin;
+        return false;
+    }
+    else
+    {
+        *coinChannelName = "Channel";
+        for (int i = 0; i < 6; i++)
+        {
+            if (channelMulti[i])
+                *coinChannelName += QString::number(i+1) + "&";
+        }
+        coinChannelName->remove(coinChannelName->length()-1,1);
+        **nbrCoinPtr = nbrCoin;
+        return true;
+    }
 }
 
-//void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr)
-//{
-//    fetchUiData();
-//    *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
-//    **nbrCoinPtr = nbrCoin;
-//}
 
 
