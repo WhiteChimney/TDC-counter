@@ -27,15 +27,15 @@ void StatisticsChannel::setCountPtr(int *countPtr0)
     countPtr = countPtr0;
 }
 
-void StatisticsChannel::updateLcdCount(int stepCurrent0)
+void StatisticsChannel::updateLcdCount(int stepCurrent0, double unitTime)
 {
     stepCurrent = stepCurrent0;
     counts[stepCurrent] = *countPtr;
 
     calcCurrentStats();
 
-    lcdCount->display(QString::number(countsAvg,'g',14));
-    lcdCountStd->display(QString::number(countStd,'g',8));
+    lcdCount->display(QString::number(countsAvg/unitTime,'g',14));
+    lcdCountStd->display(QString::number(countStd/unitTime,'g',8));
 }
 
 void StatisticsChannel::setNbrSteps(int stepsTotal0)
@@ -54,7 +54,7 @@ void StatisticsChannel::calcCurrentStats()
     countsVar = 0.0;
     for (int i = 0; i <= stepCurrent; i++)
     {
-        countsVar += 1.0/double(stepCurrent)*(counts[stepCurrent]-countsAvg);
+        countsVar += 1.0/double(stepCurrent)*pow(counts[i]-countsAvg,2);
     }
     countStd = sqrt(countsVar);
 }

@@ -23,7 +23,7 @@ public:
     QLCDNumber* lcdCountStd;
     void setChannelName(QString channelName0);
     void setCountPtr(int* countPtr0);
-    void updateLcdCount(int stepCurrent);
+    void updateLcdCount(int stepCurrent, double unitTime);
     void setNbrSteps(int stepsTotal);
 };
 

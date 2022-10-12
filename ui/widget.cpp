@@ -275,6 +275,8 @@ void Widget::dealAcqThreadFinished()
 
 void Widget::on_buttonStartCount_released()
 {
+    if (!acqThread->isRunning())
+        on_buttonStartAcquisition_released();
     this->dealCountTimeOut();
     if (! *acqStopPtr) // 当采集已经开启时
     {
@@ -659,22 +661,11 @@ void Widget::setupStatUi()
     {
         if (vCoinWidgetSyncState.at(i))
         {
-            QString coinChannelName;
-            int *nbrCoin = new int();
-            int *nbrAccCoin = new int();
             bool checkMulti;
-            checkMulti = vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoin,&nbrAccCoin);
-            if (checkMulti)
-            {
-                statW->addChannel("符合 "+coinChannelName,nbrCoin);
-            }
-            else
-            {
-                statW->addChannel("符合 "+coinChannelName,nbrCoin);
-                statW->addChannel("偶然符合 "+coinChannelName,nbrAccCoin);
-            }
-            delete nbrCoin;
-            delete nbrAccCoin;
+            checkMulti = vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoinPtr,&nbrAccCoinPtr);
+            statW->addChannel("符合 "+coinChannelName,nbrCoinPtr);
+            if (!checkMulti)
+                statW->addChannel("偶然符合 "+coinChannelName,nbrAccCoinPtr);
         }
     }
 }

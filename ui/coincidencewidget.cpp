@@ -94,9 +94,9 @@ void CoincidenceWidget::on_buttonReturn_released()
 void CoincidenceWidget::on_buttonStart_released()
 {
     fetchUiData();
-    emit askDealAcqBankSwitchCoin(index);
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
+        emit askDealAcqBankSwitchCoin(index);
         ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTime)
         { // 如果需要与单道计数同步，发送同步请求
@@ -113,7 +113,26 @@ void CoincidenceWidget::on_buttonStart_released()
     }
     else
     {
-        ui->buttonChangeToMulti->setEnabled(false);
+        bool existChannel = false;
+        for (int i = 0; i < 6; i++)
+        {
+            if (channelMulti[i])
+            {
+                existChannel = true;
+                break;
+            }
+        }
+        if (!existChannel)
+        {
+            QMessageBox::critical(this,
+                                  QString("警告"),
+                                  QString("未选择通道！"),
+                                  QMessageBox::Ok);
+            return;
+        }
+
+        emit askDealAcqBankSwitchCoin(index);
+        ui->buttonChangeToDual->setEnabled(false);
         if (enableAccumulateTimeMulti)
         { // 如果需要与单道计数同步，发送同步请求
             emit coinTimerNeedsSync(index);
@@ -334,26 +353,26 @@ void CoincidenceWidget::on_buttonChangeToDual_released()
     ui->stackCoin->setCurrentIndex(0);
 }
 
-bool CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr, int **nbrAccCoinPtr)
+bool CoincidenceWidget::getCoinParam(QString* coinChannelNamePtr, int **nbrCoinPtrPtr, int **nbrAccCoinPtrPtr)
 {
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0)
     {
-        *coinChannelName = QString::number(channel1) + "&" + QString::number(channel2);
-        **nbrCoinPtr = nbrCoin;
-        **nbrAccCoinPtr = nbrAccCoin;
+        *coinChannelNamePtr = QString::number(channel1) + "&" + QString::number(channel2);
+        *nbrCoinPtrPtr = &nbrCoin;
+        *nbrAccCoinPtrPtr = &nbrAccCoin;
         return false;
     }
     else
     {
-        *coinChannelName = "";
+        *coinChannelNamePtr = "";
         for (int i = 0; i < 6; i++)
         {
             if (channelMulti[i])
-                *coinChannelName += QString::number(i+1) + "&";
+                *coinChannelNamePtr += QString::number(i+1) + "&";
         }
-        coinChannelName->remove(coinChannelName->length()-1,1);
-        **nbrCoinPtr = nbrCoin;
+        coinChannelNamePtr->remove(coinChannelNamePtr->length()-1,1);
+        *nbrCoinPtrPtr = &nbrCoinMulti;
         return true;
     }
 }

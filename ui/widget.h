@@ -142,6 +142,10 @@ private:
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
+    // 符合计数指针变量，辅助统计
+    QString coinChannelName;
+    int *nbrCoinPtr = new int();
+    int *nbrAccCoinPtr = new int();
 
     // 数据保存参数
 private:

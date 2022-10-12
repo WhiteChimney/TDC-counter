@@ -60,9 +60,11 @@ void StatisticsWidget::on_buttonStop_released()
 
 void StatisticsWidget::dealTimeOut()
 {
+    if (stepCurrent+1 == stepsTotal)
+        on_buttonStop_released();
     for (int i = 0; i < vStatChannel.count() ; i++ )
     {
-        vStatChannel.at(i)->updateLcdCount(stepCurrent);
+        vStatChannel.at(i)->updateLcdCount(stepCurrent,unitTime);
     }
     stepCurrent++;
     ui->progressBarStat->setValue(100*stepCurrent/stepsTotal);
