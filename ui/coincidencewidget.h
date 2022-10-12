@@ -42,11 +42,20 @@ private:
     Ui::CoincidenceWidget *ui;
 
     // UI 参数
+    // 双通道
     int channel1, channel2;      // 通道
     int tolerance;               // 符合门宽
     int delay, delayAcc;         // 延时，偶然符合额外延时
     bool enableAccumulateTime;   // 时钟同步勾选框
     double accumulateTime = 1.0; // 累计时间（不同步）
+
+    // 多通道
+    bool channelMulti[6] = {0}; // 是否选择该通道
+    int toleranceMulti;               // 符合门宽
+    int delayMulti[6] = {0}; // 延时
+    bool enableAccumulateTimeMulti;   // 时钟同步勾选框
+    double accumulateTimeMulti = 1.0; // 累计时间（不同步）
+
 
     // 计数参数
     QTimer* timerCoin;         // 符合专用时钟

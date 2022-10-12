@@ -18,7 +18,6 @@ void computeCoincidenceCount
     int *TOF[2];                             // TOF: time of flight 单光子到达时间
     for (int i = 0; i < 2; ++i) TOF[i] = new int[nbrSamples]();
 
-
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
