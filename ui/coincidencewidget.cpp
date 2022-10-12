@@ -257,11 +257,20 @@ void CoincidenceWidget::on_checkboxAccumlateTime_stateChanged(int checkState)
         ui->accumTimeCoin->setEnabled(true);
 }
 
+void CoincidenceWidget::on_checkboxAccumlateTime_Multi_stateChanged(int checkState)
+{
+    if (checkState == Qt::Checked)
+        ui->accumTimeCoin_Multi->setEnabled(false);
+    else
+        ui->accumTimeCoin_Multi->setEnabled(true);
+}
+
 void CoincidenceWidget::saveToIni()
 {
     fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    // 双通道
     configIni->setValue("符合计数配置/channel1",channel1);
     configIni->setValue("符合计数配置/channel2",channel2);
     configIni->setValue("符合计数配置/delay",delay);
@@ -269,12 +278,26 @@ void CoincidenceWidget::saveToIni()
     configIni->setValue("符合计数配置/accumulateTime",accumulateTime);
     configIni->setValue("符合计数配置/enableAccumulateTime",enableAccumulateTime);
     configIni->setValue("符合计数配置/tolerance",tolerance);
+
+    // 多通道
+    configIni->setValue("符合计数配置/channelMulti1",channelMulti[0]); configIni->setValue("符合计数配置/delayMulti1",delayMulti[0]);
+    configIni->setValue("符合计数配置/channelMulti2",channelMulti[1]); configIni->setValue("符合计数配置/delayMulti2",delayMulti[1]);
+    configIni->setValue("符合计数配置/channelMulti3",channelMulti[2]); configIni->setValue("符合计数配置/delayMulti3",delayMulti[2]);
+    configIni->setValue("符合计数配置/channelMulti4",channelMulti[3]); configIni->setValue("符合计数配置/delayMulti4",delayMulti[3]);
+    configIni->setValue("符合计数配置/channelMulti5",channelMulti[4]); configIni->setValue("符合计数配置/delayMulti5",delayMulti[4]);
+    configIni->setValue("符合计数配置/channelMulti6",channelMulti[5]); configIni->setValue("符合计数配置/delayMulti6",delayMulti[5]);
+    configIni->setValue("符合计数配置/accumulateTimeMulti",accumulateTimeMulti);
+    configIni->setValue("符合计数配置/enableAccumulateTimeMulti",enableAccumulateTimeMulti);
+    configIni->setValue("符合计数配置/toleranceMulti",toleranceMulti);
+
     delete configIni;
 }
 
 void CoincidenceWidget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+
+    // 双通道
     channel1 = configIni->value("符合计数配置/channel1").toInt();
     channel2 = configIni->value("符合计数配置/channel2").toInt();
     delay = configIni->value("符合计数配置/delay").toInt();
@@ -282,6 +305,17 @@ void CoincidenceWidget::loadFromIni()
     accumulateTime = configIni->value("符合计数配置/accumulateTime").toDouble();
     enableAccumulateTime = configIni->value("符合计数配置/enableAccumulateTime").toBool();
     tolerance = configIni->value("符合计数配置/tolerance").toInt();
+
+    // 多通道
+    channelMulti[0] = configIni->value("符合计数配置/channelMulti1").toBool(); delayMulti[0] = configIni->value("符合计数配置/delayMulti1").toInt();
+    channelMulti[1] = configIni->value("符合计数配置/channelMulti2").toBool(); delayMulti[1] = configIni->value("符合计数配置/delayMulti2").toInt();
+    channelMulti[2] = configIni->value("符合计数配置/channelMulti3").toBool(); delayMulti[2] = configIni->value("符合计数配置/delayMulti3").toInt();
+    channelMulti[3] = configIni->value("符合计数配置/channelMulti4").toBool(); delayMulti[3] = configIni->value("符合计数配置/delayMulti4").toInt();
+    channelMulti[4] = configIni->value("符合计数配置/channelMulti5").toBool(); delayMulti[4] = configIni->value("符合计数配置/delayMulti5").toInt();
+    channelMulti[5] = configIni->value("符合计数配置/channelMulti6").toBool(); delayMulti[5] = configIni->value("符合计数配置/delayMulti6").toInt();
+    accumulateTimeMulti = configIni->value("符合计数配置/accumulateTimeMulti").toDouble();
+    enableAccumulateTimeMulti = configIni->value("符合计数配置/enableAccumulateTimeMulti").toBool();
+    toleranceMulti = configIni->value("符合计数配置/toleranceMulti").toInt();
     delete configIni;
 
     pushUiData();
@@ -312,3 +346,5 @@ void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr,
 //    *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
 //    **nbrCoinPtr = nbrCoin;
 //}
+
+

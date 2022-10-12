@@ -83,7 +83,7 @@
    <item row="0" column="6">
     <widget class="QStackedWidget" name="stackCoin">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="stackCoin_Dual">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -607,6 +607,9 @@
            </property>
            <property name="text">
             <string> 1</string>
+           </property>
+           <property name="checked">
+            <bool>false</bool>
            </property>
           </widget>
          </item>

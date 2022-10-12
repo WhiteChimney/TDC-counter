@@ -38,6 +38,8 @@ private slots:
     void on_buttonChangeToMulti_released();
     void on_buttonChangeToDual_released();
 
+    void on_checkboxAccumlateTime_Multi_stateChanged(int arg1);
+
 private:
     Ui::CoincidenceWidget *ui;
 

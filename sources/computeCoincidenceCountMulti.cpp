@@ -87,8 +87,8 @@ void computeCoincidenceCountMulti
             {
                 for (int i = 0; i < timeSeq.size(); i++)
                 {
-                    spacing = findSpacing(timeSeq, i, toleranceMulti);
-                    nbrCoinMulti += checkCoincidence(channelMulti, channelSeq, i, i+spacing);
+                    spacing = findSpacing(timeSeq, i, toleranceMulti);          // 求符合窗口在起始位置处的跨度
+                    nbrCoinMulti += checkCoincidence(channelMulti, channelSeq, i, i+spacing); // 查看该跨度内是否有符合
                 }
             }
             mark = false;
