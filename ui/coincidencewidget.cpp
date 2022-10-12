@@ -46,12 +46,12 @@ void CoincidenceWidget::fetchUiData()
     tolerance = int(20*ui->tolerance->text().toDouble());
 
 //    多通道的数据
-    channelMulti[0] = ui->checkBoxCN1->isEnabled(); delayMulti[0] = int(20*ui->textDelayCN1->text().toDouble());
-    channelMulti[1] = ui->checkBoxCN2->isEnabled(); delayMulti[1] = int(20*ui->textDelayCN2->text().toDouble());
-    channelMulti[2] = ui->checkBoxCN3->isEnabled(); delayMulti[2] = int(20*ui->textDelayCN3->text().toDouble());
-    channelMulti[3] = ui->checkBoxCN4->isEnabled(); delayMulti[3] = int(20*ui->textDelayCN4->text().toDouble());
-    channelMulti[4] = ui->checkBoxCN5->isEnabled(); delayMulti[4] = int(20*ui->textDelayCN5->text().toDouble());
-    channelMulti[5] = ui->checkBoxCN6->isEnabled(); delayMulti[5] = int(20*ui->textDelayCN6->text().toDouble());
+    channelMulti[0] = ui->checkBoxCN1->isChecked(); delayMulti[0] = int(20*ui->textDelayCN1->text().toDouble());
+    channelMulti[1] = ui->checkBoxCN2->isChecked(); delayMulti[1] = int(20*ui->textDelayCN2->text().toDouble());
+    channelMulti[2] = ui->checkBoxCN3->isChecked(); delayMulti[2] = int(20*ui->textDelayCN3->text().toDouble());
+    channelMulti[3] = ui->checkBoxCN4->isChecked(); delayMulti[3] = int(20*ui->textDelayCN4->text().toDouble());
+    channelMulti[4] = ui->checkBoxCN5->isChecked(); delayMulti[4] = int(20*ui->textDelayCN5->text().toDouble());
+    channelMulti[5] = ui->checkBoxCN6->isChecked(); delayMulti[5] = int(20*ui->textDelayCN6->text().toDouble());
     accumulateTimeMulti = ui->accumTimeCoin_Multi->text().toDouble();
     enableAccumulateTimeMulti = ui->checkboxAccumlateTime_Multi->isChecked();
     toleranceMulti = int(20*ui->tolerance_Multi->text().toDouble());
@@ -72,12 +72,12 @@ void CoincidenceWidget::pushUiData()
     ui->tolerance->setText(QString::number(tolerance/20.0));
 
 //    多通道的数据
-    ui->checkBoxCN1->setEnabled(channelMulti[0]); ui->textDelayCN1->setText(QString::number(delayMulti[0]/20.0));
-    ui->checkBoxCN2->setEnabled(channelMulti[1]); ui->textDelayCN2->setText(QString::number(delayMulti[1]/20.0));
-    ui->checkBoxCN3->setEnabled(channelMulti[2]); ui->textDelayCN3->setText(QString::number(delayMulti[2]/20.0));
-    ui->checkBoxCN4->setEnabled(channelMulti[3]); ui->textDelayCN4->setText(QString::number(delayMulti[3]/20.0));
-    ui->checkBoxCN5->setEnabled(channelMulti[4]); ui->textDelayCN5->setText(QString::number(delayMulti[4]/20.0));
-    ui->checkBoxCN6->setEnabled(channelMulti[5]); ui->textDelayCN6->setText(QString::number(delayMulti[5]/20.0));
+    ui->checkBoxCN1->setChecked(channelMulti[0]); ui->textDelayCN1->setText(QString::number(delayMulti[0]/20.0));
+    ui->checkBoxCN2->setChecked(channelMulti[1]); ui->textDelayCN2->setText(QString::number(delayMulti[1]/20.0));
+    ui->checkBoxCN3->setChecked(channelMulti[2]); ui->textDelayCN3->setText(QString::number(delayMulti[2]/20.0));
+    ui->checkBoxCN4->setChecked(channelMulti[3]); ui->textDelayCN4->setText(QString::number(delayMulti[3]/20.0));
+    ui->checkBoxCN5->setChecked(channelMulti[4]); ui->textDelayCN5->setText(QString::number(delayMulti[4]/20.0));
+    ui->checkBoxCN6->setChecked(channelMulti[5]); ui->textDelayCN6->setText(QString::number(delayMulti[5]/20.0));
     ui->checkboxAccumlateTime_Multi->setChecked(enableAccumulateTimeMulti);
     ui->accumTimeCoin_Multi->setText(QString::number(accumulateTimeMulti));
     ui->accumTimeCoin_Multi->setEnabled(!enableAccumulateTimeMulti);
@@ -339,14 +339,14 @@ bool CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr,
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0)
     {
-        *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
+        *coinChannelName = QString::number(channel1) + "&" + QString::number(channel2);
         **nbrCoinPtr = nbrCoin;
         **nbrAccCoinPtr = nbrAccCoin;
         return false;
     }
     else
     {
-        *coinChannelName = "Channel";
+        *coinChannelName = "";
         for (int i = 0; i < 6; i++)
         {
             if (channelMulti[i])

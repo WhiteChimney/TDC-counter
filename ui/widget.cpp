@@ -666,12 +666,12 @@ void Widget::setupStatUi()
             checkMulti = vCoinWidget.at(i)->getCoinParam(&coinChannelName,&nbrCoin,&nbrAccCoin);
             if (checkMulti)
             {
-                statW->addChannel("符合"+coinChannelName,nbrCoin);
+                statW->addChannel("符合 "+coinChannelName,nbrCoin);
             }
             else
             {
-                statW->addChannel("符合"+coinChannelName,nbrCoin);
-                statW->addChannel("偶然符合"+coinChannelName,nbrAccCoin);
+                statW->addChannel("符合 "+coinChannelName,nbrCoin);
+                statW->addChannel("偶然符合 "+coinChannelName,nbrAccCoin);
             }
             delete nbrCoin;
             delete nbrAccCoin;

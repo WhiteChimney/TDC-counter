@@ -36,9 +36,6 @@ void StatisticsWidget::addChannel(QString channelName0, int *countPtr0)
     ui->gridLayoutMain->addWidget(newChannel->labelChannelName,nbrRows,1);
     ui->gridLayoutMain->addWidget(newChannel->lcdCount,nbrRows,2);
     ui->gridLayoutMain->addWidget(newChannel->lcdCountStd,nbrRows,3);
-//    newChannel->labelChannelName->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
-//    newChannel->lcdCount->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
-//    newChannel->lcdCountStd->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::Preferred);
 }
 
 void StatisticsWidget::on_buttonStart_released()
