@@ -44,6 +44,13 @@ void computeCoincidenceCount
          int tolerance,
          int delay, int delayAcc);
 
+void computeCoincidenceCountMulti
+        (AqT3DataDescriptor* dataDescPtr,
+         int* nbrCoinMulti,
+         bool* channelMulti,
+         int toleranceMulti,
+         int* delayMulti);
+
 void computeHistogramCount
         (AqT3DataDescriptor* dataDescPtr,
          int channel1, int channel2, double delay,

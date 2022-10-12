@@ -95,32 +95,65 @@ void CoincidenceWidget::on_buttonStart_released()
 {
     fetchUiData();
     emit askDealAcqBankSwitchCoin(index);
-    if (enableAccumulateTime)
-    { // 如果需要与单道计数同步，发送同步请求
-        emit coinTimerNeedsSync(index);
+    if (ui->stackCoin->currentIndex()==0) // 双通道模式
+    {
+        if (enableAccumulateTime)
+        { // 如果需要与单道计数同步，发送同步请求
+            emit coinTimerNeedsSync(index);
+        }
+        else
+        {// 否则使用自己的时钟
+            connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+            accumulateTime = ui->accumTimeCoin->text().toDouble();
+            timerCoin->start(1000.0*accumulateTime);
+            timeTic = QDateTime::currentMSecsSinceEpoch();
+        }
+        coinSavable = true; // 此时可保存数据
     }
     else
-    {// 否则使用自己的时钟
-        connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
-        accumulateTime = ui->accumTimeCoin->text().toDouble();
-        timerCoin->start(1000.0*accumulateTime);
-        timeTic = QDateTime::currentMSecsSinceEpoch();
+    {
+        if (enableAccumulateTimeMulti)
+        { // 如果需要与单道计数同步，发送同步请求
+            emit coinTimerNeedsSync(index);
+        }
+        else
+        {// 否则使用自己的时钟
+            connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+            accumulateTimeMulti = ui->accumTimeCoin_Multi->text().toDouble();
+            timerCoin->start(1000.0*accumulateTimeMulti);
+            timeTic = QDateTime::currentMSecsSinceEpoch();
+        }
+        coinSavable = false; // 暂时搁置数据存储计划
     }
-    coinSavable = true; // 此时可保存数据
 }
 
 void CoincidenceWidget::on_buttonStop_released()
 {
     coinSavable = false;
-    emit askStopDealAcqBankSwitchCoin(index);
-    if (enableAccumulateTime)
-    { // 如果需要与单道计数同步，发送同步请求
-        emit coinTimerStopsSync(index);
+    emit askStopDealAcqBankSwitchCoin(index); // 双通道模式
+    if (ui->stackCoin->currentIndex()==0)
+    {
+        if (enableAccumulateTime)
+        { // 如果需要与单道计数同步，发送同步请求
+            emit coinTimerStopsSync(index);
+        }
+        else
+        {// 否则使用自己的时钟
+            disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+            timerCoin->stop();
+        }
     }
     else
-    {// 否则使用自己的时钟
-        disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
-        timerCoin->stop();
+    {
+        if (enableAccumulateTimeMulti)
+        { // 如果需要与单道计数同步，发送同步请求
+            emit coinTimerStopsSync(index);
+        }
+        else
+        {// 否则使用自己的时钟
+            disconnect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
+            timerCoin->stop();
+        }
     }
 }
 
@@ -153,10 +186,18 @@ void CoincidenceWidget::createTempDataFile()
 
 void CoincidenceWidget::dealTimeOut()
 {
-    ui->lcdCoin->display(nbrCoin);
-    ui->lcdAccCoin->display(nbrAccCoin);
-    memset(&nbrCoin,0,sizeof(nbrCoin));
-    memset(&nbrAccCoin,0,sizeof(nbrAccCoin));
+    if (ui->stackCoin->currentIndex()==0) // 双通道模式
+    {
+        ui->lcdCoin->display(nbrCoin);
+        ui->lcdAccCoin->display(nbrAccCoin);
+        memset(&nbrCoin,0,sizeof(nbrCoin));
+        memset(&nbrAccCoin,0,sizeof(nbrAccCoin));
+    }
+    else
+    {
+        ui->lcdCoin_Multi->display(nbrCoinMulti);
+        memset(&nbrCoinMulti,0,sizeof(nbrCoinMulti));
+    }
 }
 
 void CoincidenceWidget::dealSaveCoinData()
@@ -176,8 +217,15 @@ void CoincidenceWidget::dealSaveCoinData()
 
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr)
 {
-    computeCoincidenceCount
-        (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
+    if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
+    {
+        computeCoincidenceCount
+            (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
+    }
+    else                                   // 多通道模式计算符合计数
+    {
+        computeCoincidenceCountMulti(dataDescPtr, &nbrCoinMulti, channelMulti, toleranceMulti, delayMulti);
+    }
 }
 
 void CoincidenceWidget::startRecordCoinLocal()

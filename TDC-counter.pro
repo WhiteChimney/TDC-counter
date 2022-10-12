@@ -15,6 +15,7 @@ SOURCES += \
     sources/QSimpleLed.cpp \
     sources/acquisitionthread.cpp \
     sources/computeCoincidenceCount.cpp \
+    sources/computeCoincidenceCountMulti.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
@@ -58,6 +59,7 @@ FORMS += \
 
 INCLUDEPATH += $$PWD/include/
 INCLUDEPATH += $$PWD/include/Acqiris/
+INCLUDEPATH += $$PWD/ui/
 
 #LIBS += -L$$PWD/lib/ -lAqDrv4
 LIBS += -L$$PWD/lib/ -lAqDrv4_x64
