@@ -232,9 +232,9 @@ void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr,
     **nbrAccCoinPtr = nbrAccCoin;
 }
 
-void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr)
-{
+//void CoincidenceWidget::getCoinParam(QString* coinChannelName, int **nbrCoinPtr)
+//{
 //    fetchUiData();
 //    *coinChannelName = "Channel" + QString::number(channel1) + "&" + QString::number(channel2);
 //    **nbrCoinPtr = nbrCoin;
-}
+//}

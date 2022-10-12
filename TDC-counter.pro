@@ -14,17 +14,17 @@ SOURCES += \
     main.cpp \
     sources/QSimpleLed.cpp \
     sources/acquisitionthread.cpp \
-    sources/coincidencewidget.cpp \
     sources/computeCoincidenceCount.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
-    sources/histogramwidget.cpp \
     sources/mergeDataFiles.cpp \
     sources/statisticschannel.cpp \
-    sources/statisticswidget.cpp \
-    sources/testwidget.cpp \
-    widget.cpp
+    ui/coincidencewidget.cpp \
+    ui/histogramwidget.cpp \
+    ui/statisticswidget.cpp \
+    ui/testwidget.cpp \
+    ui/widget.cpp
 
 HEADERS += \
     include/Acqiris/AcqirisD1Import.h \
@@ -41,20 +41,20 @@ HEADERS += \
     include/Acqiris/vpptype.h \
     include/QSimpleLed.h \
     include/acquisitionthread.h \
-    include/coincidencewidget.h \
-    include/histogramwidget.h \
     include/statisticschannel.h \
-    include/statisticswidget.h \
     include/stdafx.h \
-    include/testwidget.h \
-    widget.h
+    ui/coincidencewidget.h \
+    ui/histogramwidget.h \
+    ui/statisticswidget.h \
+    ui/testwidget.h \
+    ui/widget.h
 
 FORMS += \
-    forms/coincidencewidget.ui \
-    forms/histogramwidget.ui \
-    forms/statisticswidget.ui \
-    forms/testwidget.ui \
-    widget.ui
+    ui/coincidencewidget.ui \
+    ui/histogramwidget.ui \
+    ui/statisticswidget.ui \
+    ui/testwidget.ui \
+    ui/widget.ui
 
 INCLUDEPATH += $$PWD/include/
 INCLUDEPATH += $$PWD/include/Acqiris/
