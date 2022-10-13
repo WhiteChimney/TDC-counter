@@ -109,7 +109,6 @@ void CoincidenceWidget::on_buttonStart_released()
             timerCoin->start(1000.0*accumulateTime);
             timeTic = QDateTime::currentMSecsSinceEpoch();
         }
-        coinSavable = true; // 此时可保存数据
     }
     else
     {
@@ -144,8 +143,8 @@ void CoincidenceWidget::on_buttonStart_released()
             timerCoin->start(1000.0*accumulateTimeMulti);
             timeTic = QDateTime::currentMSecsSinceEpoch();
         }
-        coinSavable = false; // 暂时搁置数据存储计划
     }
+    coinSavable = true; // 此时可保存数据
 }
 
 void CoincidenceWidget::on_buttonStop_released()
