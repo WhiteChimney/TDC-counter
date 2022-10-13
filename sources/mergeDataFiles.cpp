@@ -24,7 +24,7 @@ void Widget::mergeDataFiles
         fStream << tr(metaData.toStdString().data()) << endl
                 << endl;
         fSingle.open(QIODevice::ReadOnly | QIODevice::Text);
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4; i++)                                 // 单道计数文件跳过前 4 行，第 5 行为表头
         {
             line = QString::fromLocal8Bit(fSingle.readLine());
             fStream << line;
@@ -39,7 +39,7 @@ void Widget::mergeDataFiles
                 QFile *fCoin = new QFile();
                 fCoin->setFileName(tempFileName_C);
                 fCoin->open(QIODevice::ReadOnly | QIODevice::Text);
-                for (int i = 0; i < 9; i++)
+                for (int i = 0; i < 9; i++)                                // 符合计数文件跳过前 9 行，第 10 行为表头
                 {
                     line = QString::fromLocal8Bit(fCoin->readLine());
                     fStream << line;

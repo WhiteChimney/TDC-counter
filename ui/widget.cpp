@@ -65,7 +65,6 @@ Widget::Widget(QWidget *parent)
     connect(timerFile,&QTimer::timeout,this,&Widget::dealRecordTimeOut);
 
     qRegisterMetaType<AqT3DataDescriptor>("AqT3DataDescriptor");
-
 }
 
 Widget::~Widget()

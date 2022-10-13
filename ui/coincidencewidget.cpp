@@ -182,25 +182,68 @@ void CoincidenceWidget::createTempDataFile()
 {
     // 将配置写入临时文件
     fCoin->open(QIODevice::WriteOnly | QIODevice::Text);
-    fStream << tr("符合计数") << index+1 << endl
-            << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
-            << tr("符合通道：Channel") << channel1 << tr("与Channel") << channel2 << endl
-            << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
-            << tr("延时：") << delay/20.0 << tr("ns") << endl
-            << tr("偶然符合额外延时：") << delayAcc/20.0 << tr("ns") << endl;
-    if (enableAccumulateTime)
+
+    // 双通道
+    if (ui->stackCoin->currentIndex()==0)
     {
-        fStream << tr("计时与单道计数同步") << endl
-                << endl
-                << endl
-                << tr("符合计数") << index+1 << endl;
+        fStream << tr("符合计数") << index+1 << endl
+                << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
+                << tr("符合通道：Channel") << channel1 << tr("与Channel") << channel2 << endl
+                << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
+                << tr("延时：") << delay/20.0 << tr("ns") << endl
+                << tr("偶然符合额外延时：") << delayAcc/20.0 << tr("ns") << endl;
+        if (enableAccumulateTime)
+        {
+            fStream << tr("计时与单道计数同步") << endl
+                    << endl
+                    << endl
+                    << tr("符合计数") << index+1 << endl;
+        }
+        else
+        {
+            fStream << tr("计时未与单道计数同步") << endl
+                    << tr("累计时间：") << accumulateTime << endl
+                    << endl
+                    << tr("时间/ms\t计数") << endl;
+        }
     }
     else
     {
-        fStream << tr("计时未与单道计数同步") << endl
-                << tr("累计时间：") << accumulateTime << endl
-                << endl
-                << tr("时间/ms\t计数") << endl;
+        QString strChannel = "符合通道：Channel ";
+        QString strDelay = "延时：";
+        for (int i = 0; i < 6; i++)
+        {
+            if (channelMulti[i])
+            {
+                strChannel.append(QString::number(i+1));
+                strChannel.append(" & ");
+                strDelay.append(QString::number(delayMulti[i]/20.0));
+                strDelay.append("ns, ");
+            }
+        }
+        strChannel.remove(strChannel.length()-3,3);
+        strDelay.remove(strDelay.length()-2,2);
+
+        fStream << tr("符合计数") << index+1 << endl
+                << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
+                << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
+                << strChannel << endl
+                << strDelay << endl
+                << endl;
+        if (enableAccumulateTimeMulti)
+        {
+            fStream << tr("计时与单道计数同步") << endl
+                    << endl
+                    << endl
+                    << tr("符合计数") << index+1 << endl;
+        }
+        else
+        {
+            fStream << tr("计时未与单道计数同步") << endl
+                    << tr("累计时间：") << accumulateTime << endl
+                    << endl
+                    << tr("时间/ms\t计数") << endl;
+        }
     }
     fCoin->close();
 }
@@ -231,7 +274,10 @@ void CoincidenceWidget::dealSaveCoinData()
             timeToc = QDateTime::currentMSecsSinceEpoch();
             fStream << timeToc - timeTic << "\t";
         }
-        fStream << nbrCoin << endl;
+        if (ui->stackCoin->currentIndex()==0) // 双通道模式
+            fStream << nbrCoin << endl;
+        else
+            fStream << nbrCoinMulti << endl;
         fCoin->close();
     }
 }
