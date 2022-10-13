@@ -336,6 +336,8 @@ void CoincidenceWidget::saveToIni()
     fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    configIni->setValue("符合计数配置/currentPage",ui->stackCoin->currentIndex());
+
     // 双通道
     configIni->setValue("符合计数配置/channel1",channel1);
     configIni->setValue("符合计数配置/channel2",channel2);
@@ -362,6 +364,7 @@ void CoincidenceWidget::saveToIni()
 void CoincidenceWidget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    ui->stackCoin->setCurrentIndex(configIni->value("符合计数配置/currentPage").toInt());
 
     // 双通道
     channel1 = configIni->value("符合计数配置/channel1").toInt();

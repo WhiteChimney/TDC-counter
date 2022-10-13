@@ -567,6 +567,8 @@ void Widget::saveToIni()
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
 
+    configIni->setValue("UI设置/currentPage",ui->tabWidget->currentIndex());  // 记录当前所在页面
+
     //    configure TDC
     configIni->setValue("TDC配置/freqCOM",freqCOM);
     configIni->setValue("TDC配置/enableCountEvents",enableCountEvents);
@@ -595,6 +597,8 @@ void Widget::saveToIni()
 void Widget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+
+    ui->tabWidget->setCurrentIndex(configIni->value("UI设置/currentPage").toInt());
 
 //    configure TDC
     freqCOM = configIni->value("TDC配置/freqCOM").toInt();
