@@ -42,14 +42,14 @@ void computeCoincidenceCount
         {
             if (mark == 1)                            // 计算上一轮符合
             {
-                for (int i = nCOM+1; i < n; i++)
+                for (int i = nCOM; i < n; i++)
                     if (TOF[0][i] > 0)
                     {
-                        for (int j = nCOM+1; j < n; j++)
+                        for (int j = nCOM; j < n; j++)
                         {
-                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay)<tolerance/2.0)
+                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay)<=tolerance/2.0)
                                 (*nbrCoin)++;
-                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay-delayAcc)<tolerance/2.0)
+                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay-delayAcc)<=tolerance/2.0)
                                 (*nbrAccCoin)++;
                         }
                     }
