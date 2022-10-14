@@ -12,14 +12,14 @@ RC_ICONS = resources/TDC-Counter.ico
 
 SOURCES += \
     main.cpp \
-    sources/acquisitionthread.cpp \
     sources/computeCoincidenceCount.cpp \
     sources/computeCoincidenceCountMulti.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/mergeDataFiles.cpp \
-    sources/statisticschannel.cpp \
+    tools/acquisitionthread.cpp \
+    tools/statisticschannel.cpp \
     ui/QSimpleLed.cpp \
     ui/coincidencewidget.cpp \
     ui/histogramwidget.cpp \
@@ -40,9 +40,9 @@ HEADERS += \
     include/Acqiris/visa.h \
     include/Acqiris/visatype.h \
     include/Acqiris/vpptype.h \
-    include/acquisitionthread.h \
-    include/statisticschannel.h \
     include/stdafx.h \
+    tools/acquisitionthread.h \
+    tools/statisticschannel.h \
     ui/QSimpleLed.h \
     ui/coincidencewidget.h \
     ui/histogramwidget.h \
