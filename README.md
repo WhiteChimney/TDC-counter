@@ -25,11 +25,11 @@
 * CoincidenceWidget: 符合计数窗口
 * HistogramWidget: 直方图窗口
 * StatisticsWidget: 统计窗口
-* QSimpleLed: 自定义状态指示灯（来自 [CSDN 网友](https://blog.csdn.net/weixin_37818081/article/details/119803320)）
 
 ### 功能 Classes
 * AcquisitionThread: 采集线程
 * StatisticsChannel: 进行统计的通道
+* QSimpleLed: 自定义状态指示灯（来自 [CSDN 网友](https://blog.csdn.net/weixin_37818081/article/details/119803320)）
 
 ### 子函数
 * configTDC: 配置 TDC 参数
