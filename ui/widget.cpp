@@ -424,6 +424,7 @@ void Widget::on_buttonDataDirectory_released()
 
 void Widget::on_buttonStartRecord_released()
 {
+    ui->buttonStartRecord->setEnabled(false);
     fetchUiData();
     // 如果选择记录单道
     if (ui->checkboxSCC->isChecked())
@@ -546,6 +547,8 @@ void Widget::on_buttonStopRecord_released()
     {
         timerFile->stop();
     }
+
+    ui->buttonStartRecord->setEnabled(true);
 }
 
 void Widget::dealRecordTimeOut()
