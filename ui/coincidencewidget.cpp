@@ -187,7 +187,7 @@ void CoincidenceWidget::createTempDataFile()
     {
         fStream << tr("符合计数") << index+1 << endl
                 << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
-                << tr("符合通道：Channel") << channel1 << tr("与Channel") << channel2 << endl
+                << tr("符合通道：Channel ") << channel1 << tr(" & ") << channel2 << endl
                 << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
                 << tr("延时：") << delay/20.0 << tr("ns") << endl
                 << tr("偶然符合额外延时：") << delayAcc/20.0 << tr("ns") << endl;
@@ -201,7 +201,7 @@ void CoincidenceWidget::createTempDataFile()
         else
         {
             fStream << tr("计时未与单道计数同步") << endl
-                    << tr("累计时间：") << accumulateTime << endl
+                    << tr("累计时间：") << accumulateTime << tr("s") << endl
                     << endl
                     << tr("时间/ms\t计数") << endl;
         }
@@ -225,13 +225,13 @@ void CoincidenceWidget::createTempDataFile()
 
         fStream << tr("符合计数") << index+1 << endl
                 << tr("当前时间：") << QDateTime::currentDateTime().toString() << endl
-                << tr("符合门宽：") << tolerance/20.0 << tr("ns") << endl
+                << tr("符合门宽：") << toleranceMulti/20.0 << tr("ns") << endl
                 << strChannel << endl
-                << strDelay << endl
-                << endl;
+                << strDelay << endl;
         if (enableAccumulateTimeMulti)
         {
             fStream << tr("计时与单道计数同步") << endl
+                    << endl
                     << endl
                     << endl
                     << tr("符合计数") << index+1 << endl;
@@ -239,7 +239,8 @@ void CoincidenceWidget::createTempDataFile()
         else
         {
             fStream << tr("计时未与单道计数同步") << endl
-                    << tr("累计时间：") << accumulateTime << endl
+                    << tr("累计时间：") << accumulateTimeMulti << tr("s") << endl
+                    << endl
                     << endl
                     << tr("时间/ms\t计数") << endl;
         }

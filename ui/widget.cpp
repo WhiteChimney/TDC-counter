@@ -589,6 +589,8 @@ void Widget::saveToIni()
     configIni->setValue("保存数据/metaData",metaData);
     configIni->setValue("保存数据/enableRecordTime",enableRecordTime);
     configIni->setValue("保存数据/recordTime",recordTime);
+    configIni->setValue("保存数据/checkboxSCC",ui->checkboxSCC->isChecked());
+    configIni->setValue("保存数据/checkboxCC",ui->checkboxCC->isChecked());
 
     delete configIni;
 
@@ -620,6 +622,8 @@ void Widget::loadFromIni()
     metaData = configIni->value("保存数据/metaData").toString();
     enableRecordTime = configIni->value("保存数据/enableRecordTime").toBool();
     recordTime = configIni->value("保存数据/recordTime").toDouble();
+    ui->checkboxSCC->setChecked(configIni->value("保存数据/checkboxSCC").toBool());
+    ui->checkboxCC->setChecked(configIni->value("保存数据/checkboxCC").toBool());
 
     delete configIni;
 

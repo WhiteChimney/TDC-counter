@@ -313,7 +313,7 @@
             </property>
             <property name="text">
              <string>与单道计数的
-累计时间相同</string>
+刷新时间同步</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -751,7 +751,7 @@
             </property>
             <property name="text">
              <string>与单道计数的
-累计时间相同</string>
+刷新时间同步</string>
             </property>
             <property name="checked">
              <bool>true</bool>

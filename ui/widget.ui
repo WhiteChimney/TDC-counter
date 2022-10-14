@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="pageSettings">
       <attribute name="title">
@@ -1080,7 +1080,8 @@
          <property name="text">
           <string>注：
 1. 单独记录符合计数时，会在数据目录下新建一个 Coincidences 文件夹以存放多个符合计数
-2. 单道计数与符合计数同时记录时，符合计数面板需要勾选“与单道计数的累计时间相同”</string>
+2. 单独记录符合计数时，请取消勾选符合面板上的“与单道计数的刷新时间同步”
+3. 单道计数与符合计数同时记录时，需要勾选符合面板上的“与单道计数的刷新时间同步”</string>
          </property>
         </widget>
        </item>
