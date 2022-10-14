@@ -60,6 +60,7 @@ FORMS += \
 INCLUDEPATH += $$PWD/include/
 INCLUDEPATH += $$PWD/include/Acqiris/
 INCLUDEPATH += $$PWD/ui/
+INCLUDEPATH += $$PWD/tools/
 
 #LIBS += -L$$PWD/lib/ -lAqDrv4
 LIBS += -L$$PWD/lib/ -lAqDrv4_x64
