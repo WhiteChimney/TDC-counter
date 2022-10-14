@@ -18,9 +18,9 @@ SOURCES += \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/mergeDataFiles.cpp \
+    tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
     tools/statisticschannel.cpp \
-    ui/QSimpleLed.cpp \
     ui/coincidencewidget.cpp \
     ui/histogramwidget.cpp \
     ui/statisticswidget.cpp \
@@ -41,9 +41,9 @@ HEADERS += \
     include/Acqiris/visatype.h \
     include/Acqiris/vpptype.h \
     include/stdafx.h \
+    tools/QSimpleLed.h \
     tools/acquisitionthread.h \
     tools/statisticschannel.h \
-    ui/QSimpleLed.h \
     ui/coincidencewidget.h \
     ui/histogramwidget.h \
     ui/statisticswidget.h \
