@@ -1,7 +1,9 @@
 # TDC-counter
 * 主要功能：对 TDC 的数据进行采集与处理
 * 实际效果图：
-![捕获](https://user-images.githubusercontent.com/44578389/166425249-36da424d-c8e9-4022-8d07-3bf5dcd86e99.PNG)
+![捕获1](https://user-images.githubusercontent.com/44578389/196106119-fd9da0a8-fd7d-4e06-afcc-d686a0568cc7.PNG)
+![捕获2](https://user-images.githubusercontent.com/44578389/196106153-ee4e9df8-33cc-42fc-953e-46e0508ec6b6.PNG)
+![捕获3](https://user-images.githubusercontent.com/44578389/196106165-5cf4e69a-e54c-46d1-8791-3bc89d1d9cbc.PNG)
 * 项目 exe 发行地址：[Github](https://github.com/WhiteChimney/TDC-counter/releases)
 
 ## 硬件信息
