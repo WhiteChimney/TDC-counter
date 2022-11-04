@@ -426,5 +426,15 @@ bool CoincidenceWidget::getCoinParam(QString* coinChannelNamePtr, int **nbrCoinP
     }
 }
 
+int* CoincidenceWidget::getCoinCountPtr()
+{
+    if (ui->stackCoin->currentIndex()==0)
+        return &nbrCoin;
+    else
+        return &nbrCoinMulti;
+}
 
-
+int* CoincidenceWidget::getAccCoinCountPtr()
+{
+    return &nbrAccCoin;
+}

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -20,8 +20,10 @@ SOURCES += \
     sources/mergeDataFiles.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
+    tools/customizedCommands.cpp \
     tools/statisticschannel.cpp \
     ui/coincidencewidget.cpp \
+    ui/externalapplicationswidget.cpp \
     ui/histogramwidget.cpp \
     ui/statisticswidget.cpp \
     ui/testwidget.cpp \
@@ -45,6 +47,7 @@ HEADERS += \
     tools/acquisitionthread.h \
     tools/statisticschannel.h \
     ui/coincidencewidget.h \
+    ui/externalapplicationswidget.h \
     ui/histogramwidget.h \
     ui/statisticswidget.h \
     ui/testwidget.h \
@@ -52,6 +55,7 @@ HEADERS += \
 
 FORMS += \
     ui/coincidencewidget.ui \
+    ui/externalapplicationswidget.ui \
     ui/histogramwidget.ui \
     ui/statisticswidget.ui \
     ui/testwidget.ui \
@@ -72,3 +76,4 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     README.md
+

@@ -79,6 +79,8 @@ public:
     void saveToIni(), loadFromIni();  // 保存与读取配置
     void startRecordCoinLocal(), stopRecordCoinLocal(); // 开始与停止保存计数（不与单道同步）
     bool getCoinParam(QString* coinChannelName, int** nbrCoinPtr, int** nbrAccCoinPtr);
+    int* getCoinCountPtr();
+    int* getAccCoinCountPtr();
 };
 
 #endif // COINCIDENCEWIDGET_H

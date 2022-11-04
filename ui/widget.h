@@ -9,6 +9,7 @@
 #include "coincidencewidget.h"
 #include "acquisitionthread.h"
 #include "statisticswidget.h"
+#include "externalapplicationswidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -97,6 +98,8 @@ private slots:
     // 当未选择记录时长时，不可更改记录时间
     void on_buttonStatistics_released();
 
+    void on_buttonExternalApplications_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -146,6 +149,8 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
+public:
+    int* getSingleCountPtr();
 
     // 数据保存参数
 private:
@@ -178,6 +183,16 @@ public:
     // 保存当前配置到配置文件
     void loadFromIni();
     // 从配置文件加载配置
+
+private:
+    // 外部功能子窗口（序列）
+    ExternalApplicationsWidget *extAppW;
+public:
+    void setupExtAppWidget();
+public slots:
+    void dealExtAppRequestData();
+signals:
+    void sendExpAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
 
 };
 #endif // WIDGET_H

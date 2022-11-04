@@ -65,6 +65,8 @@ Widget::Widget(QWidget *parent)
     connect(timerFile,&QTimer::timeout,this,&Widget::dealRecordTimeOut);
 
     qRegisterMetaType<AqT3DataDescriptor>("AqT3DataDescriptor");
+
+    this->setupExtAppWidget();
 }
 
 Widget::~Widget()
@@ -693,7 +695,36 @@ void Widget::dealStatisticsRequestSync()
             connect(timerCount,&QTimer::timeout,vCoinWidget.at(i),&CoincidenceWidget::dealTimeOut);
 }
 
+int* Widget::getSingleCountPtr()
+{
+    return nbrSCC;
+}
+
 void Widget::dealStatisticsRequestStopSync()
 {
     disconnect(timerCount,&QTimer::timeout,statW,&StatisticsWidget::dealTimeOut);
+}
+
+void Widget::setupExtAppWidget()
+{
+    extAppW = new ExternalApplicationsWidget(this);
+    extAppW->setWindowTitle("外接功能");
+    connect(extAppW,&ExternalApplicationsWidget::requestData,this,&Widget::dealExtAppRequestData);
+}
+
+void Widget::on_buttonExternalApplications_released()
+{
+    extAppW->show();
+}
+
+void Widget::dealExtAppRequestData()
+{
+    QVector<int*> vNbrCoin;
+    for (int i = 0; i < vCoinWidget.size(); i++)
+    {
+        if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
+            vNbrCoin.append(vCoinWidget.at(i)->getCoinCountPtr());
+    }
+    emit sendExpAppRequestedData(nbrSCC, vNbrCoin);
+    connect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::dealSingleCountTimeup);
 }
