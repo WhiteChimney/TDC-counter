@@ -17,10 +17,10 @@ SOURCES += \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
+    sources/customizedCommands.cpp \
     sources/mergeDataFiles.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
-    tools/customizedCommands.cpp \
     tools/statisticschannel.cpp \
     ui/coincidencewidget.cpp \
     ui/externalapplicationswidget.cpp \

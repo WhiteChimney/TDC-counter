@@ -33,12 +33,13 @@ int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
 int checkCoincidence(bool* channelMulti, QVector<int> channelSeq, int start, int end)
 {
     bool channelMark[6] = {0};
-    for (int i = start; i <= end; i++)
+    for (int i = start; i <= end; i++)         // 判断 channelSeq[start,end-1] 这个序列中有哪些通道号
     {
         channelMark[channelSeq.at(i)] = true;
     }
+                                               // 到这一步 channelMark 数组中包含了哪几个通道为符合通道
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)                // 再判断 channelMark 数组中的通道是否包含所要求的符合通道 channelMulti
     {
         if (channelMulti[i])
             if (!channelMark[i])
