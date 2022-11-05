@@ -58,4 +58,6 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
     qDebug() << "单道计数刷新";
     qDebug() << tr("单道计数：") << *nbrSCC;
     qDebug() << tr("第一个与单道计数同步的符合面板的计数：") << *vNbrCoin.at(0);
+    qDebug() << tr("第一个与单道计数同步的符合面板的计数：") << *vNbrCoin.at(0);
+    //
 }
