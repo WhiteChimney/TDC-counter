@@ -69,6 +69,9 @@ private slots:
     void on_buttonOpenSP_released();
     void on_buttonStart_released();
     void on_buttonStop_released();
+    void on_buttonSend_released();
+    void on_buttonCloseSP_released();
+    void on_buttonRefresh_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

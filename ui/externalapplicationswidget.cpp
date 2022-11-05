@@ -58,6 +58,11 @@ void ExternalApplicationsWidget::refreshPorts()
     }
 }
 
+void ExternalApplicationsWidget::on_buttonRefresh_released()
+{
+    this->refreshPorts();
+}
+
 void ExternalApplicationsWidget::fetchUiData()
 {
     switch (ui->comboBoxBaudRateList->currentIndex()) {
@@ -150,11 +155,12 @@ void ExternalApplicationsWidget::readData()
 {
     QByteArray buffer = serial->readAll();
     ui->labelDataReceived->setText(buffer);
+    qDebug() << "buffer: " << buffer;
 }
 
 void ExternalApplicationsWidget::sendData()
 {
-    serial->write(ui->textDataSent->text().toLocal8Bit());
+    qDebug() << serial->write(ui->textDataSent->text().toLocal8Bit().data());
 }
 
 void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkState)
@@ -189,7 +195,21 @@ void ExternalApplicationsWidget::on_buttonOpenSP_released()
                              tr("串口打开失败"),
                              QMessageBox::Ok);
     }
+}
 
+void ExternalApplicationsWidget::on_buttonCloseSP_released()
+{
+    if (serial->isOpen())
+    {
+        serial->close();
+        statusIndicator->setStates(QSimpleLed::OFF);
+    }
+}
+
+void ExternalApplicationsWidget::on_buttonSend_released()
+{
+    this->sendData();
+    this->readData();
 }
 
 void ExternalApplicationsWidget::on_buttonStart_released()
@@ -210,4 +230,3 @@ void ExternalApplicationsWidget::on_buttonStop_released()
 {
     this->customizedSPcommands_stop();
 }
-
