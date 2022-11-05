@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>616</width>
+    <width>429</width>
     <height>571</height>
    </rect>
   </property>
@@ -81,6 +81,13 @@
             <widget class="QPushButton" name="buttonOpenSP">
              <property name="text">
               <string>打开串口</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="buttonCloseSP">
+             <property name="text">
+              <string>关闭串口</string>
              </property>
             </widget>
            </item>
@@ -251,19 +258,36 @@
           </widget>
          </item>
          <item row="1" column="1">
-          <widget class="QLineEdit" name="textDataSent"/>
+          <widget class="QLineEdit" name="textDataSent">
+           <property name="text">
+            <string>*IDN?</string>
+           </property>
+          </widget>
          </item>
-         <item row="1" column="2" rowspan="2">
+         <item row="1" column="2">
           <widget class="QPushButton" name="buttonSend">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>发送</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="2">
+          <widget class="QPushButton" name="buttonReceive">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="text">
+            <string>接收</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
        <item>
-        <widget class="QTextEdit" name="textCommand"/>
+        <widget class="QTextEdit" name="whiteBoard"/>
        </item>
        <item>
         <spacer name="verticalSpacer_2">
@@ -282,6 +306,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QCheckBox" name="checkboxSPcustomize">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
              <horstretch>0</horstretch>
@@ -291,12 +318,28 @@
            <property name="text">
             <string>自定义编程操控</string>
            </property>
+           <property name="checked">
+            <bool>true</bool>
+           </property>
+           <property name="tristate">
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="buttonTest">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>测试</string>
+           </property>
           </widget>
          </item>
          <item>
           <widget class="QPushButton" name="buttonStart">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string> 开始</string>
@@ -306,7 +349,7 @@
          <item>
           <widget class="QPushButton" name="buttonStop">
            <property name="enabled">
-            <bool>false</bool>
+            <bool>true</bool>
            </property>
            <property name="text">
             <string>停止</string>

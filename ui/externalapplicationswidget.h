@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QDebug>
+#include <QThread>
 #include <QListView>
 #include <QMessageBox>
 #include <QSettings>
@@ -46,8 +47,8 @@ public:
 
     void refreshPorts();
     bool openSerialPort(QSerialPortInfo);
-    void readData();
-    void sendData();
+    QString readData();
+    void sendData(QString dataText);
 
 signals:
     void requestData();
@@ -69,6 +70,11 @@ private slots:
     void on_buttonOpenSP_released();
     void on_buttonStart_released();
     void on_buttonStop_released();
+    void on_buttonSend_released();
+    void on_buttonCloseSP_released();
+    void on_buttonRefresh_released();
+    void on_buttonReceive_released();
+    void on_buttonTest_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H
