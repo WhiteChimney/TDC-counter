@@ -151,16 +151,19 @@ bool ExternalApplicationsWidget::openSerialPort(QSerialPortInfo spInfo)
     return serial->open(QIODevice::ReadWrite);
 }
 
-void ExternalApplicationsWidget::readData()
+QString ExternalApplicationsWidget::readData()
 {
+    qDebug() << serial->waitForReadyRead(1000);
     QByteArray buffer = serial->readAll();
-    ui->labelDataReceived->setText(buffer);
-    qDebug() << "buffer: " << buffer;
+    if (buffer.size() > 0)
+        buffer = buffer.remove(buffer.size()-1,1);
+    return buffer;
 }
 
-void ExternalApplicationsWidget::sendData()
+void ExternalApplicationsWidget::sendData(QString dataText)
 {
-    qDebug() << serial->write(ui->textDataSent->text().toLocal8Bit().data());
+    serial->write(dataText.toLocal8Bit().append("\n"));
+    serial->waitForBytesWritten();
 }
 
 void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkState)
@@ -168,12 +171,16 @@ void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkSt
     if (checkState == Qt::Checked)
     {
         ui->buttonSend->setEnabled(false);
+        ui->buttonReceive->setEnabled(false);
+        ui->buttonTest->setEnabled(true);
         ui->buttonStart->setEnabled(true);
         ui->buttonStop->setEnabled(true);
     }
     else
     {
         ui->buttonSend->setEnabled(true);
+        ui->buttonReceive->setEnabled(true);
+        ui->buttonTest->setEnabled(false);
         ui->buttonStart->setEnabled(false);
         ui->buttonStop->setEnabled(false);
     }
@@ -208,8 +215,12 @@ void ExternalApplicationsWidget::on_buttonCloseSP_released()
 
 void ExternalApplicationsWidget::on_buttonSend_released()
 {
-    this->sendData();
-    this->readData();
+    this->sendData(ui->textDataSent->text());
+}
+
+void ExternalApplicationsWidget::on_buttonReceive_released()
+{
+    ui->labelDataReceived->setText(this->readData());
 }
 
 void ExternalApplicationsWidget::on_buttonStart_released()
@@ -230,3 +241,4 @@ void ExternalApplicationsWidget::on_buttonStop_released()
 {
     this->customizedSPcommands_stop();
 }
+
