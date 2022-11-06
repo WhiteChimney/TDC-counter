@@ -53,6 +53,7 @@ public:
 
 private:
     TSP01 *tsp;
+    QList<QString> tspList;
     double temperature, temperatureOffset;
     double humidity, humidityOffset;
 

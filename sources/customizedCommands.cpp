@@ -38,6 +38,14 @@ void ExternalApplicationsWidget::on_buttonTest_released()
     QThread::msleep(500);
     sendData(commandBeep);
 
+    // Thorlabs 温湿度计操作
+    temperature = tsp->getTemperature();    // 获取温度
+    humidity = tsp->getHumidity();          // 获取湿度
+
+    answer += tr("\n当前温度：") + QString::number(temperature) + tr("℃");
+    answer += tr("\n当前湿度：") + QString::number(humidity) + tr("%");
+    ui->whiteBoard->setText(answer);
+
 }
 
 //  开始 按钮被按下

@@ -8,11 +8,11 @@ TSP01::TSP01(QObject *parent) : QObject(parent)
 /*---------------------------------------------------------------------------
   Find Instruments, return the list of found instruments
 ---------------------------------------------------------------------------*/
-QList<ViChar*> TSP01::findInstruments()
+QList<QString> TSP01::findInstruments()
 {
     ViUInt32       findCnt;
     ViChar         *rscPtr;
-    QList<ViChar*> vResource;
+    QList<QString> vResource;
     ViUInt32       cnt;
 
     switch(err = TLTSP_getDeviceCount(VI_NULL, &findCnt)) {
@@ -30,14 +30,14 @@ QList<ViChar*> TSP01::findInstruments()
     {
         if((err = TLTSP_getDeviceResourceString(VI_NULL, cnt, rscPtr)))
         {
+            rscPtr -= cnt * VI_FIND_BUFLEN;
             delete [] rscPtr;
             return vResource;
         }
-        vResource.append(rscPtr);
+        vResource.append(QString(rscPtr));
         rscPtr += VI_FIND_BUFLEN;
     }
     rscPtr -= cnt * VI_FIND_BUFLEN;
-
     delete [] rscPtr;
     return vResource;
 }
@@ -45,9 +45,9 @@ QList<ViChar*> TSP01::findInstruments()
 /*===========================================================================
  Initialize Device
 ===========================================================================*/
-ViStatus TSP01::initializeDevice(ViChar *rscPtr)
+ViStatus TSP01::initializeDevice(QString resourceName)
 {
-    err = TLTSP_init(rscPtr, VI_ON, VI_ON, &ihdl);
+    err = TLTSP_init(resourceName.toLocal8Bit().data(), VI_ON, VI_ON, &ihdl);
     if (!err)
         viSetAttribute(ihdl, VI_ATTR_TMO_VALUE, TIMEOUT_MILLISEC);
 

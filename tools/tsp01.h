@@ -24,8 +24,8 @@ private:
     ViReal64 errValue = 1958.0;
 
 public:
-    QList<ViChar*> findInstruments();
-    ViStatus initializeDevice(ViChar* rscPtr);
+    QList<QString> findInstruments();
+    ViStatus initializeDevice(QString resourceName);
     ViStatus closeDevice();
     QString checkDeviceInfo();
     ViStatus getErrorCode();

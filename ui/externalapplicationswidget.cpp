@@ -74,14 +74,6 @@ void ExternalApplicationsWidget::refreshPorts()
     }
 }
 
-void ExternalApplicationsWidget::refreshTSPlist()
-{
-    ui->comboBoxTSP01DeviceList->clear();
-    QList<ViChar*> TSPlist = tsp->findInstruments();
-    for (int i = 0; i < TSPlist.size(); i++)
-        ui->comboBoxTSP01DeviceList->addItem(TSPlist.at(i));
-}
-
 void ExternalApplicationsWidget::on_buttonRefresh_released()
 {
     this->refreshPorts();
@@ -266,6 +258,16 @@ void ExternalApplicationsWidget::on_buttonStop_released()
     this->customizedSPcommands_stop();
 }
 
+void ExternalApplicationsWidget::refreshTSPlist()
+{
+    ui->comboBoxTSP01DeviceList->clear();
+
+    tspList = tsp->findInstruments();
+
+    for (int i = 0; i < tspList.size(); i++)
+        ui->comboBoxTSP01DeviceList->addItem(tspList.at(i));
+}
+
 void ExternalApplicationsWidget::on_buttonRefreshTSP01_released()
 {
     this->refreshTSPlist();
@@ -273,20 +275,30 @@ void ExternalApplicationsWidget::on_buttonRefreshTSP01_released()
 
 void ExternalApplicationsWidget::on_buttonOpenTSP01_released()
 {
-    tsp->initializeDevice(
-                tsp->findInstruments().at(ui->comboBoxTSP01DeviceList->currentIndex()));
+    tsp->initializeDevice(tspList.at(ui->comboBoxTSP01DeviceList->currentIndex()));
+
+    if (tsp->getErrorCode())
+        TSP01statusIndicator->setStates(QSimpleLed::OFF);
+    else
+        TSP01statusIndicator->setStates(QSimpleLed::ON);
 }
 
 
 void ExternalApplicationsWidget::on_buttonCloseTSP01_released()
 {
     tsp->closeDevice();
+    TSP01statusIndicator->setStates(QSimpleLed::OFF);
 }
 
 
 void ExternalApplicationsWidget::on_buttonTestTSP01_released()
 {
     ui->whiteBoard->setText(tsp->checkDeviceInfo());
+
+    if (tsp->getErrorCode())
+        TSP01statusIndicator->setStates(QSimpleLed::OFF);
+    else
+        TSP01statusIndicator->setStates(QSimpleLed::ON);
 }
 
 
@@ -296,5 +308,10 @@ void ExternalApplicationsWidget::on_buttonRefreshDataTSP01_released()
     ui->lcdTempOffset->display(tsp->getTemperatureOffset());
     ui->lcdHumd->display(tsp->getHumidity());
     ui->lcdHumdOffset->display(tsp->getHumidityOffset());
+
+    if (tsp->getErrorCode())
+        TSP01statusIndicator->setStates(QSimpleLed::OFF);
+    else
+        TSP01statusIndicator->setStates(QSimpleLed::ON);
 }
 
