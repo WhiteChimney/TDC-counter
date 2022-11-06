@@ -12,6 +12,7 @@
 
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
+#include "tsp01.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -27,7 +28,7 @@ public:
 
 private:
     Ui::ExternalApplicationsWidget *ui;
-    QSimpleLed *statusIndicator;
+    QSimpleLed *SPstatusIndicator, *TSP01statusIndicator;
 
 private:
     QSerialPort *serial;
@@ -39,7 +40,7 @@ private:
     QByteArray receivedBytes, sentBytes;
 
 public:
-    void setupSPIndicator();
+    void setupSPIndicator(), setupTSPIndicator();
     void fetchUiData();
     void pushUiData();
     void saveToIni();
@@ -49,6 +50,14 @@ public:
     bool openSerialPort(QSerialPortInfo);
     QString readData();
     void sendData(QString dataText);
+
+private:
+    TSP01 *tsp;
+    double temperature, temperatureOffset;
+    double humidity, humidityOffset;
+
+public:
+    void refreshTSPlist();
 
 signals:
     void requestData();
@@ -75,6 +84,11 @@ private slots:
     void on_buttonRefresh_released();
     void on_buttonReceive_released();
     void on_buttonTest_released();
+    void on_buttonRefreshTSP01_released();
+    void on_buttonOpenTSP01_released();
+    void on_buttonCloseTSP01_released();
+    void on_buttonTestTSP01_released();
+    void on_buttonRefreshDataTSP01_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

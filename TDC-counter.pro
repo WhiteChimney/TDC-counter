@@ -22,6 +22,7 @@ SOURCES += \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
     tools/statisticschannel.cpp \
+    tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
     ui/externalapplicationswidget.cpp \
     ui/histogramwidget.cpp \
@@ -38,14 +39,15 @@ HEADERS += \
     include/Acqiris/AcqirisInterface.h \
     include/Acqiris/AcqirisT3Import.h \
     include/Acqiris/AcqirisT3Interface.h \
-    include/Acqiris/ivi.h \
-    include/Acqiris/visa.h \
-    include/Acqiris/visatype.h \
-    include/Acqiris/vpptype.h \
+    include/VISA/ivi.h \
+    include/VISA/visa.h \
+    include/VISA/visatype.h \
+    include/VISA/vpptype.h \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \
     tools/statisticschannel.h \
+    tools/tsp01.h \
     ui/coincidencewidget.h \
     ui/externalapplicationswidget.h \
     ui/histogramwidget.h \
@@ -63,11 +65,17 @@ FORMS += \
 
 INCLUDEPATH += $$PWD/include/
 INCLUDEPATH += $$PWD/include/Acqiris/
+INCLUDEPATH += $$PWD/include/VISA/
+INCLUDEPATH += $$PWD/include/Thorlabs/
 INCLUDEPATH += $$PWD/ui/
 INCLUDEPATH += $$PWD/tools/
 
-#LIBS += -L$$PWD/lib/ -lAqDrv4
 LIBS += -L$$PWD/lib/ -lAqDrv4_x64
+LIBS += -L$$PWD/lib/ -lTLTSP_64
+LIBS += -L$$PWD/lib/ -lvisa64
+#LIBS += -L$$PWD/lib/ -lAqDrv4
+#LIBS += -L$$PWD/lib/ -lTLTSP_32
+#LIBS += -L$$PWD/lib/ -lvisa32
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

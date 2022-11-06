@@ -14,12 +14,16 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
 
     setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
 
-    statusIndicator = new QSimpleLed(this);
+    SPstatusIndicator = new QSimpleLed(this);
     this->setupSPIndicator();
+    TSP01statusIndicator = new QSimpleLed(this);
+    this->setupTSPIndicator();
 
     serial = new QSerialPort(this);
-
     this->refreshPorts();
+
+    tsp = new TSP01(this);
+    this->refreshTSPlist();
 
 }
 
@@ -30,14 +34,26 @@ ExternalApplicationsWidget::~ExternalApplicationsWidget()
 
 void ExternalApplicationsWidget::setupSPIndicator()
 {
-    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
-    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
+    SPstatusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    SPstatusIndicator->setCustomOffColor0(QSimpleLed::RED);
     QSizePolicy p1;
     p1.setHorizontalPolicy(QSizePolicy::Minimum);
     p1.setVerticalPolicy(QSizePolicy::Preferred);
-    statusIndicator->setSizePolicy(p1);
-    ui->horizontalLayout_3->insertWidget(0,statusIndicator);
-    statusIndicator->setStates(QSimpleLed::OFF);
+    SPstatusIndicator->setSizePolicy(p1);
+    ui->horizontalLayout_3->insertWidget(0,SPstatusIndicator);
+    SPstatusIndicator->setStates(QSimpleLed::OFF);
+}
+
+void ExternalApplicationsWidget::setupTSPIndicator()
+{
+    TSP01statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    TSP01statusIndicator->setCustomOffColor0(QSimpleLed::RED);
+    QSizePolicy p1;
+    p1.setHorizontalPolicy(QSizePolicy::Minimum);
+    p1.setVerticalPolicy(QSizePolicy::Preferred);
+    TSP01statusIndicator->setSizePolicy(p1);
+    ui->gridLayout_3->addWidget(TSP01statusIndicator,0,0,2,1,0);
+    TSP01statusIndicator->setStates(QSimpleLed::OFF);
 }
 
 void ExternalApplicationsWidget::refreshPorts()
@@ -56,6 +72,14 @@ void ExternalApplicationsWidget::refreshPorts()
         else
             spList.removeAt(i);
     }
+}
+
+void ExternalApplicationsWidget::refreshTSPlist()
+{
+    ui->comboBoxTSP01DeviceList->clear();
+    QList<ViChar*> TSPlist = tsp->findInstruments();
+    for (int i = 0; i < TSPlist.size(); i++)
+        ui->comboBoxTSP01DeviceList->addItem(TSPlist.at(i));
 }
 
 void ExternalApplicationsWidget::on_buttonRefresh_released()
@@ -192,11 +216,11 @@ void ExternalApplicationsWidget::on_buttonOpenSP_released()
     this->fetchUiData();
     if (this->openSerialPort(spList.at(ui->comboboxSPList->currentIndex())))
     {
-        statusIndicator->setStates(QSimpleLed::ON);
+        SPstatusIndicator->setStates(QSimpleLed::ON);
     }
     else
     {
-        statusIndicator->setStates(QSimpleLed::OFF);
+        SPstatusIndicator->setStates(QSimpleLed::OFF);
         QMessageBox::warning(this,
                              tr("警告"),
                              tr("串口打开失败"),
@@ -209,7 +233,7 @@ void ExternalApplicationsWidget::on_buttonCloseSP_released()
     if (serial->isOpen())
     {
         serial->close();
-        statusIndicator->setStates(QSimpleLed::OFF);
+        SPstatusIndicator->setStates(QSimpleLed::OFF);
     }
 }
 
@@ -240,5 +264,37 @@ void ExternalApplicationsWidget::dealRequestedData(int* m_nbrSCC, QVector<int*> 
 void ExternalApplicationsWidget::on_buttonStop_released()
 {
     this->customizedSPcommands_stop();
+}
+
+void ExternalApplicationsWidget::on_buttonRefreshTSP01_released()
+{
+    this->refreshTSPlist();
+}
+
+void ExternalApplicationsWidget::on_buttonOpenTSP01_released()
+{
+    tsp->initializeDevice(
+                tsp->findInstruments().at(ui->comboBoxTSP01DeviceList->currentIndex()));
+}
+
+
+void ExternalApplicationsWidget::on_buttonCloseTSP01_released()
+{
+    tsp->closeDevice();
+}
+
+
+void ExternalApplicationsWidget::on_buttonTestTSP01_released()
+{
+    ui->whiteBoard->setText(tsp->checkDeviceInfo());
+}
+
+
+void ExternalApplicationsWidget::on_buttonRefreshDataTSP01_released()
+{
+    ui->lcdTemp->display(tsp->getTemperature());
+    ui->lcdTempOffset->display(tsp->getTemperatureOffset());
+    ui->lcdHumd->display(tsp->getHumidity());
+    ui->lcdHumdOffset->display(tsp->getHumidityOffset());
 }
 
