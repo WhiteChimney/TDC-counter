@@ -12,7 +12,7 @@ class ExternalApplicationsWidget;
 //  测试 按钮被按下
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
-    QString commandAskID = "*IDN?";                    // 查询仪器 ID
+   /* QString commandAskID = "*IDN?";                    // 查询仪器 ID
     sendData(commandAskID);                            // 发送指令
     QThread::msleep(100);                              // 加延时，不然读不到数据
     QString answer = readData();                       // 读取回复
@@ -44,13 +44,15 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 
     answer += tr("\n当前温度：") + QString::number(temperature) + tr("℃");
     answer += tr("\n当前湿度：") + QString::number(humidity) + tr("%");
-    ui->whiteBoard->setText(answer);
+    ui->whiteBoard->setText(answer);   */
 
-/*   //稳相位
+   //稳相位
+    QString setvol;
     static int i=0;      //用于数秒
     static int k=0;      //用于数每次调整到最大干涉需要调几次电压
     static int coin10=0,coin01=0,coin11=0,coin00=0,tag=0;     //各对通道的符合计数
     static double thsum=0,thaver1=0,thaver2=0,error1=0,error2=0;           //用于温度求和
+    static double volinitial = 5;
     int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
     double th1r, phi1;
     i++;
@@ -79,33 +81,50 @@ void ExternalApplicationsWidget::on_buttonTest_released()
          if(k==1){
              if(thaver1-thaver2){
                  tag = 0;
-                 qDebug()<<"输出负电压:"<<phi1/0.06;
+                 volinitial=volinitial-phi1/0.06;
+                 qDebug()<<"输出负电压:"<<volinitial;
                  qDebug()<<"phi1" << phi1;
-
+                 setvol =":VOLT " + QString::number(volinitial);
+                 sendData(setvol);
              }
              else{
                  tag = 1;
-                 qDebug()<<"输出正电压:"<<phi1/0.06;
+                 volinitial=volinitial+phi1/0.06;
+                 qDebug()<<"输出正电压:"<<volinitial;
+                 setvol =":VOLT " + QString::number(volinitial);
+                 sendData(setvol);
              }
          }
          else{
              if(error2>error1){
                  if(tag==0){
-                     qDebug()<< "输出负电压："<< "1";
+                     volinitial=volinitial-1;
+                     qDebug()<< "输出负电压："<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                      tag=0;
                  }
                  else{
-                     qDebug()<< "输出正电压："<< "1";
+                     volinitial=volinitial+1;
+                     qDebug()<< "输出正电压："<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                      tag=1;
                  }
              }
              else{
                  if(tag==0){
-                   qDebug()<< "输出正电压:" << "1";
+                   volinitial=volinitial+1;
+                   qDebug()<< "输出正电压:" << volinitial;
+                   setvol =":VOLT " + QString::number(volinitial);
+                   sendData(setvol);
                    tag = 1;
                   }
                  else{
-                   qDebug()<< "输出负电压:"<< "1";
+                     volinitial=volinitial-1;
+                     qDebug()<< "输出负电压:"<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                    tag = 0;
                   }
              }
@@ -120,9 +139,6 @@ void ExternalApplicationsWidget::on_buttonTest_released()
      coin11=coin11r;
      coin00=coin00r;
     }
-
-
-*/
 
 
 
@@ -141,7 +157,7 @@ void ExternalApplicationsWidget::customizedSPcommands_start()
     QString setinitialvol = ":APPL CH1,5,2";              //设置初始电压，需要实验前先测试出消光的电压
     sendData(setinitialvol);
     QThread::msleep(100);
-    QString setoutputon = ":CURR:PROT:STAT ON";            //打开输出
+    QString setoutputon = ":OUTP CH1,ON";            //打开输出
     sendData(setoutputon);
     QThread::msleep(100);
 
@@ -161,11 +177,12 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
     qDebug() << tr("第一个与单道计数同步的符合面板的计数：") << *vNbrCoin.at(0);
     qDebug() << tr("第一个与单道计数同步的符合面板的计数：") << *vNbrCoin.at(0);
 
-    QString setvol = ":APPL CH1"  ;
+    QString setvol;
     static int i=0;      //用于数秒
     static int k=0;      //用于数每次调整到最大干涉需要调几次电压
     static int coin10=0,coin01=0,coin11=0,coin00=0,tag=0;     //各对通道的符合计数
     static double thsum=0,thaver1=0,thaver2=0,error1=0,error2=0;           //用于温度求和
+    static double volinitial = 5;
     int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
     double th1r, phi1;
     i++;
@@ -193,35 +210,52 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
          k++;
 
          if(k==1){
-             if((thaver1-thaver2)<0){
+             if(thaver1-thaver2){
                  tag = 0;
-                 qDebug()<<"输出负电压:"<<phi1/0.06;
-
-               //  sendData(commandAskID);
+                 volinitial=volinitial-phi1/0.06;
+                 qDebug()<<"输出负电压:"<<volinitial;
+                 qDebug()<<"phi1" << phi1;
+                 setvol =":VOLT " + QString::number(volinitial);
+                 sendData(setvol);
              }
              else{
                  tag = 1;
-                 qDebug()<<"输出正电压:"<<phi1/0.06;
+                 volinitial=volinitial+phi1/0.06;
+                 qDebug()<<"输出正电压:"<<volinitial;
+                 setvol =":VOLT " + QString::number(volinitial);
+                 sendData(setvol);
              }
          }
          else{
              if(error2>error1){
                  if(tag==0){
-                     qDebug()<< "输出负电压："<< "1";
+                     volinitial=volinitial-1;
+                     qDebug()<< "输出负电压："<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                      tag=0;
                  }
                  else{
-                     qDebug()<< "输出正电压："<< "1";
+                     volinitial=volinitial+1;
+                     qDebug()<< "输出正电压："<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                      tag=1;
                  }
              }
              else{
                  if(tag==0){
-                   qDebug()<< "输出正电压:" << "1";
+                   volinitial=volinitial+1;
+                   qDebug()<< "输出正电压:" << volinitial;
+                   setvol =":VOLT " + QString::number(volinitial);
+                   sendData(setvol);
                    tag = 1;
                   }
                  else{
-                   qDebug()<< "输出负电压:"<< "1";
+                     volinitial=volinitial-1;
+                     qDebug()<< "输出负电压:"<< volinitial;
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                    tag = 0;
                   }
              }
@@ -236,7 +270,5 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
      coin11=coin11r;
      coin00=coin00r;
     }
-
-
-
 }
+
