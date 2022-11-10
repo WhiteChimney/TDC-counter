@@ -137,7 +137,7 @@ ViReal64 TSP01::getTemperature()
     if (!err)
     {
         ViReal64 temperature_value;
-        err = TLTSP_measTemperature (ihdl, TLTSP_MEAS_TEMP1, &temperature_value);
+        err = TLTSP_measTemperature (ihdl, TLTSP_MEAS_TEMP2, &temperature_value);
         if(!err)
             return temperature_value;
     }
