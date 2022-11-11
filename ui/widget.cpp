@@ -184,6 +184,7 @@ void Widget::on_buttonTempFilePath_released()
 
 void Widget::on_buttonExit_released()
 {
+    emit mainAppClosing();
     for (int i = vCoinWidget.count()-1; i >= 0; i--)
     {
         vCoinWidget.at(i)->saveToIni();
@@ -719,6 +720,10 @@ void Widget::on_buttonExternalApplications_released()
 
 void Widget::dealExtAppRequestData()
 {
+    connect(this,&Widget::mainAppClosing,extAppW,&ExternalApplicationsWidget::dealMainAppClosed);
+    connect(extAppW,&ExternalApplicationsWidget::dataReceived,this,&Widget::dealExpAppDataReceived);
+    connect(this,&Widget::sendExpAppRequestedData,extAppW,&ExternalApplicationsWidget::dealRequestedData);
+    connect(extAppW,&ExternalApplicationsWidget::externalAppStopped,this,&Widget::dealExpAppStopped);
     QVector<int*> vNbrCoin;
     for (int i = 0; i < vCoinWidget.size(); i++)
     {
@@ -726,5 +731,22 @@ void Widget::dealExtAppRequestData()
             vNbrCoin.append(vCoinWidget.at(i)->getCoinCountPtr());
     }
     emit sendExpAppRequestedData(nbrSCC, vNbrCoin);
+}
+
+void Widget::dealExpAppDataReceived()
+{
+    disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+    for (int i = 0; i < vCoinWidget.size(); i++)
+        if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
+            disconnect(timerCount,&QTimer::timeout,vCoinWidget.at(i),&CoincidenceWidget::dealTimeOut);
     connect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::dealSingleCountTimeup);
+    for (int i = 0; i < vCoinWidget.size(); i++)
+        if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
+            connect(timerCount,&QTimer::timeout,vCoinWidget.at(i),&CoincidenceWidget::dealTimeOut);
+    connect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+}
+
+void Widget::dealExpAppStopped()
+{
+    disconnect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::dealSingleCountTimeup);
 }

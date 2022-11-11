@@ -62,14 +62,18 @@ public:
 
 signals:
     void requestData();
+    void dataReceived();
+    void externalAppStopped();
 
 private:
     int *nbrSCC;
     QVector<int*> vNbrCoin;
+    bool dataRec = false;
 
 public slots:
     void dealRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
     void dealSingleCountTimeup();
+    void dealMainAppClosed();
 
 public:
     void customizedSPcommands_start();

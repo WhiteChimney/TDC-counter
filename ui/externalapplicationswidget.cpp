@@ -62,16 +62,7 @@ void ExternalApplicationsWidget::refreshPorts()
     spList.clear();
     spList = QSerialPortInfo::availablePorts();
     for (int i = 0; i < spList.size(); i++)
-    {
-        serial->setPort(spList.at(i));
-        if (serial->open(QIODevice::ReadWrite))
-        {
-            ui->comboboxSPList->addItem(spList.at(i).portName());
-            serial->close();
-        }
-        else
-            spList.removeAt(i);
-    }
+        ui->comboboxSPList->addItem(spList.at(i).portName());
 }
 
 void ExternalApplicationsWidget::on_buttonRefresh_released()
@@ -188,7 +179,7 @@ void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkSt
     {
         ui->buttonSend->setEnabled(false);
         ui->buttonReceive->setEnabled(false);
-        ui->buttonTest->setEnabled(true);
+        ui->buttonTest->setEnabled(dataRec);
         ui->buttonStart->setEnabled(true);
         ui->buttonStop->setEnabled(true);
     }
@@ -251,10 +242,14 @@ void ExternalApplicationsWidget::dealRequestedData(int* m_nbrSCC, QVector<int*> 
     for (int i = 0; i < m_vNbrCoin.size(); i++)
         vNbrCoin.append(m_vNbrCoin.at(i));
     this->customizedSPcommands_start();
+    emit dataReceived();
+    dataRec = true;
+    ui->buttonTest->setEnabled(dataRec);
 }
 
 void ExternalApplicationsWidget::on_buttonStop_released()
 {
+    emit externalAppStopped();
     this->customizedSPcommands_stop();
 }
 
@@ -315,3 +310,9 @@ void ExternalApplicationsWidget::on_buttonRefreshDataTSP01_released()
         TSP01statusIndicator->setStates(QSimpleLed::ON);
 }
 
+void ExternalApplicationsWidget::dealMainAppClosed()
+{
+    if (serial->isOpen())
+        serial->close();
+    tsp->closeDevice();
+}

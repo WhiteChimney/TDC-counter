@@ -191,8 +191,11 @@ public:
     void setupExtAppWidget();
 public slots:
     void dealExtAppRequestData();
+    void dealExpAppDataReceived();
+    void dealExpAppStopped();
 signals:
     void sendExpAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
+    void mainAppClosing();
 
 };
 #endif // WIDGET_H
