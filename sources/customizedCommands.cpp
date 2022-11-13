@@ -161,11 +161,11 @@ void ExternalApplicationsWidget::customizedSPcommands_start()
 {
     qDebug() << "开始自定义程序";
     myfile.open(QIODevice::WriteOnly | QIODevice::Text);
-/*    QString commandAskVOL = ":APPL? CH1,VOLT";
+    QString commandAskVOL = ":APPL? CH1,VOLT";
     sendData(commandAskVOL);
     QThread::msleep(100);                              // 加延时，不然读不到数据
     QString answervol = readData();                       // 读取回复
-    volinitial  = answervol.toDouble();   */                // Qt 内输出结果
+    volinitial  = answervol.toDouble();                 // Qt 内输出结果
 
   /*  QString setcurrport = ":CURR:PROT 5.3";
     sendData(setcurrport);
@@ -200,7 +200,7 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
       static int i=0;      //用于数秒
       static int k=0;      //用于数每次调整到最大干涉需要调几次电压
       static int coin10=0,coin01=0,coin11=0,coin00=0,tag=0;     //各对通道的符合计数
-      static double th1=0,th2=0,error1=0,error2=0;           //用于温度求和
+      static double th1=0,th2=0,th3,error1=0,error2=0;           //用于温度求和
       int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
       double phi1;
       i++;
@@ -247,17 +247,48 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
                  sendData(setvol);
              }
              else{
-                 tag = 1;
-                 volinitial=volinitial+phi1/0.06;
-                 qDebug()<<"输出正电压:"<<volinitial;
-                 if(volinitial>33){
-                     volinitial=volinitial-31;
+                 if((th1-th2)==0){
+                     if((th1-th3)>0){
+                         tag = 0;
+                         volinitial=volinitial-phi1/0.06;
+                         qDebug()<<"输出负电压:"<<volinitial;
+                         qDebug()<<"phi1" << phi1;
+                         if(volinitial<0){
+                             volinitial=volinitial+31;
+                         }
+                         else{
+
+                         }
+                         setvol =":VOLT " + QString::number(volinitial);
+                         sendData(setvol);
+                     }
+                     else{
+                         tag = 1;
+                         volinitial=volinitial+phi1/0.06;
+                         qDebug()<<"输出正电压:"<<volinitial;
+                         if(volinitial>33){
+                             volinitial=volinitial-31;
+                         }
+                         else{
+
+                         }
+                         setvol =":VOLT " + QString::number(volinitial);
+                         sendData(setvol);
+                     }
                  }
                  else{
+                     tag = 1;
+                     volinitial=volinitial+phi1/0.06;
+                     qDebug()<<"输出正电压:"<<volinitial;
+                     if(volinitial>33){
+                         volinitial=volinitial-31;
+                     }
+                     else{
 
+                     }
+                     setvol =":VOLT " + QString::number(volinitial);
+                     sendData(setvol);
                  }
-                 setvol =":VOLT " + QString::number(volinitial);
-                 sendData(setvol);
              }
          }
          else{
@@ -322,6 +353,7 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
      qDebug()<<"使用步数"<<k;
 
      i=1;
+     th3 = th2;
      th2 = th1;
      error2 = error1;
      coin10=coin10r;
