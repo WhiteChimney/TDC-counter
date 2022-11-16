@@ -9,8 +9,8 @@ class ExternalApplicationsWidget;
 //  自定义串口操作文件
 //  注: nbrSCC（单道计数的指针），vNbrCoin（包含符合计数的指针的向量），serial（串口）
 //  dealSingleCountTimeup 指当单道计数计时时间到后，进行什么操作
-double volinitial=0;
-QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/erroroutput1.txt");
+double volinitial=0,volch3=0,volch1=0;
+QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/erroroutput1113_1.txt");
 //  测试 按钮被按下
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
@@ -196,11 +196,11 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //      qDebug() << tr("单道计数：") << *nbrSCC;
 //    qDebug() << tr("第一个与单道计数同步的符合面板的计数：") << *(vNbrCoin.at(0));
 
-      QString setvol;
+      QString setvol,setvolch3;
       static int i=0;      //用于数秒
       static int k=0;      //用于数每次调整到最大干涉需要调几次电压
       static int coin10=0,coin01=0,coin11=0,coin00=0,tag=0;     //各对通道的符合计数
-      static double th1=0,th2=0,th3,error1=0,error2=0;           //用于温度求和
+      static double th1=0,th2=0,th3,error1=0,error2=0,error3=0;           //用于温度求和
       int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
       double phi1;
       i++;
@@ -218,143 +218,491 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
    coin00=coin00+coin00r;
     }
     else{
-       th1 = tsp->getTemperature();
+//       th1 = tsp->getTemperature();
+//       QString str;
+//       str = QString::number(th1,'f',2);
+//       th1 = str.toDouble();
        error1 = (double)(coin10+coin01)/(coin00+coin11+coin01+coin10);
        phi1 = 1-(acos(2*error1-1))/3.1415926535897;
        qDebug()<< "误码"<< error1;
+       qDebug()<< "温度"<< th1;
        QTextStream stream(&myfile);
        stream << error1 << "\t";
      if(error1<0.02){
-         qDebug() << "k=" << k;                               //后续要补充写入文档
+         qDebug() << "k=" << k;    //后续要补充写入文档
+//         stream << th1 << "\t";
          stream << k << endl;
-         k=0;
+         k=1;
      }
      else{
          k++;
          if(k==1){
-             if((th1-th2)>0){
-                 tag = 0;
-                 volinitial=volinitial-phi1/0.06;
-                 qDebug()<<"输出负电压:"<<volinitial;
-                 qDebug()<<"phi1" << phi1;
-                 if(volinitial<0){
-                     volinitial=volinitial+31;
-                 }
-                 else{
+//             if((th1-th2)>0){
+//                 tag = 0;
+//                 volinitial=volinitial-phi1/0.07;
+//                 qDebug()<<"输出负电压:"<<volinitial;
+//                 qDebug()<<"phi1" << phi1;
+//                 if(volinitial<0){
+//                     volinitial=volinitial+31;
+//                 }
+//                 else{
 
-                 }
-                 setvol =":VOLT " + QString::number(volinitial);
-                 sendData(setvol);
-             }
-             else{
-                 if((th1-th2)==0){
-                     if((th1-th3)>0){
-                         tag = 0;
-                         volinitial=volinitial-phi1/0.06;
-                         qDebug()<<"输出负电压:"<<volinitial;
-                         qDebug()<<"phi1" << phi1;
-                         if(volinitial<0){
-                             volinitial=volinitial+31;
-                         }
-                         else{
+//                 }
+//                 setvol =":VOLT " + QString::number(volinitial);
+//                 sendData(setvol);
+//             }
+//             else{
+//                 if((th1-th2)==0){
+//                     if((th1-th3)>0){
+//                         tag = 0;
+//                         volinitial=volinitial-phi1/0.07;
+//                         qDebug()<<"输出负电压:"<<volinitial;
+//                         qDebug()<<"phi1" << phi1;
+//                         if(volinitial<0){
+//                             volinitial=volinitial+31;
+//                         }
+//                         else{
 
-                         }
-                         setvol =":VOLT " + QString::number(volinitial);
-                         sendData(setvol);
-                     }
-                     else{
-                         tag = 1;
-                         volinitial=volinitial+phi1/0.06;
-                         qDebug()<<"输出正电压:"<<volinitial;
-                         if(volinitial>33){
-                             volinitial=volinitial-31;
-                         }
-                         else{
+//                         }
+//                         setvol =":VOLT " + QString::number(volinitial);
+//                         sendData(setvol);
+//                     }
+//                     else{
+//                         tag = 1;
+//                         volinitial=volinitial+phi1/0.07;
+//                         if(volinitial>33){
+//                             volinitial=volinitial-31;
+//                         }
+//                         else{
 
-                         }
-                         setvol =":VOLT " + QString::number(volinitial);
-                         sendData(setvol);
-                     }
-                 }
-                 else{
-                     tag = 1;
-                     volinitial=volinitial+phi1/0.06;
-                     qDebug()<<"输出正电压:"<<volinitial;
-                     if(volinitial>33){
-                         volinitial=volinitial-31;
-                     }
-                     else{
+//                         }
+//                         setvol =":VOLT " + QString::number(volinitial);
+//                         sendData(setvol);
+//                         qDebug()<<"输出正电压:"<<volinitial;
+//                     }
+//                 }
+//                 else{
+//                     tag = 1;
+//                     volinitial=volinitial+phi1/0.07;
+//                     qDebug()<<"输出正电压:"<<volinitial;
+//                     if(volinitial>33){
+//                         volinitial=volinitial-31;
+//                     }
+//                     else{
 
-                     }
-                     setvol =":VOLT " + QString::number(volinitial);
-                     sendData(setvol);
-                 }
-             }
-         }
-         else{
-             if(error2>error1){
-                 if(tag==0){
-                     volinitial=volinitial-1;
-                     qDebug()<< "输出负电压："<< volinitial;
-                     if(volinitial<0){
-                         volinitial=volinitial+31;
-                     }
-                     else{
-
-                     }
-                     setvol =":VOLT " + QString::number(volinitial);
-                     sendData(setvol);
-                     tag=0;
-                 }
-                 else{
-                     volinitial=volinitial+1;
-                     qDebug()<< "输出正电压："<< volinitial;
-                     if(volinitial>33){
-                         volinitial=volinitial-31;
-                     }
-                     else{
-
-                     }
-                     setvol =":VOLT " + QString::number(volinitial);
-                     sendData(setvol);
-                     tag=1;
-                 }
-             }
-             else{
-                 if(tag==0){
-                   volinitial=volinitial+1;
-                   qDebug()<< "输出正电压:" << volinitial;
-                   if(volinitial>33){
-                       volinitial=volinitial-31;
+//                     }
+//                     setvol =":VOLT " + QString::number(volinitial);
+//                     sendData(setvol);
+//                 }
+//             }                                                                        //根据温度确定调节方向
+               if(tag==0){
+                   volinitial=volinitial-phi1/0.07;
+                   qDebug()<< "输出负电压："<< volinitial;
+                   if(volinitial<0){
+                       volinitial=volinitial+32;
                    }
                    else{
 
                    }
-                   setvol =":VOLT " + QString::number(volinitial);
-                   sendData(setvol);
-                   tag = 1;
-                  }
-                 else{
-                     volinitial=volinitial-1;
-                     qDebug()<< "输出负电压:"<< volinitial;
-                     if(volinitial<0){
-                         volinitial=volinitial+31;
+                   if(volinitial>32){
+                       volch1=32;
+                       volch3=volinitial-32;
+                       setvol =":APPL CH1," + QString::number(volch1);
+                       setvolch3 =":APPL CH3," + QString::number(volch3);
+                       sendData(setvol);
+                       QThread::msleep(100);
+                       sendData(setvolch3);
+                   }
+                   else{
+                       if(volch3==0){
+                           volch1=volinitial;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           sendData(setvol);
+                       }
+                       else{
+                           volch3=0;
+                           volch1=volinitial;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           setvolch3 =":APPL CH3," + QString::number(volch3);
+                           sendData(setvol);
+                           QThread::msleep(100);
+                           sendData(setvolch3);
+                       }
+                   }
+                   tag=0;
+                   qDebug()<<"输出正电压:"<<volinitial;
+               }
+               else{
+                   volinitial=volinitial+phi1/0.07;
+                   if(volinitial>37){
+                       volinitial=volinitial-32;
+                   }
+                   else{
+
+                   }
+                   if(volinitial>32){
+                       volch1=32;
+                       volch3=volinitial-32;
+                       setvol =":APPL CH1," + QString::number(volch1);
+                       setvolch3 =":APPL CH3," + QString::number(volch3);
+                       sendData(setvol);
+                       QThread::msleep(100);
+                       sendData(setvolch3);
+                   }
+                   else{
+                       if(volch3==0){
+                           volch1=volinitial;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           sendData(setvol);
+                       }
+                       else{
+                           volch3=0;
+                           volch1=volinitial;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           setvolch3 =":APPL CH3," + QString::number(volch3);
+                           sendData(setvol);
+                           QThread::msleep(100);
+                           sendData(setvolch3);
+                       }
+                   }
+                   tag=1;
+                   qDebug()<< "输出正电压："<< volinitial;
+               }
+         }
+         else{
+             if(k<5){
+                 if(error2>error1){
+                     if(tag==0){
+                         volinitial=volinitial-phi1/0.07;
+                         if(volinitial<0){
+                             volinitial=volinitial+32;
+                         }
+                         else{
+
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                         tag=0;
+                         qDebug()<< "输出负电压："<< volinitial;
                      }
                      else{
+                         volinitial=volinitial+phi1/0.07;
+                         if(volinitial>37){
+                             volinitial=volinitial-32;
+                         }
+                         else{
 
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                         tag=1;
+                         qDebug()<< "输出正电压："<< volinitial;
                      }
-                     setvol =":VOLT " + QString::number(volinitial);
-                     sendData(setvol);
-                   tag = 0;
-                  }
+                 }
+                 else{
+                     if(tag==0){
+                       volinitial=volinitial+phi1/0.07;
+                       if(volinitial>37){
+                           volinitial=volinitial-32;
+                       }
+                       else{
+
+                       }
+                       if(volinitial>32){
+                           volch1=32;
+                           volch3=volinitial-32;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           setvolch3 =":APPL CH3," + QString::number(volch3);
+                           sendData(setvol);
+                           QThread::msleep(100);
+                           sendData(setvolch3);
+                       }
+                       else{
+                           if(volch3==0){
+                               volch1=volinitial;
+                               setvol =":APPL CH1," + QString::number(volch1);
+                               sendData(setvol);
+                           }
+                           else{
+                               volch3=0;
+                               volch1=volinitial;
+                               setvol =":APPL CH1," + QString::number(volch1);
+                               setvolch3 =":APPL CH3," + QString::number(volch3);
+                               sendData(setvol);
+                               QThread::msleep(100);
+                               sendData(setvolch3);
+                           }
+                       }
+                       qDebug()<< "输出正电压:" << volinitial;
+                       tag = 1;
+                      }
+                     else{
+                         volinitial=volinitial-phi1/0.07;
+                         if(volinitial<0){
+                             volinitial=volinitial+32;
+                         }
+                         else{
+
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                       qDebug()<< "输出负电压:"<< volinitial;
+                       tag = 0;
+                      }
+                 }
+             }
+             else{
+                 if(error2>error1){
+                     if(tag==0){
+                         volinitial=volinitial-1;
+                         if(volinitial<0){
+                             volinitial=volinitial+32;
+                         }
+                         else{
+
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                         tag=0;
+                         qDebug()<< "输出负电压："<< volinitial;
+                     }
+                     else{
+                         volinitial=volinitial+1;
+                         if(volinitial>37){
+                             volinitial=volinitial-32;
+                         }
+                         else{
+
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                         tag=1;
+                         qDebug()<< "输出正电压："<< volinitial;
+                     }
+                 }
+                 else{
+                     if(tag==0){
+                       volinitial=volinitial+1;
+                       if(volinitial>37){
+                           volinitial=volinitial-32;
+                       }
+                       else{
+
+                       }
+                       if(volinitial>32){
+                           volch1=32;
+                           volch3=volinitial-32;
+                           setvol =":APPL CH1," + QString::number(volch1);
+                           setvolch3 =":APPL CH3," + QString::number(volch3);
+                           sendData(setvol);
+                           QThread::msleep(100);
+                           sendData(setvolch3);
+                       }
+                       else{
+                           if(volch3==0){
+                               volch1=volinitial;
+                               setvol =":APPL CH1," + QString::number(volch1);
+                               sendData(setvol);
+                           }
+                           else{
+                               volch3=0;
+                               volch1=volinitial;
+                               setvol =":APPL CH1," + QString::number(volch1);
+                               setvolch3 =":APPL CH3," + QString::number(volch3);
+                               sendData(setvol);
+                               QThread::msleep(100);
+                               sendData(setvolch3);
+                           }
+                       }
+                       qDebug()<< "输出正电压:" << volinitial;
+                       tag = 1;
+                      }
+                     else{
+                         volinitial=volinitial-1;
+                         if(volinitial<0){
+                             volinitial=volinitial+32;
+                         }
+                         else{
+
+                         }
+                         if(volinitial>32){
+                             volch1=32;
+                             volch3=volinitial-32;
+                             setvol =":APPL CH1," + QString::number(volch1);
+                             setvolch3 =":APPL CH3," + QString::number(volch3);
+                             sendData(setvol);
+                             QThread::msleep(100);
+                             sendData(setvolch3);
+                         }
+                         else{
+                             if(volch3==0){
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 sendData(setvol);
+                             }
+                             else{
+                                 volch3=0;
+                                 volch1=volinitial;
+                                 setvol =":APPL CH1," + QString::number(volch1);
+                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+                                 sendData(setvol);
+                                 QThread::msleep(100);
+                                 sendData(setvolch3);
+                             }
+                         }
+                       qDebug()<< "输出负电压:"<< volinitial;
+                       tag = 0;
+                      }
+                 }
              }
          }
      }
      qDebug()<<"使用步数"<<k;
+//     if(k==20){                                        //因为电压源的行程只有33V，还差一点覆盖一个周期，当相位漂移动pi无法纠回
+//         QString setoutputoff = ":OUTP CH1,OFF";            //关闭输出
+//         sendData(setoutputoff);                          //超过12步无法纠回时，关闭电压源，等待相位再漂移一会儿。
+//         QThread::msleep(100);
+//         stream << "off" << "\n";
+//     }
+//     else{
+//         if(k>20){
+//             if((error1-error2)>0.01&&(error2-error3)>0&&(error1>0.03)){
+//                 setvol =":VOLT 16";
+//                 sendData(setvol);
+//                 QThread::msleep(50);
+//                   QString setoutputon = ":OUTP CH1,ON";            //打开输出
+//                   sendData(setoutputon);
+//                   k=2;
+//                   stream << "on" << "\n";
 
+//             }
+//             else{
+
+//             }
+//         }
+//         else{
+
+//         }
+//     }
      i=1;
      th3 = th2;
      th2 = th1;
+     error3 = error2;
      error2 = error1;
      coin10=coin10r;
      coin01=coin01r;
