@@ -13,7 +13,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include "tsp01.h"
-#include "dp832a_visa.h"
+#include "dp832a_usb.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -29,7 +29,7 @@ public:
 
 private:
     Ui::ExternalApplicationsWidget *ui;
-    QSimpleLed *SPstatusIndicator, *TSP01statusIndicator;
+    QSimpleLed *SPstatusIndicator, *TSP01statusIndicator, *DP832UsbIndicator;
 
 private:
     QSerialPort *serial;
@@ -41,7 +41,7 @@ private:
     QByteArray receivedBytes, sentBytes;
 
 public:
-    void setupSPIndicator(), setupTSPIndicator();
+    void setupSPIndicator(), setupTSPIndicator(), setupDP832UsbIndicator();
     void fetchUiData();
     void pushUiData();
     void saveToIni();
@@ -95,11 +95,17 @@ private slots:
     void on_buttonCloseTSP01_released();
     void on_buttonTestTSP01_released();
     void on_buttonRefreshDataTSP01_released();
-    void on_buttonDP832AVISAtest_clicked();
-    void on_buttonRefreshUSB_clicked();
+    void on_buttonDP832UsbRefresh_released();
+    void on_buttonDP832UsbInitiate_released();
+    void on_buttonDP832UsbClose_released();
+    void on_buttonDP832UsbTest_released();
+    void on_buttonDP832UsbSendCmd_released();
+
+private:
+    DP832A_USB* dp832usb;
 
 public:
-    void refreshDP832AUSBlist();
+    void refreshDP832UsbList();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

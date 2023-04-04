@@ -9,7 +9,7 @@ void ExternalApplicationsWidget::setupTSPIndicator()
     p1.setHorizontalPolicy(QSizePolicy::Minimum);
     p1.setVerticalPolicy(QSizePolicy::Preferred);
     TSP01statusIndicator->setSizePolicy(p1);
-    ui->gridLayout_3->addWidget(TSP01statusIndicator,0,0,2,1,0);
+    ui->gridLayoutTSP01->addWidget(TSP01statusIndicator,0,0,2,1,0);
     TSP01statusIndicator->setStates(QSimpleLed::OFF);
 }
 

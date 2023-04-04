@@ -1,5 +1,5 @@
-#ifndef DP832A_VISA_H
-#define DP832A_VISA_H
+#ifndef DP832A_USB_H
+#define DP832A_USB_H
 
 #include <visa.h>
 #include <QString>
@@ -8,12 +8,12 @@
 #define MAX_SCPI_LEN 255
 #define DEFAULT_TMO  5000
 
-class dp832a_visa : public QObject
+class DP832A_USB : public QObject
 {
     Q_OBJECT
 public:
-    explicit dp832a_visa(QString resourceName, QObject *parent = nullptr);
-    ~dp832a_visa();
+    explicit DP832A_USB(QString resourceName, QObject *parent = nullptr);
+    ~DP832A_USB();
 
 private:
 
@@ -23,16 +23,16 @@ private:
     ViSession pInstrHandle;
     ViRsrc rscName;
 
-//    通信读写 buffer
+//    读取与写入 buffer
     ViByte wrBuff[MAX_SCPI_LEN];
     ViByte rdBuff[DEFAULT_TMO];
 
     int retCount = 0;
 
 public:
-    ViStatus initializeDevice();
-    ViStatus closeDevice();
-    ViStatus sendCommand(QString* command, QString* result);
+    bool initializeDevice();
+    bool closeDevice();
+    bool sendCommand(QString* command, QString* result);
 };
 
-#endif // DP832A_VISA_H
+#endif // DP832A_USB_H

@@ -21,7 +21,7 @@ SOURCES += \
     sources/mergeDataFiles.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
-    tools/dp832a_visa.cpp \
+    tools/dp832a_usb.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
@@ -50,7 +50,7 @@ HEADERS += \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \
-    tools/dp832a_visa.h \
+    tools/dp832a_usb.h \
     tools/statisticschannel.h \
     tools/tsp01.h \
     ui/coincidencewidget.h \

@@ -21,7 +21,7 @@
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
-       <string>D832A</string>
+       <string>D832A_串口</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
@@ -292,68 +292,107 @@
       <attribute name="title">
        <string>DP832A_USB</string>
       </attribute>
-      <widget class="QPushButton" name="buttonDP832AVISAtest">
-       <property name="geometry">
-        <rect>
-         <x>220</x>
-         <y>210</y>
-         <width>80</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>test</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="comboBoxDP832AUSB">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>40</y>
-         <width>251</width>
-         <height>22</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="buttonRefreshUSB">
-       <property name="geometry">
-        <rect>
-         <x>300</x>
-         <y>40</y>
-         <width>80</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>刷新</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="labelUSBret">
-       <property name="geometry">
-        <rect>
-         <x>60</x>
-         <y>140</y>
-         <width>261</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>回复区域</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="textDP832Acommand">
-       <property name="geometry">
-        <rect>
-         <x>140</x>
-         <y>100</y>
-         <width>113</width>
-         <height>20</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>*IDN?</string>
-       </property>
-      </widget>
+      <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QLabel" name="label_15">
+           <property name="text">
+            <string>选择设备</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBoxDP832UsbList">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="buttonDP832UsbRefresh">
+           <property name="text">
+            <string>刷新列表</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QGridLayout" name="gridLayoutDP832Usb">
+         <item row="0" column="1">
+          <widget class="QPushButton" name="buttonDP832UsbInitiate">
+           <property name="text">
+            <string>打开设备</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QPushButton" name="buttonDP832UsbClose">
+           <property name="text">
+            <string>关闭设备</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" rowspan="2">
+          <widget class="QLabel" name="label_16">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QPushButton" name="buttonDP832UsbSendCmd">
+           <property name="text">
+            <string>发送命令</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QPushButton" name="buttonDP832UsbTest">
+           <property name="text">
+            <string>测试设备</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="formLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="label_17">
+           <property name="text">
+            <string>发送命令</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="textDP832UsbCmdSent">
+           <property name="text">
+            <string>*IDN?</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLabel" name="labelDP832UsbMsgRecv">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_18">
+           <property name="text">
+            <string>接收信息</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
@@ -389,7 +428,7 @@
         </layout>
        </item>
        <item>
-        <layout class="QGridLayout" name="gridLayout_3">
+        <layout class="QGridLayout" name="gridLayoutTSP01">
          <item row="1" column="3">
           <widget class="QPushButton" name="buttonRefreshDataTSP01">
            <property name="text">

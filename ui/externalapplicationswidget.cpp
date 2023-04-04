@@ -18,6 +18,8 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
     this->setupSPIndicator();
     TSP01statusIndicator = new QSimpleLed(this);
     this->setupTSPIndicator();
+    DP832UsbIndicator = new QSimpleLed(this);
+    this->setupDP832UsbIndicator();
 
     serial = new QSerialPort(this);
     this->refreshPorts();
@@ -38,4 +40,5 @@ void ExternalApplicationsWidget::dealMainAppClosed()
         serial->close();
     tsp->closeDevice();
 }
+
 
