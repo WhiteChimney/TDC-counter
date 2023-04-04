@@ -95,7 +95,6 @@ private slots:
     void on_buttonCloseTSP01_released();
     void on_buttonTestTSP01_released();
     void on_buttonRefreshDataTSP01_released();
-    void on_buttonDP832UsbRefresh_released();
     void on_buttonDP832UsbInitiate_released();
     void on_buttonDP832UsbClose_released();
     void on_buttonDP832UsbTest_released();
@@ -104,8 +103,6 @@ private slots:
 private:
     DP832A_USB* dp832usb;
 
-public:
-    void refreshDP832UsbList();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

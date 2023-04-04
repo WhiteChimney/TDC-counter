@@ -298,24 +298,14 @@
          <item>
           <widget class="QLabel" name="label_15">
            <property name="text">
-            <string>选择设备</string>
+            <string>设备代号</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBoxDP832UsbList">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="buttonDP832UsbRefresh">
+          <widget class="QLineEdit" name="textDP832DeviceName">
            <property name="text">
-            <string>刷新列表</string>
+            <string>USB0::0x1AB1::0x0E11::DP8B240700265::INSTR</string>
            </property>
           </widget>
          </item>
@@ -372,7 +362,7 @@
          <item row="0" column="1">
           <widget class="QLineEdit" name="textDP832UsbCmdSent">
            <property name="text">
-            <string>*IDN?</string>
+            <string>:APPL? CH1,VOLT</string>
            </property>
           </widget>
          </item>

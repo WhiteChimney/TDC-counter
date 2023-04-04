@@ -13,26 +13,11 @@ void ExternalApplicationsWidget::setupDP832UsbIndicator()
     DP832UsbIndicator->setStates(QSimpleLed::OFF);
 }
 
-void ExternalApplicationsWidget::refreshDP832UsbList()
-{
-    ui->comboBoxDP832UsbList->clear();
-
-    QList<QString> usbDevices = TSP01::findInstruments();
-
-    for (int i = 0; i < usbDevices.size(); i++)
-        ui->comboBoxDP832UsbList->addItem(usbDevices.at(i));
-}
-
-void ExternalApplicationsWidget::on_buttonDP832UsbRefresh_released()
-{
-    refreshDP832UsbList();
-}
-
 void ExternalApplicationsWidget::on_buttonDP832UsbInitiate_released()
 {
     if (DP832UsbIndicator->states() == QSimpleLed::OFF)
     {
-        dp832usb = new DP832A_USB(ui->comboBoxDP832UsbList->currentText(), this);
+        dp832usb = new DP832A_USB(ui->textDP832DeviceName->text(), this);
         if (dp832usb->initializeDevice())
             DP832UsbIndicator->setStates(QSimpleLed::ON);
     }
@@ -55,7 +40,7 @@ void ExternalApplicationsWidget::on_buttonDP832UsbTest_released()
     }
     DP832A_USB instr1(QString("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR"),this);
     instr1.initializeDevice();
-    QString command = ui->textDP832UsbCmdSent->text();
+    QString command = "*IDN?";
     QString result = ui->labelDP832UsbMsgRecv->text();
     instr1.sendCommand(&command,&result);
     ui->labelDP832UsbMsgRecv->setText(result);
