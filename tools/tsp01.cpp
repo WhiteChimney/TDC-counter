@@ -14,8 +14,9 @@ QList<QString> TSP01::findInstruments()
     ViChar         *rscPtr;
     QList<QString> vResource;
     ViUInt32       cnt;
+    ViStatus       error;
 
-    switch(err = TLTSP_getDeviceCount(VI_NULL, &findCnt)) {
+    switch(error = TLTSP_getDeviceCount(VI_NULL, &findCnt)) {
     case VI_SUCCESS:
          break;
     case VI_ERROR_RSRC_NFOUND:
@@ -28,7 +29,7 @@ QList<QString> TSP01::findInstruments()
 
     for(cnt = 0; cnt < findCnt; cnt++)
     {
-        if((err = TLTSP_getDeviceResourceString(VI_NULL, cnt, rscPtr)))
+        if((error = TLTSP_getDeviceResourceString(VI_NULL, cnt, rscPtr)))
         {
             rscPtr -= cnt * VI_FIND_BUFLEN;
             delete [] rscPtr;

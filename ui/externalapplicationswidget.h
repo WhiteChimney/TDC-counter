@@ -13,6 +13,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include "tsp01.h"
+#include "dp832a_visa.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -94,6 +95,11 @@ private slots:
     void on_buttonCloseTSP01_released();
     void on_buttonTestTSP01_released();
     void on_buttonRefreshDataTSP01_released();
+    void on_buttonDP832AVISAtest_clicked();
+    void on_buttonRefreshUSB_clicked();
+
+public:
+    void refreshDP832AUSBlist();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H
