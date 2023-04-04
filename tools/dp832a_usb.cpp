@@ -53,3 +53,32 @@ bool DP832A_USB::sendCommand(QString* command, QString* result)
     else
         return false;
 }
+
+bool DP832A_USB::sendCommand2(QString command)
+{
+    //    发送指令
+        command += "\n";
+//        char commandFormat[] = "%s";
+//        nRetStatus = viQueryf(pInstrHandle,command.toLocal8Bit().data(),commandFormat);
+
+
+
+        char ch_command[MAX_SCPI_LEN];
+        strcpy(ch_command,":APPL CH1,1.32\n");
+
+        unsigned long retcnt = DEFAULT_TMO;
+        nRetStatus = viWrite(pInstrHandle,(ViBuf)ch_command,(ViUInt32)strlen(ch_command),&retcnt);
+
+        if (nRetStatus == VI_SUCCESS)
+            return true;
+        else
+            return false;
+
+}
+
+void DP832A_USB::setVoltage(double voltage)
+{
+    QString command = ":APPL CH1,";
+    command += QString::number(voltage);
+    qDebug() << sendCommand2(command);
+}

@@ -21,7 +21,6 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
     DP832UsbIndicator = new QSimpleLed(this);
     this->setupDP832UsbIndicator();
 
-    serial = new QSerialPort(this);
     this->refreshPorts();
 
     tsp = new TSP01(this);
@@ -36,9 +35,46 @@ ExternalApplicationsWidget::~ExternalApplicationsWidget()
 
 void ExternalApplicationsWidget::dealMainAppClosed()
 {
-    if (serial->isOpen())
-        serial->close();
     tsp->closeDevice();
 }
 
 
+void ExternalApplicationsWidget::on_buttonStart_released()
+{
+    emit this->requestData();
+}
+
+void ExternalApplicationsWidget::dealRequestedData(int* m_nbrSCC, QVector<int*> m_vNbrCoin)
+{
+    nbrSCC = new int(); nbrSCC = m_nbrSCC;
+    vNbrCoin.clear();
+    for (int i = 0; i < m_vNbrCoin.size(); i++)
+        vNbrCoin.append(m_vNbrCoin.at(i));
+    this->customizedSPcommands_start();
+    emit dataReceived();
+    dataRec = true;
+}
+
+void ExternalApplicationsWidget::on_buttonStop_released()
+{
+    emit externalAppStopped();
+    this->customizedSPcommands_stop();
+}
+
+void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkState)
+{
+    if (checkState == Qt::Checked)
+    {
+        ui->buttonSend->setEnabled(false);
+        ui->buttonReceive->setEnabled(false);
+        ui->buttonStart->setEnabled(true);
+        ui->buttonStop->setEnabled(true);
+    }
+    else
+    {
+        ui->buttonSend->setEnabled(true);
+        ui->buttonReceive->setEnabled(true);
+        ui->buttonStart->setEnabled(false);
+        ui->buttonStop->setEnabled(false);
+    }
+}

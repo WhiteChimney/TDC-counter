@@ -105,106 +105,39 @@ void ExternalApplicationsWidget::pushUiData()
     }
 }
 
-bool ExternalApplicationsWidget::openSerialPort(QSerialPortInfo spInfo)
-{
-    serial->setPort(spInfo);
-    serial->setBaudRate(baudRate);
-    serial->setDataBits(dataBits);
-    serial->setStopBits(stopBits);
-    serial->setParity(parity);
-    return serial->open(QIODevice::ReadWrite);
-}
-
-QString ExternalApplicationsWidget::readData()
-{
-    qDebug() << serial->waitForReadyRead(1000);
-    QByteArray buffer = serial->readAll();
-    if (buffer.size() > 0)
-        buffer = buffer.remove(buffer.size()-1,1);
-    return buffer;
-}
-
-void ExternalApplicationsWidget::sendData(QString dataText)
-{
-    serial->write(dataText.toLocal8Bit().append("\n"));
-    serial->waitForBytesWritten();
-}
-
-void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkState)
-{
-    if (checkState == Qt::Checked)
-    {
-        ui->buttonSend->setEnabled(false);
-        ui->buttonReceive->setEnabled(false);
-        ui->buttonTest->setEnabled(dataRec);
-        ui->buttonStart->setEnabled(true);
-        ui->buttonStop->setEnabled(true);
-    }
-    else
-    {
-        ui->buttonSend->setEnabled(true);
-        ui->buttonReceive->setEnabled(true);
-        ui->buttonTest->setEnabled(false);
-        ui->buttonStart->setEnabled(false);
-        ui->buttonStop->setEnabled(false);
-    }
-}
 
 void ExternalApplicationsWidget::on_buttonOpenSP_released()
 {
     this->fetchUiData();
-    if (this->openSerialPort(spList.at(ui->comboboxSPList->currentIndex())))
+    if (SPstatusIndicator->states() == QSimpleLed::OFF)
     {
-        SPstatusIndicator->setStates(QSimpleLed::ON);
-    }
-    else
-    {
-        SPstatusIndicator->setStates(QSimpleLed::OFF);
-        QMessageBox::warning(this,
-                             tr("警告"),
-                             tr("串口打开失败"),
-                             QMessageBox::Ok);
+        dp832_sp = new DP832A_Serial(this);
+        if (dp832_sp->initializeDevice(spList.at(ui->comboboxSPList->currentIndex()),
+                                       baudRate,
+                                       dataBits,
+                                       stopBits,
+                                       parity))
+            SPstatusIndicator->setStates(QSimpleLed::ON);
     }
 }
 
 void ExternalApplicationsWidget::on_buttonCloseSP_released()
 {
-    if (serial->isOpen())
+    if (SPstatusIndicator->states() == QSimpleLed::ON)
     {
-        serial->close();
+        dp832_sp->closeDevice();
         SPstatusIndicator->setStates(QSimpleLed::OFF);
     }
 }
 
 void ExternalApplicationsWidget::on_buttonSend_released()
 {
-    this->sendData(ui->textDataSent->text());
+    if (SPstatusIndicator->states() == QSimpleLed::ON)
+        dp832_sp->sendCommand(ui->textDataSent->text());
 }
 
 void ExternalApplicationsWidget::on_buttonReceive_released()
 {
-    ui->labelDataReceived->setText(this->readData());
-}
-
-void ExternalApplicationsWidget::on_buttonStart_released()
-{
-    emit this->requestData();
-}
-
-void ExternalApplicationsWidget::dealRequestedData(int* m_nbrSCC, QVector<int*> m_vNbrCoin)
-{
-    nbrSCC = new int(); nbrSCC = m_nbrSCC;
-    vNbrCoin.clear();
-    for (int i = 0; i < m_vNbrCoin.size(); i++)
-        vNbrCoin.append(m_vNbrCoin.at(i));
-    this->customizedSPcommands_start();
-    emit dataReceived();
-    dataRec = true;
-    ui->buttonTest->setEnabled(dataRec);
-}
-
-void ExternalApplicationsWidget::on_buttonStop_released()
-{
-    emit externalAppStopped();
-    this->customizedSPcommands_stop();
+    if (SPstatusIndicator->states() == QSimpleLed::ON)
+        ui->labelDataReceived->setText(dp832_sp->readData());
 }

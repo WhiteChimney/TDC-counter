@@ -13,6 +13,7 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 #include "tsp01.h"
+#include "dp832a_serial.h"
 #include "dp832a_usb.h"
 
 namespace Ui {
@@ -32,7 +33,7 @@ private:
     QSimpleLed *SPstatusIndicator, *TSP01statusIndicator, *DP832UsbIndicator;
 
 private:
-    QSerialPort *serial;
+    DP832A_Serial* dp832_sp;
     QList<QSerialPortInfo> spList;
     QSerialPort::BaudRate baudRate;
     QSerialPort::DataBits dataBits;
@@ -48,9 +49,6 @@ public:
     void loadFromIni();
 
     void refreshPorts();
-    bool openSerialPort(QSerialPortInfo);
-    QString readData();
-    void sendData(QString dataText);
 
 private:
     TSP01 *tsp;

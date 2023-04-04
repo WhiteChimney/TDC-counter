@@ -33,6 +33,9 @@ public:
     bool initializeDevice();
     bool closeDevice();
     bool sendCommand(QString* command, QString* result);
+    bool sendCommand2(QString command);
+
+    void setVoltage(double voltage);
 };
 
 #endif // DP832A_USB_H
