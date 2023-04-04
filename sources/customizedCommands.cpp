@@ -10,7 +10,7 @@ class ExternalApplicationsWidget;
 //  注: nbrSCC（单道计数的指针），vNbrCoin（包含符合计数的指针的向量），serial（串口）
 //  dealSingleCountTimeup 指当单道计数计时时间到后，进行什么操作
 double volinitial=0,volch3=0,volch1=0;
-QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/erroroutput1113_1.txt");
+QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwBb.txt");
 //  测试 按钮被按下
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
@@ -204,14 +204,14 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
       int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
       double phi1;
       i++;
-      coin10r=*vNbrCoin.at(2);                 //读取一次符合计数  符合面板打开顺序要与其一致。
-      coin01r=*vNbrCoin.at(3);
-      coin11r=*vNbrCoin.at(0);
-      coin00r=*vNbrCoin.at(1);
+      coin10r=*vNbrCoin.at(0);                 //读取一次符合计数  符合面板打开顺序要与其一致。
+      coin01r=*vNbrCoin.at(2);
+      coin11r=*vNbrCoin.at(1);
+      coin00r=*vNbrCoin.at(3);
 //      th1r = tsp->getTemperature();               //读取温度
 //    qDebug()<< "输出电压"<<volinitial;
 
-    if(i<11){
+    if(i<12){
    coin10=coin10+coin10r;                //累计10s内的数据
    coin01=coin01+coin01r;
    coin11=coin11+coin11r;
@@ -227,8 +227,13 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
        qDebug()<< "误码"<< error1;
        qDebug()<< "温度"<< th1;
        QTextStream stream(&myfile);
+       stream << coin10 << "\t";
+       stream << coin01 << "\t";
+       stream << coin00 << "\t";
+       stream << coin11 << "\t";
        stream << error1 << "\t";
-     if(error1<0.02){
+       stream << ";" << "\t";
+     if(error1<0.025){
          qDebug() << "k=" << k;    //后续要补充写入文档
 //         stream << th1 << "\t";
          stream << k << endl;
@@ -296,7 +301,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                 }
 //             }                                                                        //根据温度确定调节方向
                if(tag==0){
-                   volinitial=volinitial-phi1/0.07;
+              //     volinitial=volinitial-phi1/0.07;          //AB2 参数
+                   volinitial=volinitial-phi1/0.1;             //AB1 参数
                    qDebug()<< "输出负电压："<< volinitial;
                    if(volinitial<0){
                        volinitial=volinitial+32;
@@ -333,7 +339,9 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
                    qDebug()<<"输出正电压:"<<volinitial;
                }
                else{
-                   volinitial=volinitial+phi1/0.07;
+  //               volinitial=volinitial+phi1/0.07;      //AB2 参数
+                   volinitial=volinitial+phi1/0.1;         //AB1 参数
+
                    if(volinitial>37){
                        volinitial=volinitial-32;
                    }
@@ -373,7 +381,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
              if(k<5){
                  if(error2>error1){
                      if(tag==0){
-                         volinitial=volinitial-phi1/0.07;
+                        // volinitial=volinitial-phi1/0.07;
+                         volinitial=volinitial-phi1/0.1;             //AB1 参数
                          if(volinitial<0){
                              volinitial=volinitial+32;
                          }
@@ -409,7 +418,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
                          qDebug()<< "输出负电压："<< volinitial;
                      }
                      else{
-                         volinitial=volinitial+phi1/0.07;
+ //                        volinitial=volinitial+phi1/0.07;
+                         volinitial=volinitial+phi1/0.1;         //AB1 参数
                          if(volinitial>37){
                              volinitial=volinitial-32;
                          }
@@ -447,7 +457,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
                  }
                  else{
                      if(tag==0){
-                       volinitial=volinitial+phi1/0.07;
+//                       volinitial=volinitial+phi1/0.07;
+                       volinitial=volinitial+phi1/0.1;         //AB1 参数
                        if(volinitial>37){
                            volinitial=volinitial-32;
                        }
@@ -483,7 +494,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
                        tag = 1;
                       }
                      else{
-                         volinitial=volinitial-phi1/0.07;
+//                         volinitial=volinitial-phi1/0.07;
+                         volinitial=volinitial-phi1/0.1;             //AB1 参数
                          if(volinitial<0){
                              volinitial=volinitial+32;
                          }
@@ -704,6 +716,7 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
      th2 = th1;
      error3 = error2;
      error2 = error1;
+
      coin10=coin10r;
      coin01=coin01r;
      coin11=coin11r;
