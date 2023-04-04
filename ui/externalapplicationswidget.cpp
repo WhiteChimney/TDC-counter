@@ -160,7 +160,9 @@ bool ExternalApplicationsWidget::openSerialPort(QSerialPortInfo spInfo)
 
 QString ExternalApplicationsWidget::readData()
 {
+    qDebug() << 1;
     qDebug() << serial->waitForReadyRead(1000);
+    qDebug() << 2;
     QByteArray buffer = serial->readAll();
     if (buffer.size() > 0)
         buffer = buffer.remove(buffer.size()-1,1);
