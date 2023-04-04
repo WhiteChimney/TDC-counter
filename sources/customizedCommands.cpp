@@ -12,6 +12,30 @@ class ExternalApplicationsWidget;
 double volinitial=0,volch3=0,volch1=0;
 QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwBb.txt");
 //  测试 按钮被按下
+
+int sumAB(int a, int b)
+{
+    return a+b;
+}
+
+void sendComplicatedCommands(DP832A_USB* usb)
+{
+    QString command = ":VOLT " + QString::number(0.1);
+    QString result = "";
+    usb->sendCommand(&command,&result);
+    command = ":VOLT " + QString::number(0.5);
+    usb->sendCommand(&command,&result);
+
+}
+
+void setVoltage(double vol, DP832A_USB* usb)
+{
+//    vol = vol % 31.0;
+    QString command = ":VOLT " + QString::number(vol);
+    QString result = "";
+    usb->sendCommand(&command,&result);
+}
+
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
    /* QString commandAskID = "*IDN?";                    // 查询仪器 ID
@@ -48,6 +72,21 @@ void ExternalApplicationsWidget::on_buttonTest_released()
     answer += tr("\n当前湿度：") + QString::number(humidity) + tr("%");
     ui->whiteBoard->setText(answer);   */
 
+//    qDebug() << 11;
+
+//    QString command = "*IDN?";
+//    QString result = "";
+
+//    dp832usb->sendCommand(&command,&result);
+
+//    qDebug() << result;
+
+//    qDebug() << sumAB(1,3);
+
+//    sendComplicatedCommands(dp832usb);
+
+//    setVoltage(0.5,dp832usb);
+
    //稳相位
     QString setvol;
     static int i=0;      //用于数秒
@@ -70,8 +109,8 @@ void ExternalApplicationsWidget::on_buttonTest_released()
     volinitial  = answervol.toDouble();                   // Qt 内输出结果
     volinitial =volinitial +1;
     qDebug()<< "输出电压"<<volinitial;
-//    th1r = tsp->getTemperature();
-//    qDebug()<<"符合计数10"<< coin10r;
+    th1r = tsp->getTemperature();
+    qDebug()<<"符合计数10"<< coin10r;
     //读取温度
   /*  if(i<11){
    coin10=coin10+coin10r;                //累计10s内的数据
