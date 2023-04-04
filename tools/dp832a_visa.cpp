@@ -2,8 +2,11 @@
 
 dp832a_visa::dp832a_visa(QString resourceName, QObject *parent) : QObject(parent)
 {
+    qDebug() << "11";
     rscName = new char[MAX_SCPI_LEN];
-    strcpy_s(rscName,resourceName.size(),resourceName.toStdString().c_str());
+    qDebug() << "12";
+    strcpy_s(rscName,resourceName.size()+1,resourceName.toStdString().c_str());
+    qDebug() << "13";
 }
 
 dp832a_visa::~dp832a_visa()
@@ -39,6 +42,9 @@ ViStatus dp832a_visa::sendCommand(QString* command, QString* result)
     *command += "\n";
     char commandFormat[] = "%s";
     nRetStatus = viQueryf(pInstrHandle,command->toLocal8Bit().data(),commandFormat,rdBuff);
+
+    qDebug() << rdBuff;
+    qDebug() << QString(QLatin1String((char*)rdBuff));
 
     *result = QString(QLatin1String((char*)rdBuff));
 
