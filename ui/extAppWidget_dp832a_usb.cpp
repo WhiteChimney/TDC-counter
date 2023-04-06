@@ -41,9 +41,8 @@ void ExternalApplicationsWidget::on_buttonDP832UsbTest_released()
     DP832A_USB instr1(QString("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR"),this);
     instr1.initializeDevice();
     QString command = "*IDN?";
-    QString result = ui->labelDP832UsbMsgRecv->text();
-    instr1.sendCommand(&command,&result);
-    ui->labelDP832UsbMsgRecv->setText(result);
+    instr1.sendCommand(command);
+    ui->labelDP832UsbMsgRecv->setText(instr1.readReply());
     instr1.closeDevice();
 }
 
@@ -52,8 +51,7 @@ void ExternalApplicationsWidget::on_buttonDP832UsbSendCmd_released()
     if (DP832UsbIndicator->states() == QSimpleLed::ON)
     {
         QString command = ui->textDP832UsbCmdSent->text();
-        QString result = ui->labelDP832UsbMsgRecv->text();
-        dp832usb->sendCommand(&command,&result);
-        ui->labelDP832UsbMsgRecv->setText(result);
+        dp832usb->sendCommand(command);
+        ui->labelDP832UsbMsgRecv->setText(dp832usb->readReply());
     }
 }

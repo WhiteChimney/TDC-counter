@@ -76,7 +76,6 @@ bool DP832A_USB::readReply(QString* reply)
     }
     else
         return false;
-
 }
 
 QString DP832A_USB::readReply()
@@ -94,7 +93,37 @@ QString DP832A_USB::readReply()
     }
     else
         return QString("");
+}
 
+bool DP832A_USB::getVoltage(int channel, double *voltage)
+{
+    QString command = ":APPL? CH";
+    command += QString::number(channel);
+    command += ",VOLT";
+    status = sendCommand(command);
+    if (status == VI_SUCCESS)
+    {
+        QString reply;
+        status = readReply(&reply);
+        if (status == VI_SUCCESS)
+        {
+            *voltage = reply.toDouble();
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
+
+double DP832A_USB::getVoltage(int channel)
+{
+    QString command = ":APPL? CH";
+    command += QString::number(channel);
+    command += ",VOLT";
+    sendCommand(command);
+    return readReply().toDouble();
 }
 
 bool DP832A_USB::setVoltage(int channel, double voltage)

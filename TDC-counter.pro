@@ -51,6 +51,7 @@ HEADERS += \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \
+    tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \
     tools/statisticschannel.h \

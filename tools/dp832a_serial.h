@@ -30,6 +30,8 @@ public:
     QString readReply();
     bool sendCommand(QString command);
 
+    bool getVoltage(int channel, double* voltage);
+    double getVoltage(int channel);
     bool setVoltage(int channel, double voltage);
 
 };

@@ -75,6 +75,37 @@ QString DP832A_Serial::readReply()
         return QString("");
 }
 
+bool DP832A_Serial::getVoltage(int channel, double *voltage)
+{
+    QString command = ":APPL? CH";
+    command += QString::number(channel);
+    command += ",VOLT";
+    bool status = sendCommand(command);
+    if (status)
+    {
+        QString reply;
+        status = readReply(&reply);
+        if (status)
+        {
+            *voltage = reply.toDouble();
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
+
+double DP832A_Serial::getVoltage(int channel)
+{
+    QString command = ":APPL? CH";
+    command += QString::number(channel);
+    command += ",VOLT";
+    sendCommand(command);
+    return readReply().toDouble();
+}
+
 bool DP832A_Serial::setVoltage(int channel, double voltage)
 {
     QString command = ":APPL CH";

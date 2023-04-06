@@ -111,8 +111,8 @@ void ExternalApplicationsWidget::on_buttonOpenSP_released()
     this->fetchUiData();
     if (SPstatusIndicator->states() == QSimpleLed::OFF)
     {
-        dp832_sp = new DP832A_Serial(this);
-        if (dp832_sp->initializeDevice(spList.at(ui->comboboxSPList->currentIndex()),
+        dp832serial = new DP832A_Serial(this);
+        if (dp832serial->initializeDevice(spList.at(ui->comboboxSPList->currentIndex()),
                                        baudRate,
                                        dataBits,
                                        stopBits,
@@ -125,7 +125,7 @@ void ExternalApplicationsWidget::on_buttonCloseSP_released()
 {
     if (SPstatusIndicator->states() == QSimpleLed::ON)
     {
-        dp832_sp->closeDevice();
+        dp832serial->closeDevice();
         SPstatusIndicator->setStates(QSimpleLed::OFF);
     }
 }
@@ -133,11 +133,11 @@ void ExternalApplicationsWidget::on_buttonCloseSP_released()
 void ExternalApplicationsWidget::on_buttonSend_released()
 {
     if (SPstatusIndicator->states() == QSimpleLed::ON)
-        dp832_sp->sendCommand(ui->textDataSent->text());
+        dp832serial->sendCommand(ui->textDataSent->text());
 }
 
 void ExternalApplicationsWidget::on_buttonReceive_released()
 {
     if (SPstatusIndicator->states() == QSimpleLed::ON)
-        ui->labelDataReceived->setText(dp832_sp->readData());
+        ui->labelDataReceived->setText(dp832serial->readReply());
 }

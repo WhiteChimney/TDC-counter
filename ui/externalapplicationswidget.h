@@ -33,7 +33,8 @@ private:
     QSimpleLed *SPstatusIndicator, *TSP01statusIndicator, *DP832UsbIndicator;
 
 private:
-    DP832A_Serial* dp832_sp;
+    DP832A_USB* dp832usb;
+    DP832A_Serial* dp832serial;
     QList<QSerialPortInfo> spList;
     QSerialPort::BaudRate baudRate;
     QSerialPort::DataBits dataBits;
@@ -41,13 +42,13 @@ private:
     QSerialPort::Parity parity;
     QByteArray receivedBytes, sentBytes;
 
+
 public:
     void setupSPIndicator(), setupTSPIndicator(), setupDP832UsbIndicator();
     void fetchUiData();
     void pushUiData();
     void saveToIni();
     void loadFromIni();
-
     void refreshPorts();
 
 private:
@@ -97,9 +98,6 @@ private slots:
     void on_buttonDP832UsbClose_released();
     void on_buttonDP832UsbTest_released();
     void on_buttonDP832UsbSendCmd_released();
-
-private:
-    DP832A_USB* dp832usb;
 
 };
 

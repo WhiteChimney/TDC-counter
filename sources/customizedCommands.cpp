@@ -1,48 +1,53 @@
 #include "externalapplicationswidget.h"
 #include "ui_externalapplicationswidget.h"
+
 #include <QtMath>
 #include <QTextStream>
+
+#include "customizedfunctions.hpp"
+
 namespace Ui {
 class ExternalApplicationsWidget;
 }
 
-//  自定义串口操作文件
-//  注: nbrSCC（单道计数的指针），vNbrCoin（包含符合计数的指针的向量），serial（串口）
+
+//  自定义操作文件
+//  注: nbrSCC（单道计数的指针），vNbrCoin（包含符合计数的指针的向量）
 //  dealSingleCountTimeup 指当单道计数计时时间到后，进行什么操作
+
+//  各仪器操作：
+//  DP832A 电压源（串口）：dp832serial
+//      获取电压：dp832serial->getVoltage(channel)
+//      设定电压：dp832serial->setVoltage(channel,voltage)
+//      发送指令：dp832serial->sendCommand("abc");
+//      接收回复：QString reply = dp832serial->readReply();
+//  DP832A 电压源（USB）：dp832usb
+//      用法同上
+//  Thorlabs 温湿度计：tsp
+//      获取湿度：tsp->getHumidity()
+//      获取温度：tsp->getTemperature()
+//      获取湿度偏移量：tsp->getHumidityOffset()
+//      获取温度偏移量：tsp->getTemperatureOffset()
+
+//  剩余自定义函数写在 "customizedfunctions.hpp" 中
+
+
+
+
 double volinitial=0,volch3=0,volch1=0;
 QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwBb.txt");
+
 //  测试 按钮被按下
-
-int sumAB(int a, int b)
-{
-    return a+b;
-}
-
-void sendComplicatedCommands(DP832A_USB* usb)
-{
-    QString command = ":VOLT " + QString::number(0.1);
-    QString result = "";
-    usb->sendCommand(&command,&result);
-    command = ":VOLT " + QString::number(0.5);
-    usb->sendCommand(&command,&result);
-
-}
-
-void setVoltage(double vol, DP832A_USB* usb)
-{
-//    vol = vol % 31.0;
-    QString command = ":VOLT " + QString::number(vol);
-    QString result = "";
-    usb->sendCommand(&command,&result);
-}
-
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
 
-    static double vol = 0.5;
-    dp832usb->setVoltage(vol++);
+    qDebug() << sum(1,3);
 
-//    dp832usb->setVoltage(0.18);
+    dp832usb->setVoltage(1,0.18);
+    dp832serial->setVoltage(1,4.3);
+
+    computerA(dp832serial,tsp);
+    computerB(dp832usb,tsp);
 
    /* QString commandAskID = "*IDN?";                    // 查询仪器 ID
     sendData(commandAskID);                            // 发送指令
