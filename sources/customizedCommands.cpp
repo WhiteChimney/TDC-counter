@@ -41,13 +41,30 @@ QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwB
 void ExternalApplicationsWidget::on_buttonTest_released()
 {
 
+    DP832A_USB device1("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+//    DP832A_USB device2("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+    device1.initializeDevice();
+
+    device1.setVoltage(1,0.1);
+
+    qDebug() << device1.getVoltage(1);
+
+    device1.setVoltage(1,0.5);
+
+    device1.closeDevice();
+
+
+
     qDebug() << sum(1,3);
 
-    dp832usb->setVoltage(1,0.18);
-    dp832serial->setVoltage(1,4.3);
+    qDebug() << "temp is " << tsp->getTemperature();
+    qDebug() << "error code: " << tsp->getErrorCode();
 
-    computerA(dp832serial,tsp);
-    computerB(dp832usb,tsp);
+//    dp832usb->setVoltage(1,0.18);
+//    dp832serial->setVoltage(1,4.3);
+
+//    computerA(dp832serial,tsp);
+//    computerB(dp832usb,tsp);
 
    /* QString commandAskID = "*IDN?";                    // 查询仪器 ID
     sendData(commandAskID);                            // 发送指令
