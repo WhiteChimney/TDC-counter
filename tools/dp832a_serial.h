@@ -6,6 +6,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QtSerialPort/QSerialPortInfo>
 
+#define WAIT_FOR_READ_TIME 1000
+
 class DP832A_Serial : public QObject
 {
     Q_OBJECT
@@ -24,8 +26,11 @@ public:
                           QSerialPort::StopBits stopBits,
                           QSerialPort::Parity parity);
     bool closeDevice();
-    QString readData();
-    void sendCommand(QString dataText);
+    bool readReply(QString* reply);
+    QString readReply();
+    bool sendCommand(QString command);
+
+    bool setVoltage(int channel, double voltage);
 
 };
 

@@ -12,12 +12,17 @@ bool DP832A_Serial::initializeDevice(QSerialPortInfo spInfo,
                                      QSerialPort::StopBits stopBits,
                                      QSerialPort::Parity parity)
 {
-    serial->setPort(spInfo);
-    serial->setBaudRate(baudRate);
-    serial->setDataBits(dataBits);
-    serial->setStopBits(stopBits);
-    serial->setParity(parity);
-    return serial->open(QIODevice::ReadWrite);
+    if (!serial->isOpen())
+    {
+        serial->setPort(spInfo);
+        serial->setBaudRate(baudRate);
+        serial->setDataBits(dataBits);
+        serial->setStopBits(stopBits);
+        serial->setParity(parity);
+        return serial->open(QIODevice::ReadWrite);
+    }
+    else
+        return false;
 }
 
 bool DP832A_Serial::closeDevice()
@@ -27,17 +32,54 @@ bool DP832A_Serial::closeDevice()
     return true;
 }
 
-QString DP832A_Serial::readData()
+bool DP832A_Serial::sendCommand(QString dataText)
 {
-    qDebug() << serial->waitForReadyRead(1000);
-    QByteArray buffer = serial->readAll();
-    if (buffer.size() > 0)
-        buffer = buffer.remove(buffer.size()-1,1);
-    return buffer;
+    if (serial->isOpen())
+    {
+        serial->write(dataText.toLocal8Bit().append("\n"));
+        return serial->waitForBytesWritten();
+    }
+    else
+        return false;
 }
 
-void DP832A_Serial::sendCommand(QString dataText)
+bool DP832A_Serial::readReply(QString *reply)
 {
-    serial->write(dataText.toLocal8Bit().append("\n"));
-    serial->waitForBytesWritten();
+    if (serial->isOpen())
+    {
+        serial->waitForReadyRead(WAIT_FOR_READ_TIME);
+        QByteArray buffer = serial->readAll();
+        if (buffer.size() > 0)
+        {
+            *reply = buffer.remove(buffer.size()-1,1);
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}
+
+QString DP832A_Serial::readReply()
+{
+    if (serial->isOpen())
+    {
+        serial->waitForReadyRead(WAIT_FOR_READ_TIME);
+        QByteArray buffer = serial->readAll();
+        if (buffer.size() > 0)
+            buffer = buffer.remove(buffer.size()-1,1);
+        return buffer;
+    }
+    else
+        return QString("");
+}
+
+bool DP832A_Serial::setVoltage(int channel, double voltage)
+{
+    QString command = ":APPL CH";
+    command += QString::number(channel);
+    command += ",";
+    command += QString::number(voltage);
+    return sendCommand(command);
 }

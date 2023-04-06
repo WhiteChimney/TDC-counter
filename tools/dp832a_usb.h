@@ -1,12 +1,11 @@
 #ifndef DP832A_USB_H
 #define DP832A_USB_H
 
-#include <visa.h>
+#include <QObject>
 #include <QString>
-#include <QDebug>
+#include <visa.h>
 
-#define MAX_SCPI_LEN 255
-#define DEFAULT_TMO  5000
+#define MAX_REC_SIZE 255
 
 class DP832A_USB : public QObject
 {
@@ -17,25 +16,27 @@ public:
 
 private:
 
+    QString resourceName;
 //    VISA session
-    ViStatus nRetStatus;
-    ViSession rmSession = 0;
-    ViSession pInstrHandle;
-    ViRsrc rscName;
+    ViStatus status = VI_SUCCESS - 1;
+    ViSession defaultRM = 0;
+    ViSession instr;
+    ViUInt32 retCount = 0;
 
 //    读取与写入 buffer
-    ViByte wrBuff[MAX_SCPI_LEN];
-    ViByte rdBuff[DEFAULT_TMO];
+    char* SendAddr = NULL;
+    char* SendBuf = NULL;
+    unsigned char RecBuf[MAX_REC_SIZE];
 
-    int retCount = 0;
 
 public:
     bool initializeDevice();
     bool closeDevice();
-    bool sendCommand(QString* command, QString* result);
-    bool sendCommand2(QString command);
+    bool sendCommand(QString command);
+    bool readReply(QString* reply);
+    QString readReply();
 
-    void setVoltage(double voltage);
+    bool setVoltage(int channel, double voltage);
 };
 
 #endif // DP832A_USB_H

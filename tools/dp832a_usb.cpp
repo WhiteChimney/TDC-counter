@@ -1,28 +1,26 @@
 #include "dp832a_usb.h"
 
-DP832A_USB::DP832A_USB(QString resourceName, QObject *parent) : QObject(parent)
+DP832A_USB::DP832A_USB(QString resourceName0, QObject *parent) : QObject(parent)
 {
-    rscName = new char[MAX_SCPI_LEN];
-    strcpy_s(rscName,resourceName.size()+1,resourceName.toStdString().c_str());
+    resourceName = resourceName0;
 }
 
 DP832A_USB::~DP832A_USB()
 {
-    delete rscName;
 }
 
 bool DP832A_USB::initializeDevice()
 {
+//    仪器地址
+    SendAddr = resourceName.toLocal8Bit().data();
+
 //    打开设备，获取指针
-    nRetStatus = viOpenDefaultRM(&rmSession);
-    nRetStatus = viOpen(rmSession,rscName,VI_NULL,VI_NULL,&pInstrHandle);
+    status = viOpenDefaultRM(&defaultRM);
+    if (status < VI_SUCCESS)
+        return false;
+    status = viOpen(defaultRM,SendAddr,VI_NULL,VI_NULL,&instr);
 
-//    设置 VISA 格式
-    nRetStatus = viSetAttribute(pInstrHandle,VI_ATTR_TMO_VALUE,DEFAULT_TMO);
-    nRetStatus = viSetAttribute(pInstrHandle,VI_ATTR_SUPPRESS_END_EN,VI_FALSE);
-    nRetStatus = viSetAttribute(pInstrHandle,VI_ATTR_SEND_END_EN,VI_FALSE);
-
-    if (nRetStatus == VI_SUCCESS)
+    if (status == VI_SUCCESS)
         return true;
     else
         return false;
@@ -30,55 +28,80 @@ bool DP832A_USB::initializeDevice()
 
 bool DP832A_USB::closeDevice()
 {
-    nRetStatus = viClose(pInstrHandle);
-    nRetStatus = viClose(rmSession);
+    if (status == VI_SUCCESS)
+    {
+        status = viClose(instr);
+        status = viClose(defaultRM);
 
-    if (nRetStatus == VI_SUCCESS)
-        return true;
-    else
-        return false;
-}
-
-bool DP832A_USB::sendCommand(QString* command, QString* result)
-{
-//    发送指令
-    *command += "\n";
-    char commandFormat[] = "%s";
-    nRetStatus = viQueryf(pInstrHandle,command->toLocal8Bit().data(),commandFormat,rdBuff);
-
-    *result = QString(QLatin1String((char*)rdBuff));
-
-    if (nRetStatus == VI_SUCCESS)
-        return true;
-    else
-        return false;
-}
-
-bool DP832A_USB::sendCommand2(QString command)
-{
-    //    发送指令
-        command += "\n";
-//        char commandFormat[] = "%s";
-//        nRetStatus = viQueryf(pInstrHandle,command.toLocal8Bit().data(),commandFormat);
-
-
-
-        char ch_command[MAX_SCPI_LEN];
-        strcpy(ch_command,":APPL CH1,1.32\n");
-
-        unsigned long retcnt = DEFAULT_TMO;
-        nRetStatus = viWrite(pInstrHandle,(ViBuf)ch_command,(ViUInt32)strlen(ch_command),&retcnt);
-
-        if (nRetStatus == VI_SUCCESS)
+        if (status == VI_SUCCESS)
             return true;
         else
             return false;
+    }
+    else
+        return false;
+}
+
+bool DP832A_USB::sendCommand(QString command)
+{
+//    发送指令
+    if (status == VI_SUCCESS)
+    {
+        command += "\n";
+        SendBuf = command.toLocal8Bit().data();
+        status = viWrite(instr,(unsigned char*)SendBuf,strlen(SendBuf),&retCount);
+
+        if (status == VI_SUCCESS)
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+}
+
+bool DP832A_USB::readReply(QString* reply)
+{
+    if (status == VI_SUCCESS)
+    {
+        memset(RecBuf,0,MAX_REC_SIZE);
+        status = viRead(instr,RecBuf,MAX_REC_SIZE,&retCount);
+        if (status == VI_SUCCESS)
+        {
+            *reply = QString(QLatin1String((char*)RecBuf));
+            return true;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
 
 }
 
-void DP832A_USB::setVoltage(double voltage)
+QString DP832A_USB::readReply()
 {
-    QString command = ":APPL CH1,";
+    if (status == VI_SUCCESS)
+    {
+        memset(RecBuf,0,MAX_REC_SIZE);
+        status = viRead(instr,RecBuf,MAX_REC_SIZE,&retCount);
+        if (status == VI_SUCCESS)
+        {
+            return QString(QLatin1String((char*)RecBuf));
+        }
+        else
+            return QString("");
+    }
+    else
+        return QString("");
+
+}
+
+bool DP832A_USB::setVoltage(int channel, double voltage)
+{
+    QString command = ":APPL CH";
+    command += QString::number(channel);
+    command += ",";
     command += QString::number(voltage);
-    qDebug() << sendCommand2(command);
+    return sendCommand(command);
 }
