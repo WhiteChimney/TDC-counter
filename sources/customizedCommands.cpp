@@ -36,7 +36,7 @@ class ExternalApplicationsWidget;
 
 double volinitial=0,volch3=0,volch1=0;
 QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwBb.txt");
-DP832A_USB device1("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+DP832A_USB* device1;
 
 
 //  测试 按钮被按下
@@ -45,15 +45,16 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 
 //  DP832A_USB device1("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
 //    DP832A_USB device2("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
-    device1.initializeDevice();
+    device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+    device1->initializeDevice();
 
-    device1.setVoltage(1,0.1);
+    device1->setVoltage(1,0.1);
 
-    qDebug() << device1.getVoltage(1);
+    qDebug() << device1->getVoltage(1);
 
-    device1.setVoltage(1,0.5);
+    device1->setVoltage(1,0.5);
 
-    device1.closeDevice();
+    device1->closeDevice();
 
 
 
@@ -127,11 +128,11 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 //    int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
 //    double th1r, phi1;
 //    i++;
-////    qDebug() << "tsfdk" << vNbrCoin.size();
-////    qDebug()<<*(vNbrCoin.at(0));                 //读取一次符合计数  符合面板打开顺序要与其一致。
-////    //coin01r=*vNbrCoin.at(1);
-////    //coin11r=*vNbrCoin.at(2);
-////    //coin00r=*vNbrCoin.at(3);
+//    qDebug() << "tsfdk" << vNbrCoin.size();
+//    qDebug()<<*(vNbrCoin.at(0));                 //读取一次符合计数  符合面板打开顺序要与其一致。
+//    //coin01r=*vNbrCoin.at(1);
+//    //coin11r=*vNbrCoin.at(2);
+//    //coin00r=*vNbrCoin.at(3);
 //    QString commandAskVOL = ":APPL? CH1,VOLT";
 //    sendData(commandAskVOL);
 //    QThread::msleep(100);                              // 加延时，不然读不到数据
@@ -228,9 +229,10 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 //  开始 按钮被按下
 void ExternalApplicationsWidget::customizedSPcommands_start()
 {
-      device1.initializeDevice();
+      device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+      device1->initializeDevice();
       QString commandAskVOL = ":APPL? CH1,VOLT";
-      double answervol = device1.getVoltage(1);                       // 读取回复
+      double answervol = device1->getVoltage(1);                       // 读取回复
       volinitial  = answervol;                 // Qt 内输出结果
 
       qDebug() << "开始自定义程序";
@@ -261,7 +263,7 @@ void ExternalApplicationsWidget::customizedSPcommands_stop()
 {
 //    qDebug() << "停止自定义程序";
       myfile.close();
-      device1.closeDevice();
+      device1->closeDevice();
 }
 
 //  单道计数刷新时
@@ -393,15 +395,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                      sendData(setvol);
 //                      QThread::msleep(100);
 //                      sendData(setvolch3);
-                       device1.setVoltage(1,volch1);
-                       device1.setVoltage(3,volch3);
+                       device1->setVoltage(1,volch1);
+                       device1->setVoltage(3,volch3);
                    }
                    else{
                        if(volch3==0){
                            volch1=volinitial;
 //                           setvol =":APPL CH1," + QString::number(volch1);
 //                           sendData(setvol);
-                        device1.setVoltage(1,volch1);
+                        device1->setVoltage(1,volch1);
 
                        }
                        else{
@@ -412,8 +414,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
  //                          sendData(setvol);
 //                          QThread::msleep(100);
 //                           sendData(setvolch3);
-                           device1.setVoltage(1,volch1);
-                           device1.setVoltage(3,volch3);
+                           device1->setVoltage(1,volch1);
+                           device1->setVoltage(3,volch3);
                        }
                    }
                    tag=0;
@@ -437,15 +439,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                       sendData(setvol);
 //                       QThread::msleep(100);
 //                       sendData(setvolch3);
-                       device1.setVoltage(1,volch1);
-                       device1.setVoltage(3,volch3);
+                       device1->setVoltage(1,volch1);
+                       device1->setVoltage(3,volch3);
                    }
                    else{
                        if(volch3==0){
                            volch1=volinitial;
 //                           setvol =":APPL CH1," + QString::number(volch1);
 //                           sendData(setvol);
-                           device1.setVoltage(1,volch1);
+                           device1->setVoltage(1,volch1);
                        }
                        else{
                            volch3=0;
@@ -455,8 +457,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                           sendData(setvol);
 //                           QThread::msleep(100);
 //                           sendData(setvolch3);
-                           device1.setVoltage(1,volch1);
-                           device1.setVoltage(3,volch3);
+                           device1->setVoltage(1,volch1);
+                           device1->setVoltage(3,volch3);
                        }
                    }
                    tag=1;
@@ -483,15 +485,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                 device1.setVoltage(1,volch1);
+                                 device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -501,8 +503,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                          tag=0;
@@ -525,15 +527,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                  device1.setVoltage(1,volch1);
+                                  device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -543,8 +545,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                          tag=1;
@@ -569,15 +571,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                           sendData(setvol);
 //                           QThread::msleep(100);
 //                           sendData(setvolch3);
-                           device1.setVoltage(1,volch1);
-                           device1.setVoltage(3,volch3);
+                           device1->setVoltage(1,volch1);
+                           device1->setVoltage(3,volch3);
                        }
                        else{
                            if(volch3==0){
                                volch1=volinitial;
 //                               setvol =":APPL CH1," + QString::number(volch1);
 //                               sendData(setvol);
-                               device1.setVoltage(1,volch1);
+                               device1->setVoltage(1,volch1);
                            }
                            else{
                                volch3=0;
@@ -587,8 +589,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                               sendData(setvol);
 //                               QThread::msleep(100);
 //                               sendData(setvolch3);
-                               device1.setVoltage(1,volch1);
-                               device1.setVoltage(3,volch3);
+                               device1->setVoltage(1,volch1);
+                               device1->setVoltage(3,volch3);
                            }
                        }
                        qDebug()<< "输出正电压:" << volinitial;
@@ -611,15 +613,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                  device1.setVoltage(1,volch1);
+                                  device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -629,8 +631,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                        qDebug()<< "输出负电压:"<< volinitial;
@@ -656,15 +658,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                  device1.setVoltage(1,volch1);
+                                  device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -674,8 +676,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                          tag=0;
@@ -697,15 +699,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                  device1.setVoltage(1,volch1);
+                                  device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -715,8 +717,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                          tag=1;
@@ -740,15 +742,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                           sendData(setvol);
 //                           QThread::msleep(100);
 //                           sendData(setvolch3);
-                           device1.setVoltage(1,volch1);
-                           device1.setVoltage(3,volch3);
+                           device1->setVoltage(1,volch1);
+                           device1->setVoltage(3,volch3);
                        }
                        else{
                            if(volch3==0){
                                volch1=volinitial;
 //                               setvol =":APPL CH1," + QString::number(volch1);
 //                               sendData(setvol);
-                                device1.setVoltage(1,volch1);
+                                device1->setVoltage(1,volch1);
                            }
                            else{
                                volch3=0;
@@ -758,8 +760,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                               sendData(setvol);
 //                               QThread::msleep(100);
 //                               sendData(setvolch3);
-                               device1.setVoltage(1,volch1);
-                               device1.setVoltage(3,volch3);
+                               device1->setVoltage(1,volch1);
+                               device1->setVoltage(3,volch3);
                            }
                        }
                        qDebug()<< "输出正电压:" << volinitial;
@@ -781,15 +783,15 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                             sendData(setvol);
 //                             QThread::msleep(100);
 //                             sendData(setvolch3);
-                             device1.setVoltage(1,volch1);
-                             device1.setVoltage(3,volch3);
+                             device1->setVoltage(1,volch1);
+                             device1->setVoltage(3,volch3);
                          }
                          else{
                              if(volch3==0){
                                  volch1=volinitial;
 //                                 setvol =":APPL CH1," + QString::number(volch1);
 //                                 sendData(setvol);
-                                  device1.setVoltage(1,volch1);
+                                  device1->setVoltage(1,volch1);
                              }
                              else{
                                  volch3=0;
@@ -799,8 +801,8 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                                 sendData(setvol);
 //                                 QThread::msleep(100);
 //                                 sendData(setvolch3);
-                                 device1.setVoltage(1,volch1);
-                                 device1.setVoltage(3,volch3);
+                                 device1->setVoltage(1,volch1);
+                                 device1->setVoltage(3,volch3);
                              }
                          }
                        qDebug()<< "输出负电压:"<< volinitial;
