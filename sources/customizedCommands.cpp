@@ -35,7 +35,7 @@ class ExternalApplicationsWidget;
 
 
 double volinitial=0,volch3=0,volch1=0;
-QFile  myfile("C:/Users/EntangleQKD/Desktop/timebin纠缠/0km_noise=0_m=2X基AwBb.txt");
+QFile  myfile("C:/Users/217-Entangle/Desktop/数据/0km 60ghz.txt");
 DP832A_USB* device1;
 
 
@@ -45,7 +45,7 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 
 //  DP832A_USB device1("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
 //    DP832A_USB device2("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
-    device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+    device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700288::INSTR",this);
     device1->initializeDevice();
 
     device1->setVoltage(1,0.1);
@@ -236,7 +236,7 @@ void ExternalApplicationsWidget::customizedSPcommands_start()
       volinitial  = answervol;                 // Qt 内输出结果
 
       qDebug() << "开始自定义程序";
-//    myfile.open(QIODevice::WriteOnly | QIODevice::Text);
+    myfile.open(QIODevice::WriteOnly | QIODevice::Text);
 //    QString commandAskVOL = ":APPL? CH1,VOLT";
 //    sendData(commandAskVOL);
 //    QThread::msleep(100);                              // 加延时，不然读不到数据
@@ -281,14 +281,14 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
       int coin10r=0,coin01r=0,coin11r=0,coin00r=0;
       double phi1;
       i++;
-      coin10r=*vNbrCoin.at(0);                 //读取一次符合计数  符合面板打开顺序要与其一致。
+      coin10r=*vNbrCoin.at(1);                 //读取一次符合计数  符合面板打开顺序要与其一致。
       coin01r=*vNbrCoin.at(2);
-      coin11r=*vNbrCoin.at(1);
+      coin11r=*vNbrCoin.at(0);
       coin00r=*vNbrCoin.at(3);
 //      th1r = tsp->getTemperature();               //读取温度
 //    qDebug()<< "输出电压"<<volinitial;
 
-    if(i<12){
+    if(i<2){
    coin10=coin10+coin10r;                //累计10s内的数据
    coin01=coin01+coin01r;
    coin11=coin11+coin11r;
@@ -297,548 +297,551 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
     else{
        th1 = tsp->getTemperature();
       QString str;
-       str = QString::number(th1,'f',2);
-       th1 = str.toDouble();
+//       str = QString::number(th1,'f',2);
+//       th1 = str.toDouble();
        error1 = (double)(coin10+coin01)/(coin00+coin11+coin01+coin10);
        phi1 = 1-(acos(2*error1-1))/3.1415926535897;
        qDebug()<< "误码"<< error1;
-       qDebug()<< "温度"<< th1;
+       qDebug()<<"total coin"<<"\t"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11;
        QTextStream stream(&myfile);
-       stream << coin10 << "\t";
-       stream << coin01 << "\t";
-       stream << coin00 << "\t";
-       stream << coin11 << "\t";
-       stream << error1 << "\t";
-       stream << ";" << "\t";
-     if(error1<0.025){
-         qDebug() << "k=" << k;    //后续要补充写入文档
-//         stream << th1 << "\t";
-         stream << k << endl;
-         k=1;
-     }
-     else{
-         k++;
-         if(k==1){
-//             if((th1-th2)>0){
-//                 tag = 0;
-//                 volinitial=volinitial-phi1/0.07;
-//                 qDebug()<<"输出负电压:"<<volinitial;
-//                 qDebug()<<"phi1" << phi1;
-//                 if(volinitial<0){
-//                     volinitial=volinitial+31;
-//                 }
-//                 else{
-
-//                 }
-//                 setvol =":VOLT " + QString::number(volinitial);
-//                 sendData(setvol);
-//             }
-//             else{
-//                 if((th1-th2)==0){
-//                     if((th1-th3)>0){
-//                         tag = 0;
-//                         volinitial=volinitial-phi1/0.07;
-//                         qDebug()<<"输出负电压:"<<volinitial;
-//                         qDebug()<<"phi1" << phi1;
-//                         if(volinitial<0){
-//                             volinitial=volinitial+31;
-//                         }
-//                         else{
-
-//                         }
-//                         setvol =":VOLT " + QString::number(volinitial);
-//                         sendData(setvol);
-//                     }
-//                     else{
-//                         tag = 1;
-//                         volinitial=volinitial+phi1/0.07;
-//                         if(volinitial>33){
-//                             volinitial=volinitial-31;
-//                         }
-//                         else{
-
-//                         }
-//                         setvol =":VOLT " + QString::number(volinitial);
-//                         sendData(setvol);
-//                         qDebug()<<"输出正电压:"<<volinitial;
-//                     }
-//                 }
-//                 else{
-//                     tag = 1;
-//                     volinitial=volinitial+phi1/0.07;
-//                     qDebug()<<"输出正电压:"<<volinitial;
-//                     if(volinitial>33){
-//                         volinitial=volinitial-31;
-//                     }
-//                     else{
-
-//                     }
-//                   setvol =":VOLT " + QString::number(volinitial);
-//                     sendData(setvol);
-//                 }
-//             }                                                                        //根据温度确定调节方向
-               if(tag==0){
-              //     volinitial=volinitial-phi1/0.07;          //AB1 参数
-                   volinitial=volinitial-phi1/0.02;             //AB2 参数
-                   qDebug()<< "输出负电压："<< volinitial;
-                   if(volinitial<0){
-                       volinitial=volinitial+32;
-                   }
-                   else{
-
-                   }
-                   if(volinitial>32){
-                       volch1=32;
-                       volch3=volinitial-32;
-//                      setvol =":APPL CH1," + QString::number(volch1);
-//                      setvolch3 =":APPL CH3," + QString::number(volch3);
-//                      sendData(setvol);
-//                      QThread::msleep(100);
-//                      sendData(setvolch3);
-                       device1->setVoltage(1,volch1);
-                       device1->setVoltage(3,volch3);
-                   }
-                   else{
-                       if(volch3==0){
-                           volch1=volinitial;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           sendData(setvol);
-                        device1->setVoltage(1,volch1);
-
-                       }
-                       else{
-                           volch3=0;
-                           volch1=volinitial;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           setvolch3 =":APPL CH3," + QString::number(volch3);
- //                          sendData(setvol);
-//                          QThread::msleep(100);
-//                           sendData(setvolch3);
-                           device1->setVoltage(1,volch1);
-                           device1->setVoltage(3,volch3);
-                       }
-                   }
-                   tag=0;
-                   qDebug()<<"输出正电压:"<<volinitial;
-               }
-               else{
-  //               volinitial=volinitial+phi1/0.07;      //AB2 参数
-                   volinitial=volinitial+phi1/0.02;         //AB1 参数
-
-                   if(volinitial>37){
-                       volinitial=volinitial-32;
-                   }
-                   else{
-
-                   }
-                   if(volinitial>32){
-                       volch1=32;
-                       volch3=volinitial-32;
-//                       setvol =":APPL CH1," + QString::number(volch1);
-//                       setvolch3 =":APPL CH3," + QString::number(volch3);
-//                       sendData(setvol);
-//                       QThread::msleep(100);
-//                       sendData(setvolch3);
-                       device1->setVoltage(1,volch1);
-                       device1->setVoltage(3,volch3);
-                   }
-                   else{
-                       if(volch3==0){
-                           volch1=volinitial;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           sendData(setvol);
-                           device1->setVoltage(1,volch1);
-                       }
-                       else{
-                           volch3=0;
-                           volch1=volinitial;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           setvolch3 =":APPL CH3," + QString::number(volch3);
-//                           sendData(setvol);
-//                           QThread::msleep(100);
-//                           sendData(setvolch3);
-                           device1->setVoltage(1,volch1);
-                           device1->setVoltage(3,volch3);
-                       }
-                   }
-                   tag=1;
-                   qDebug()<< "输出正电压："<< volinitial;
-               }
-         }
-         else{
-             if(k<5){
-                 if(error2>error1){
-                     if(tag==0){
-                        // volinitial=volinitial-phi1/0.07;
-                         volinitial=volinitial-phi1/0.1;             //AB1 参数
-                         if(volinitial<0){
-                             volinitial=volinitial+32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                 device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                         tag=0;
-                         qDebug()<< "输出负电压："<< volinitial;
-                     }
-                     else{
- //                        volinitial=volinitial+phi1/0.07;
-                         volinitial=volinitial+phi1/0.1;         //AB1 参数
-                         if(volinitial>37){
-                             volinitial=volinitial-32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                  device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                         tag=1;
-                         qDebug()<< "输出正电压："<< volinitial;
-                     }
-                 }
-                 else{
-                     if(tag==0){
-//                       volinitial=volinitial+phi1/0.07;
-                       volinitial=volinitial+phi1/0.1;         //AB1 参数
-                       if(volinitial>37){
-                           volinitial=volinitial-32;
-                       }
-                       else{
-
-                       }
-                       if(volinitial>32){
-                           volch1=32;
-                           volch3=volinitial-32;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           setvolch3 =":APPL CH3," + QString::number(volch3);
-//                           sendData(setvol);
-//                           QThread::msleep(100);
-//                           sendData(setvolch3);
-                           device1->setVoltage(1,volch1);
-                           device1->setVoltage(3,volch3);
-                       }
-                       else{
-                           if(volch3==0){
-                               volch1=volinitial;
-//                               setvol =":APPL CH1," + QString::number(volch1);
-//                               sendData(setvol);
-                               device1->setVoltage(1,volch1);
-                           }
-                           else{
-                               volch3=0;
-                               volch1=volinitial;
-//                               setvol =":APPL CH1," + QString::number(volch1);
-//                               setvolch3 =":APPL CH3," + QString::number(volch3);
-//                               sendData(setvol);
-//                               QThread::msleep(100);
-//                               sendData(setvolch3);
-                               device1->setVoltage(1,volch1);
-                               device1->setVoltage(3,volch3);
-                           }
-                       }
-                       qDebug()<< "输出正电压:" << volinitial;
-                       tag = 1;
-                      }
-                     else{
-//                         volinitial=volinitial-phi1/0.07;
-                         volinitial=volinitial-phi1/0.1;             //AB1 参数
-                         if(volinitial<0){
-                             volinitial=volinitial+32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                  device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                       qDebug()<< "输出负电压:"<< volinitial;
-                       tag = 0;
-                      }
-                 }
-             }
-             else{
-                 if(error2>error1){
-                     if(tag==0){
-                         volinitial=volinitial-1;
-                         if(volinitial<0){
-                             volinitial=volinitial+32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                  device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                         tag=0;
-                         qDebug()<< "输出负电压："<< volinitial;
-                     }
-                     else{
-                         volinitial=volinitial+1;
-                         if(volinitial>37){
-                             volinitial=volinitial-32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                  device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                         tag=1;
-                         qDebug()<< "输出正电压："<< volinitial;
-                     }
-                 }
-                 else{
-                     if(tag==0){
-                       volinitial=volinitial+1;
-                       if(volinitial>37){
-                           volinitial=volinitial-32;
-                       }
-                       else{
-
-                       }
-                       if(volinitial>32){
-                           volch1=32;
-                           volch3=volinitial-32;
-//                           setvol =":APPL CH1," + QString::number(volch1);
-//                           setvolch3 =":APPL CH3," + QString::number(volch3);
-//                           sendData(setvol);
-//                           QThread::msleep(100);
-//                           sendData(setvolch3);
-                           device1->setVoltage(1,volch1);
-                           device1->setVoltage(3,volch3);
-                       }
-                       else{
-                           if(volch3==0){
-                               volch1=volinitial;
-//                               setvol =":APPL CH1," + QString::number(volch1);
-//                               sendData(setvol);
-                                device1->setVoltage(1,volch1);
-                           }
-                           else{
-                               volch3=0;
-                               volch1=volinitial;
-//                               setvol =":APPL CH1," + QString::number(volch1);
-//                               setvolch3 =":APPL CH3," + QString::number(volch3);
-//                               sendData(setvol);
-//                               QThread::msleep(100);
-//                               sendData(setvolch3);
-                               device1->setVoltage(1,volch1);
-                               device1->setVoltage(3,volch3);
-                           }
-                       }
-                       qDebug()<< "输出正电压:" << volinitial;
-                       tag = 1;
-                      }
-                     else{
-                         volinitial=volinitial-1;
-                         if(volinitial<0){
-                             volinitial=volinitial+32;
-                         }
-                         else{
-
-                         }
-                         if(volinitial>32){
-                             volch1=32;
-                             volch3=volinitial-32;
-//                             setvol =":APPL CH1," + QString::number(volch1);
-//                             setvolch3 =":APPL CH3," + QString::number(volch3);
-//                             sendData(setvol);
-//                             QThread::msleep(100);
-//                             sendData(setvolch3);
-                             device1->setVoltage(1,volch1);
-                             device1->setVoltage(3,volch3);
-                         }
-                         else{
-                             if(volch3==0){
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 sendData(setvol);
-                                  device1->setVoltage(1,volch1);
-                             }
-                             else{
-                                 volch3=0;
-                                 volch1=volinitial;
-//                                 setvol =":APPL CH1," + QString::number(volch1);
-//                                 setvolch3 =":APPL CH3," + QString::number(volch3);
-//                                 sendData(setvol);
-//                                 QThread::msleep(100);
-//                                 sendData(setvolch3);
-                                 device1->setVoltage(1,volch1);
-                                 device1->setVoltage(3,volch3);
-                             }
-                         }
-                       qDebug()<< "输出负电压:"<< volinitial;
-                       tag = 0;
-                      }
-                 }
-             }
-         }
-     }
-     qDebug()<<"使用步数"<<k;
-//     if(k==20){                                        //因为电压源的行程只有33V，还差一点覆盖一个周期，当相位漂移动pi无法纠回
-//         QString setoutputoff = ":OUTP CH1,OFF";            //关闭输出
-//         sendData(setoutputoff);                          //超过12步无法纠回时，关闭电压源，等待相位再漂移一会儿。
-//         QThread::msleep(100);
-//         stream << "off" << "\n";
+       stream << "误码"<< error1<<"\t"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11<<"\n";
+//       qDebug()<< "温度"<< th1;
+//       QTextStream stream(&myfile);
+//       stream << coin10 << "\t";
+//       stream << coin01 << "\t";
+//       stream << coin00 << "\t";
+//       stream << coin11 << "\t";
+//       stream << error1 << "\t";
+//       stream << ";" << "\t";
+//     if(error1<0.025){
+//         qDebug() << "k=" << k;    //后续要补充写入文档
+// //         stream << th1 << "\t";
+//         stream << k << endl;
+//         k=1;
 //     }
 //     else{
-//         if(k>20){
-//             if((error1-error2)>0.01&&(error2-error3)>0&&(error1>0.03)){
-//                 setvol =":VOLT 16";
-//                 sendData(setvol);
-//                 QThread::msleep(50);
-//                   QString setoutputon = ":OUTP CH1,ON";            //打开输出
-//                   sendData(setoutputon);
-//                   k=2;
-//                   stream << "on" << "\n";
+//         k++;
+//         if(k==1){
+// //             if((th1-th2)>0){
+// //                 tag = 0;
+// //                 volinitial=volinitial-phi1/0.07;
+// //                 qDebug()<<"输出负电压:"<<volinitial;
+// //                 qDebug()<<"phi1" << phi1;
+// //                 if(volinitial<0){
+// //                     volinitial=volinitial+31;
+// //                 }
+// //                 else{
 
-//             }
-//             else{
+// //                 }
+// //                 setvol =":VOLT " + QString::number(volinitial);
+// //                 sendData(setvol);
+// //             }
+// //             else{
+// //                 if((th1-th2)==0){
+// //                     if((th1-th3)>0){
+// //                         tag = 0;
+// //                         volinitial=volinitial-phi1/0.07;
+// //                         qDebug()<<"输出负电压:"<<volinitial;
+// //                         qDebug()<<"phi1" << phi1;
+// //                         if(volinitial<0){
+// //                             volinitial=volinitial+31;
+// //                         }
+// //                         else{
 
-//             }
+// //                         }
+// //                         setvol =":VOLT " + QString::number(volinitial);
+// //                         sendData(setvol);
+// //                     }
+// //                     else{
+// //                         tag = 1;
+// //                         volinitial=volinitial+phi1/0.07;
+// //                         if(volinitial>33){
+// //                             volinitial=volinitial-31;
+// //                         }
+// //                         else{
+
+// //                         }
+// //                         setvol =":VOLT " + QString::number(volinitial);
+// //                         sendData(setvol);
+// //                         qDebug()<<"输出正电压:"<<volinitial;
+// //                     }
+// //                 }
+// //                 else{
+// //                     tag = 1;
+// //                     volinitial=volinitial+phi1/0.07;
+// //                     qDebug()<<"输出正电压:"<<volinitial;
+// //                     if(volinitial>33){
+// //                         volinitial=volinitial-31;
+// //                     }
+// //                     else{
+
+// //                     }
+// //                   setvol =":VOLT " + QString::number(volinitial);
+// //                     sendData(setvol);
+// //                 }
+// //             }                                                                        //根据温度确定调节方向
+//               if(tag==0){
+//              //     volinitial=volinitial-phi1/0.07;          //AB1 参数
+//                   volinitial=volinitial-phi1/0.02;             //AB2 参数
+//                   qDebug()<< "输出负电压："<< volinitial;
+//                   if(volinitial<0){
+//                       volinitial=volinitial+32;
+//                   }
+//                   else{
+
+//                   }
+//                   if(volinitial>32){
+//                       volch1=32;
+//                       volch3=volinitial-32;
+// //                      setvol =":APPL CH1," + QString::number(volch1);
+//  //                      setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                      sendData(setvol);
+// //                      QThread::msleep(100);
+// //                      sendData(setvolch3);
+//                       device1->setVoltage(1,volch1);
+//                       device1->setVoltage(3,volch3);
+//                   }
+//                   else{
+//                       if(volch3==0){
+//                           volch1=volinitial;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           sendData(setvol);
+//                        device1->setVoltage(1,volch1);
+
+//                       }
+//                       else{
+//                           volch3=0;
+//                           volch1=volinitial;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                          sendData(setvol);
+// //                          QThread::msleep(100);
+// //                           sendData(setvolch3);
+//                           device1->setVoltage(1,volch1);
+//                           device1->setVoltage(3,volch3);
+//                       }
+//                   }
+//                   tag=0;
+//                   qDebug()<<"输出正电压:"<<volinitial;
+//               }
+//               else{
+//  //               volinitial=volinitial+phi1/0.07;      //AB2 参数
+//                   volinitial=volinitial+phi1/0.02;         //AB1 参数
+
+//                   if(volinitial>37){
+//                       volinitial=volinitial-32;
+//                   }
+//                   else{
+
+//                   }
+//                   if(volinitial>32){
+//                       volch1=32;
+//                       volch3=volinitial-32;
+// //                       setvol =":APPL CH1," + QString::number(volch1);
+// //                       setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                       sendData(setvol);
+// //                       QThread::msleep(100);
+// //                       sendData(setvolch3);
+//                       device1->setVoltage(1,volch1);
+//                       device1->setVoltage(3,volch3);
+//                   }
+//                   else{
+//                       if(volch3==0){
+//                           volch1=volinitial;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           sendData(setvol);
+//                           device1->setVoltage(1,volch1);
+//                       }
+//                       else{
+//                           volch3=0;
+//                           volch1=volinitial;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                           sendData(setvol);
+// //                           QThread::msleep(100);
+// //                           sendData(setvolch3);
+//                           device1->setVoltage(1,volch1);
+//                           device1->setVoltage(3,volch3);
+//                       }
+//                   }
+//                   tag=1;
+//                   qDebug()<< "输出正电压："<< volinitial;
+//               }
 //         }
 //         else{
+//             if(k<5){
+//                 if(error2>error1){
+//                     if(tag==0){
+//                        // volinitial=volinitial-phi1/0.07;
+//                         volinitial=volinitial-phi1/0.1;             //AB1 参数
+//                         if(volinitial<0){
+//                             volinitial=volinitial+32;
+//                         }
+//                         else{
 
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                 device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                         tag=0;
+//                         qDebug()<< "输出负电压："<< volinitial;
+//                     }
+//                     else{
+// //                        volinitial=volinitial+phi1/0.07;
+//                         volinitial=volinitial+phi1/0.1;         //AB1 参数
+//                         if(volinitial>37){
+//                             volinitial=volinitial-32;
+//                         }
+//                         else{
+
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                  device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                         tag=1;
+//                         qDebug()<< "输出正电压："<< volinitial;
+//                     }
+//                 }
+//                 else{
+//                     if(tag==0){
+// //                       volinitial=volinitial+phi1/0.07;
+//                       volinitial=volinitial+phi1/0.1;         //AB1 参数
+//                       if(volinitial>37){
+//                           volinitial=volinitial-32;
+//                       }
+//                       else{
+
+//                       }
+//                       if(volinitial>32){
+//                           volch1=32;
+//                           volch3=volinitial-32;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                           sendData(setvol);
+// //                           QThread::msleep(100);
+// //                           sendData(setvolch3);
+//                           device1->setVoltage(1,volch1);
+//                           device1->setVoltage(3,volch3);
+//                       }
+//                       else{
+//                           if(volch3==0){
+//                               volch1=volinitial;
+// //                               setvol =":APPL CH1," + QString::number(volch1);
+// //                               sendData(setvol);
+//                               device1->setVoltage(1,volch1);
+//                           }
+//                           else{
+//                               volch3=0;
+//                               volch1=volinitial;
+// //                               setvol =":APPL CH1," + QString::number(volch1);
+// //                               setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                               sendData(setvol);
+// //                               QThread::msleep(100);
+// //                               sendData(setvolch3);
+//                               device1->setVoltage(1,volch1);
+//                               device1->setVoltage(3,volch3);
+//                           }
+//                       }
+//                       qDebug()<< "输出正电压:" << volinitial;
+//                       tag = 1;
+//                      }
+//                     else{
+// //                         volinitial=volinitial-phi1/0.07;
+//                         volinitial=volinitial-phi1/0.1;             //AB1 参数
+//                         if(volinitial<0){
+//                             volinitial=volinitial+32;
+//                         }
+//                         else{
+
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                  device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                       qDebug()<< "输出负电压:"<< volinitial;
+//                       tag = 0;
+//                      }
+//                 }
+//             }
+//             else{
+//                 if(error2>error1){
+//                     if(tag==0){
+//                         volinitial=volinitial-1;
+//                         if(volinitial<0){
+//                             volinitial=volinitial+32;
+//                         }
+//                         else{
+
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                  device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                         tag=0;
+//                         qDebug()<< "输出负电压："<< volinitial;
+//                     }
+//                     else{
+//                         volinitial=volinitial+1;
+//                         if(volinitial>37){
+//                             volinitial=volinitial-32;
+//                         }
+//                         else{
+
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                  device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                         tag=1;
+//                         qDebug()<< "输出正电压："<< volinitial;
+//                     }
+//                 }
+//                 else{
+//                     if(tag==0){
+//                       volinitial=volinitial+1;
+//                       if(volinitial>37){
+//                           volinitial=volinitial-32;
+//                       }
+//                       else{
+
+//                       }
+//                       if(volinitial>32){
+//                           volch1=32;
+//                           volch3=volinitial-32;
+// //                           setvol =":APPL CH1," + QString::number(volch1);
+// //                           setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                           sendData(setvol);
+// //                           QThread::msleep(100);
+// //                           sendData(setvolch3);
+//                           device1->setVoltage(1,volch1);
+//                           device1->setVoltage(3,volch3);
+//                       }
+//                       else{
+//                           if(volch3==0){
+//                               volch1=volinitial;
+// //                               setvol =":APPL CH1," + QString::number(volch1);
+// //                               sendData(setvol);
+//                                device1->setVoltage(1,volch1);
+//                           }
+//                           else{
+//                               volch3=0;
+//                               volch1=volinitial;
+// //                               setvol =":APPL CH1," + QString::number(volch1);
+// //                               setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                               sendData(setvol);
+// //                               QThread::msleep(100);
+// //                               sendData(setvolch3);
+//                               device1->setVoltage(1,volch1);
+//                               device1->setVoltage(3,volch3);
+//                           }
+//                       }
+//                       qDebug()<< "输出正电压:" << volinitial;
+//                       tag = 1;
+//                      }
+//                     else{
+//                         volinitial=volinitial-1;
+//                         if(volinitial<0){
+//                             volinitial=volinitial+32;
+//                         }
+//                         else{
+
+//                         }
+//                         if(volinitial>32){
+//                             volch1=32;
+//                             volch3=volinitial-32;
+// //                             setvol =":APPL CH1," + QString::number(volch1);
+// //                             setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                             sendData(setvol);
+// //                             QThread::msleep(100);
+// //                             sendData(setvolch3);
+//                             device1->setVoltage(1,volch1);
+//                             device1->setVoltage(3,volch3);
+//                         }
+//                         else{
+//                             if(volch3==0){
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 sendData(setvol);
+//                                  device1->setVoltage(1,volch1);
+//                             }
+//                             else{
+//                                 volch3=0;
+//                                 volch1=volinitial;
+// //                                 setvol =":APPL CH1," + QString::number(volch1);
+// //                                 setvolch3 =":APPL CH3," + QString::number(volch3);
+// //                                 sendData(setvol);
+// //                                 QThread::msleep(100);
+// //                                 sendData(setvolch3);
+//                                 device1->setVoltage(1,volch1);
+//                                 device1->setVoltage(3,volch3);
+//                             }
+//                         }
+//                       qDebug()<< "输出负电压:"<< volinitial;
+//                       tag = 0;
+//                      }
+//                 }
+//             }
 //         }
 //     }
+//     qDebug()<<"使用步数"<<k;
+// //     if(k==20){                                        //因为电压源的行程只有33V，还差一点覆盖一个周期，当相位漂移动pi无法纠回
+// //         QString setoutputoff = ":OUTP CH1,OFF";            //关闭输出
+// //         sendData(setoutputoff);                          //超过12步无法纠回时，关闭电压源，等待相位再漂移一会儿。
+// //         QThread::msleep(100);
+// //         stream << "off" << "\n";
+// //     }
+// //     else{
+// //         if(k>20){
+// //             if((error1-error2)>0.01&&(error2-error3)>0&&(error1>0.03)){
+// //                 setvol =":VOLT 16";
+// //                 sendData(setvol);
+// //                 QThread::msleep(50);
+// //                   QString setoutputon = ":OUTP CH1,ON";            //打开输出
+// //                   sendData(setoutputon);
+// //                   k=2;
+// //                   stream << "on" << "\n";
+
+// //             }
+// //             else{
+
+// //             }
+// //         }
+// //         else{
+
+// //         }
+// //     }
      i=0;
      th3 = th2;
      th2 = th1;
