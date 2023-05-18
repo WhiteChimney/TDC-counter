@@ -67,5 +67,14 @@ void StatisticsWidget::dealTimeOut()
         vStatChannel.at(i)->updateLcdCount(stepCurrent,unitTime);
     }
     stepCurrent++;
-    ui->progressBarStat->setValue(100*stepCurrent/stepsTotal);
+
+    // 设置进度条，显示两位小数
+    ui->progressBarStat->setMaximum(100*stepsTotal);
+    double progressValue = 100.0*stepCurrent;
+    ui->progressBarStat->setValue(progressValue);
+    int noDecimal = floor(log10(stepsTotal/100.0));
+    if (noDecimal < 0) noDecimal = 0;
+    ui->progressBarStat->setFormat
+            (QString::number(progressValue/stepsTotal,'f',noDecimal)+"%");
+    ui->progressBarStat->setAlignment(Qt::AlignCenter);
 }
