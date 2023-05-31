@@ -6,7 +6,7 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Acqiris TDC 计数程序");
+    this->setWindowTitle("Acqiris TDC 计数程序 V3.0.1");
     this->setupAcqIndicator();
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 

@@ -72,7 +72,7 @@ void StatisticsWidget::dealTimeOut()
     ui->progressBarStat->setMaximum(100*stepsTotal);
     double progressValue = 100.0*stepCurrent;
     ui->progressBarStat->setValue(progressValue);
-    int noDecimal = floor(log10(stepsTotal/100.0));
+    int noDecimal = ceil(log10(stepsTotal/100.0));
     if (noDecimal < 0) noDecimal = 0;
     ui->progressBarStat->setFormat
             (QString::number(progressValue/stepsTotal,'f',noDecimal)+"%");
