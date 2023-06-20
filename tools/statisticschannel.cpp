@@ -55,10 +55,13 @@ void StatisticsChannel::calcCurrentStats()
     countsAvg = stepCurrent/double(stepCurrent+1)*countsAvgOld
                 + counts[stepCurrent]/double(stepCurrent+1);
     countsAvgOld = countsAvg;
-    countsVar = 0.0;
-    for (int i = 0; i <= stepCurrent; i++)
-    {
-        countsVar += 1.0/double(stepCurrent)*pow(counts[i]-countsAvg,2);
-    }
-    countStd = sqrt(countsVar);
+//    countsVar = 0.0;
+//    for (int i = 0; i <= stepCurrent; i++)
+//    {
+//        countsVar += 1.0/double(stepCurrent)*pow(counts[i]-countsAvg,2);
+//    }
+//    countStd = sqrt(countsVar);
+
+//    改成 sqrt(N) 的偏差估计方式，提高易用性
+    countStd = sqrt(countsAvg/(stepCurrent+1));
 }
