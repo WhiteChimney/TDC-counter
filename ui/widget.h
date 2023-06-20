@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "projectInfo.h"
 #include "stdafx.h"
 #include "testwidget.h"
 #include "histogramwidget.h"
@@ -99,6 +100,8 @@ private slots:
     void on_buttonStatistics_released();
 
     void on_buttonExternalApplications_released();
+
+    void on_buttonCheckUpdate_released();
 
 private:
     Ui::Widget *ui;

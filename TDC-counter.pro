@@ -48,6 +48,7 @@ HEADERS += \
     include/VISA/visa.h \
     include/VISA/visatype.h \
     include/VISA/vpptype.h \
+    include/projectInfo.h \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \

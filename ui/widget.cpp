@@ -6,7 +6,10 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->setWindowTitle("Acqiris TDC 计数程序 V3.0.1");
+    this->setWindowTitle(tr("Acqiris TDC 计数程序 V")
+                           + tr(PROJECT_VERSION_0) + tr(".")
+                           + tr(PROJECT_VERSION_1) + tr(".")
+                           + tr(PROJECT_VERSION_2));
     this->setupAcqIndicator();
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
@@ -218,6 +221,12 @@ void Widget::on_buttonTest_released()
     testW->setWindowTitle("测试"+QString::number(index+1));
     testW->setWindowState(Qt::WindowActive);
     testW->show();
+}
+
+void Widget::on_buttonCheckUpdate_released()
+{
+    QUrl myUrl = QUrl(PROJECT_RELEASE_PAGE);
+    QDesktopServices::openUrl(myUrl);
 }
 
 void Widget::dealTestReturn(int index)
@@ -750,3 +759,4 @@ void Widget::dealExpAppStopped()
 {
     disconnect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::dealSingleCountTimeup);
 }
+
