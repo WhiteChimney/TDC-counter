@@ -282,8 +282,9 @@ void CoincidenceWidget::dealSaveCoinData()
     }
 }
 
-void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr)
+void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)
 {
+    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
     {
         computeCoincidenceCount

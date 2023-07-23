@@ -40,6 +40,14 @@ Widget::Widget(QWidget *parent)
     fSingleCount->setFileName(tempFileName_SCC);
     fStream.setDevice(fSingleCount);
 
+    ui->checkboxEnableCountEvents->setToolTip(
+                tr("设置 TDC 的 COM 通道累计多少信号个数后进行内存切换，\n") +
+                tr("默认为 COM 频率的 1/100"));
+    ui->checkBoxNbrCOMbuffer->setToolTip(
+                tr("缓存中保留的 TDC 内存切换的数据指针个数，\n") +
+                tr("通道间延时差较大且需要计算符合时需要适当调大，\n") +
+                tr("但太大可能导致程序内存占用较高"));
+
 //     初始化设备
     status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,
             VI_FALSE, "CAL=0", &idInstr);
@@ -58,6 +66,8 @@ Widget::Widget(QWidget *parent)
     connect(this,&Widget::acqParamReady,acqThread,&AcquisitionThread::dealAcqParamReady);
     connect(acqThread,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished);
 //    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitch);
+    dataPtrList.clear();
+    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::updateDataPtrList);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);
@@ -128,6 +138,25 @@ void Widget::fetchUiData()
     slope[4] = ui->slopeCN4->currentIndex();
     slope[5] = ui->slopeCN5->currentIndex();
     slope[6] = ui->slopeCN6->currentIndex();
+    delayCN[0] = ui->textDelayCN1->text().toDouble();
+    delayCN[1] = ui->textDelayCN2->text().toDouble();
+    delayCN[2] = ui->textDelayCN3->text().toDouble();
+    delayCN[3] = ui->textDelayCN4->text().toDouble();
+    delayCN[4] = ui->textDelayCN5->text().toDouble();
+    delayCN[5] = ui->textDelayCN6->text().toDouble();
+    int minDelay = delayCN[0], maxDelay = delayCN[0];
+    for (int k = 1; k < 6; k++)
+    {
+        if (delayCN[k] < minDelay)
+            minDelay = delayCN[k];
+        if (delayCN[k] > maxDelay)
+            maxDelay = delayCN[k];
+    }
+    for (int k = 0; k < 6; k++)
+    {
+        delayCN[k] = delayCN[k] - minDelay;
+    }
+    delayCN[6] = maxDelay - minDelay;
 
     // 单道计数设置
     accumulateTime = ui->accumulateTimeText->text().toDouble();
@@ -167,6 +196,12 @@ void Widget::pushUiData()
     ui->slopeCN4->setCurrentIndex(slope[4]);
     ui->slopeCN5->setCurrentIndex(slope[5]);
     ui->slopeCN6->setCurrentIndex(slope[6]);
+    ui->textDelayCN1->setText(QString::number(delayCN[0]));
+    ui->textDelayCN2->setText(QString::number(delayCN[1]));
+    ui->textDelayCN3->setText(QString::number(delayCN[2]));
+    ui->textDelayCN4->setText(QString::number(delayCN[3]));
+    ui->textDelayCN5->setText(QString::number(delayCN[4]));
+    ui->textDelayCN6->setText(QString::number(delayCN[5]));
 
     // 单道计数设置
     ui->accumulateTimeText->setText(QString::number(accumulateTime));
@@ -284,6 +319,17 @@ void Widget::dealAcqThreadFinished()
     statusIndicator->setStates(QSimpleLed::OFF);
 }
 
+void Widget::updateDataPtrList(AqT3DataDescriptor *dataPtr0)
+{
+    if (dataPtrList.size() == nbrCOMbuffer)
+    {
+        delete dataPtrList.at(0);
+        dataPtrList.removeFirst();
+    }
+    dataPtrList.append(dataPtr0);
+    emit dataPtrListUpdated(dataPtrList);
+}
+
 void Widget::on_buttonStartCount_released()
 {
     if (!acqThread->isRunning())
@@ -292,7 +338,7 @@ void Widget::on_buttonStartCount_released()
     if (! *acqStopPtr) // 当采集已经开启时
     {
         // 开始计算单道计数
-        connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
+        connect(this,&Widget::dataPtrListUpdated,this,&Widget::dealAcqThreadBankSwitchSCC);
         // 启动定时器
         fetchUiData();
         timerCount->start(1000.0*accumulateTime);
@@ -310,9 +356,9 @@ void Widget::createTempDataFile()
     fSingleCount->close();
 }
 
-void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
+void Widget::dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*> dataPtrList)
 {
-    computeSingleChannelCount(dataDescPtr,nbrSCC);
+    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataPtrList,delayCN,freqCOM,countEvents);
 }
 
 void Widget::dealCountTimeOut()
@@ -323,13 +369,14 @@ void Widget::dealCountTimeOut()
     ui->lcdSPC4->display(nbrSCC[3]);
     ui->lcdSPC5->display(nbrSCC[4]);
     ui->lcdSPC6->display(nbrSCC[5]);
-    memset(nbrSCC, 0, 6*sizeof(nbrSCC[0]));
+    memcpy(nbrSCC,nbrSCCfuture,6*sizeof(nbrSCC[0]));
+    memset(nbrSCCfuture, 0, 6*sizeof(nbrSCCfuture[0]));
 }
 
 void Widget::on_buttonStopCount_released()
 {
     timerCount->stop();
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
+    disconnect(this,&Widget::dataPtrListUpdated,this,&Widget::dealAcqThreadBankSwitchSCC);
 }
 
 void Widget::on_buttonCoincidence_released()
@@ -362,13 +409,13 @@ void Widget::dealCoincidenceReturn(int index)
 void Widget::dealAskDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    connect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    disconnect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealCoinTimerNeedsSync(int index)
@@ -408,13 +455,13 @@ void Widget::dealHistogramReturn(int index)
 void Widget::dealAskDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    connect(this,&Widget::dataPtrListUpdated,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    disconnect(this,&Widget::dataPtrListUpdated,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }
 
 void Widget::on_buttonOpenDataDir_released()
@@ -593,6 +640,7 @@ void Widget::saveToIni()
         configIni->setValue("TDC配置/channelConfig"+QString::number(i),channelConfig[i]);
         configIni->setValue("TDC配置/level"+QString::number(i),level[i]);
         configIni->setValue("TDC配置/slope"+QString::number(i),slope[i]);
+        configIni->setValue("TDC配置/delayCN"+QString::number(i),delayCN[i]);
     }
 
     //    configure single count
@@ -626,6 +674,7 @@ void Widget::loadFromIni()
         channelConfig[i] = configIni->value("TDC配置/channelConfig"+QString::number(i)).toBool();
         level[i] = configIni->value("TDC配置/level"+QString::number(i)).toDouble();
         slope[i] = configIni->value("TDC配置/slope"+QString::number(i)).toInt();
+        delayCN[i] = configIni->value("TDC配置/delayCN"+QString::number(i)).toDouble();
     }
 
 //    configure single count
@@ -758,5 +807,20 @@ void Widget::dealExpAppDataReceived()
 void Widget::dealExpAppStopped()
 {
     disconnect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::dealSingleCountTimeup);
+}
+
+
+void Widget::on_checkBoxNbrCOMbuffer_stateChanged(int arg1)
+{
+    ui->textNbrCOMbuffer->setEnabled(arg1);
+}
+
+
+void Widget::on_textNbrCOMbuffer_editingFinished()
+{
+    nbrCOMbuffer = ui->textNbrCOMbuffer->text().toInt();
+    if (nbrCOMbuffer < 1)
+        nbrCOMbuffer = 1;
+    ui->textNbrCOMbuffer->setText(QString::number(nbrCOMbuffer));
 }
 

@@ -26,7 +26,7 @@ signals:
 
 public slots:
     void dealTimeOut();                                     // 累计时间到，刷新计数
-    void dealAcqThreadBankSwitchCoin(AqT3DataDescriptor*);  // 内存切换，计算计数
+    void dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList);  // 内存切换，计算计数
     void dealSaveCoinData();                                // 保存数据
 
 private slots:

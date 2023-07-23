@@ -35,7 +35,11 @@ ViStatus configTDC
          int *slope,
          AqT3ReadParameters* readParamPtr);
 
-void computeSingleChannelCount(AqT3DataDescriptor*,int*);
+void computeSingleChannelCount
+        (int* nbrSCC, int* nbrSCCfuture,
+         QVector<AqT3DataDescriptor*> dataPtrList,
+         double *delayCN,
+         int freqCOM, int countEvents);
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,

@@ -33,7 +33,7 @@ public slots:
     // 采集线程关闭后续
 //    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
-    void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
+    void dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*>);
     // 计算单道计数
     void dealCountTimeOut();
     // 定时刷新单道计数
@@ -103,6 +103,10 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
+    void on_checkBoxNbrCOMbuffer_stateChanged(int arg1);
+
+    void on_textNbrCOMbuffer_editingFinished();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -123,9 +127,9 @@ public:
 
     // 需要配置的 TDC 参数
 private:
-    int freqCOM = 1000;
+    int freqCOM = 1000;             // kHz
     bool enableCountEvents = false;
-    int countEvents = 100;
+    int countEvents = 10;           // kHz
     bool channelConfig[7];
     double level[7] = {0.5};
     int slope[7] = {0};
@@ -141,10 +145,13 @@ private:
     ViStatus configStatus = -1;
     AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
+    QVector<AqT3DataDescriptor*> dataPtrList;
 
     // 单道计数参数
 private:
     int nbrSCC[6] = {0};
+    int nbrSCCfuture[6] = {0};
+    double delayCN[7] = {0.0};
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
@@ -152,8 +159,12 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
+    int nbrCOMbuffer = 1;
 public:
     int* getSingleCountPtr();
+    void updateDataPtrList(AqT3DataDescriptor*);
+signals:
+    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
 
     // 数据保存参数
 private:
