@@ -2,6 +2,7 @@
 #define STATISTICSCHANNEL_H
 
 #include "stdafx.h"
+#include "cliplcdnumber.h"
 
 class StatisticsChannel
 {
@@ -19,8 +20,10 @@ private:
 
 public:
     QLabel* labelChannelName;
-    QLCDNumber* lcdCount;
-    QLCDNumber* lcdCountStd;
+//    QLCDNumber* lcdCount;
+//    QLCDNumber* lcdCountStd;
+    ClipLcdNumber *lcdCount;
+    ClipLcdNumber *lcdCountStd;
     void setChannelName(QString channelName0);
     void setCountPtr(int* countPtr0);
     void updateLcdCount(int stepCurrent, double unitTime);

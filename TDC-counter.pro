@@ -21,6 +21,7 @@ SOURCES += \
     sources/mergeDataFiles.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
+    tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
     tools/dp832a_usb.cpp \
     tools/statisticschannel.cpp \
@@ -52,6 +53,7 @@ HEADERS += \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \
+    tools/cliplcdnumber.h \
     tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \

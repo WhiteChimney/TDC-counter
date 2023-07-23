@@ -5,17 +5,17 @@ StatisticsChannel::StatisticsChannel()
     channelName = "channel";
     labelChannelName = new QLabel();
     countPtr = new int();
-    lcdCount = new QLCDNumber(15);
+//    lcdCount = new QLCDNumber(15);
+    lcdCount = new ClipLcdNumber(15);
     lcdCount->setSegmentStyle(QLCDNumber::Flat);
     lcdCount->setStyleSheet("background-color: white");
     lcdCount->display(0);
-//    lcdCount->display(QString::number(0,'g',14));
     countStd = 0;
-    lcdCountStd = new QLCDNumber(9);
+//    lcdCountStd = new QLCDNumber(9);
+    lcdCountStd = new ClipLcdNumber(9);
     lcdCountStd->setSegmentStyle(QLCDNumber::Flat);
     lcdCountStd->setStyleSheet("background-color: white");
     lcdCountStd->display(0);
-//    lcdCountStd->display(QString::number(0,'g',8));
 }
 
 void StatisticsChannel::setChannelName(QString channelName0)
@@ -38,8 +38,6 @@ void StatisticsChannel::updateLcdCount(int stepCurrent0, double unitTime)
 
     lcdCount->display(countsAvg/unitTime);
     lcdCountStd->display(countStd/unitTime);
-//    lcdCount->display(QString::number(countsAvg/unitTime,'g',14));
-//    lcdCountStd->display(QString::number(countStd/unitTime,'g',8));
 }
 
 void StatisticsChannel::setNbrSteps(int stepsTotal0)
