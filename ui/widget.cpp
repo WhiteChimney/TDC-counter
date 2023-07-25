@@ -302,11 +302,11 @@ void Widget::on_buttonStartCount_released()
 void Widget::createTempDataFile()
 {
     fSingleCount->open(QIODevice::WriteOnly | QIODevice::Text);
-    fStream << tr("单道计数") << endl
-            << tr("当前时间：") << dateTime.currentDateTime().toString() << endl
-            << tr("计数累计时间：") << accumulateTime << endl
-            << endl
-            << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << endl;
+    fStream << tr("单道计数") << "\n"
+            << tr("当前时间：") << dateTime.currentDateTime().toString() << "\n"
+            << tr("计数累计时间：") << accumulateTime << "\n"
+            << "\n"
+            << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << "\n";
     fSingleCount->close();
 }
 
@@ -511,7 +511,7 @@ void Widget::dealRecordSingleCount()
     {
         fStream << "\t" << nbrSCC[i];
     }
-    fStream << endl;
+    fStream << "\n";
 }
 
 void Widget::on_buttonStopRecord_released()

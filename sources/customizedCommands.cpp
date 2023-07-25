@@ -316,7 +316,7 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //     if(error1<0.025){
 //         qDebug() << "k=" << k;    //后续要补充写入文档
 // //         stream << th1 << "\t";
-//         stream << k << endl;
+//         stream << k << "\n";
 //         k=1;
 //     }
 //     else{

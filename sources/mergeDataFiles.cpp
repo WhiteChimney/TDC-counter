@@ -21,8 +21,8 @@ void Widget::mergeDataFiles
     {
         fMerge.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream fStream(&fMerge);
-        fStream << tr(metaData.toStdString().data()) << endl
-                << endl;
+        fStream << tr(metaData.toStdString().data()) << "\n"
+                << "\n";
         fSingle.open(QIODevice::ReadOnly | QIODevice::Text);
         for (int i = 0; i < 4; i++)                                 // 单道计数文件跳过前 4 行，第 5 行为表头
         {
@@ -56,7 +56,7 @@ void Widget::mergeDataFiles
                 line = QString::fromLocal8Bit(vfCoin.at(i)->readLine().trimmed());
                 fStream << "\t" << line;
             }
-            fStream << endl;
+            fStream << "\n";
             line = QString::fromLocal8Bit(fSingle.readLine().trimmed());
         }
         fMerge.close();
@@ -70,8 +70,8 @@ void Widget::mergeDataFiles
     {
         fMerge.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream fStream(&fMerge);
-        fStream << tr(metaData.toStdString().data()) << endl
-                << endl;
+        fStream << tr(metaData.toStdString().data()) << "\n"
+                << "\n";
         fSingle.open(QIODevice::ReadOnly | QIODevice::Text);
         line = QString::fromLocal8Bit(fSingle.readAll());
         fStream << line;
@@ -93,8 +93,8 @@ void Widget::mergeDataFiles
                 QFile fCopiedFile(copiedFileName);
                 fCopiedFile.open(QIODevice::WriteOnly | QIODevice::Text);
                 QTextStream fStream(&fCopiedFile);
-                fStream << tr(metaData.toStdString().data()) << endl
-                        << endl;
+                fStream << tr(metaData.toStdString().data()) << "\n"
+                        << "\n";
 
                 QString tempFileName_C = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
                                        + "/AcqirisTDC_qt/Data/Coincidence" + QString::number(i) +".txt";

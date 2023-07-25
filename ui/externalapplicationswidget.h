@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QFile>
 #include "QSimpleLed.h"
 
 #include <QtSerialPort/QSerialPort>
