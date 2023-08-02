@@ -17,7 +17,7 @@ void ClipLcdNumber::mousePressEvent(QMouseEvent* event)
 {
     setCursor(Qt::WaitCursor);
     QClipboard *clip = QApplication::clipboard();
-    clip->setText(QString::number(this->value()));
+    clip->setText(QString::number(this->value(),'g',12));
     QTimer *timer = new QTimer();
     connect(timer,&QTimer::timeout,this,[=](){
         this->setCursor(Qt::PointingHandCursor);
