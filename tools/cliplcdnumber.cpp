@@ -3,17 +3,23 @@
 ClipLcdNumber::ClipLcdNumber(QWidget *parent)
     : QLCDNumber(parent)
 {
-    this->setCursor(Qt::PointingHandCursor);
+    setupUi();
 }
 
 ClipLcdNumber::ClipLcdNumber(uint numDigits, QWidget *parent)
     : QLCDNumber(parent)
 {
     this->setDigitCount(numDigits);
+    setupUi();
+}
+
+void ClipLcdNumber::setupUi()
+{
+    this->setToolTip("点击复制");
     this->setCursor(Qt::PointingHandCursor);
 }
 
-void ClipLcdNumber::mousePressEvent(QMouseEvent* event)
+void ClipLcdNumber::mousePressEvent(QMouseEvent*)
 {
     setCursor(Qt::WaitCursor);
     QClipboard *clip = QApplication::clipboard();

@@ -16,6 +16,7 @@ public:
     ClipLcdNumber(QWidget *parent = nullptr);
     ClipLcdNumber(uint numDigits, QWidget *parent = nullptr);
 
+    void setupUi();
     void mousePressEvent(QMouseEvent*);
 
 };
