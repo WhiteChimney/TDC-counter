@@ -35,11 +35,6 @@ void Widget::dealAcqThreadFinished()
     statusIndicator->setStates(QSimpleLed::OFF);
 }
 
-void Widget::dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*> dataPtrList)
-{
-    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataPtrList,delayCN,freqCOM,countEvents);
-}
-
 void Widget::updateDataPtrList(AqT3DataDescriptor *dataPtr0)
 {
     if (dataPtrList.size() == nbrCOMbuffer)

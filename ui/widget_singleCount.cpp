@@ -16,6 +16,11 @@ void Widget::on_buttonStartCount_released()
     }
 }
 
+void Widget::dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*> dataPtrList)
+{
+    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataPtrList,delayCN,freqCOM,countEvents);
+}
+
 void Widget::dealCountTimeOut()
 {
     ui->lcdSPC1->display(nbrSCC[0]);
