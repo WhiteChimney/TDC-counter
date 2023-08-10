@@ -287,12 +287,26 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*>
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
     {
+        int channels[2] = {channel1-1, channel2-1};
         computeCoincidenceCount
-            (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
+            (dataPtrList, 2, channels, tolerance, &nbrCoin, &nbrAccCoin, delayAcc);
+//        computeCoincidenceCount
+//            (dataDescPtr, &nbrCoin, &nbrAccCoin, channel1, channel2, tolerance, delay, delayAcc);
     }
     else                                   // 多通道模式计算符合计数
     {
-        computeCoincidenceCountMulti(dataDescPtr, &nbrCoinMulti, channelMulti, toleranceMulti, delayMulti);
+        int nbrChannels = 0;
+        int channels[6] = {0};
+        for (int i = 0; i < 6; i++)
+        {
+            if (channelMulti[i])
+            {
+                channels[nbrChannels] = i;
+                nbrChannels++;
+            }
+        }
+        computeCoincidenceCount(dataPtrList, nbrChannels, channels, tolerance, &nbrCoinMulti);
+//        computeCoincidenceCountMulti(dataDescPtr, &nbrCoinMulti, channelMulti, toleranceMulti, delayMulti);
     }
 }
 

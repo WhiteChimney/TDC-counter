@@ -6,7 +6,7 @@
 
 // 计算符合计数
 
-int findInsertPosition2(QVector<int> timeSeq, int TimeOfFlight)
+int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 {
     if (timeSeq.size() == 0)
         return 0;
@@ -22,7 +22,7 @@ int findInsertPosition2(QVector<int> timeSeq, int TimeOfFlight)
     return index;
 }
 
-int findSpacing2(QVector<int> timeSeq, int i, int toleranceMulti)
+int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
 {
     int spacing = 0;
     while (timeSeq.at(i+spacing+1) - timeSeq.at(i) <= toleranceMulti and i+spacing+1 < timeSeq.size())
@@ -30,7 +30,7 @@ int findSpacing2(QVector<int> timeSeq, int i, int toleranceMulti)
     return spacing;
 }
 
-int checkCoincidence2(int channel1, int channel2, QVector<int> channelSeq, int start, int end)
+int checkCoincidence(int channel1, int channel2, QVector<int> channelSeq, int start, int end)
 {
     bool channelMark[6] = {0};
     for (int i = start; i <= end; i++)
@@ -47,12 +47,17 @@ int checkCoincidence2(int channel1, int channel2, QVector<int> channelSeq, int s
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoin, int* nbrAccCoin,
-         int channel1, int channel2,
+         int nbrChannels,
+         int* channels,
          int tolerance,
-         int delay, int delayAcc)
+         int* nbrCoin,
+         int* nbrCoinAcc = new int (),
+         int delayAcc = 0)
 {
 //    假设每个 COM 周期内的原始数据的时间是升序排列的
+
+// 判定通道数是否合法
+    if (nbrChannels < 2 or nbrChannels > 6) return;
 
 //    先读取时间数据
     long nbrSamples = dataDescPtr->nbrSamples;
