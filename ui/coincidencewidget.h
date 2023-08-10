@@ -52,7 +52,7 @@ private:
     double accumulateTime = 1.0; // 累计时间（不同步）
 
     // 多通道
-    bool channelMulti[6] = {0}; // 是否选择该通道
+    bool channelMark[6] = {0}; // 是否选择该通道
     int toleranceMulti;               // 符合门宽
     int delayMulti[6] = {0}; // 延时
     bool enableAccumulateTimeMulti;   // 时钟同步勾选框

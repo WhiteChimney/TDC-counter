@@ -92,7 +92,7 @@ void computeCoincidenceCount
             channelSeq.insert(index, channel-1);
             if (nbrChannels == 2)
             {
-                if (channel == channels[0])
+                if (channel-1 == channels[0])
                     TimeOfFlightAcc = TimeOfFlight;
                 else
                     TimeOfFlightAcc = TimeOfFlight + delayAcc;
