@@ -288,6 +288,7 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*>
     if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
     {
         int channels[2] = {channel1-1, channel2-1};
+        int delayDual[2] = {0, delay};
         computeCoincidenceCount
             (dataPtrList, 2, channels, tolerance, &nbrCoin, &nbrAccCoin, delayAcc);
 //        computeCoincidenceCount
