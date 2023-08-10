@@ -56,7 +56,7 @@ void computeCoincidenceCount
          int delayAcc,
          double *delayCN, int freqCOM, int countEvents);
 
-void clear2DintVector(QVector<QVector<int>> v);
+void clear2DintVector(QVector<QVector<int>> *v);
 
 void computeHistogramCount
         (AqT3DataDescriptor* dataDescPtr,

@@ -6,18 +6,18 @@
 
 // 计算符合计数
 
-void resizeSeqLength(QVector<QVector<int>> v, int l)
+void resizeSeqLength(QVector<QVector<int>> *v, int l)
 {
-    if (v.size() < l)
+    if (v->size() < l)
     {
         QVector<int> v0;
-        while (v.size() < l)
-            v.append(v0);
+        while (v->size() < l)
+            v->append(v0);
     }
-    else if (v.size() > l)
+    else if (v->size() > l)
     {
-        while (v.size() > l)
-            v.removeFirst();
+        while (v->size() > l)
+            v->removeFirst();
     }
 }
 
@@ -82,14 +82,14 @@ void computeCoincidenceCount
     if (nbrChannels < 2 or nbrChannels > 6) return;
 
 //    预处理 TDC 参数
-    double timeCOM = 1000.0/freqCOM;           // 单位为 us
+    double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     int nbrCOMdelay[6] = {0};                 // delay 了多少个 COM
     int delayInCOM[6] = {0};                  // 除去 COM delay 后，同一 COM 内的延时量
                                               // 以 TDC 最小时间为单位，50 ps
     double minDelay = delayCN[0] + delayMulti[0]/20.0;
     for (int i = 0; i < 6; i++)
     {
-        delayCN[i] += delayMulti[i]/20.0;
+        delayCN[i] += delayMulti[i]/20.0/1000.0;
         if (delayCN[i] < minDelay)
             minDelay = delayCN[i];
     }
@@ -104,10 +104,10 @@ void computeCoincidenceCount
     }
 
 //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
-    resizeSeqLength(timeSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(timeSeqAcc, maxNbrCOMdelay+2);
-    resizeSeqLength(channelSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(channelSeqAcc, maxNbrCOMdelay+2);
+    resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
+    resizeSeqLength(&timeSeqAcc, maxNbrCOMdelay+2);
+    resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
+    resizeSeqLength(&channelSeqAcc, maxNbrCOMdelay+2);
 
 //    读取时间数据
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
@@ -151,12 +151,12 @@ void computeCoincidenceCount
         }
         else
         {
-            if (mark and timeSeq.first().size() >= nbrChannels)                            // 计算上一轮符合
+            if (mark and timeSeq.last().size() >= nbrChannels)                            // 计算上一轮符合
             {
-                for (int i = 0; i < timeSeq.first().size()-nbrChannels+1; i++)
+                for (int i = 0; i < timeSeq.last().size()-nbrChannels+1; i++)
                 {
-                    spacing = findSpacing(timeSeq.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence(channels, nbrChannels, channelSeq.first(), i, i+spacing)) // 查看该跨度内是否有符合
+                    spacing = findSpacing(timeSeq.last(), i, tolerance);          // 求符合窗口在起始位置处的跨度
+                    if (checkCoincidence(channels, nbrChannels, channelSeq.last(), i, i+spacing)) // 查看该跨度内是否有符合
                     {
                         (*nbrCoin)++;
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -164,10 +164,10 @@ void computeCoincidenceCount
                 }
                 if (nbrChannels == 2)
                 {
-                    for (int i = 0; i < timeSeqAcc.size()-2+1; i++)
+                    for (int i = 0; i < timeSeqAcc.last().size()-2+1; i++)
                     {
-                        spacing = findSpacing(timeSeqAcc.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
-                        if (checkCoincidence(channels, 2, channelSeqAcc.first(), i, i+spacing)) // 查看该跨度内是否有符合
+                        spacing = findSpacing(timeSeqAcc.last(), i, tolerance);          // 求符合窗口在起始位置处的跨度
+                        if (checkCoincidence(channels, 2, channelSeqAcc.last(), i, i+spacing)) // 查看该跨度内是否有符合
                         {
                             (*nbrCoinAcc)++;
                             i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -176,12 +176,13 @@ void computeCoincidenceCount
                 }
             }
             mark = false;
-            timeSeq.first().clear(); timeSeq.removeFirst();
-            channelSeq.first().clear(); channelSeq.removeFirst();
+            QVector<int> v0;
+            timeSeq.last().clear(); timeSeq.removeLast(); timeSeq.insert(0,v0);
+            channelSeq.last().clear(); channelSeq.removeLast(); channelSeq.insert(0,v0);
             if (nbrChannels == 2)
             {
-                timeSeqAcc.first().clear(); timeSeqAcc.removeFirst();
-                channelSeqAcc.first().clear(); channelSeqAcc.removeFirst();
+                timeSeqAcc.last().clear(); timeSeqAcc.removeLast(); timeSeqAcc.insert(0,v0);
+                channelSeqAcc.last().clear(); channelSeqAcc.removeLast(); channelSeqAcc.insert(0,v0);
             }
         }
     }

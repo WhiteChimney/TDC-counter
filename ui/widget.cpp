@@ -1,8 +1,6 @@
 #include "widget.h"
 #include "ui_widget.h"
 
-#include <QVector2D>
-
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)

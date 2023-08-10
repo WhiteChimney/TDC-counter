@@ -37,6 +37,8 @@ void computeSingleChannelCount
         nbrCOMdelay[i] = floor(delayCN[i]/timeCOM);
         delayInCOM[i] = 20*1000*int(delayCN[i] - timeCOM*nbrCOMdelay[i]);
     }
+//    qDebug() << "nbrCOMdelay[" << i << "]: " << nbrCOMdelay[i];
+//    qDebug() << "delayInCOM[" << i << "]:" << delayInCOM[i];
 
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
 

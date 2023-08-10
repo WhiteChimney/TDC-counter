@@ -124,49 +124,59 @@ void CoincidenceWidget::on_buttonStop_released()
             timerCoin->stop();
         }
     }
-    clear2DintVector(timeSeq);
-    clear2DintVector(timeSeqAcc);
-    clear2DintVector(channelSeq);
-    clear2DintVector(channelSeqAcc);
+    clear2DintVector(&timeSeq);
+    clear2DintVector(&timeSeqAcc);
+    clear2DintVector(&channelSeq);
+    clear2DintVector(&channelSeqAcc);
 }
 
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)
 {
-    int channels[6] = {0};
-    int nbrChannels = 0;
-    int *nbrCoinCalc;
-    int toleranceCalc;
-    int *delayCalc;
-    if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
-    {
-        channels[0] = channel1-1;
-        channels[1] = channel2-1;
-        nbrChannels = 2;
-        nbrCoinCalc = &nbrCoin;
-        toleranceCalc = tolerance;
-        delayCalc = new int[6]();
-        delayCalc[channel2-1] = delay;
-    }
-    else                                   // 多通道模式计算符合计数
-    {
-        for (int i = 0; i < 6; i++)
-        {
-            if (channelMark[i])
-            {
-                channels[nbrChannels] = i;
-                nbrChannels++;
-            }
-        }
-        nbrCoinCalc = &nbrCoinMulti;
-        toleranceCalc = toleranceMulti;
-        delayCalc = delayMulti;
-    }
+//    int channels[6] = {0};
+//    int nbrChannels = 0;
+//    int *nbrCoinCalc;
+//    int toleranceCalc;
+//    int *delayCalc;
+//    if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
+//    {
+//        channels[0] = channel1-1;
+//        channels[1] = channel2-1;
+//        nbrChannels = 2;
+//        nbrCoinCalc = &nbrCoin;
+//        toleranceCalc = tolerance;
+//        delayCalc = new int[6]();
+//        delayCalc[channel2-1] = delay;
+//    }
+//    else                                   // 多通道模式计算符合计数
+//    {
+//        for (int i = 0; i < 6; i++)
+//        {
+//            if (channelMark[i])
+//            {
+//                channels[nbrChannels] = i;
+//                nbrChannels++;
+//            }
+//        }
+//        nbrCoinCalc = &nbrCoinMulti;
+//        toleranceCalc = toleranceMulti;
+//        delayCalc = delayMulti;
+//    }
+//    computeCoincidenceCount
+//            (dataPtrList,
+//             timeSeq, timeSeqAcc,
+//             channelSeq, channelSeqAcc,
+//             nbrChannels, channels, nbrCoinCalc,
+//             toleranceCalc, delayCalc, &nbrAccCoin, delayAcc,
+//             delayCN, freqCOM, countEvents);
+    int channels[2] = {channel1-1,channel2-1};
+    int delayCalc[6] = {0};
+    delayCalc[channel2-1] = delay;
     computeCoincidenceCount
             (dataPtrList,
              timeSeq, timeSeqAcc,
              channelSeq, channelSeqAcc,
-             nbrChannels, channels, nbrCoinCalc,
-             toleranceCalc, delayCalc, &nbrAccCoin, delayAcc,
+             2, channels, &nbrCoin,
+             tolerance, delayCalc, &nbrAccCoin, delayAcc,
              delayCN, freqCOM, countEvents);
 }
 
