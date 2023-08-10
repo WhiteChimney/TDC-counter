@@ -30,28 +30,31 @@ int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
     return spacing;
 }
 
-int checkCoincidence(int* channels, int nbrChannels, sQVector<int> channelSeq, int start, int end)
+int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, int start, int end)
 {
     bool channelMark[6] = {0};
-    for (int i = start; i <= end; i++)
+    for (int i = start; i <= end; i++)         // 判断 channelSeq[start,end-1] 这个序列中有哪些通道号
     {
-        channelMark[channelSeq.at(i)] = true;
+        channelMark[channelSeq[i]] = true;
     }
+                                               // 到这一步 channelMark 数组中包含了哪几个通道为符合通道
 
-    if (channelMark[channel1-1] and channelMark[channel2-1])
-        return 1;
-    else
-        return 0;
+    for (int i = 0; i < nbrChannels; i++)                // 再判断 channelMark 数组中的通道是否包含所要求的符合通道 channelMulti
+    {
+        if (!channelMark[channels[i]])
+            return 0;
+    }
+    return 1;
 }
 
 
 void computeCoincidenceCount
-        (AqT3DataDescriptor* dataDescPtr,
+        (QVector<AqT3DataDescriptor*> dataPtrList,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
          int tolerance,
-         int* delayMulti = new int (),
+         int* delayMulti,
          int* nbrCoinAcc = new int (),
          int delayAcc = 0)
 {
@@ -61,6 +64,7 @@ void computeCoincidenceCount
     if (nbrChannels < 2 or nbrChannels > 6) return;
 
 //    先读取时间数据
+    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     long nbrSamples = dataDescPtr->nbrSamples;
 
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算
@@ -105,71 +109,33 @@ void computeCoincidenceCount
                 for (int i = 0; i < timeSeq.size()-nbrChannels+1; i++)
                 {
                     spacing = findSpacing(timeSeq, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence(channelMulti, channelSeq, i, i+spacing)) // 查看该跨度内是否有符合
-                    {
-                        (*nbrCoinMulti)++;
-                        i = i+spacing;                                     // 计算过符合的区间可以跳过
-                    }
-                }
-            }
-            mark = false;
-            timeSeq.clear();
-            channelSeq.clear();
-        }
-
-
-
-
-        // flag 为 0 表示 COM 信号，channel 为 7 表示内存切换
-        if (channel == channel1 or channel == channel2)                        // Channel=1-6 are the physical channels;
-                                                // Data = an integer giving the time value in units of 50 ps
-                                                // Channel=7 is for marker data.
-        {
-            if (channel == channel1)
-            {
-                TimeOfFlightAcc = TimeOfFlight;
-            }
-            else
-            {
-                TimeOfFlight += delay;
-                TimeOfFlightAcc = TimeOfFlight + delayAcc;
-            }
-            index = findInsertPosition2(timeSeq, TimeOfFlight);        // 按时间升序排列
-            timeSeq.insert(index, TimeOfFlight);
-            channelSeq.insert(index, channel-1);
-            index = findInsertPosition2(timeSeqAcc, TimeOfFlightAcc);
-            timeSeqAcc.insert(index, TimeOfFlightAcc);
-            channelSeqAcc.insert(index, channel-1);
-            mark = true;
-        }
-        else if (channel == 0 or channel == 7)
-        {
-            if (mark and timeSeq.size() >= 2)                            // 计算上一轮符合
-            {
-                for (int i = 0; i < timeSeq.size()-2+1; i++)
-                {
-                    spacing = findSpacing2(timeSeq, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence2(channel1, channel2, channelSeq, i, i+spacing)) // 查看该跨度内是否有符合
+                    if (checkCoincidence(channels, nbrChannels, channelSeq, i, i+spacing)) // 查看该跨度内是否有符合
                     {
                         (*nbrCoin)++;
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
                     }
                 }
-                for (int i = 0; i < timeSeqAcc.size()-2+1; i++)
+                if (nbrChannels == 2)
                 {
-                    spacing = findSpacing2(timeSeqAcc, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence2(channel1, channel2, channelSeqAcc, i, i+spacing)) // 查看该跨度内是否有符合
+                    for (int i = 0; i < timeSeqAcc.size()-2+1; i++)
                     {
-                        (*nbrAccCoin)++;
-                        i = i+spacing;                                     // 计算过符合的区间可以跳过
+                        spacing = findSpacing(timeSeqAcc, i, tolerance);          // 求符合窗口在起始位置处的跨度
+                        if (checkCoincidence(channels, 2, channelSeqAcc, i, i+spacing)) // 查看该跨度内是否有符合
+                        {
+                            (*nbrCoinAcc)++;
+                            i = i+spacing;                                     // 计算过符合的区间可以跳过
+                        }
                     }
                 }
             }
             mark = false;
             timeSeq.clear();
             channelSeq.clear();
-            timeSeqAcc.clear();
-            channelSeqAcc.clear();
+            if (nbrChannels == 2)
+            {
+                timeSeqAcc.clear();
+                channelSeqAcc.clear();
+            }
         }
     }
 }

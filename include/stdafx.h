@@ -42,18 +42,14 @@ void computeSingleChannelCount
          int freqCOM, int countEvents);
 
 void computeCoincidenceCount
-        (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoin, int* nbrAccCoin,
-         int channel1, int channel2,
+        (QVector<AqT3DataDescriptor*> dataPtrList,
+         int nbrChannels,
+         int* channels,
+         int* nbrCoin,
          int tolerance,
-         int delay, int delayAcc);
-
-void computeCoincidenceCountMulti
-        (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoinMulti,
-         bool* channelMulti,
-         int toleranceMulti,
-         int* delayMulti);
+         int* delayMulti,
+         int* nbrCoinAcc = new int (),
+         int delayAcc = 0);
 
 void computeHistogramCount
         (AqT3DataDescriptor* dataDescPtr,
