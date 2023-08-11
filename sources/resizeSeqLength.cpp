@@ -1,10 +1,10 @@
 #include <QVector>
 
-void resizeSeqLength(QList<QVector<int>> *v, int l)
+void resizeSeqLength(QList<std::vector<int>> *v, int l)
 {
     if (v->size() < l)
     {
-        QVector<int> v0;
+        std::vector<int> v0;
         while (v->size() < l)
             v->append(v0);
     }

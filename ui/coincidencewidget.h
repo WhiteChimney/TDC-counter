@@ -76,8 +76,8 @@ private:
     int nbrCoin = 0;           // 符合计数
     int nbrAccCoin = 0;        // 偶然符合计数
     int nbrCoinMulti = 0;      // 多通道符合计数
-    QList<QVector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
-    QList<QVector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
+    QList<std::vector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
+    QList<std::vector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
     double *delayCN;           // 各通道固有延时
     int freqCOM;               // TDC COM 重复频率
 
