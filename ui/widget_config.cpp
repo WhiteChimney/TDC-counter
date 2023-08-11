@@ -19,12 +19,6 @@ void Widget::dealTestReturn(int index)
     testW->close();
 }
 
-void Widget::on_buttonApplyConfig_released()
-{
-    fetchUiData();
-    configStatus = configTDC(idInstr, countEvents, channelConfig, level, slope, readParamPtr);
-}
-
 void Widget::on_checkboxEnableCountEvents_released()
 {
     if (ui->checkboxEnableCountEvents->isChecked())

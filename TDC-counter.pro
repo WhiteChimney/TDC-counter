@@ -12,6 +12,7 @@ RC_ICONS = resources/TDC-Counter.ico
 
 SOURCES += \
     main.cpp \
+    sources/clear2DintVector.cpp \
     sources/computeCoincidenceCount.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
@@ -26,6 +27,8 @@ SOURCES += \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
+    ui/coincidencewidget_saveData.cpp \
+    ui/coincidencewidget_ui.cpp \
     ui/extAppWidget_dp832a_serial.cpp \
     ui/extAppWidget_dp832a_usb.cpp \
     ui/extAppWidget_tsp01.cpp \

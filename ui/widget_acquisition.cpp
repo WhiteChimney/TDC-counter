@@ -3,8 +3,10 @@
 
 void Widget::on_buttonStartAcquisition_released()
 {
+    fetchUiData();
     if (configStatus != VI_SUCCESS)
-        on_buttonApplyConfig_released();
+        configStatus = configTDC
+                (idInstr, countEvents, channelConfig, level, slope, readParamPtr);
 
     // start Acquisition
     if (configStatus == VI_SUCCESS)

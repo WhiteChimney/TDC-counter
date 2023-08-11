@@ -75,8 +75,6 @@ private slots:
     // 开始采集
     void on_buttonStopAcq_released();
     // 停止采集线程
-    void on_buttonApplyConfig_released();
-    // 应用 TDC 配置
     void on_buttonStartCount_released();
     // 开启计数功能
     void on_buttonStopCount_released();

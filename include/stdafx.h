@@ -51,6 +51,8 @@ void computeCoincidenceCount
          int* nbrCoinAcc = new int (),
          int delayAcc = 0);
 
+void clear2DintVector(QVector<QVector<int>> v);
+
 void computeHistogramCount
         (AqT3DataDescriptor* dataDescPtr,
          int channel1, int channel2, double delay,

@@ -64,6 +64,8 @@ private:
     int nbrCoin = 0;           // 符合计数
     int nbrAccCoin = 0;        // 偶然符合计数
     int nbrCoinMulti = 0;      // 多通道符合计数
+    QVector<QVector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
+    QVector<QVector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
 
     // 数据保存
     bool coinSavable = false;  // 判断是否可保存
