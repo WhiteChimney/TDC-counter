@@ -85,9 +85,12 @@ void computeCoincidenceCount
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     int timeCOMunit = int(20*1000.0*timeCOM); // TDC 内部单位，50 ps
     int nbrCOMdelay[6] = {0};                 // delay 了多少个 COM
+    int nbrCOMdelayAcc[6] = {0};                 // delay 了多少个 COM
     int delayInCOM[6] = {0};                  // 除去 COM delay 后，同一 COM 内的延时量
                                               // 以 TDC 最小时间为单位，50 ps
-    double delayTotal[6] = {0.0};
+    int delayInCOMAcc[6] = {0};                  // 除去 COM delay 后，同一 COM 内的延时量
+                                              // 以 TDC 最小时间为单位，50 ps
+    double delayTotal[6] = {0.0}, delayTotalAcc[6] = {0.0};
     double minDelay = delayCN[0] + delayMulti[0]/20.0/1000.0;
     for (int i = 0; i < 6; i++)
     {
@@ -95,14 +98,21 @@ void computeCoincidenceCount
         if (delayTotal[i] < minDelay)
             minDelay = delayTotal[i];
     }
-    int maxNbrCOMdelay = 0;
+    if (delayAcc < 0)
+        minDelay += delayAcc;
+    int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
     for (int i = 0; i < 6; i++)
     {
-        delayTotal[i] -= minDelay;
-        nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);             // 保证所有延时均为非负
+        delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+        delayTotalAcc[i] = delayTotal[i] + delayAcc;
+        nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
+        nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
         if (nbrCOMdelay[i] > maxNbrCOMdelay)
             maxNbrCOMdelay = nbrCOMdelay[i];
+        if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
+            maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
         delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+        delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
     }
 
 //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
@@ -135,7 +145,7 @@ void computeCoincidenceCount
             TimeOfFlight += delayInCOM[channel-1];
             // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
             // 先暂时忽略计算偶然符合时使用的 delay
-            int indexCOM;
+            int indexCOM, indexCOMAcc;
             if (TimeOfFlight > timeCOMunit)
             {
                 TimeOfFlight -= timeCOMunit;
@@ -152,7 +162,14 @@ void computeCoincidenceCount
                     TimeOfFlightAcc = TimeOfFlight;
                 else
                     TimeOfFlightAcc = TimeOfFlight + delayAcc;
-                index = findInsertPosition(timeSeqAcc[indexCOM], TimeOfFlightAcc);
+                if (TimeOfFlightAcc > timeCOMunit)
+                {
+                    TimeOfFlightAcc -= timeCOMunit;
+                    indexCOMAcc = nbrCOMdelayAcc[channel-1] + 1;
+                }
+                else
+                    indexCOMAcc = nbrCOMdelayAcc[channel-1];
+                index = findInsertPosition(timeSeqAcc[indexCOMAcc], TimeOfFlightAcc);
                 timeSeqAcc[indexCOM].insert(index, TimeOfFlightAcc);
                 channelSeqAcc[indexCOM].insert(index, channel-1);
             }
