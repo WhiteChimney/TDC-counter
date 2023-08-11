@@ -29,16 +29,14 @@ void computeSingleChannelCount
      QVector<AqT3DataDescriptor*> dataPtrList,
      double *delayCN, int freqCOM, int countEvents)
 {
-    double timeCOM = 1000.0/freqCOM;           // 单位为 us
+    double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     int nbrCOMdelay[6] = {0};
     int delayInCOM[6] = {0};                  // 以 TDC 最小时间为单位，50 ps
     for (int i = 0; i < 6; i++)
     {
         nbrCOMdelay[i] = floor(delayCN[i]/timeCOM);
-        delayInCOM[i] = 20*1000*int(delayCN[i] - timeCOM*nbrCOMdelay[i]);
+        delayInCOM[i] = int(20*1000.0*delayCN[i] - timeCOM*nbrCOMdelay[i]);
     }
-//    qDebug() << "nbrCOMdelay[" << i << "]: " << nbrCOMdelay[i];
-//    qDebug() << "delayInCOM[" << i << "]:" << delayInCOM[i];
 
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
 
