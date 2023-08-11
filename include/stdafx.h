@@ -43,13 +43,18 @@ void computeSingleChannelCount
 
 void computeCoincidenceCount
         (QVector<AqT3DataDescriptor*> dataPtrList,
+         QVector<QVector<int>> timeSeq,
+         QVector<QVector<int>> timeSeqAcc,
+         QVector<QVector<int>> channelSeq,
+         QVector<QVector<int>> channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
          int tolerance,
          int* delayMulti,
-         int* nbrCoinAcc = new int (),
-         int delayAcc = 0);
+         int* nbrCoinAcc,
+         int delayAcc,
+         double *delayCN, int freqCOM, int countEvents);
 
 void clear2DintVector(QVector<QVector<int>> v);
 

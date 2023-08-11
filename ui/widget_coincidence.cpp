@@ -28,9 +28,12 @@ void Widget::dealCoincidenceReturn(int index)
     coinW->close();
 }
 
-void Widget::dealAskDealAcqBankSwitchCoin(int index)
+void Widget::dealAskDealAcqBankSwitchCoin(int index,double **delayCNPtr, int *freqCOMPtr, int *countEventsPtr)
 {
     coinW = vCoinWidget.at(index);
+    *delayCNPtr = delayCN;
+    *freqCOMPtr = freqCOM;
+    *countEventsPtr = countEvents;
     connect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 

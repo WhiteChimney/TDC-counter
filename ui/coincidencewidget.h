@@ -19,7 +19,8 @@ public:
 
 signals:
     void returnSignal(int index);                  // 处理返回按键按下
-    void askDealAcqBankSwitchCoin(int index);      // 告知主窗口将内存切换信号与本窗口连接
+    void askDealAcqBankSwitchCoin(int index,
+         double **delayCNPtr, int *freqCOMPtr, int *countEventsPtr);      // 告知主窗口将内存切换信号与本窗口连接
     void askStopDealAcqBankSwitchCoin(int index);  // 告知主窗口断开内存切换信号与本窗口的连接
     void coinTimerNeedsSync(int index);            // 告知主窗口时钟需要同步
     void coinTimerStopsSync(int index);            // 告知主窗口停止同步时钟
@@ -66,6 +67,9 @@ private:
     int nbrCoinMulti = 0;      // 多通道符合计数
     QVector<QVector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
     QVector<QVector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
+    double *delayCN;           // 各通道固有延时
+    int freqCOM;               // TDC COM 重复频率
+    int countEvents;           // 切换 buffer 所需要的 COM 数
 
     // 数据保存
     bool coinSavable = false;  // 判断是否可保存

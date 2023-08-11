@@ -45,7 +45,7 @@ void CoincidenceWidget::on_buttonStart_released()
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
-        emit askDealAcqBankSwitchCoin(index);
+        emit askDealAcqBankSwitchCoin(index,&delayCN,&freqCOM,&countEvents);
         ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTime)
         { // 如果需要与单道计数同步，发送同步请求
@@ -79,7 +79,7 @@ void CoincidenceWidget::on_buttonStart_released()
             return;
         }
 
-        emit askDealAcqBankSwitchCoin(index);
+        emit askDealAcqBankSwitchCoin(index,&delayCN,&freqCOM,&countEvents);
         ui->buttonChangeToDual->setEnabled(false);
         if (enableAccumulateTimeMulti)
         { // 如果需要与单道计数同步，发送同步请求
@@ -162,7 +162,12 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*>
         delayCalc = delayMulti;
     }
     computeCoincidenceCount
-            (dataPtrList, nbrChannels, channels, nbrCoinCalc, toleranceCalc, delayCalc, &nbrAccCoin, delayAcc);
+            (dataPtrList,
+             timeSeq, timeSeqAcc,
+             channelSeq, channelSeqAcc,
+             nbrChannels, channels, nbrCoinCalc,
+             toleranceCalc, delayCalc, &nbrAccCoin, delayAcc,
+             delayCN, freqCOM, countEvents);
 }
 
 void CoincidenceWidget::dealTimeOut()

@@ -6,6 +6,21 @@
 
 // 计算符合计数
 
+void resizeSeqLength(QVector<QVector<int>> v, int l)
+{
+    if (v.size() < l)
+    {
+        QVector<int> v0;
+        while (v.size() < l)
+            v.append(v0);
+    }
+    else if (v.size() > l)
+    {
+        while (v.size() > l)
+            v.removeFirst();
+    }
+}
+
 int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 {
     if (timeSeq.size() == 0)
@@ -50,26 +65,55 @@ int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, in
 
 void computeCoincidenceCount
         (QVector<AqT3DataDescriptor*> dataPtrList,
+         QVector<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QVector<QVector<int>> timeSeqAcc,
+         QVector<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QVector<QVector<int>> channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
          int tolerance,
          int* delayMulti,
-         int* nbrCoinAcc = new int (),
-         int delayAcc = 0)
+         int* nbrCoinAcc,
+         int delayAcc,
+         double *delayCN, int freqCOM, int countEvents)
 {
-//    假设每个 COM 周期内的原始数据的时间是升序排列的
-
 //    判定通道数是否合法
     if (nbrChannels < 2 or nbrChannels > 6) return;
 
-//    先读取时间数据
+//    预处理 TDC 参数
+    double timeCOM = 1000.0/freqCOM;           // 单位为 us
+    int nbrCOMdelay[6] = {0};                 // delay 了多少个 COM
+    int delayInCOM[6] = {0};                  // 除去 COM delay 后，同一 COM 内的延时量
+                                              // 以 TDC 最小时间为单位，50 ps
+    double minDelay = delayCN[0] + delayMulti[0]/20.0;
+    for (int i = 0; i < 6; i++)
+    {
+        delayCN[i] += delayMulti[i]/20.0;
+        if (delayCN[i] < minDelay)
+            minDelay = delayCN[i];
+    }
+    int maxNbrCOMdelay = 0;
+    for (int i = 0; i < 6; i++)
+    {
+        delayCN[i] -= minDelay;             // 保证所有延时均为非负
+        nbrCOMdelay[i] = floor(delayCN[i]/timeCOM);
+        if (nbrCOMdelay[i] > maxNbrCOMdelay)
+            maxNbrCOMdelay = nbrCOMdelay[i];
+        delayInCOM[i] = 20*1000*int(delayCN[i] - timeCOM*nbrCOMdelay[i]);
+    }
+
+//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
+    resizeSeqLength(timeSeq, maxNbrCOMdelay+2);
+    resizeSeqLength(timeSeqAcc, maxNbrCOMdelay+2);
+    resizeSeqLength(channelSeq, maxNbrCOMdelay+2);
+    resizeSeqLength(channelSeqAcc, maxNbrCOMdelay+2);
+
+//    读取时间数据
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     long nbrSamples = dataDescPtr->nbrSamples;
 
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算
-    QVector<int> channelSeq, channelSeqAcc; // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-    QVector<int> timeSeq, timeSeqAcc;    // 升序排列后的时间，与通道编号一一对应
     int index = 0; // 用于标记元素插入位置
     int spacing = 0; // 用于表示符合窗口跨度
 
@@ -86,30 +130,33 @@ void computeCoincidenceCount
                                                 // Data = an integer giving the time value in units of 50 ps
                                                 // Channel=7 is for marker data.
         {
-            TimeOfFlight += delayMulti[channel-1];
-            index = findInsertPosition(timeSeq, TimeOfFlight);        // 按时间升序排列
-            timeSeq.insert(index, TimeOfFlight);
-            channelSeq.insert(index, channel-1);
+            TimeOfFlight += delayInCOM[channel-1];
+            // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
+            // 先暂时忽略计算偶然符合时使用的 delay
+            int indexCOM = nbrCOMdelay[channel-1];
+            index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
+            timeSeq[indexCOM].insert(index, TimeOfFlight);
+            channelSeq[indexCOM].insert(index, channel-1);
             if (nbrChannels == 2)
             {
                 if (channel-1 == channels[0])
                     TimeOfFlightAcc = TimeOfFlight;
                 else
                     TimeOfFlightAcc = TimeOfFlight + delayAcc;
-                index = findInsertPosition(timeSeqAcc, TimeOfFlightAcc);
-                timeSeqAcc.insert(index, TimeOfFlightAcc);
-                channelSeqAcc.insert(index, channel-1);
+                index = findInsertPosition(timeSeqAcc[indexCOM], TimeOfFlightAcc);
+                timeSeqAcc[indexCOM].insert(index, TimeOfFlightAcc);
+                channelSeqAcc[indexCOM].insert(index, channel-1);
             }
             mark = true;
         }
         else
         {
-            if (mark and timeSeq.size() >= nbrChannels)                            // 计算上一轮符合
+            if (mark and timeSeq.first().size() >= nbrChannels)                            // 计算上一轮符合
             {
-                for (int i = 0; i < timeSeq.size()-nbrChannels+1; i++)
+                for (int i = 0; i < timeSeq.first().size()-nbrChannels+1; i++)
                 {
-                    spacing = findSpacing(timeSeq, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence(channels, nbrChannels, channelSeq, i, i+spacing)) // 查看该跨度内是否有符合
+                    spacing = findSpacing(timeSeq.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
+                    if (checkCoincidence(channels, nbrChannels, channelSeq.first(), i, i+spacing)) // 查看该跨度内是否有符合
                     {
                         (*nbrCoin)++;
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -119,8 +166,8 @@ void computeCoincidenceCount
                 {
                     for (int i = 0; i < timeSeqAcc.size()-2+1; i++)
                     {
-                        spacing = findSpacing(timeSeqAcc, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                        if (checkCoincidence(channels, 2, channelSeqAcc, i, i+spacing)) // 查看该跨度内是否有符合
+                        spacing = findSpacing(timeSeqAcc.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
+                        if (checkCoincidence(channels, 2, channelSeqAcc.first(), i, i+spacing)) // 查看该跨度内是否有符合
                         {
                             (*nbrCoinAcc)++;
                             i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -129,12 +176,12 @@ void computeCoincidenceCount
                 }
             }
             mark = false;
-            timeSeq.clear();
-            channelSeq.clear();
+            timeSeq.first().clear(); timeSeq.removeFirst();
+            channelSeq.first().clear(); channelSeq.removeFirst();
             if (nbrChannels == 2)
             {
-                timeSeqAcc.clear();
-                channelSeqAcc.clear();
+                timeSeqAcc.first().clear(); timeSeqAcc.removeFirst();
+                channelSeqAcc.first().clear(); channelSeqAcc.removeFirst();
             }
         }
     }
