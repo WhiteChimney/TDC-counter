@@ -52,7 +52,7 @@ private:
     int toleranceCalc;
     int *delayCalc;
     int nbrCOMdelay[6] = {0}, nbrCOMdelayAcc[6] = {0};
-    int maxNbrCOMdelay, maxNbrCOMdelayAcc;
+    int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
     int delayInCOM[6] = {0}, delayInCOMAcc[6] = {0};
     int timeCOMunit;
 

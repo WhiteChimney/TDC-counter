@@ -164,12 +164,12 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
 
         //    预处理 TDC 参数
         double timeCOM = 1000000.0/freqCOM;           // 单位为 us
-        timeCOMunit = int(20*1000.0*timeCOM); // TDC 内部单位，50 ps
+        timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
         double delayTotal[6] = {0.0}, delayTotalAcc[6] = {0.0};
-        double minDelay = delayCN[0] + delayMulti[0]/20.0/1000.0;
+        double minDelay = delayCN[0] + delayCalc[0]/20.0/1000.0;
         for (int i = 0; i < 6; i++)
         {
-            delayTotal[i] = delayCN[i] + delayMulti[i]/20.0/1000.0;
+            delayTotal[i] = delayCN[i] + delayCalc[i]/20.0/1000.0;
             if (delayTotal[i] < minDelay)
                 minDelay = delayTotal[i];
             if (nbrChannels == 2)
@@ -199,8 +199,20 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
             }
         }
 
+
+
         emit askDealAcqBankSwitchCoin(index);
     }
+    for (int i = 0; i < 6; i++)
+    {
+        qDebug() << "nbrCOMdelay[" << i << "]: " << nbrCOMdelay[i];
+        qDebug() << "nbrCOMdelayAcc[" << i << "]: " << nbrCOMdelayAcc[i];
+        qDebug() << "delayInCOM[" << i << "]: " << delayInCOM[i];
+        qDebug() << "delayInCOMAcc[" << i << "]: " << delayInCOM[i];
+    }
+    qDebug() << "maxNbrCOMdelay: " << maxNbrCOMdelay;
+    qDebug() << "maxNbrCOMdelayAcc: " << maxNbrCOMdelayAcc;
+    qDebug() << "timeCOMunit: " << timeCOMunit;
 }
 
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)
