@@ -97,29 +97,41 @@ void computeCoincidenceCount
         delayTotal[i] = delayCN[i] + delayMulti[i]/20.0/1000.0;
         if (delayTotal[i] < minDelay)
             minDelay = delayTotal[i];
+        if (nbrChannels == 2)
+        {
+            delayTotalAcc[i] = delayTotal[i];
+            if(i == channels[1])
+                delayTotalAcc[i] += delayAcc/20.0/1000.0;
+        }
     }
-    if (delayAcc < 0)
+    if (nbrChannels == 2 && delayAcc < 0)
         minDelay += delayAcc;
     int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
     for (int i = 0; i < 6; i++)
     {
         delayTotal[i] -= minDelay;             // 保证所有延时均为非负
-        delayTotalAcc[i] = delayTotal[i] + delayAcc;
         nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
-        nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
         if (nbrCOMdelay[i] > maxNbrCOMdelay)
             maxNbrCOMdelay = nbrCOMdelay[i];
-        if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
-            maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
         delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
-        delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
+        if (nbrChannels == 2)
+        {
+            delayTotalAcc[i] -= minDelay;
+            nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
+            if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
+                maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
+            delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
+        }
     }
 
 //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
     resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(&timeSeqAcc, maxNbrCOMdelay+2);
     resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(&channelSeqAcc, maxNbrCOMdelay+2);
+    if (nbrChannels == 2)
+    {
+        resizeSeqLength(&timeSeqAcc, maxNbrCOMdelay+2);
+        resizeSeqLength(&channelSeqAcc, maxNbrCOMdelay+2);
+    }
 
 //    读取时间数据
     AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
@@ -128,7 +140,6 @@ void computeCoincidenceCount
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算
     int index = 0; // 用于标记元素插入位置
     int spacing = 0; // 用于表示符合窗口跨度
-
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
@@ -142,10 +153,11 @@ void computeCoincidenceCount
                                                 // Data = an integer giving the time value in units of 50 ps
                                                 // Channel=7 is for marker data.
         {
+            int indexCOM, indexCOMAcc;
+            if (nbrChannels == 2)
+                TimeOfFlightAcc = TimeOfFlight + delayInCOMAcc[channel-1];
             TimeOfFlight += delayInCOM[channel-1];
             // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
-            // 先暂时忽略计算偶然符合时使用的 delay
-            int indexCOM, indexCOMAcc;
             if (TimeOfFlight > timeCOMunit)
             {
                 TimeOfFlight -= timeCOMunit;
@@ -158,10 +170,6 @@ void computeCoincidenceCount
             channelSeq[indexCOM].insert(index, channel-1);
             if (nbrChannels == 2)
             {
-                if (channel-1 == channels[0])
-                    TimeOfFlightAcc = TimeOfFlight;
-                else
-                    TimeOfFlightAcc = TimeOfFlight + delayAcc;
                 if (TimeOfFlightAcc > timeCOMunit)
                 {
                     TimeOfFlightAcc -= timeCOMunit;
@@ -170,8 +178,8 @@ void computeCoincidenceCount
                 else
                     indexCOMAcc = nbrCOMdelayAcc[channel-1];
                 index = findInsertPosition(timeSeqAcc[indexCOMAcc], TimeOfFlightAcc);
-                timeSeqAcc[indexCOM].insert(index, TimeOfFlightAcc);
-                channelSeqAcc[indexCOM].insert(index, channel-1);
+                timeSeqAcc[indexCOMAcc].insert(index, TimeOfFlightAcc);
+                channelSeqAcc[indexCOMAcc].insert(index, channel-1);
             }
             mark = true;
         }
