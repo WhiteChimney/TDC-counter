@@ -39,8 +39,9 @@ public slots:
     // 定时刷新单道计数
     void dealCoincidenceReturn(int index);
     // 关闭符合子窗口
-    void dealAskDealAcqBankSwitchCoin(int index,
-         double **delayCNPtr, int *freqCOMPtr, int *countEventsPtr);
+    void dealRequestCoinParam(int index);
+
+    void dealAskDealAcqBankSwitchCoin(int index);
     // 将 Bank 切换信号与符合子窗口的槽对接
     void dealAskStopDealAcqBankSwitchCoin(int index);
     // 停止对接 Bank 切换信号与符合子窗口的槽
@@ -119,6 +120,7 @@ private:
 
 signals:
     void countParamReady(bool*, int*);
+    void coinParamReady(int index, double *delayCN, int freqCOM);
 
 public:
     void setupAcqIndicator();

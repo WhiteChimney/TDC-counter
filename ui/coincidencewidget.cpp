@@ -42,10 +42,11 @@ void CoincidenceWidget::on_buttonReturn_released()
 
 void CoincidenceWidget::on_buttonStart_released()
 {
+    on_buttonStop_released();
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
-        emit askDealAcqBankSwitchCoin(index,&delayCN,&freqCOM,&countEvents);
+        emit requestCoinParam(index);
         ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTime)
         { // 如果需要与单道计数同步，发送同步请求
@@ -79,7 +80,7 @@ void CoincidenceWidget::on_buttonStart_released()
             return;
         }
 
-        emit askDealAcqBankSwitchCoin(index,&delayCN,&freqCOM,&countEvents);
+        emit requestCoinParam(index);
         ui->buttonChangeToDual->setEnabled(false);
         if (enableAccumulateTimeMulti)
         { // 如果需要与单道计数同步，发送同步请求
@@ -130,54 +131,90 @@ void CoincidenceWidget::on_buttonStop_released()
     clear2DintVector(&channelSeqAcc);
 }
 
+void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int freqCOM0)
+{
+    if (index == index0)
+    {
+        delayCN = delayCN0;
+        freqCOM = freqCOM0;
+        if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
+        {
+            channels[0] = channel1-1;
+            channels[1] = channel2-1;
+            nbrChannels = 2;
+            nbrCoinCalc = &nbrCoin;
+            toleranceCalc = tolerance;
+            delayCalc = new int[6]();
+            delayCalc[channel2-1] = delay;
+        }
+        else                                   // 多通道模式计算符合计数
+        {
+            for (int i = 0; i < 6; i++)
+            {
+                if (channelMark[i])
+                {
+                    channels[nbrChannels] = i;
+                    nbrChannels++;
+                }
+            }
+            nbrCoinCalc = &nbrCoinMulti;
+            toleranceCalc = toleranceMulti;
+            delayCalc = delayMulti;
+        }
+
+        //    预处理 TDC 参数
+        double timeCOM = 1000000.0/freqCOM;           // 单位为 us
+        timeCOMunit = int(20*1000.0*timeCOM); // TDC 内部单位，50 ps
+        double delayTotal[6] = {0.0}, delayTotalAcc[6] = {0.0};
+        double minDelay = delayCN[0] + delayMulti[0]/20.0/1000.0;
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] = delayCN[i] + delayMulti[i]/20.0/1000.0;
+            if (delayTotal[i] < minDelay)
+                minDelay = delayTotal[i];
+            if (nbrChannels == 2)
+            {
+                delayTotalAcc[i] = delayTotal[i];
+                if(i == channels[1])
+                    delayTotalAcc[i] += delayAcc/20.0/1000.0;
+            }
+        }
+        if (nbrChannels == 2 && delayAcc < 0)
+            minDelay += delayAcc;
+        int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+            nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
+            if (nbrCOMdelay[i] > maxNbrCOMdelay)
+                maxNbrCOMdelay = nbrCOMdelay[i];
+            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+            if (nbrChannels == 2)
+            {
+                delayTotalAcc[i] -= minDelay;
+                nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
+                if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
+                    maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
+                delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
+            }
+        }
+
+        emit askDealAcqBankSwitchCoin(index);
+    }
+}
+
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)
 {
-//    int channels[6] = {0};
-//    int nbrChannels = 0;
-//    int *nbrCoinCalc;
-//    int toleranceCalc;
-//    int *delayCalc;
-//    if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
-//    {
-//        channels[0] = channel1-1;
-//        channels[1] = channel2-1;
-//        nbrChannels = 2;
-//        nbrCoinCalc = &nbrCoin;
-//        toleranceCalc = tolerance;
-//        delayCalc = new int[6]();
-//        delayCalc[channel2-1] = delay;
-//    }
-//    else                                   // 多通道模式计算符合计数
-//    {
-//        for (int i = 0; i < 6; i++)
-//        {
-//            if (channelMark[i])
-//            {
-//                channels[nbrChannels] = i;
-//                nbrChannels++;
-//            }
-//        }
-//        nbrCoinCalc = &nbrCoinMulti;
-//        toleranceCalc = toleranceMulti;
-//        delayCalc = delayMulti;
-//    }
-//    computeCoincidenceCount
-//            (dataPtrList,
-//             timeSeq, timeSeqAcc,
-//             channelSeq, channelSeqAcc,
-//             nbrChannels, channels, nbrCoinCalc,
-//             toleranceCalc, delayCalc, &nbrAccCoin, delayAcc,
-//             delayCN, freqCOM, countEvents);
-    int channels[2] = {channel1-1,channel2-1};
-    int delayCalc[6] = {0};
-    delayCalc[channel2-1] = delay;
     computeCoincidenceCount
             (dataPtrList,
              timeSeq, timeSeqAcc,
              channelSeq, channelSeqAcc,
-             2, channels, &nbrCoin,
-             tolerance, delayCalc, &nbrAccCoin, delayAcc,
-             delayCN, freqCOM, countEvents);
+             nbrChannels, channels, nbrCoinCalc,
+             toleranceCalc, &nbrAccCoin,
+             nbrCOMdelay, nbrCOMdelayAcc,
+             maxNbrCOMdelay, maxNbrCOMdelayAcc,
+             delayInCOM, delayInCOMAcc,
+             timeCOMunit);
 }
 
 void CoincidenceWidget::dealTimeOut()

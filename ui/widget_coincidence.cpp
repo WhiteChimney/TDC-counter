@@ -8,6 +8,8 @@ void Widget::on_buttonCoincidence_released()
     vCoinWidget.append(coinW);
     vCoinWidgetSyncState.append(false);
     connect(coinW,&CoincidenceWidget::returnSignal,this,&Widget::dealCoincidenceReturn);
+    connect(coinW,&CoincidenceWidget::requestCoinParam,this,&Widget::dealRequestCoinParam);
+    connect(this,&Widget::coinParamReady,coinW,&CoincidenceWidget::dealRequestCoinParam);
     connect(coinW,&CoincidenceWidget::askDealAcqBankSwitchCoin,this,&Widget::dealAskDealAcqBankSwitchCoin);
     connect(coinW,&CoincidenceWidget::askStopDealAcqBankSwitchCoin,this,&Widget::dealAskStopDealAcqBankSwitchCoin);
     connect(coinW,&CoincidenceWidget::coinTimerNeedsSync,this,&Widget::dealCoinTimerNeedsSync);
@@ -22,18 +24,22 @@ void Widget::dealCoincidenceReturn(int index)
     coinW = vCoinWidget.at(index);
     coinW->setWindowState(Qt::WindowNoState);
     disconnect(coinW,&CoincidenceWidget::returnSignal,this,&Widget::dealCoincidenceReturn);
+    disconnect(coinW,&CoincidenceWidget::requestCoinParam,this,&Widget::dealRequestCoinParam);
+    disconnect(this,&Widget::coinParamReady,coinW,&CoincidenceWidget::dealRequestCoinParam);
     disconnect(coinW,&CoincidenceWidget::askDealAcqBankSwitchCoin,this,&Widget::dealAskDealAcqBankSwitchCoin);
     disconnect(coinW,&CoincidenceWidget::askStopDealAcqBankSwitchCoin,this,&Widget::dealAskStopDealAcqBankSwitchCoin);
     disconnect(coinW,&CoincidenceWidget::coinTimerNeedsSync,this,&Widget::dealCoinTimerNeedsSync);
     coinW->close();
 }
 
-void Widget::dealAskDealAcqBankSwitchCoin(int index,double **delayCNPtr, int *freqCOMPtr, int *countEventsPtr)
+void Widget::dealRequestCoinParam(int index)
+{
+    emit coinParamReady(index, delayCN, freqCOM);
+}
+
+void Widget::dealAskDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
-    *delayCNPtr = delayCN;
-    *freqCOMPtr = freqCOM;
-    *countEventsPtr = countEvents;
     connect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 

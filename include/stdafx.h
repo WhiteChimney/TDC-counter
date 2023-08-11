@@ -43,18 +43,19 @@ void computeSingleChannelCount
 
 void computeCoincidenceCount
         (QVector<AqT3DataDescriptor*> dataPtrList,
-         QVector<QVector<int>> timeSeq,
+         QVector<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
          QVector<QVector<int>> timeSeqAcc,
-         QVector<QVector<int>> channelSeq,
+         QVector<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
          QVector<QVector<int>> channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
          int tolerance,
-         int* delayMulti,
          int* nbrCoinAcc,
-         int delayAcc,
-         double *delayCN, int freqCOM, int countEvents);
+         int *nbrCOMdelay, int *nbrCOMdelayAcc,
+         int maxNbrCOMdelay, int maxNbrCOMdelayAcc,
+         int *delayInCOM, int *delayInCOMAcc,
+         int timeCOMunit);
 
 void clear2DintVector(QVector<QVector<int>> *v);
 

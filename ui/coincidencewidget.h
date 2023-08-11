@@ -19,14 +19,15 @@ public:
 
 signals:
     void returnSignal(int index);                  // 处理返回按键按下
-    void askDealAcqBankSwitchCoin(int index,
-         double **delayCNPtr, int *freqCOMPtr, int *countEventsPtr);      // 告知主窗口将内存切换信号与本窗口连接
+    void requestCoinParam(int index);              // 请求符合用数据
+    void askDealAcqBankSwitchCoin(int index);      // 告知主窗口将内存切换信号与本窗口连接
     void askStopDealAcqBankSwitchCoin(int index);  // 告知主窗口断开内存切换信号与本窗口的连接
     void coinTimerNeedsSync(int index);            // 告知主窗口时钟需要同步
     void coinTimerStopsSync(int index);            // 告知主窗口停止同步时钟
 
 public slots:
     void dealTimeOut();                                     // 累计时间到，刷新计数
+    void dealRequestCoinParam(int index, double *delayCN, int freqCOM);
     void dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList);  // 内存切换，计算计数
     void dealSaveCoinData();                                // 保存数据
 
@@ -44,7 +45,17 @@ private slots:
 private:
     Ui::CoincidenceWidget *ui;
 
-    // UI 参数
+    // 用于计算的符合参数
+    int channels[6] = {0};
+    int nbrChannels = 0;
+    int *nbrCoinCalc;
+    int toleranceCalc;
+    int *delayCalc;
+    int nbrCOMdelay[6] = {0}, nbrCOMdelayAcc[6] = {0};
+    int maxNbrCOMdelay, maxNbrCOMdelayAcc;
+    int delayInCOM[6] = {0}, delayInCOMAcc[6] = {0};
+    int timeCOMunit;
+
     // 双通道
     int channel1, channel2;      // 通道
     int tolerance;               // 符合门宽
@@ -69,7 +80,6 @@ private:
     QVector<QVector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
     double *delayCN;           // 各通道固有延时
     int freqCOM;               // TDC COM 重复频率
-    int countEvents;           // 切换 buffer 所需要的 COM 数
 
     // 数据保存
     bool coinSavable = false;  // 判断是否可保存
