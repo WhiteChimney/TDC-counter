@@ -149,6 +149,7 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
         }
         else                                   // 多通道模式计算符合计数
         {
+            nbrChannels = 0;
             for (int i = 0; i < 6; i++)
             {
                 if (channelMark[i])
@@ -198,21 +199,8 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
                 delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
             }
         }
-
-
-
         emit askDealAcqBankSwitchCoin(index);
     }
-    for (int i = 0; i < 6; i++)
-    {
-        qDebug() << "nbrCOMdelay[" << i << "]: " << nbrCOMdelay[i];
-        qDebug() << "nbrCOMdelayAcc[" << i << "]: " << nbrCOMdelayAcc[i];
-        qDebug() << "delayInCOM[" << i << "]: " << delayInCOM[i];
-        qDebug() << "delayInCOMAcc[" << i << "]: " << delayInCOM[i];
-    }
-    qDebug() << "maxNbrCOMdelay: " << maxNbrCOMdelay;
-    qDebug() << "maxNbrCOMdelayAcc: " << maxNbrCOMdelayAcc;
-    qDebug() << "timeCOMunit: " << timeCOMunit;
 }
 
 void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)

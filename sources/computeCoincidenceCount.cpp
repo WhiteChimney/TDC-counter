@@ -24,7 +24,7 @@ void resizeSeqLength(QVector<QVector<int>> *v, int l)
 bool channelToBeCalculated(int channel, int *channels, int nbrChannels)
 {
     for (int i = 0; i < nbrChannels; i++)
-        if (channel == channels[i])
+        if (channel-1 == channels[i])
             return true;
     return false;
 }
