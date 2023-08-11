@@ -199,20 +199,29 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
                 delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
             }
         }
+
+    //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
+        resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
+        resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
+        if (nbrChannels == 2)
+        {
+            resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
+            resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
+        }
+
         emit askDealAcqBankSwitchCoin(index);
     }
 }
 
-void CoincidenceWidget::dealAcqThreadBankSwitchCoin(QVector<AqT3DataDescriptor*> dataPtrList)
+void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr)
 {
     computeCoincidenceCount
-            (dataPtrList,
+            (dataDescPtr,
              timeSeq, timeSeqAcc,
              channelSeq, channelSeqAcc,
              nbrChannels, channels, nbrCoinCalc,
              toleranceCalc, &nbrAccCoin,
              nbrCOMdelay, nbrCOMdelayAcc,
-             maxNbrCOMdelay, maxNbrCOMdelayAcc,
              delayInCOM, delayInCOMAcc,
              timeCOMunit);
 }

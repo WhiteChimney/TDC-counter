@@ -26,7 +26,7 @@
 // // 计算延时的算法
 void computeSingleChannelCount
     (int* nbrSCC, int* nbrSCCfuture,
-     QVector<AqT3DataDescriptor*> dataPtrList,
+     AqT3DataDescriptor* dataDescPtr,
      double *delayCN, int freqCOM, int countEvents)
 {
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
@@ -38,7 +38,7 @@ void computeSingleChannelCount
         delayInCOM[i] = int(20*1000.0*delayCN[i] - timeCOM*nbrCOMdelay[i]);
     }
 
-    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
+//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
 
     long nbrSamples = dataDescPtr->nbrSamples;
     int nCOM = 0;

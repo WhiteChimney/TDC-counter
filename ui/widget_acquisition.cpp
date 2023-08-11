@@ -37,13 +37,13 @@ void Widget::dealAcqThreadFinished()
     statusIndicator->setStates(QSimpleLed::OFF);
 }
 
-void Widget::updateDataPtrList(AqT3DataDescriptor *dataPtr0)
-{
-    if (dataPtrList.size() == nbrCOMbuffer)
-    {
-        delete dataPtrList.at(0);
-        dataPtrList.removeFirst();
-    }
-    dataPtrList.append(dataPtr0);
-    emit dataPtrListUpdated(dataPtrList);
-}
+//void Widget::updateDataPtrList(AqT3DataDescriptor *dataPtr0)
+//{
+//    if (dataPtrList.size() == nbrCOMbuffer)
+//    {
+//        delete dataPtrList.at(0);
+//        dataPtrList.removeFirst();
+//    }
+//    dataPtrList.append(dataPtr0);
+//    emit dataPtrListUpdated(dataPtrList);
+//}

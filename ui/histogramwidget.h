@@ -26,7 +26,7 @@ signals:
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
-    void dealAcqThreadBankSwitchHist(QVector<AqT3DataDescriptor*> dataPtrList); // 内存切换时累计计数
+    void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
 
 private slots:
     void on_buttonReturn_released();

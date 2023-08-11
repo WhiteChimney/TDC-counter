@@ -66,8 +66,8 @@ Widget::Widget(QWidget *parent)
     connect(this,&Widget::acqParamReady,acqThread,&AcquisitionThread::dealAcqParamReady);
     connect(acqThread,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished);
 //    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitch);
-    dataPtrList.clear();
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::updateDataPtrList);
+//    dataPtrList.clear();
+//    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::updateDataPtrList);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);

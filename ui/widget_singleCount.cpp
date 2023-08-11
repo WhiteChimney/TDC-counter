@@ -9,16 +9,16 @@ void Widget::on_buttonStartCount_released()
     if (! *acqStopPtr) // 当采集已经开启时
     {
         // 开始计算单道计数
-        connect(this,&Widget::dataPtrListUpdated,this,&Widget::dealAcqThreadBankSwitchSCC);
+        connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
         // 启动定时器
         fetchUiData();
         timerCount->start(1000.0*accumulateTime);
     }
 }
 
-void Widget::dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*> dataPtrList)
+void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
 {
-    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataPtrList,delayCN,freqCOM,countEvents);
+    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataDescPtr,delayCN,freqCOM,countEvents);
 }
 
 void Widget::dealCountTimeOut()
@@ -36,7 +36,7 @@ void Widget::dealCountTimeOut()
 void Widget::on_buttonStopCount_released()
 {
     timerCount->stop();
-    disconnect(this,&Widget::dataPtrListUpdated,this,&Widget::dealAcqThreadBankSwitchSCC);
+    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
 }
 
 int* Widget::getSingleCountPtr()

@@ -33,7 +33,7 @@ public slots:
     // 采集线程关闭后续
 //    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
-    void dealAcqThreadBankSwitchSCC(QVector<AqT3DataDescriptor*>);
+    void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
     // 计算单道计数
     void dealCountTimeOut();
     // 定时刷新单道计数
@@ -163,9 +163,9 @@ private:
     int nbrCOMbuffer = 1;
 public:
     int* getSingleCountPtr();
-    void updateDataPtrList(AqT3DataDescriptor*);
-signals:
-    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
+//    void updateDataPtrList(AqT3DataDescriptor*);
+//signals:
+//    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
 
     // 数据保存参数
 private:

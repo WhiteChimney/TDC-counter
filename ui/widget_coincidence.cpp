@@ -40,13 +40,13 @@ void Widget::dealRequestCoinParam(int index)
 void Widget::dealAskDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
-    connect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
-    disconnect(this,&Widget::dataPtrListUpdated,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
 }
 
 void Widget::dealCoinTimerNeedsSync(int index)

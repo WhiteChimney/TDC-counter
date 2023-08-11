@@ -128,9 +128,9 @@ void HistogramWidget::dealTimeOut()
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
 }
 
-void HistogramWidget::dealAcqThreadBankSwitchHist(QVector<AqT3DataDescriptor*> dataPtrList)
+void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr)
 {
-    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
+//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     // prepare samples to plot
     computeHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
 }

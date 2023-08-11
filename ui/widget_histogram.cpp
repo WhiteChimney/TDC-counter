@@ -24,11 +24,11 @@ void Widget::dealHistogramReturn(int index)
 void Widget::dealAskDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    connect(this,&Widget::dataPtrListUpdated,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    disconnect(this,&Widget::dataPtrListUpdated,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }

@@ -6,21 +6,6 @@
 
 // 计算符合计数
 
-void resizeSeqLength(QVector<QVector<int>> *v, int l)
-{
-    if (v->size() < l)
-    {
-        QVector<int> v0;
-        while (v->size() < l)
-            v->append(v0);
-    }
-    else if (v->size() > l)
-    {
-        while (v->size() > l)
-            v->removeFirst();
-    }
-}
-
 bool channelToBeCalculated(int channel, int *channels, int nbrChannels)
 {
     for (int i = 0; i < nbrChannels; i++)
@@ -72,35 +57,25 @@ int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, in
 
 
 void computeCoincidenceCount
-        (QVector<AqT3DataDescriptor*> dataPtrList,
-         QVector<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-         QVector<QVector<int>> timeSeqAcc,
-         QVector<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         QVector<QVector<int>> channelSeqAcc,
+        (AqT3DataDescriptor* dataDescPtr,
+         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> timeSeqAcc,
+         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
          int tolerance,
          int* nbrCoinAcc,
          int *nbrCOMdelay, int *nbrCOMdelayAcc,
-         int maxNbrCOMdelay, int maxNbrCOMdelayAcc,
          int *delayInCOM, int *delayInCOMAcc,
          int timeCOMunit)
 {
 //    判定通道数是否合法
     if (nbrChannels < 2 or nbrChannels > 6) return;
 
-//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
-    resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
-    if (nbrChannels == 2)
-    {
-        resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
-        resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
-    }
-
 //    读取时间数据
-    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
+//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     long nbrSamples = dataDescPtr->nbrSamples;
 
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算

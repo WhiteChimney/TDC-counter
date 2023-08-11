@@ -19,6 +19,7 @@ SOURCES += \
     sources/configTDC.cpp \
     sources/customizedCommands.cpp \
     sources/mergeDataFiles.cpp \
+    sources/resizeSeqLength.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
     tools/cliplcdnumber.cpp \
