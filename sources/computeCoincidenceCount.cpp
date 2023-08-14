@@ -14,12 +14,11 @@ bool channelToBeCalculated(int channel, int *channels, int nbrChannels)
     return false;
 }
 
-//int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
-int findInsertPosition(std::vector<int> timeSeq, int TimeOfFlight)
+int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 {
     if (timeSeq.size() == 0)
         return 0;
-    uint index = 0;
+    int index = 0;
     bool bingo = false;
     while (!bingo and index < timeSeq.size())
     {
@@ -31,17 +30,15 @@ int findInsertPosition(std::vector<int> timeSeq, int TimeOfFlight)
     return index;
 }
 
-//int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
-int findSpacing(std::vector<int> timeSeq, int i, int toleranceMulti)
+int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
 {
-    uint spacing = 0;
+    int spacing = 0;
     while (timeSeq.at(i+spacing+1) - timeSeq.at(i) <= toleranceMulti and i+spacing+1 < timeSeq.size())
         spacing++;
     return spacing;
 }
 
-//int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, int start, int end)
-int checkCoincidence(int* channels, int nbrChannels, std::vector<int> channelSeq, int start, int end)
+int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, int start, int end)
 {
     bool channelMark[6] = {0};
     for (int i = start; i <= end; i++)         // 判断 channelSeq[start,end-1] 这个序列中有哪些通道号
@@ -61,10 +58,10 @@ int checkCoincidence(int* channels, int nbrChannels, std::vector<int> channelSeq
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         QList<std::vector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-         QList<std::vector<int>> timeSeqAcc,
-         QList<std::vector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         QList<std::vector<int>> channelSeqAcc,
+         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> timeSeqAcc,
+         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
@@ -112,8 +109,8 @@ void computeCoincidenceCount
             else
                 indexCOM = nbrCOMdelay[channel-1];
             index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
-            timeSeq[indexCOM].insert(timeSeq[indexCOM].begin()+index, TimeOfFlight);
-            channelSeq[indexCOM].insert(channelSeq[indexCOM].begin()+index, channel-1);
+            timeSeq[indexCOM].insert(index, TimeOfFlight);
+            channelSeq[indexCOM].insert(index, channel-1);
             if (nbrChannels == 2)
             {
                 if (TimeOfFlightAcc > timeCOMunit)
@@ -124,16 +121,16 @@ void computeCoincidenceCount
                 else
                     indexCOMAcc = nbrCOMdelayAcc[channel-1];
                 index = findInsertPosition(timeSeqAcc[indexCOMAcc], TimeOfFlightAcc);
-                timeSeqAcc[indexCOMAcc].insert(timeSeqAcc[indexCOMAcc].begin()+index, TimeOfFlightAcc);
-                channelSeqAcc[indexCOMAcc].insert(channelSeqAcc[indexCOMAcc].begin()+index, channel-1);
+                timeSeqAcc[indexCOMAcc].insert(index, TimeOfFlightAcc);
+                channelSeqAcc[indexCOMAcc].insert(index, channel-1);
             }
             mark = true;
         }
         else
         {
-            if (mark and timeSeq.first().size() >= uint(nbrChannels))                            // 计算上一轮符合
+            if (mark and timeSeq.first().size() >= nbrChannels)                            // 计算上一轮符合
             {
-                for (uint i = 0; i < timeSeq.first().size()-nbrChannels+1; i++)
+                for (int i = 0; i < timeSeq.first().size()-nbrChannels+1; i++)
                 {
                     spacing = findSpacing(timeSeq.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
                     if (checkCoincidence(channels, nbrChannels, channelSeq.first(), i, i+spacing)) // 查看该跨度内是否有符合
@@ -144,7 +141,7 @@ void computeCoincidenceCount
                 }
                 if (nbrChannels == 2)
                 {
-                    for (uint i = 0; i < timeSeqAcc.first().size()-2+1; i++)
+                    for (int i = 0; i < timeSeqAcc.first().size()-2+1; i++)
                     {
                         spacing = findSpacing(timeSeqAcc.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
                         if (checkCoincidence(channels, 2, channelSeqAcc.first(), i, i+spacing)) // 查看该跨度内是否有符合
@@ -156,7 +153,7 @@ void computeCoincidenceCount
                 }
             }
             mark = false;
-            std::vector<int> v0;
+            QVector<int> v0;
             timeSeq.first().clear(); timeSeq.removeFirst(); timeSeq.append(v0);
             channelSeq.first().clear(); channelSeq.removeFirst(); channelSeq.append(v0);
             if (nbrChannels == 2)
