@@ -55,6 +55,7 @@ private:
     int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
     int delayInCOM[6] = {0}, delayInCOMAcc[6] = {0};
     int timeCOMunit;
+    int COM_HEAD = 0;
 
     // 双通道
     int channel1, channel2;      // 通道

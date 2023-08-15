@@ -54,7 +54,8 @@ void computeCoincidenceCount
          int* nbrCoinAcc,
          int *nbrCOMdelay, int *nbrCOMdelayAcc,
          int *delayInCOM, int *delayInCOMAcc,
-         int timeCOMunit);
+         int timeCOMunit,
+         int *COM_HEAD);
 
 void clear2DintVector(QList<QVector<int>> *v);
 

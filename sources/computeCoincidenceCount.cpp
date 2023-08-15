@@ -69,7 +69,8 @@ void computeCoincidenceCount
          int* nbrCoinAcc,
          int *nbrCOMdelay, int *nbrCOMdelayAcc,
          int *delayInCOM, int *delayInCOMAcc,
-         int timeCOMunit)
+         int timeCOMunit,
+         int *COM_HEAD)
 {
 //    判定通道数是否合法
     if (nbrChannels < 2 or nbrChannels > 6) return;
@@ -104,10 +105,10 @@ void computeCoincidenceCount
             if (TimeOfFlight > timeCOMunit)
             {
                 TimeOfFlight -= timeCOMunit;
-                indexCOM = nbrCOMdelay[channel-1] + 1;
+                indexCOM = (nbrCOMdelay[channel-1] + 1 + *COM_HEAD) % timeSeq.size();
             }
             else
-                indexCOM = nbrCOMdelay[channel-1];
+                indexCOM = (nbrCOMdelay[channel-1] + *COM_HEAD) % timeSeq.size();
             index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
             timeSeq[indexCOM].insert(index, TimeOfFlight);
             channelSeq[indexCOM].insert(index, channel-1);
@@ -116,10 +117,10 @@ void computeCoincidenceCount
                 if (TimeOfFlightAcc > timeCOMunit)
                 {
                     TimeOfFlightAcc -= timeCOMunit;
-                    indexCOMAcc = nbrCOMdelayAcc[channel-1] + 1;
+                    indexCOMAcc = (nbrCOMdelayAcc[channel-1] + 1 + *COM_HEAD) % timeSeq.size();
                 }
                 else
-                    indexCOMAcc = nbrCOMdelayAcc[channel-1];
+                    indexCOMAcc = (nbrCOMdelayAcc[channel-1] + *COM_HEAD) % timeSeq.size();
                 index = findInsertPosition(timeSeqAcc[indexCOMAcc], TimeOfFlightAcc);
                 timeSeqAcc[indexCOMAcc].insert(index, TimeOfFlightAcc);
                 channelSeqAcc[indexCOMAcc].insert(index, channel-1);
@@ -128,12 +129,12 @@ void computeCoincidenceCount
         }
         else
         {
-            if (mark and timeSeq.first().size() >= nbrChannels)                            // 计算上一轮符合
+            if (mark and timeSeq[*COM_HEAD].size() >= nbrChannels)                            // 计算上一轮符合
             {
-                for (int i = 0; i < timeSeq.first().size()-nbrChannels+1; i++)
+                for (int i = 0; i < timeSeq[*COM_HEAD].size()-nbrChannels+1; i++)
                 {
-                    spacing = findSpacing(timeSeq.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence(channels, nbrChannels, channelSeq.first(), i, i+spacing)) // 查看该跨度内是否有符合
+                    spacing = findSpacing(timeSeq[*COM_HEAD], i, tolerance);          // 求符合窗口在起始位置处的跨度
+                    if (checkCoincidence(channels, nbrChannels, channelSeq[*COM_HEAD], i, i+spacing)) // 查看该跨度内是否有符合
                     {
                         (*nbrCoin)++;
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -141,10 +142,10 @@ void computeCoincidenceCount
                 }
                 if (nbrChannels == 2)
                 {
-                    for (int i = 0; i < timeSeqAcc.first().size()-2+1; i++)
+                    for (int i = 0; i < timeSeqAcc[*COM_HEAD].size()-2+1; i++)
                     {
-                        spacing = findSpacing(timeSeqAcc.first(), i, tolerance);          // 求符合窗口在起始位置处的跨度
-                        if (checkCoincidence(channels, 2, channelSeqAcc.first(), i, i+spacing)) // 查看该跨度内是否有符合
+                        spacing = findSpacing(timeSeqAcc[*COM_HEAD], i, tolerance);          // 求符合窗口在起始位置处的跨度
+                        if (checkCoincidence(channels, 2, channelSeqAcc[*COM_HEAD], i, i+spacing)) // 查看该跨度内是否有符合
                         {
                             (*nbrCoinAcc)++;
                             i = i+spacing;                                     // 计算过符合的区间可以跳过
@@ -153,14 +154,14 @@ void computeCoincidenceCount
                 }
             }
             mark = false;
-            QVector<int> v0;
-            timeSeq.first().clear(); timeSeq.removeFirst(); timeSeq.append(v0);
-            channelSeq.first().clear(); channelSeq.removeFirst(); channelSeq.append(v0);
+            timeSeq[*COM_HEAD].clear();
+            channelSeq[*COM_HEAD].clear();
             if (nbrChannels == 2)
             {
-                timeSeqAcc.first().clear(); timeSeqAcc.removeFirst(); timeSeqAcc.append(v0);
-                channelSeqAcc.first().clear(); channelSeqAcc.removeFirst(); channelSeqAcc.append(v0);
+                timeSeqAcc[*COM_HEAD].clear();
+                channelSeqAcc[*COM_HEAD].clear();
             }
+            *COM_HEAD = ((*COM_HEAD)++) % timeSeq.size();
         }
     }
 }

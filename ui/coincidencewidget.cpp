@@ -208,6 +208,7 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int f
             resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
         }
+        COM_HEAD = 0;
 
         emit askDealAcqBankSwitchCoin(index);
     }
@@ -223,7 +224,7 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDesc
              toleranceCalc, &nbrAccCoin,
              nbrCOMdelay, nbrCOMdelayAcc,
              delayInCOM, delayInCOMAcc,
-             timeCOMunit);
+             timeCOMunit, &COM_HEAD);
 }
 
 void CoincidenceWidget::dealTimeOut()
