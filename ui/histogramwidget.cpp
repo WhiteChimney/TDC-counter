@@ -112,8 +112,8 @@ void HistogramWidget::on_buttonStart_released()
         double intervalStart = timeStart + i*binWidth;
         histIntervals[i] = QwtInterval(intervalStart,intervalStart+binWidth);
     }
-    emit askDealAcqBankSwitchHist(index);
     timerHist->start(1000.0*accumulateTime);
+    emit requestHistParam(index);
 }
 
 void HistogramWidget::dealTimeOut()
@@ -126,6 +126,90 @@ void HistogramWidget::dealTimeOut()
     qwtHistPlot->setSamples(histSamples);
     ui->qwtPlot->replot();
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
+}
+
+void HistogramWidget::dealRequestHistParam(int index0, double *delayCN, int freqCOM)
+{
+
+    if (index == index0)
+    {
+//        delayCN = delayCN0;
+//        freqCOM = freqCOM0;
+//        if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
+//        {
+//            channels[0] = channel1-1;
+//            channels[1] = channel2-1;
+//            nbrChannels = 2;
+//            nbrCoinCalc = &nbrCoin;
+//            toleranceCalc = tolerance;
+//            delayCalc = new int[6]();
+//            delayCalc[channel2-1] = delay;
+//        }
+//        else                                   // 多通道模式计算符合计数
+//        {
+//            nbrChannels = 0;
+//            for (int i = 0; i < 6; i++)
+//            {
+//                if (channelMark[i])
+//                {
+//                    channels[nbrChannels] = i;
+//                    nbrChannels++;
+//                }
+//            }
+//            nbrCoinCalc = &nbrCoinMulti;
+//            toleranceCalc = toleranceMulti;
+//            delayCalc = delayMulti;
+//        }
+
+//        //    预处理 TDC 参数
+//        double timeCOM = 1000000.0/freqCOM;           // 单位为 us
+//        timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
+//        double delayTotal[6] = {0.0}, delayTotalAcc[6] = {0.0};
+//        double minDelay = delayCN[0] + delayCalc[0]/20.0/1000.0;
+//        for (int i = 0; i < 6; i++)
+//        {
+//            delayTotal[i] = delayCN[i] + delayCalc[i]/20.0/1000.0;
+//            if (delayTotal[i] < minDelay)
+//                minDelay = delayTotal[i];
+//            if (nbrChannels == 2)
+//            {
+//                delayTotalAcc[i] = delayTotal[i];
+//                if(i == channels[1])
+//                    delayTotalAcc[i] += delayAcc/20.0/1000.0;
+//            }
+//        }
+//        if (nbrChannels == 2 && delayAcc < 0)
+//            minDelay += delayAcc;
+//        int maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
+//        for (int i = 0; i < 6; i++)
+//        {
+//            delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+//            nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
+//            if (nbrCOMdelay[i] > maxNbrCOMdelay)
+//                maxNbrCOMdelay = nbrCOMdelay[i];
+//            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+//            if (nbrChannels == 2)
+//            {
+//                delayTotalAcc[i] -= minDelay;
+//                nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
+//                if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
+//                    maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
+//                delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
+//            }
+//        }
+
+//    //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
+//        resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
+//        resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
+//        if (nbrChannels == 2)
+//        {
+//            resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
+//            resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
+//        }
+//        COM_HEAD = 0;
+
+        emit askDealAcqBankSwitchHist(index);
+    }
 }
 
 void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr)

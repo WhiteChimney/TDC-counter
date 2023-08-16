@@ -21,11 +21,13 @@ public:
 
 signals:
     void returnSignal(int index);                  // 返回信号
+    void requestHistParam(int index);              // 请求用于画直方图的参数
     void askDealAcqBankSwitchHist(int index);      // 通知主窗口接上内存切换信号
     void askStopDealAcqBankSwitchHist(int index);  // 通知主窗口断掉内存切换信号
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
+    void dealRequestHistParam(int index, double *delayCN, int freqCOM);
     void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
 
 private slots:

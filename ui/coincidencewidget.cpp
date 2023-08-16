@@ -46,7 +46,6 @@ void CoincidenceWidget::on_buttonStart_released()
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
-        emit requestCoinParam(index);
         ui->buttonChangeToMulti->setEnabled(false);
         if (enableAccumulateTime)
         { // 如果需要与单道计数同步，发送同步请求
@@ -79,8 +78,6 @@ void CoincidenceWidget::on_buttonStart_released()
                                   QMessageBox::Ok);
             return;
         }
-
-        emit requestCoinParam(index);
         ui->buttonChangeToDual->setEnabled(false);
         if (enableAccumulateTimeMulti)
         { // 如果需要与单道计数同步，发送同步请求
@@ -95,6 +92,7 @@ void CoincidenceWidget::on_buttonStart_released()
         }
     }
     coinSavable = true; // 此时可保存数据
+    emit requestCoinParam(index);
 }
 
 void CoincidenceWidget::on_buttonStop_released()

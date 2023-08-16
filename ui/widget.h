@@ -51,6 +51,8 @@ public slots:
     // 符合子窗口同步停止
     void dealHistogramReturn(int index);
     // 关闭直方图子窗口
+    void dealRequestHistParam(int index);
+
     void dealAskDealAcqBankSwitchHist(int index);
     // 对接 Bank 切换与直方图槽函数
     void dealAskStopDealAcqBankSwitchHist(int index);
@@ -121,6 +123,7 @@ private:
 signals:
     void countParamReady(bool*, int*);
     void coinParamReady(int index, double *delayCN, int freqCOM);
+    void histParamReady(int index, double *delayCN, int freqCOM);
 
 public:
     void setupAcqIndicator();

@@ -7,6 +7,8 @@ void Widget::on_buttonHistogram_released()
     histW = new HistogramWidget(0, index);
     vHistWidget.append(histW);
     connect(histW,&HistogramWidget::returnSignal,this,&Widget::dealHistogramReturn);
+    connect(histW,&HistogramWidget::requestHistParam,this,&Widget::dealRequestHistParam);
+    connect(this,&Widget::histParamReady,histW,&HistogramWidget::dealRequestHistParam);
     connect(histW,&HistogramWidget::askDealAcqBankSwitchHist,this,&Widget::dealAskDealAcqBankSwitchHist);
     connect(histW,&HistogramWidget::askStopDealAcqBankSwitchHist,this,&Widget::dealAskStopDealAcqBankSwitchHist);
     histW->setWindowTitle("直方图"+QString::number(index+1));
@@ -19,6 +21,11 @@ void Widget::dealHistogramReturn(int index)
     histW = vHistWidget.at(index);
     histW->setWindowState(Qt::WindowNoState);
     histW->close();
+}
+
+void Widget::dealRequestHistParam(int index)
+{
+    emit histParamReady(index, delayCN, freqCOM);
 }
 
 void Widget::dealAskDealAcqBankSwitchHist(int index)
