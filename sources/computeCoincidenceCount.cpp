@@ -70,7 +70,6 @@ void computeCoincidenceCount
     if (nbrChannels < 2 or nbrChannels > 6) return;
 
 //    读取时间数据
-//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     long nbrSamples = dataDescPtr->nbrSamples;
 
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算
