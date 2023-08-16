@@ -61,10 +61,20 @@ void clear2DintVector(QList<QVector<int>> *v);
 
 void resizeSeqLength(QList<QVector<int>> *v, int l);
 
-void computeHistogramCount
-        (AqT3DataDescriptor* dataDescPtr,
-         int channel1, int channel2, double delay,
-         double timeStart, double binWidth, int nbrIntervals, int* binHeight);
+void resizeSeqLength(QList<QVector<double>> *v, int l);
+
+void resizeSeqLength(QVector<QVector<int>> *v, int l);
+
+void resizeSeqLength(QVector<QVector<double>> *v, int l);
+
+void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
+                           QVector<QVector<double>> timeSeq1, QVector<QVector<double>> timeSeq2,
+                           int channel1, int channel2, double delay,
+                           double timeStart, double binWidth, int nbrIntervals, int* binHeight,
+                           int *nbrCOMdelay,
+                           int *delayInCOM,
+                           int timeCOMunit,
+                           int *COM_HEAD);
 
 enum RecordMode {notRecording, SingleCountOnly, CoinCountOnly, SingleAndCoinCount};
 

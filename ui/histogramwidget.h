@@ -43,6 +43,15 @@ private:
     double accumulateTime = 1.0;   // 累计时间
     double delay = 0.0;            // 延时
 
+    // TDC 参数
+    QVector<QVector<double>> timeSeq1, timeSeq2;
+    int nbrCOMdelay[6] = {0};
+    int delayInCOM[6] = {0};
+    int timeCOMunit;
+    int COM_HEAD = 0;
+    double *delayCN;           // 各通道固有延时
+    int freqCOM;               // TDC COM 重复频率
+
     // 画图参数
     double timeStart, timeStop;    // 起止时间
     double binWidth;               // bin 宽
