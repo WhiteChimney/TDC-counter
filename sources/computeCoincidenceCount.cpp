@@ -6,13 +6,7 @@
 
 // 计算符合计数
 
-bool channelToBeCalculated(int channel, int *channels, int nbrChannels)
-{
-    for (int i = 0; i < nbrChannels; i++)
-        if (channel-1 == channels[i])
-            return true;
-    return false;
-}
+bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
 
 int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 {

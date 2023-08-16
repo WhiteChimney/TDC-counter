@@ -4,6 +4,8 @@
 
 // 计算统计直方图计数
 
+bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
+
 void countSingle(AqT3DataDescriptor* dataDescPtr, int channel1,
                  double timeStart, double binWidth, int nbrIntervals, int* binHeight)
 {
@@ -24,8 +26,18 @@ void countSingle(AqT3DataDescriptor* dataDescPtr, int channel1,
     }
 }
 
-void countDifference(AqT3DataDescriptor* dataDescPtr, int channel1, int channel2, double delay,
-                 double timeStart, double binWidth, int nbrIntervals, int* binHeight)
+//void countDifference(AqT3DataDescriptor* dataDescPtr,
+//                     QVector<QVector<int>> timeSeq1, QVector<QVector<int>> timeSeq2,
+//                     QVector<QVector<int>> channelSeq1, QVector<QVector<int>> channelSeq2,
+//                     int channel1, int channel2, double delay,
+//                     double timeStart, double binWidth, int nbrIntervals, int* binHeight,
+//                     int *nbrCOMdelay,
+//                     int *delayInCOM,
+//                     int timeCOMunit,
+//                     int *COM_HEAD)
+void countDifference(AqT3DataDescriptor* dataDescPtr,
+                     int channel1, int channel2, double delay,
+                     double timeStart, double binWidth, int nbrIntervals, int* binHeight)
 {
     long nbrSamples = dataDescPtr->nbrSamples;
     double TOF1 = 0.0, TOF2 = 0.0;

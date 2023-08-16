@@ -12,14 +12,13 @@ RC_ICONS = resources/TDC-Counter.ico
 
 SOURCES += \
     main.cpp \
-    sources/clear2DintVector.cpp \
     sources/computeCoincidenceCount.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/customizedCommands.cpp \
     sources/mergeDataFiles.cpp \
-    sources/resizeSeqLength.cpp \
+    sources/vectorProcessing.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
     tools/cliplcdnumber.cpp \
