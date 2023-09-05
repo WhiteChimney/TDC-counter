@@ -45,7 +45,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
                     binHeight[index]++;
             }
             timeSeq1[*COM_HEAD].clear();
-            *COM_HEAD = ((*COM_HEAD)++) % timeSeq1.size();
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
         }
     }
 }
@@ -85,11 +85,11 @@ void countDifference(AqT3DataDescriptor* dataDescPtr,
         }
         else if (channel == 0 or channel == 7)
         {
-            for (int i = 0; i < timeSeq1.size(); i++)
+            for (int i = 0; i < timeSeq1[*COM_HEAD].size(); i++)
             {
-                for (int j = 0; j < timeSeq2.size(); j++)
+                for (int j = 0; j < timeSeq2[*COM_HEAD].size(); j++)
                 {
-                    double timeDiff = timeSeq1[*COM_HEAD][i] - timeSeq2[*COM_HEAD][j];
+                    double timeDiff = timeSeq2[*COM_HEAD][i] - timeSeq1[*COM_HEAD][j];
                     int index = int((timeDiff+delay-timeStart)/binWidth);
                     if (index >= 0 and index < nbrIntervals)
                         binHeight[index]++;
@@ -97,7 +97,7 @@ void countDifference(AqT3DataDescriptor* dataDescPtr,
             }
             timeSeq1[*COM_HEAD].clear();
             timeSeq2[*COM_HEAD].clear();
-            *COM_HEAD = ((*COM_HEAD)++) % timeSeq1.size();
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
         }
     }
 }

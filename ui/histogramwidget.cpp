@@ -128,15 +128,13 @@ void HistogramWidget::dealTimeOut()
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
 }
 
-void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, int freqCOM0)
+void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double freqCOM0)
 {
 
     if (index == index0)
     {
         delayCN = delayCN0;
         freqCOM = freqCOM0;
-        channel1 = channel1-1;
-        channel2 = channel2-1;
 
         //    预处理 TDC 参数
         double timeCOM = 1000000.0/freqCOM;           // 单位为 us

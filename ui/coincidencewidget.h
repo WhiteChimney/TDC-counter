@@ -27,7 +27,7 @@ signals:
 
 public slots:
     void dealTimeOut();                                     // 累计时间到，刷新计数
-    void dealRequestCoinParam(int index, double *delayCN, int freqCOM);
+    void dealRequestCoinParam(int index, double *delayCN, double freqCOM);
     void dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr);  // 内存切换，计算计数
     void dealSaveCoinData();                                // 保存数据
 
@@ -80,7 +80,7 @@ private:
     QList<QVector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
     QList<QVector<int>> channelSeq, channelSeqAcc; // 用于存放通道序列
     double *delayCN;           // 各通道固有延时
-    int freqCOM;               // TDC COM 重复频率
+    double freqCOM;               // TDC COM 重复频率
 
     // 数据保存
     bool coinSavable = false;  // 判断是否可保存

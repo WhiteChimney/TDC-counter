@@ -43,13 +43,13 @@ void Widget::on_buttonExit_released()
 void Widget::fetchUiData()
 {
     // TDC 设置
-    freqCOM = int(1000*ui->textFreqCOM->text().toDouble());
+    freqCOM = 1000.0*ui->textFreqCOM->text().toDouble();
     enableCountEvents = ui->checkboxEnableCountEvents->isChecked();
     if (enableCountEvents)
         countEvents = int(1000*ui->textCountEvents->text().toDouble());
     else
     {
-        countEvents = freqCOM / 100;
+        countEvents = int(freqCOM/100.0);
         ui->textCountEvents->setText(QString::number(countEvents/1000));
     }
     channelConfig[0] = true;
@@ -107,7 +107,7 @@ void Widget::fetchUiData()
 void Widget::pushUiData()
 {
     // TDC 设置
-    ui->textFreqCOM->setText(QString::number(freqCOM/1000));
+    ui->textFreqCOM->setText(QString::number(freqCOM/1000.0));
     ui->checkboxEnableCountEvents->setChecked(enableCountEvents);
     ui->textCountEvents->setEnabled(enableCountEvents);
     ui->textCountEvents->setText(QString::number(countEvents/1000));
@@ -193,7 +193,7 @@ void Widget::loadFromIni()
     ui->tabWidget->setCurrentIndex(configIni->value("UI设置/currentPage").toInt());
 
 //    configure TDC
-    freqCOM = configIni->value("TDC配置/freqCOM").toInt();
+    freqCOM = configIni->value("TDC配置/freqCOM").toDouble();
     enableCountEvents = configIni->value("TDC配置/enableCountEvents").toBool();
     countEvents = configIni->value("TDC配置/countEvents").toInt();
     for(int i = 0; i < 7; i++)

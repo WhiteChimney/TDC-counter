@@ -27,7 +27,7 @@ signals:
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
-    void dealRequestHistParam(int index, double *delayCN, int freqCOM);
+    void dealRequestHistParam(int index, double *delayCN, double freqCOM);
     void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
 
 private slots:
@@ -50,7 +50,7 @@ private:
     int timeCOMunit;
     int COM_HEAD = 0;
     double *delayCN;           // 各通道固有延时
-    int freqCOM;               // TDC COM 重复频率
+    double freqCOM;               // TDC COM 重复频率
 
     // 画图参数
     double timeStart, timeStop;    // 起止时间

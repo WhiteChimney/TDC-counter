@@ -129,7 +129,7 @@ void CoincidenceWidget::on_buttonStop_released()
     clear2DintVector(&channelSeqAcc);
 }
 
-void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, int freqCOM0)
+void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, double freqCOM0)
 {
     if (index == index0)
     {

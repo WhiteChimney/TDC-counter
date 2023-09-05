@@ -122,8 +122,8 @@ private:
 
 signals:
     void countParamReady(bool*, int*);
-    void coinParamReady(int index, double *delayCN, int freqCOM);
-    void histParamReady(int index, double *delayCN, int freqCOM);
+    void coinParamReady(int index, double *delayCN, double freqCOM);
+    void histParamReady(int index, double *delayCN, double freqCOM);
 
 public:
     void setupAcqIndicator();
@@ -131,7 +131,7 @@ public:
 
     // 需要配置的 TDC 参数
 private:
-    int freqCOM = 1000;             // kHz
+    double freqCOM = 1000.0;             // kHz
     bool enableCountEvents = false;
     int countEvents = 10;           // kHz
     bool channelConfig[7];
