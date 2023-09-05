@@ -105,10 +105,6 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
-    void on_checkBoxNbrCOMbuffer_stateChanged(int arg1);
-
-    void on_textNbrCOMbuffer_editingFinished();
-
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）

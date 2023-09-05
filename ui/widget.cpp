@@ -43,10 +43,6 @@ Widget::Widget(QWidget *parent)
     ui->checkboxEnableCountEvents->setToolTip(
                 tr("设置 TDC 的 COM 通道累计多少信号个数后进行内存切换，\n") +
                 tr("默认为 COM 频率的 1/100"));
-    ui->checkBoxNbrCOMbuffer->setToolTip(
-                tr("缓存中保留的 TDC 内存切换的数据指针个数，\n") +
-                tr("通道间延时差较大且需要计算符合时需要适当调大，\n") +
-                tr("但太大可能导致程序内存占用较高"));
 
 //     初始化设备
     status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,

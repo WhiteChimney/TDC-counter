@@ -26,16 +26,3 @@ void Widget::on_checkboxEnableCountEvents_released()
     else
         ui->textCountEvents->setEnabled(false);
 }
-
-void Widget::on_checkBoxNbrCOMbuffer_stateChanged(int arg1)
-{
-    ui->textNbrCOMbuffer->setEnabled(arg1);
-}
-
-void Widget::on_textNbrCOMbuffer_editingFinished()
-{
-    nbrCOMbuffer = ui->textNbrCOMbuffer->text().toInt();
-    if (nbrCOMbuffer < 1)
-        nbrCOMbuffer = 1;
-    ui->textNbrCOMbuffer->setText(QString::number(nbrCOMbuffer));
-}
