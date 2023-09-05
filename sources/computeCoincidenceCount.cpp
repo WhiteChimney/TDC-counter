@@ -154,7 +154,7 @@ void computeCoincidenceCount
                 timeSeqAcc[*COM_HEAD].clear();
                 channelSeqAcc[*COM_HEAD].clear();
             }
-            *COM_HEAD = ((*COM_HEAD)++) % timeSeq.size();
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
         }
     }
 }
