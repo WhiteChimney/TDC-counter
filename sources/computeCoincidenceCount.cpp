@@ -6,7 +6,9 @@
 
 // 计算符合计数
 
-int findInsertPosition2(QVector<int> timeSeq, int TimeOfFlight)
+bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
+
+int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 {
     if (timeSeq.size() == 0)
         return 0;
@@ -22,7 +24,7 @@ int findInsertPosition2(QVector<int> timeSeq, int TimeOfFlight)
     return index;
 }
 
-int findSpacing2(QVector<int> timeSeq, int i, int toleranceMulti)
+int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
 {
     int spacing = 0;
     while (timeSeq.at(i+spacing+1) - timeSeq.at(i) <= toleranceMulti and i+spacing+1 < timeSeq.size())
@@ -30,195 +32,129 @@ int findSpacing2(QVector<int> timeSeq, int i, int toleranceMulti)
     return spacing;
 }
 
-int checkCoincidence2(int channel1, int channel2, QVector<int> channelSeq, int start, int end)
+int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, int start, int end)
 {
     bool channelMark[6] = {0};
-    for (int i = start; i <= end; i++)
+    for (int i = start; i <= end; i++)         // 判断 channelSeq[start,end-1] 这个序列中有哪些通道号
     {
-        channelMark[channelSeq.at(i)] = true;
+        channelMark[channelSeq[i]] = true;
     }
+                                               // 到这一步 channelMark 数组中包含了哪几个通道为符合通道
 
-    if (channelMark[channel1-1] and channelMark[channel2-1])
-        return 1;
-    else
-        return 0;
+    for (int i = 0; i < nbrChannels; i++)                // 再判断 channelMark 数组中的通道是否包含所要求的符合通道 channelMulti
+    {
+        if (!channelMark[channels[i]])
+            return 0;
+    }
+    return 1;
 }
 
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoin, int* nbrAccCoin,
-         int channel1, int channel2,
+         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> timeSeqAcc,
+         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> channelSeqAcc,
+         int nbrChannels,
+         int* channels,
+         int* nbrCoin,
          int tolerance,
-         int delay, int delayAcc)
+         int* nbrCoinAcc,
+         int *nbrCOMdelay, int *nbrCOMdelayAcc,
+         int *delayInCOM, int *delayInCOMAcc,
+         int timeCOMunit,
+         int *COM_HEAD)
 {
-//    假设每个 COM 周期内的原始数据的时间是升序排列的
+//    判定通道数是否合法
+    if (nbrChannels < 2 or nbrChannels > 6) return;
 
-//    先读取时间数据
+//    读取时间数据
     long nbrSamples = dataDescPtr->nbrSamples;
 
     bool mark = false; // 用于标记上轮是否有计数来判断是否需要进行符合计算
-    QVector<int> channelSeq, channelSeqAcc; // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-    QVector<int> timeSeq, timeSeqAcc;    // 升序排列后的时间，与通道编号一一对应
     int index = 0; // 用于标记元素插入位置
     int spacing = 0; // 用于表示符合窗口跨度
-
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
 //        int flag = (sample & 0x80000000) >> 31;      //“sample”值右移31位为flag位
         int channel = (sample & 0x70000000) >> 28;   //右移28位为channel位
         int TimeOfFlight = sample & 0x0FFFFFFF;             //最右侧28位为计数值
-        int TimeOfFlightAcc;
-
+        int TimeOfFlightAcc = 0;
 
         // flag 为 0 表示 COM 信号，channel 为 7 表示内存切换
-        if (channel == channel1 or channel == channel2)                        // Channel=1-6 are the physical channels;
+        if (channel != 0 and channel != 7)                        // Channel=1-6 are the physical channels;
                                                 // Data = an integer giving the time value in units of 50 ps
                                                 // Channel=7 is for marker data.
         {
-            if (channel == channel1)
+            if (!channelToBeCalculated(channel,channels,nbrChannels)) continue;
+
+            int indexCOM, indexCOMAcc;
+            if (nbrChannels == 2)
+                TimeOfFlightAcc = TimeOfFlight + delayInCOMAcc[channel-1];
+            TimeOfFlight += delayInCOM[channel-1];
+            // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
+            if (TimeOfFlight > timeCOMunit)
             {
-                TimeOfFlightAcc = TimeOfFlight;
+                TimeOfFlight -= timeCOMunit;
+                indexCOM = (nbrCOMdelay[channel-1] + 1 + *COM_HEAD) % timeSeq.size();
             }
             else
+                indexCOM = (nbrCOMdelay[channel-1] + *COM_HEAD) % timeSeq.size();
+            index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
+            timeSeq[indexCOM].insert(index, TimeOfFlight);
+            channelSeq[indexCOM].insert(index, channel-1);
+            if (nbrChannels == 2)
             {
-                TimeOfFlight += delay;
-                TimeOfFlightAcc = TimeOfFlight + delayAcc;
+                if (TimeOfFlightAcc > timeCOMunit)
+                {
+                    TimeOfFlightAcc -= timeCOMunit;
+                    indexCOMAcc = (nbrCOMdelayAcc[channel-1] + 1 + *COM_HEAD) % timeSeq.size();
+                }
+                else
+                    indexCOMAcc = (nbrCOMdelayAcc[channel-1] + *COM_HEAD) % timeSeq.size();
+                index = findInsertPosition(timeSeqAcc[indexCOMAcc], TimeOfFlightAcc);
+                timeSeqAcc[indexCOMAcc].insert(index, TimeOfFlightAcc);
+                channelSeqAcc[indexCOMAcc].insert(index, channel-1);
             }
-            index = findInsertPosition2(timeSeq, TimeOfFlight);        // 按时间升序排列
-            timeSeq.insert(index, TimeOfFlight);
-            channelSeq.insert(index, channel-1);
-            index = findInsertPosition2(timeSeqAcc, TimeOfFlightAcc);
-            timeSeqAcc.insert(index, TimeOfFlightAcc);
-            channelSeqAcc.insert(index, channel-1);
             mark = true;
         }
-        else if (channel == 0 or channel == 7)
+        else
         {
-            if (mark and timeSeq.size() >= 2)                            // 计算上一轮符合
+            if (mark and timeSeq[*COM_HEAD].size() >= nbrChannels)                            // 计算上一轮符合
             {
-                for (int i = 0; i < timeSeq.size()-2+1; i++)
+                for (int i = 0; i < timeSeq[*COM_HEAD].size()-nbrChannels+1; i++)
                 {
-                    spacing = findSpacing2(timeSeq, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence2(channel1, channel2, channelSeq, i, i+spacing)) // 查看该跨度内是否有符合
+                    spacing = findSpacing(timeSeq[*COM_HEAD], i, tolerance);          // 求符合窗口在起始位置处的跨度
+                    if (checkCoincidence(channels, nbrChannels, channelSeq[*COM_HEAD], i, i+spacing)) // 查看该跨度内是否有符合
                     {
                         (*nbrCoin)++;
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
                     }
                 }
-                for (int i = 0; i < timeSeqAcc.size()-2+1; i++)
+                if (nbrChannels == 2)
                 {
-                    spacing = findSpacing2(timeSeqAcc, i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (checkCoincidence2(channel1, channel2, channelSeqAcc, i, i+spacing)) // 查看该跨度内是否有符合
+                    for (int i = 0; i < timeSeqAcc[*COM_HEAD].size()-2+1; i++)
                     {
-                        (*nbrAccCoin)++;
-                        i = i+spacing;                                     // 计算过符合的区间可以跳过
+                        spacing = findSpacing(timeSeqAcc[*COM_HEAD], i, tolerance);          // 求符合窗口在起始位置处的跨度
+                        if (checkCoincidence(channels, 2, channelSeqAcc[*COM_HEAD], i, i+spacing)) // 查看该跨度内是否有符合
+                        {
+                            (*nbrCoinAcc)++;
+                            i = i+spacing;                                     // 计算过符合的区间可以跳过
+                        }
                     }
                 }
             }
             mark = false;
-            timeSeq.clear();
-            channelSeq.clear();
-            timeSeqAcc.clear();
-            channelSeqAcc.clear();
+            timeSeq[*COM_HEAD].clear();
+            channelSeq[*COM_HEAD].clear();
+            if (nbrChannels == 2)
+            {
+                timeSeqAcc[*COM_HEAD].clear();
+                channelSeqAcc[*COM_HEAD].clear();
+            }
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//#include "AcqirisImport.h"
-//#include "AcqirisT3Import.h"
-//#include <cmath>
-
-//// 计算符合计数
-
-//void computeCoincidenceCount
-//        (AqT3DataDescriptor* dataDescPtr,
-//         int* nbrCoin, int* nbrAccCoin,
-//         int channel1, int channel2,
-//         int tolerance,
-//         int delay, int delayAcc)
-//{
-//    long nbrSamples = dataDescPtr->nbrSamples;
-
-//    int mark = 0;
-//    int nCOM = 0;
-//    int *TOF[2];                             // TOF: time of flight 单光子到达时间
-//    for (int i = 0; i < 2; ++i) TOF[i] = new int[nbrSamples]();
-
-//    for (long n = 0 ; n < nbrSamples ; ++n)
-//    {
-//        int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
-////        int flag = (sample & 0x80000000) >> 31;      //“sample”值右移31位为flag位
-//        int channel = (sample & 0x70000000) >> 28;   //右移28位为channel位
-//        int TimeOfFlight = sample & 0x0FFFFFFF;             //最右侧28位为计数值
-
-//        // flag 为 0 表示 COM 信号，channel 为 7 表示内存切换
-//        if (channel == channel1)                        // Channel=1-6 are the physical channels;
-//                                                // Data = an integer giving the time value in units of 50 ps
-//                                                // Channel=7 is for marker data.
-//        {
-//            TOF[0][n] = TimeOfFlight;
-//            mark = 1;
-//        }
-//        else if (channel == channel2)
-//        {
-//            TOF[1][n] = TimeOfFlight;
-//            mark = 1;
-//        }
-//        else if (channel == 0 or channel == 7)                                     // Channel = 0 is for start the next event.
-//        {
-//            if (mark == 1)                            // 计算上一轮符合
-//            {
-//                for (int i = nCOM; i < n; i++)
-//                    if (TOF[0][i] > 0)
-//                    {
-//                        for (int j = nCOM; j < n; j++)
-//                        {
-//                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay)<=tolerance/2.0)
-//                                (*nbrCoin)++;
-//                            if(TOF[1][j]!=0 && abs(TOF[0][i]-TOF[1][j]-delay-delayAcc)<=tolerance/2.0)
-//                                (*nbrAccCoin)++;
-//                        }
-//                    }
-//                nCOM = n;
-//                mark = 0;
-//            }
-//        }
-//    }
-//    for (int i = 0; i < 2; ++i) delete [] TOF[i];
-//}

@@ -13,19 +13,22 @@ RC_ICONS = resources/TDC-Counter.ico
 SOURCES += \
     main.cpp \
     sources/computeCoincidenceCount.cpp \
-    sources/computeCoincidenceCountMulti.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/customizedCommands.cpp \
     sources/mergeDataFiles.cpp \
+    sources/vectorProcessing.cpp \
     tools/QSimpleLed.cpp \
     tools/acquisitionthread.cpp \
+    tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
     tools/dp832a_usb.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
+    ui/coincidencewidget_saveData.cpp \
+    ui/coincidencewidget_ui.cpp \
     ui/extAppWidget_dp832a_serial.cpp \
     ui/extAppWidget_dp832a_usb.cpp \
     ui/extAppWidget_tsp01.cpp \
@@ -33,7 +36,16 @@ SOURCES += \
     ui/histogramwidget.cpp \
     ui/statisticswidget.cpp \
     ui/testwidget.cpp \
-    ui/widget.cpp
+    ui/widget.cpp \
+    ui/widget_acquisition.cpp \
+    ui/widget_coincidence.cpp \
+    ui/widget_config.cpp \
+    ui/widget_extApp.cpp \
+    ui/widget_histogram.cpp \
+    ui/widget_saveData.cpp \
+    ui/widget_singleCount.cpp \
+    ui/widget_statistics.cpp \
+    ui/widget_ui.cpp
 
 HEADERS += \
     include/Acqiris/AcqirisD1Import.h \
@@ -48,9 +60,11 @@ HEADERS += \
     include/VISA/visa.h \
     include/VISA/visatype.h \
     include/VISA/vpptype.h \
+    include/projectInfo.h \
     include/stdafx.h \
     tools/QSimpleLed.h \
     tools/acquisitionthread.h \
+    tools/cliplcdnumber.h \
     tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \

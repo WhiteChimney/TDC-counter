@@ -112,8 +112,8 @@ void HistogramWidget::on_buttonStart_released()
         double intervalStart = timeStart + i*binWidth;
         histIntervals[i] = QwtInterval(intervalStart,intervalStart+binWidth);
     }
-    emit askDealAcqBankSwitchHist(index);
     timerHist->start(1000.0*accumulateTime);
+    emit requestHistParam(index);
 }
 
 void HistogramWidget::dealTimeOut()
@@ -128,10 +128,57 @@ void HistogramWidget::dealTimeOut()
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
 }
 
+void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double freqCOM0)
+{
+
+    if (index == index0)
+    {
+        delayCN = delayCN0;
+        freqCOM = freqCOM0;
+
+        //    预处理 TDC 参数
+        double timeCOM = 1000000.0/freqCOM;           // 单位为 us
+        timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
+        double delayTotal[6] = {0.0};
+        double minDelay = delayCN[0];
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] = delayCN[i];
+            if (delayTotal[i] < minDelay)
+                minDelay = delayTotal[i];
+        }
+        int maxNbrCOMdelay = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+            nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
+            if (nbrCOMdelay[i] > maxNbrCOMdelay)
+                maxNbrCOMdelay = nbrCOMdelay[i];
+            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+        }
+
+    //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
+        resizeSeqLength(&timeSeq1, maxNbrCOMdelay+2);
+        resizeSeqLength(&timeSeq2, maxNbrCOMdelay+2);
+        COM_HEAD = 0;
+
+        emit askDealAcqBankSwitchHist(index);
+    }
+}
+
 void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr)
 {
+//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
     // prepare samples to plot
-    computeHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
+    computeHistogramCount(dataDescPtr,
+                          timeSeq1, timeSeq2,
+                          channel1, channel2, delay,
+                          timeStart, binWidth, nbrIntervals, binHeight,
+                          nbrCOMdelay,
+                          delayInCOM,
+                          timeCOMunit,
+                          &COM_HEAD);
+//    computeHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
 }
 
 void HistogramWidget::on_buttonStop_released()

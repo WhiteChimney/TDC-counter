@@ -3,6 +3,7 @@
 
 #include <QWidget>
 
+#include "projectInfo.h"
 #include "stdafx.h"
 #include "testwidget.h"
 #include "histogramwidget.h"
@@ -38,6 +39,8 @@ public slots:
     // 定时刷新单道计数
     void dealCoincidenceReturn(int index);
     // 关闭符合子窗口
+    void dealRequestCoinParam(int index);
+
     void dealAskDealAcqBankSwitchCoin(int index);
     // 将 Bank 切换信号与符合子窗口的槽对接
     void dealAskStopDealAcqBankSwitchCoin(int index);
@@ -48,6 +51,8 @@ public slots:
     // 符合子窗口同步停止
     void dealHistogramReturn(int index);
     // 关闭直方图子窗口
+    void dealRequestHistParam(int index);
+
     void dealAskDealAcqBankSwitchHist(int index);
     // 对接 Bank 切换与直方图槽函数
     void dealAskStopDealAcqBankSwitchHist(int index);
@@ -74,8 +79,6 @@ private slots:
     // 开始采集
     void on_buttonStopAcq_released();
     // 停止采集线程
-    void on_buttonApplyConfig_released();
-    // 应用 TDC 配置
     void on_buttonStartCount_released();
     // 开启计数功能
     void on_buttonStopCount_released();
@@ -100,6 +103,8 @@ private slots:
 
     void on_buttonExternalApplications_released();
 
+    void on_buttonCheckUpdate_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -113,6 +118,8 @@ private:
 
 signals:
     void countParamReady(bool*, int*);
+    void coinParamReady(int index, double *delayCN, double freqCOM);
+    void histParamReady(int index, double *delayCN, double freqCOM);
 
 public:
     void setupAcqIndicator();
@@ -120,9 +127,9 @@ public:
 
     // 需要配置的 TDC 参数
 private:
-    int freqCOM = 1000;
+    double freqCOM = 1000.0;             // kHz
     bool enableCountEvents = false;
-    int countEvents = 100;
+    int countEvents = 10;           // kHz
     bool channelConfig[7];
     double level[7] = {0.5};
     int slope[7] = {0};
@@ -138,10 +145,13 @@ private:
     ViStatus configStatus = -1;
     AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
+    QVector<AqT3DataDescriptor*> dataPtrList;
 
     // 单道计数参数
 private:
     int nbrSCC[6] = {0};
+    int nbrSCCfuture[6] = {0};
+    double delayCN[7] = {0.0};
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
@@ -149,8 +159,12 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
+    int nbrCOMbuffer = 1;
 public:
     int* getSingleCountPtr();
+//    void updateDataPtrList(AqT3DataDescriptor*);
+//signals:
+//    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
 
     // 数据保存参数
 private:

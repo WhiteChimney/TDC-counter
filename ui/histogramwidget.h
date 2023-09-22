@@ -21,12 +21,14 @@ public:
 
 signals:
     void returnSignal(int index);                  // 返回信号
+    void requestHistParam(int index);              // 请求用于画直方图的参数
     void askDealAcqBankSwitchHist(int index);      // 通知主窗口接上内存切换信号
     void askStopDealAcqBankSwitchHist(int index);  // 通知主窗口断掉内存切换信号
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
-    void dealAcqThreadBankSwitchHist(AqT3DataDescriptor*); // 内存切换时累计计数
+    void dealRequestHistParam(int index, double *delayCN, double freqCOM);
+    void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
 
 private slots:
     void on_buttonReturn_released();
@@ -40,6 +42,15 @@ private:
     int channel1, channel2;        // 通道
     double accumulateTime = 1.0;   // 累计时间
     double delay = 0.0;            // 延时
+
+    // TDC 参数
+    QVector<QVector<double>> timeSeq1, timeSeq2;
+    int nbrCOMdelay[6] = {0};
+    int delayInCOM[6] = {0};
+    int timeCOMunit;
+    int COM_HEAD = 0;
+    double *delayCN;           // 各通道固有延时
+    double freqCOM;               // TDC COM 重复频率
 
     // 画图参数
     double timeStart, timeStop;    // 起止时间

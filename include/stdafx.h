@@ -35,26 +35,46 @@ ViStatus configTDC
          int *slope,
          AqT3ReadParameters* readParamPtr);
 
-void computeSingleChannelCount(AqT3DataDescriptor*,int*);
+void computeSingleChannelCount
+        (int* nbrSCC, int* nbrSCCfuture,
+         AqT3DataDescriptor* dataDescPtr,
+         double *delayCN,
+         int freqCOM, int countEvents);
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoin, int* nbrAccCoin,
-         int channel1, int channel2,
+         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> timeSeqAcc,
+         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> channelSeqAcc,
+         int nbrChannels,
+         int* channels,
+         int* nbrCoin,
          int tolerance,
-         int delay, int delayAcc);
+         int* nbrCoinAcc,
+         int *nbrCOMdelay, int *nbrCOMdelayAcc,
+         int *delayInCOM, int *delayInCOMAcc,
+         int timeCOMunit,
+         int *COM_HEAD);
 
-void computeCoincidenceCountMulti
-        (AqT3DataDescriptor* dataDescPtr,
-         int* nbrCoinMulti,
-         bool* channelMulti,
-         int toleranceMulti,
-         int* delayMulti);
+void clear2DintVector(QList<QVector<int>> *v);
 
-void computeHistogramCount
-        (AqT3DataDescriptor* dataDescPtr,
-         int channel1, int channel2, double delay,
-         double timeStart, double binWidth, int nbrIntervals, int* binHeight);
+void resizeSeqLength(QList<QVector<int>> *v, int l);
+
+void resizeSeqLength(QList<QVector<double>> *v, int l);
+
+void resizeSeqLength(QVector<QVector<int>> *v, int l);
+
+void resizeSeqLength(QVector<QVector<double>> *v, int l);
+
+void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
+                           QVector<QVector<double>> timeSeq1, QVector<QVector<double>> timeSeq2,
+                           int channel1, int channel2, double delay,
+                           double timeStart, double binWidth, int nbrIntervals, int* binHeight,
+                           int *nbrCOMdelay,
+                           int *delayInCOM,
+                           int timeCOMunit,
+                           int *COM_HEAD);
 
 enum RecordMode {notRecording, SingleCountOnly, CoinCountOnly, SingleAndCoinCount};
 

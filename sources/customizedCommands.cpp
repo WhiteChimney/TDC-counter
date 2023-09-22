@@ -35,8 +35,8 @@ class ExternalApplicationsWidget;
 
 
 double volinitial=0,volch3=0,volch1=0;
-QFile  myfile("C:/Users/EntangleQKD/Desktop/补测数据/50km noise=0.1-20230418.txt");
-// DP832A_USB* device1;
+QFile  myfile("C:/Users/217-Entangle/Desktop/数据/0km 60ghz.txt");
+DP832A_USB* device1;
 
 
 //  测试 按钮被按下
@@ -45,16 +45,16 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 
 //  DP832A_USB device1("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
 //    DP832A_USB device2("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
-//    device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
-//    device1->initializeDevice();
+    device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700288::INSTR",this);
+    device1->initializeDevice();
 
-//    device1->setVoltage(1,0.1);
+    device1->setVoltage(1,0.1);
 
-//    qDebug() << device1->getVoltage(1);
+    qDebug() << device1->getVoltage(1);
 
-//    device1->setVoltage(1,0.5);
+    device1->setVoltage(1,0.5);
 
-//    device1->closeDevice();
+    device1->closeDevice();
 
 
 
@@ -229,14 +229,14 @@ void ExternalApplicationsWidget::on_buttonTest_released()
 //  开始 按钮被按下
 void ExternalApplicationsWidget::customizedSPcommands_start()
 {
-//      device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
-//      device1->initializeDevice();
-//      QString commandAskVOL = ":APPL? CH1,VOLT";
-//      double answervol = device1->getVoltage(1);                       // 读取回复
-//      volinitial  = answervol;                 // Qt 内输出结果
+      device1 = new DP832A_USB("USB0::0x1AB1::0x0E11::DP8B240700265::INSTR",this);
+      device1->initializeDevice();
+      QString commandAskVOL = ":APPL? CH1,VOLT";
+      double answervol = device1->getVoltage(1);                       // 读取回复
+      volinitial  = answervol;                 // Qt 内输出结果
 
       qDebug() << "开始自定义程序";
-      myfile.open(QIODevice::WriteOnly | QIODevice::Text);
+    myfile.open(QIODevice::WriteOnly | QIODevice::Text);
 //    QString commandAskVOL = ":APPL? CH1,VOLT";
 //    sendData(commandAskVOL);
 //    QThread::msleep(100);                              // 加延时，不然读不到数据
@@ -263,7 +263,7 @@ void ExternalApplicationsWidget::customizedSPcommands_stop()
 {
 //    qDebug() << "停止自定义程序";
       myfile.close();
-//      device1->closeDevice();
+      device1->closeDevice();
 }
 
 //  单道计数刷新时
@@ -288,24 +288,23 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //      th1r = tsp->getTemperature();               //读取温度
 //    qDebug()<< "输出电压"<<volinitial;
 
-    if(i<5){
+    if(i<2){
    coin10=coin10+coin10r;                //累计10s内的数据
    coin01=coin01+coin01r;
    coin11=coin11+coin11r;
    coin00=coin00+coin00r;
     }
     else{
-//       th1 = tsp->getTemperature();
-       QString str;
-       str = QString::number(th1,'f',2);
+       th1 = tsp->getTemperature();
+      QString str;
+//       str = QString::number(th1,'f',2);
 //       th1 = str.toDouble();
        error1 = (double)(coin10+coin01)/(coin00+coin11+coin01+coin10);
        phi1 = 1-(acos(2*error1-1))/3.1415926535897;
        qDebug()<< "误码"<< error1;
-       qDebug()<< "累计符合计数"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11;
+       qDebug()<<"total coin"<<"\t"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11;
        QTextStream stream(&myfile);
-       stream << error1 << "\t"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11<<"\n";
-
+       stream << "误码"<< error1<<"\t"<<coin10<<"\t"<<coin01<<"\t"<<coin00<<"\t"<<coin11<<"\n";
 //       qDebug()<< "温度"<< th1;
 //       QTextStream stream(&myfile);
 //       stream << coin10 << "\t";
@@ -316,9 +315,9 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //       stream << ";" << "\t";
 //     if(error1<0.025){
 //         qDebug() << "k=" << k;    //后续要补充写入文档
-// //           stream << th1 << "\t";
-//         stream << k << endl;
-//         k=0;
+// //         stream << th1 << "\t";
+//         stream << k << "\n";
+//         k=1;
 //     }
 //     else{
 //         k++;
@@ -395,7 +394,7 @@ void ExternalApplicationsWidget::dealSingleCountTimeup()
 //                       volch1=32;
 //                       volch3=volinitial-32;
 // //                      setvol =":APPL CH1," + QString::number(volch1);
-// //                      setvolch3 =":APPL CH3," + QString::number(volch3);
+//  //                      setvolch3 =":APPL CH3," + QString::number(volch3);
 // //                      sendData(setvol);
 // //                      QThread::msleep(100);
 // //                      sendData(setvolch3);
