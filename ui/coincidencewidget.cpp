@@ -13,24 +13,12 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     // 符合专用时钟
     timerCoin = new QTimer(this);
 
-    // 设置配置文件与临时文件名
-    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
-    iniName = iniPath + "/Configurations/coincidence" + QString::number(index) +".ini";
-    tempFileName = iniPath + "/Data/Coincidence" + QString::number(index) +".txt";
-    fCoin->setFileName(tempFileName);
-    fStream.setDevice(fCoin);
-    QFileInfo iniInfo(iniName);
-    if (iniInfo.isFile())
-        loadFromIni();
-    else
-        saveToIni();
 }
 
 CoincidenceWidget::~CoincidenceWidget()
 {
     on_buttonStop_released();
     on_buttonReturn_released();
-    saveToIni();
     delete ui;
 }
 
@@ -43,7 +31,6 @@ void CoincidenceWidget::on_buttonReturn_released()
 void CoincidenceWidget::on_buttonStart_released()
 {
     on_buttonStop_released();
-    fetchUiData();
     if (ui->stackCoin->currentIndex()==0) // 双通道模式
     {
         ui->buttonChangeToMulti->setEnabled(false);
@@ -56,7 +43,6 @@ void CoincidenceWidget::on_buttonStart_released()
             connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
             accumulateTime = ui->accumTimeCoin->text().toDouble();
             timerCoin->start(1000.0*accumulateTime);
-            timeTic = QDateTime::currentMSecsSinceEpoch();
         }
     }
     else
@@ -88,16 +74,13 @@ void CoincidenceWidget::on_buttonStart_released()
             connect(timerCoin,&QTimer::timeout,this,&CoincidenceWidget::dealTimeOut);
             accumulateTimeMulti = ui->accumTimeCoin_Multi->text().toDouble();
             timerCoin->start(1000.0*accumulateTimeMulti);
-            timeTic = QDateTime::currentMSecsSinceEpoch();
         }
     }
-    coinSavable = true; // 此时可保存数据
     emit requestCoinParam(index);
 }
 
 void CoincidenceWidget::on_buttonStop_released()
 {
-    coinSavable = false;
     emit askStopDealAcqBankSwitchCoin(index); // 双通道模式
     if (ui->stackCoin->currentIndex()==0)
     {
@@ -243,7 +226,6 @@ void CoincidenceWidget::dealTimeOut()
 
 bool CoincidenceWidget::getCoinParam(QString* coinChannelNamePtr, int **nbrCoinPtrPtr, int **nbrAccCoinPtrPtr)
 {
-    fetchUiData();
     if (ui->stackCoin->currentIndex()==0)
     {
         *coinChannelNamePtr = QString::number(channel1) + "&" + QString::number(channel2);

@@ -3,7 +3,6 @@
 
 void Widget::on_buttonStartAcquisition_released()
 {
-    fetchUiData();
     if (configStatus != VI_SUCCESS)
         configStatus = configTDC
                 (idInstr, countEvents, channelConfig, level, slope, readParamPtr);
@@ -36,14 +35,3 @@ void Widget::dealAcqThreadFinished()
     acqThread->wait();
     statusIndicator->setStates(QSimpleLed::OFF);
 }
-
-//void Widget::updateDataPtrList(AqT3DataDescriptor *dataPtr0)
-//{
-//    if (dataPtrList.size() == nbrCOMbuffer)
-//    {
-//        delete dataPtrList.at(0);
-//        dataPtrList.removeFirst();
-//    }
-//    dataPtrList.append(dataPtr0);
-//    emit dataPtrListUpdated(dataPtrList);
-//}

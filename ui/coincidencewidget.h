@@ -29,7 +29,6 @@ public slots:
     void dealTimeOut();                                     // 累计时间到，刷新计数
     void dealRequestCoinParam(int index, double *delayCN, double freqCOM);
     void dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDescPtr);  // 内存切换，计算计数
-    void dealSaveCoinData();                                // 保存数据
 
 private slots:
     void on_buttonReturn_released();                       // 返回按键按下
@@ -82,19 +81,7 @@ private:
     double *delayCN;           // 各通道固有延时
     double freqCOM;               // TDC COM 重复频率
 
-    // 数据保存
-    bool coinSavable = false;  // 判断是否可保存
-    qint64 timeTic, timeToc;   // 记录时间用
-    QString iniPath, iniName;  // 配置文件
-    QString tempFileName;      // 临时文件
-    QFile *fCoin = new QFile();
-    QTextStream fStream;
-
 public:
-    void fetchUiData(), pushUiData(); // 获取与推送 Ui 数据
-    void createTempDataFile();
-    void saveToIni(), loadFromIni();  // 保存与读取配置
-    void startRecordCoinLocal(), stopRecordCoinLocal(); // 开始与停止保存计数（不与单道同步）
     bool getCoinParam(QString* coinChannelName, int** nbrCoinPtr, int** nbrAccCoinPtr);
     int* getCoinCountPtr();
     int* getAccCoinCountPtr();

@@ -11,7 +11,6 @@ void Widget::on_buttonStartCount_released()
         // 开始计算单道计数
         connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
         // 启动定时器
-        fetchUiData();
         timerCount->start(1000.0*accumulateTime);
     }
 }

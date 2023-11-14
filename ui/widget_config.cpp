@@ -18,11 +18,3 @@ void Widget::dealTestReturn(int index)
     testW->setWindowState(Qt::WindowNoState);
     testW->close();
 }
-
-void Widget::on_checkboxEnableCountEvents_released()
-{
-    if (ui->checkboxEnableCountEvents->isChecked())
-        ui->textCountEvents->setEnabled(true);
-    else
-        ui->textCountEvents->setEnabled(false);
-}
