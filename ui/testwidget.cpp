@@ -147,7 +147,7 @@ QString TestWidget::testTC890()
     for (long nSwitch = 0 ; nSwitch < nbrSwitch ; ++nSwitch)
     {
         // Wait for bank switch
-        AcqrsT3_waitForEndOfAcquisition(idInstr2, 8000);
+        AcqrsT3_waitForEndOfAcquisition(idInstr2, 1000);
 
         AqT3DataDescriptor dataDesc2;
         ::memset(&dataDesc2, 0, sizeof(dataDesc2));
