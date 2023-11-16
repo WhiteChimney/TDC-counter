@@ -1,12 +1,11 @@
 #include "testwidget.h"
 #include "ui_testwidget.h"
 #include <QDebug>
-#include <QFile>
 #include <QTextStream>
 #include "stdafx.h"
 
 
-QFile file(QApplication::applicationDirPath()+"/test.txt");
+QFile  myfile("E:/git/TDC-counter/test.txt");
 
 
 
@@ -40,6 +39,7 @@ void TestWidget::on_buttonReturn_released()
 
 QString TestWidget::testTC890()
 {
+    myfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QString text = "";
     QString textResult = "";
 
@@ -100,6 +100,8 @@ QString TestWidget::testTC890()
     AcqrsT3_acquire(idInstr);
     AcqrsT3_acquire(idInstr2);
 
+    QTextStream stream(&myfile);       //文件
+   stream << "countLast" <<"\t"<< "count"<<"\t"<<"n"<<"\n";
     long countLast = 0;
 
     long const nbrSwitch = 12;
@@ -130,10 +132,11 @@ QString TestWidget::testTC890()
                 if (count - countLast != 1)
                 {
                     textResult.append(text.sprintf("Error: Gap in common count between %ld and %ld\n", countLast, count));
+                    stream<<"666666"<<"\n";
                 }
                 //printf("%d%c", count, 13);
                 countLast = count;
-               qDebug() << n;
+                stream << countLast <<"\t"<<count<<"\t"<<n<<"\n";
             }
 
         }
@@ -184,7 +187,7 @@ QString TestWidget::testTC890()
     AcqrsT3_stopAcquisition(idInstr);
     AcqrsT3_stopAcquisition(idInstr2);
 //    Acqrs_closeAll();
-
+    myfile.close();
     // Cleanup readout structures
     delete[] dataArrayP;
 
