@@ -3,9 +3,8 @@
 #include <QDebug>
 #include <QTextStream>
 #include "stdafx.h"
+#include <QVector>
 
-
-QFile  myfile("E:/git/TDC-counter/test.txt");
 
 
 
@@ -39,9 +38,11 @@ void TestWidget::on_buttonReturn_released()
 
 QString TestWidget::testTC890()
 {
+    QFile  myfile("E:/git/TDC-counter/test.txt");
     myfile.open(QIODevice::WriteOnly | QIODevice::Text);
     QString text = "";
     QString textResult = "";
+    QString writetxt = "";
 
     // Initializes instrument
     ViSession idInstr;
@@ -101,7 +102,7 @@ QString TestWidget::testTC890()
     AcqrsT3_acquire(idInstr2);
 
     QTextStream stream(&myfile);       //文件
-   stream << "countLast" <<"\t"<< "count"<<"\t"<<"n"<<"\n";
+    stream << "countLast" <<"\t"<< "count"<<"\t"<<"n"<<"\n";
     long countLast = 0;
 
     long const nbrSwitch = 12;
@@ -132,14 +133,17 @@ QString TestWidget::testTC890()
                 if (count - countLast != 1)
                 {
                     textResult.append(text.sprintf("Error: Gap in common count between %ld and %ld\n", countLast, count));
-                    stream<<"666666"<<"\n";
+                    writetxt = writetxt + "666666\n";
                 }
                 //printf("%d%c", count, 13);
                 countLast = count;
-                stream << countLast <<"\t"<<count<<"\t"<<n<<"\n";
+                writetxt = QString::number(countLast) + "\t" + QString::number(count)+"\t"+QString::number(n)+"\n";
+ //            stream << countLast <<"\t"<<count<<"\t"<<n<<"\n";
             }
 
+
         }
+
         textResult.append(text.sprintf("Readout %ld (%d) last common %ld.\n", nSwitch, (int)dataDesc.nbrSamples, countLast));
         fflush(stdout);
     }
@@ -182,7 +186,7 @@ QString TestWidget::testTC890()
         fflush(stdout);
 
     }
-
+    stream << writetxt;
     // Stops the acquisition & close instruments
     AcqrsT3_stopAcquisition(idInstr);
     AcqrsT3_stopAcquisition(idInstr2);
