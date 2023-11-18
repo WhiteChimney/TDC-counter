@@ -36,7 +36,7 @@ void Widget::on_buttonExit_released()
     on_buttonStopAcq_released();
     QThread::msleep(100);     // 等待进程完全停止
     // Stops the acquisition & close instruments
-    Acqrs_closeAll();
+    tdc->close();
     this->close();
 }
 
