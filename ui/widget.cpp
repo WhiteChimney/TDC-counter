@@ -55,10 +55,9 @@ Widget::Widget(QWidget *parent)
     if (tdc->getStatus() != VI_SUCCESS)
     {
         QMessageBox::critical(this,
-                              QString("警告"),
-                              QString("未发现可操控设备"),
-                              QMessageBox::Ok);
-    }
+                          QString("警告"),
+                          QString(errorMsg),
+                          QMessageBox::Ok);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);
