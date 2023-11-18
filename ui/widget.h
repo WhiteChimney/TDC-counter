@@ -136,11 +136,17 @@ private:
     int slope[7] = {0}, slope_2[7] = {0};
 
     // 采集过程用到的参数
+signals:
+    void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
+    void acqParamReady_2(bool*,ViSession,AqT3ReadParameters*);
 private:
-    Acqiris_TDC *tdc;
-    bool* acqStopPtr = new bool();
-//    int status;
-//    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+    AcquisitionThread *acqThread, *acqThread_2;
+    bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
+    ViSession idInstr, idInstr_2;
+    ViStatus status, status_2;
+    ViStatus configStatus = -1, configStatus_2 = -1;
+    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+    AqT3ReadParameters* readParamPtr_2 = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
 
     // 单道计数参数

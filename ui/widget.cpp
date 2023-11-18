@@ -47,17 +47,31 @@ Widget::Widget(QWidget *parent)
                 tr("但可能会增加 CPU 占用"));
 
 //     初始化设备
-    tdc = new Acqiris_TDC("PCI::INSTR0",this);
-    connect(tdc,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted);
-    connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
-    tdc->initialize();
+    status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,
+            VI_FALSE, "CAL=0", &idInstr);
+    status_2 = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR1", VI_FALSE,
+            VI_FALSE, "CAL=0", &idInstr_2);
 
-    if (tdc->getStatus() != VI_SUCCESS)
-    {
+    QString errorMsg = "未发现可操控设备";
+    if (status != VI_SUCCESS)
+        errorMsg.append(" TDC 1");
+    if (status_2 != VI_SUCCESS)
+        errorMsg.append(" TDC 2");
+    if (status != VI_SUCCESS or status_2 != VI_SUCCESS)
         QMessageBox::critical(this,
                           QString("警告"),
                           QString(errorMsg),
                           QMessageBox::Ok);
+
+//    数据采集线程
+    acqThread = new AcquisitionThread();
+    connect(acqThread,&AcquisitionThread::acqThreadStarted,this,&Widget::dealAcqThreadStarted);
+    connect(this,&Widget::acqParamReady,acqThread,&AcquisitionThread::dealAcqParamReady);
+    connect(acqThread,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished);
+    acqThread_2 = new AcquisitionThread();
+    connect(acqThread_2,&AcquisitionThread::acqThreadStarted,this,&Widget::dealAcqThreadStarted_2);
+    connect(this,&Widget::acqParamReady_2,acqThread_2,&AcquisitionThread::dealAcqParamReady);
+    connect(acqThread_2,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished_2);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);
