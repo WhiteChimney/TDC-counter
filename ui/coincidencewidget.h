@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "stdafx.h"
+#include "projectInfo.h"
 
 namespace Ui {
 class CoincidenceWidget;
@@ -58,6 +59,7 @@ private:
     int COM_HEAD = 0;
 
     // 双通道
+    int device1, device2;
     int channel1, channel2;      // 通道
     int tolerance;               // 符合门宽
     int delay, delayAcc;         // 延时，偶然符合额外延时
@@ -66,11 +68,12 @@ private:
 
     // 多通道
     bool channelMark[6] = {0}; // 是否选择该通道
-    int toleranceMulti;               // 符合门宽
     int delayMulti[6] = {0}; // 延时
+    bool channelMark_2[6] = {0}; // 是否选择该通道
+    int delayMulti_2[6] = {0}; // 延时
+    int toleranceMulti;               // 符合门宽
     bool enableAccumulateTimeMulti;   // 时钟同步勾选框
     double accumulateTimeMulti = 1.0; // 累计时间（不同步）
-
 
     // 计数参数
     QTimer* timerCoin;         // 符合专用时钟

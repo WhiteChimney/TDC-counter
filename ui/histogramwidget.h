@@ -5,6 +5,7 @@
 #include <QwtPlot>
 #include <QwtPlotHistogram>
 #include "stdafx.h"
+#include "projectInfo.h"
 
 namespace Ui {
 class HistogramWidget;
@@ -39,6 +40,7 @@ private:
     Ui::HistogramWidget *ui;
 
     // UI 参数
+    int device1, device2;
     int channel1, channel2;        // 通道
     double accumulateTime = 1.0;   // 累计时间
     double delay = 0.0;            // 延时

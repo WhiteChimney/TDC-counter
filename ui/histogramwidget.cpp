@@ -18,8 +18,13 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
 
+    QString appVersion = "V" + tr(PROJECT_VERSION_0) + tr(".")
+                             + tr(PROJECT_VERSION_1) + tr(".")
+                             + tr(PROJECT_VERSION_2);
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    iniName = iniPath + "/AcqirisTDC_qt/Configurations/histogram" + QString::number(index) +".ini";
+    iniPath = iniPath + "/" + appVersion;
+    iniName = iniPath + "/Configurations/histogram" + QString::number(index) +".ini";
+
     QFileInfo iniInfo(iniName);
     if (iniInfo.isFile())
         loadFromIni();
@@ -65,6 +70,8 @@ void HistogramWidget::testPlot()
 
 void HistogramWidget::fetchUiData()
 {
+    device1 = ui->comboDevice1->currentIndex();
+    device2 = ui->comboDevice2->currentIndex();
     channel1 = ui->comboChannel1->currentText().toInt();
     channel2 = ui->comboChannel2->currentText().toInt();
     accumulateTime = ui->textAccumlateTime->text().toDouble();
@@ -87,6 +94,8 @@ void HistogramWidget::fetchUiData()
 
 void HistogramWidget::pushUiData()
 {
+    ui->comboDevice1->setCurrentIndex(device1);
+    ui->comboDevice2->setCurrentIndex(device2);
     ui->comboChannel1->setCurrentText(QString::number(channel1));
     ui->comboChannel2->setCurrentText(QString::number(channel2));
     ui->textAccumlateTime->setText(QString::number(accumulateTime));
@@ -192,6 +201,8 @@ void HistogramWidget::saveToIni()
     fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    configIni->setValue("直方图配置/device1",device1);
+    configIni->setValue("直方图配置/device2",device2);
     configIni->setValue("直方图配置/channel1",channel1);
     configIni->setValue("直方图配置/channel2",channel2);
     configIni->setValue("直方图配置/accumulateTime",accumulateTime);
@@ -205,6 +216,8 @@ void HistogramWidget::saveToIni()
 void HistogramWidget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    device1 = configIni->value("直方图配置/device1").toInt();
+    device2 = configIni->value("直方图配置/device2").toInt();
     channel1 = configIni->value("直方图配置/channel1").toInt();
     channel2 = configIni->value("直方图配置/channel2").toInt();
     accumulateTime = configIni->value("直方图配置/accumulateTime").toDouble();

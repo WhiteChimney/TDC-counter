@@ -14,7 +14,11 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int index0) :
     timerCoin = new QTimer(this);
 
     // 设置配置文件与临时文件名
-    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
+    QString appVersion = "V" + tr(PROJECT_VERSION_0) + tr(".")
+                             + tr(PROJECT_VERSION_1) + tr(".")
+                             + tr(PROJECT_VERSION_2);
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+    iniPath = iniPath + "/" + appVersion;
     iniName = iniPath + "/Configurations/coincidence" + QString::number(index) +".ini";
     tempFileName = iniPath + "/Data/Coincidence" + QString::number(index) +".txt";
     fCoin->setFileName(tempFileName);
