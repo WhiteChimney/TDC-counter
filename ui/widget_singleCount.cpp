@@ -3,13 +3,11 @@
 
 void Widget::on_buttonStartCount_released()
 {
-    if (!acqThread->isRunning())
-        on_buttonStartAcquisition_released();
     this->dealCountTimeOut();
-    if (! *acqStopPtr) // 当采集已经开启时
+    if (tdc->isAcquringData()) // 当采集已经开启时
     {
         // 开始计算单道计数
-        connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
+        connect(tdc,&Acqiris_TDC::dataReturned,this,&Widget::dealAcqThreadBankSwitchSCC);
         // 启动定时器
         fetchUiData();
         timerCount->start(1000.0*accumulateTime);
@@ -36,7 +34,7 @@ void Widget::dealCountTimeOut()
 void Widget::on_buttonStopCount_released()
 {
     timerCount->stop();
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitchSCC);
+    disconnect(tdc,&Acqiris_TDC::dataReturned,this,&Widget::dealAcqThreadBankSwitchSCC);
 }
 
 int* Widget::getSingleCountPtr()

@@ -8,9 +8,9 @@
 #include "testwidget.h"
 #include "histogramwidget.h"
 #include "coincidencewidget.h"
-#include "acquisitionthread.h"
 #include "statisticswidget.h"
 #include "externalapplicationswidget.h"
+#include "acqiris_tdc.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -135,17 +135,12 @@ private:
     int slope[7] = {0};
 
     // 采集过程用到的参数
-signals:
-    void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
 private:
-    AcquisitionThread *acqThread;
+    Acqiris_TDC *tdc;
     bool* acqStopPtr = new bool();
-    ViSession idInstr;
-    ViStatus status;
-    ViStatus configStatus = -1;
-    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+//    int status;
+//    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
-    QVector<AqT3DataDescriptor*> dataPtrList;
 
     // 单道计数参数
 private:
@@ -162,9 +157,6 @@ private:
     int nbrCOMbuffer = 1;
 public:
     int* getSingleCountPtr();
-//    void updateDataPtrList(AqT3DataDescriptor*);
-//signals:
-//    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
 
     // 数据保存参数
 private:

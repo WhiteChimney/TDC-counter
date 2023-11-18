@@ -31,11 +31,11 @@ void Widget::dealRequestHistParam(int index)
 void Widget::dealAskDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    disconnect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
 }

@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QThread>
+#include <QDebug>
 
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
@@ -26,11 +27,14 @@ private:
     bool acqStop;                  // 控制采集进程停止
 
 public:
+    void setInstrId(ViSession m_instrId);
     void startAcquisition();
     void stopAcquisition();
+    bool isAcquringData();
 
 signals:
     void acqThreadBankSwitch(AqT3DataDescriptor*); // 内存切换
+    void acquisitionStarted();
     void runThreadFinished();          // 进程结束
     void acquisitionFinished(ViStatus status);
 

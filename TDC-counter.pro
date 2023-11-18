@@ -40,12 +40,12 @@ SOURCES += \
     ui/widget.cpp \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
-    ui/widget_config.cpp \
     ui/widget_extApp.cpp \
     ui/widget_histogram.cpp \
     ui/widget_saveData.cpp \
     ui/widget_singleCount.cpp \
     ui/widget_statistics.cpp \
+    ui/widget_test.cpp \
     ui/widget_ui.cpp
 
 HEADERS += \

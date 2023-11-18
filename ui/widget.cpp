@@ -42,28 +42,23 @@ Widget::Widget(QWidget *parent)
 
     ui->checkboxEnableCountEvents->setToolTip(
                 tr("设置 TDC 的 COM 通道累计多少信号个数后进行内存切换，\n") +
-                tr("默认为 COM 频率的 1/100"));
+                tr("默认为 COM 频率的 1/100\n") +
+                tr("提升该频率可以降低每秒计数抖动，\n") +
+                tr("但可能会增加 CPU 占用"));
 
 //     初始化设备
-    status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,
-            VI_FALSE, "CAL=0", &idInstr);
+    tdc = new Acqiris_TDC("PCI::INSTR0",this);
+    connect(tdc,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted);
+    connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
+    tdc->initialize();
 
-    if (status != VI_SUCCESS)
+    if (tdc->getStatus() != VI_SUCCESS)
     {
         QMessageBox::critical(this,
                               QString("警告"),
                               QString("未发现可操控设备"),
                               QMessageBox::Ok);
     }
-
-//    数据采集线程
-    acqThread = new AcquisitionThread();
-    connect(acqThread,&AcquisitionThread::acqThreadStarted,this,&Widget::dealAcqThreadStarted);
-    connect(this,&Widget::acqParamReady,acqThread,&AcquisitionThread::dealAcqParamReady);
-    connect(acqThread,&AcquisitionThread::acqThreadFinished,this,&Widget::dealAcqThreadFinished);
-//    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::dealAcqThreadBankSwitch);
-//    dataPtrList.clear();
-//    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,this,&Widget::updateDataPtrList);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);

@@ -2,6 +2,7 @@
 #define ACQIRIS_TDC_H
 
 #include <QObject>
+#include <QDebug>
 
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
@@ -14,16 +15,14 @@ class Acqiris_TDC : public QObject
 {
     Q_OBJECT
 public:
-    explicit Acqiris_TDC(QString resourceName,
-                         ViSession instrId,
+    explicit Acqiris_TDC(QString m_resourceName,
                          QObject *parent = nullptr);
 
 private:
 //    仪器参数
-    ViRsrc resourceName;
+    QString resourceName;
     ViSession instrId;
     ViStatus status;
-    ViStatus configStatus = -1;
 
 //    采集参数
     Acqiris_AcquisitionThread *acqThread;
@@ -43,16 +42,22 @@ public:
     void stopAcquisition();
 //    获取仪器的状态信息
     int getStatus();
+//    获取仪器的状态信息
+    bool isAcquringData();
 //    关闭仪器
     int close();
 
 public slots:
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
+
+    void dealAcqThreadStarted();
     // 采集线程关闭后续
     void dealAcqThreadFinished(ViStatus m_status);
 
 signals:
+    void acquisitionStarted();
+    void acquisitionFinished(ViStatus status);
     void dataReturned(AqT3DataDescriptor*);
 
 };
