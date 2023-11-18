@@ -27,14 +27,14 @@ public:
 public slots:
     void dealTestReturn(int index);
     // 关闭测试子widget
-    void dealAcqThreadStarted(); void dealAcqThreadStarted_2();
+    void dealAcqThreadStarted(); //void dealAcqThreadStarted_2();
     // 处理采集线程开启
-    void dealAcqThreadFinished(); void dealAcqThreadFinished_2();
+    void dealAcqThreadFinished(); //void dealAcqThreadFinished_2();
     // 采集线程关闭后续
 //    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
-    void dealAcqThreadBankSwitchSCC_2(AqT3DataDescriptor*);
+//    void dealAcqThreadBankSwitchSCC_2(AqT3DataDescriptor*);
     // 计算单道计数
     void dealCountTimeOut();
     // 定时刷新单道计数
@@ -135,18 +135,15 @@ private:
     double level[7] = {0.5}, level_2[7] = {0.5};
     int slope[7] = {0}, slope_2[7] = {0};
 
-    // 采集过程用到的参数
-signals:
-    void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
-    void acqParamReady_2(bool*,ViSession,AqT3ReadParameters*);
+    // 采集过程用到的参数/
 private:
-    AcquisitionThread *acqThread, *acqThread_2;
+    Acqiris_TDC *tdc;
     bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
-    ViSession idInstr, idInstr_2;
-    ViStatus status, status_2;
-    ViStatus configStatus = -1, configStatus_2 = -1;
-    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
-    AqT3ReadParameters* readParamPtr_2 = new AqT3ReadParameters();
+//    ViSession idInstr, idInstr_2;
+//    ViStatus status, status_2;
+//    ViStatus configStatus = -1, configStatus_2 = -1;
+//    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+//    AqT3ReadParameters* readParamPtr_2 = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
 
     // 单道计数参数
