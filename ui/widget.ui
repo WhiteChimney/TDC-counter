@@ -24,322 +24,733 @@
        <string>TDC 设置</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
-       <item row="0" column="0" rowspan="6">
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="3" column="2">
-          <widget class="QComboBox" name="slopeCN2">
+       <item row="0" column="0" rowspan="3">
+        <widget class="QTabWidget" name="deviceTab">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tabDevice1">
+          <attribute name="title">
+           <string>TDC 1</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <property name="text">
-             <string>Positive</string>
-            </property>
+            <layout class="QGridLayout" name="gridLayout">
+             <item row="3" column="2">
+              <widget class="QComboBox" name="slopeCN3">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBoxCN1">
+               <property name="text">
+                <string>Channel 1</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <property name="tristate">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="slopeCN1">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QLineEdit" name="levelTextCNCOM">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QComboBox" name="slopeCN2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="levelTextCN4">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QLineEdit" name="levelTextCN5">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="levelTextCN3">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLineEdit" name="textDelayCN2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string> 通道</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="2">
+              <widget class="QComboBox" name="slopeCN6">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QLineEdit" name="levelTextCN6">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="QLineEdit" name="textDelayCN5">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QCheckBox" name="checkBoxCN6">
+               <property name="text">
+                <string>Channel 6</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QCheckBox" name="checkBoxCN5">
+               <property name="text">
+                <string>Channel 5</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="label_8">
+               <property name="text">
+                <string>基础延时（us）</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="checkBoxCN3">
+               <property name="text">
+                <string>Channel 3</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string> 上升/下降沿</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_4">
+               <property name="text">
+                <string>触发电平(V)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QComboBox" name="slopeCNCOM">
+               <property name="currentIndex">
+                <number>0</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLineEdit" name="textDelayCN1">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="2">
+              <widget class="QComboBox" name="slopeCN5">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="levelTextCN1">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QComboBox" name="slopeCN4">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="4" column="3">
+              <widget class="QLineEdit" name="textDelayCN4">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="checkBoxCN2">
+               <property name="text">
+                <string>Channel 2</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_11">
+               <property name="text">
+                <string>COM</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="levelTextCN2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QLineEdit" name="textDelayCN3">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="3">
+              <widget class="QLineEdit" name="textDelayCN6">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="checkBoxCN4">
+               <property name="text">
+                <string>Channel 4</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tabDevice2">
+          <attribute name="title">
+           <string>TDC 2</string>
+          </attribute>
+          <layout class="QHBoxLayout" name="horizontalLayout">
            <item>
-            <property name="text">
-             <string>Negative</string>
-            </property>
+            <layout class="QGridLayout" name="gridLayout_9">
+             <item row="7" column="0">
+              <widget class="QLabel" name="label_16">
+               <property name="text">
+                <string>COM</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLineEdit" name="textDelayCN1_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="0">
+              <widget class="QCheckBox" name="checkBoxCN4_2">
+               <property name="text">
+                <string>Channel 4</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="3">
+              <widget class="QLineEdit" name="textDelayCN4_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="3">
+              <widget class="QLineEdit" name="textDelayCN5_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="1">
+              <widget class="QLabel" name="label_18">
+               <property name="text">
+                <string>触发电平(V)</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="3">
+              <widget class="QLineEdit" name="textDelayCN6_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="1">
+              <widget class="QLineEdit" name="levelTextCN3_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QComboBox" name="slopeCN1_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="0">
+              <widget class="QCheckBox" name="checkBoxCN3_2">
+               <property name="text">
+                <string>Channel 3</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="1">
+              <widget class="QLineEdit" name="levelTextCN4_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="2">
+              <widget class="QComboBox" name="slopeCN5_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="7" column="2">
+              <widget class="QComboBox" name="slopeCNCOM_2">
+               <property name="currentIndex">
+                <number>0</number>
+               </property>
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="6" column="0">
+              <widget class="QCheckBox" name="checkBoxCN6_2">
+               <property name="text">
+                <string>Channel 6</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="3">
+              <widget class="QLabel" name="label_20">
+               <property name="text">
+                <string>基础延时（us）</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QCheckBox" name="checkBoxCN1_2">
+               <property name="text">
+                <string>Channel 1</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+               <property name="tristate">
+                <bool>false</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="1">
+              <widget class="QLineEdit" name="levelTextCN2_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="4" column="2">
+              <widget class="QComboBox" name="slopeCN4_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="3" column="3">
+              <widget class="QLineEdit" name="textDelayCN3_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="6" column="2">
+              <widget class="QComboBox" name="slopeCN6_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="6" column="1">
+              <widget class="QLineEdit" name="levelTextCN6_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label_17">
+               <property name="sizePolicy">
+                <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                 <horstretch>0</horstretch>
+                 <verstretch>0</verstretch>
+                </sizepolicy>
+               </property>
+               <property name="text">
+                <string> 通道</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="levelTextCN1_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLineEdit" name="textDelayCN2_2">
+               <property name="text">
+                <string>0.0</string>
+               </property>
+              </widget>
+             </item>
+             <item row="7" column="1">
+              <widget class="QLineEdit" name="levelTextCNCOM_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="1">
+              <widget class="QLineEdit" name="levelTextCN5_2">
+               <property name="text">
+                <string>0.5</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QComboBox" name="slopeCN3_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QCheckBox" name="checkBoxCN2_2">
+               <property name="text">
+                <string>Channel 2</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="5" column="0">
+              <widget class="QCheckBox" name="checkBoxCN5_2">
+               <property name="text">
+                <string>Channel 5</string>
+               </property>
+               <property name="checked">
+                <bool>true</bool>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QComboBox" name="slopeCN2_2">
+               <item>
+                <property name="text">
+                 <string>Positive</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Negative</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item row="0" column="2">
+              <widget class="QLabel" name="label_19">
+               <property name="text">
+                <string> 上升/下降沿</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QCheckBox" name="checkBoxCN3">
-           <property name="text">
-            <string>Channel 3</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="2">
-          <widget class="QComboBox" name="slopeCN6">
-           <item>
-            <property name="text">
-             <string>Positive</string>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="0" column="2" rowspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>高级设置</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <layout class="QFormLayout" name="formLayout">
+            <item row="1" column="0">
+             <widget class="QCheckBox" name="checkboxEnableCountEvents">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="cursor">
+               <cursorShape>WhatsThisCursor</cursorShape>
+              </property>
+              <property name="text">
+               <string>Count Events (kHz)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QLineEdit" name="textCountEvents">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>10</string>
+              </property>
+              <property name="readOnly">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_6">
+              <property name="text">
+               <string>COM信号频率(kHz)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QLineEdit" name="textFreqCOM">
+              <property name="text">
+               <string>1000</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonTempFilePath">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-           </item>
-           <item>
             <property name="text">
-             <string>Negative</string>
+             <string>打开临时文件目录</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="4" column="2">
-          <widget class="QComboBox" name="slopeCN3">
-           <item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonTest">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
-             <string>Positive</string>
+             <string>测试</string>
             </property>
-           </item>
-           <item>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonCheckUpdate">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
             <property name="text">
-             <string>Negative</string>
+             <string>检查更新</string>
             </property>
-           </item>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QLineEdit" name="levelTextCNCOM">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QCheckBox" name="checkBoxCN5">
-           <property name="text">
-            <string>Channel 5</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="levelTextCN3">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="2">
-          <widget class="QComboBox" name="slopeCNCOM">
-           <property name="currentIndex">
-            <number>0</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Positive</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Negative</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLineEdit" name="levelTextCN5">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QCheckBox" name="checkBoxCN4">
-           <property name="text">
-            <string>Channel 4</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QCheckBox" name="checkBoxCN6">
-           <property name="text">
-            <string>Channel 6</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLineEdit" name="levelTextCN2">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="2">
-          <widget class="QComboBox" name="slopeCN5">
-           <item>
-            <property name="text">
-             <string>Positive</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Negative</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="text">
-            <string>COM信号频率(kHz)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="label_11">
-           <property name="text">
-            <string>COM</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string> 通道</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLineEdit" name="levelTextCN4">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_4">
-           <property name="text">
-            <string>触发电平(V)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QCheckBox" name="checkBoxCN2">
-           <property name="text">
-            <string>Channel 2</string>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="levelTextCN1">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QCheckBox" name="checkBoxCN1">
-           <property name="text">
-            <string>Channel 1</string>
-           </property>
-           <property name="checkable">
-            <bool>true</bool>
-           </property>
-           <property name="checked">
-            <bool>true</bool>
-           </property>
-           <property name="tristate">
-            <bool>false</bool>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="2">
-          <widget class="QComboBox" name="slopeCN4">
-           <item>
-            <property name="text">
-             <string>Positive</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Negative</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="2" column="2">
-          <widget class="QComboBox" name="slopeCN1">
-           <item>
-            <property name="text">
-             <string>Positive</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Negative</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-         <item row="0" column="2">
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string> 上升/下降沿</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QLineEdit" name="levelTextCN6">
-           <property name="text">
-            <string>0.5</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="3">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>基础延时（us）</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="3">
-          <widget class="QLineEdit" name="textDelayCN1">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="3">
-          <widget class="QLineEdit" name="textDelayCN2">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="3">
-          <widget class="QLineEdit" name="textDelayCN3">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="3">
-          <widget class="QLineEdit" name="textDelayCN4">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="3">
-          <widget class="QLineEdit" name="textDelayCN5">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="3">
-          <widget class="QLineEdit" name="textDelayCN6">
-           <property name="text">
-            <string>0.0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="1" colspan="3">
-          <widget class="QLineEdit" name="textFreqCOM">
-           <property name="text">
-            <string>1000</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </item>
        <item row="0" column="1">
         <spacer name="horizontalSpacer">
@@ -410,93 +821,6 @@
          </layout>
         </widget>
        </item>
-       <item row="0" column="2" rowspan="2">
-        <widget class="QGroupBox" name="groupBox">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="title">
-          <string>高级设置</string>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <layout class="QFormLayout" name="formLayout">
-            <item row="1" column="0">
-             <widget class="QCheckBox" name="checkboxEnableCountEvents">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="cursor">
-               <cursorShape>WhatsThisCursor</cursorShape>
-              </property>
-              <property name="text">
-               <string>Count Events (kHz)</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <widget class="QLineEdit" name="textCountEvents">
-              <property name="enabled">
-               <bool>false</bool>
-              </property>
-              <property name="text">
-               <string>10</string>
-              </property>
-              <property name="readOnly">
-               <bool>false</bool>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonTempFilePath">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>打开临时文件目录</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonTest">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>测试</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonCheckUpdate">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="text">
-             <string>检查更新</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="mainPage">
@@ -504,19 +828,6 @@
        <string>计数</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="accumulateTimeText">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
        <item row="3" column="1">
         <widget class="QPushButton" name="buttonStartCount">
          <property name="sizePolicy">
@@ -530,56 +841,10 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="1">
-        <spacer name="verticalSpacer_5">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="4" column="1">
-        <widget class="QPushButton" name="buttonStopCount">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>停止计数</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="1">
-        <widget class="QPushButton" name="buttonStatistics">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>统计</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="0" rowspan="8">
         <layout class="QGridLayout" name="gridLayout_2">
-         <item row="0" column="1">
-          <widget class="QLabel" name="label_12">
-           <property name="text">
-            <string>单道计数</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLCDNumber" name="lcdNumber_4">
+         <item row="1" column="0">
+          <widget class="QLCDNumber" name="lcdNumber">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -590,12 +855,69 @@
             <number>1</number>
            </property>
            <property name="intValue" stdset="0">
-            <number>4</number>
+            <number>1</number>
            </property>
           </widget>
          </item>
-         <item row="6" column="1">
-          <widget class="QLCDNumber" name="lcdSPC6">
+         <item row="1" column="1">
+          <widget class="QLCDNumber" name="lcdSPC1">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>1</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="digitCount">
+            <number>13</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
+           </property>
+           <property name="value" stdset="0">
+            <double>0.000000000000000</double>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QLCDNumber" name="lcdNumber_6">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="digitCount">
+            <number>1</number>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>6</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0">
+          <widget class="QLCDNumber" name="lcdNumber_5">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="digitCount">
+            <number>1</number>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>5</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="1">
+          <widget class="QLCDNumber" name="lcdSPC5">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -623,6 +945,29 @@
            </property>
           </widget>
          </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>TDC 1 单道计数</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLCDNumber" name="lcdNumber_4">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="digitCount">
+            <number>1</number>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>4</number>
+           </property>
+          </widget>
+         </item>
          <item row="3" column="0">
           <widget class="QLCDNumber" name="lcdNumber_3">
            <property name="sizePolicy">
@@ -639,40 +984,55 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLCDNumber" name="lcdNumber">
+         <item row="2" column="1">
+          <widget class="QLCDNumber" name="lcdSPC2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
            <property name="digitCount">
-            <number>1</number>
+            <number>13</number>
+           </property>
+           <property name="mode">
+            <enum>QLCDNumber::Dec</enum>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>1</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
-          <widget class="QLCDNumber" name="lcdNumber_6">
+         <item row="4" column="1">
+          <widget class="QLCDNumber" name="lcdSPC4">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
            <property name="digitCount">
-            <number>1</number>
+            <number>13</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>6</number>
+            <number>0</number>
            </property>
           </widget>
          </item>
-         <item row="5" column="1">
-          <widget class="QLCDNumber" name="lcdSPC5">
+         <item row="6" column="1">
+          <widget class="QLCDNumber" name="lcdSPC6">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -715,8 +1075,24 @@
            </property>
           </widget>
          </item>
-         <item row="1" column="1">
-          <widget class="QLCDNumber" name="lcdSPC1">
+         <item row="2" column="0">
+          <widget class="QLCDNumber" name="lcdNumber_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="digitCount">
+            <number>1</number>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>2</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="2">
+          <widget class="QLCDNumber" name="lcdSPC1_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>1</horstretch>
@@ -740,8 +1116,8 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="1">
-          <widget class="QLCDNumber" name="lcdSPC2">
+         <item row="2" column="2">
+          <widget class="QLCDNumber" name="lcdSPC2_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -765,24 +1141,8 @@
            </property>
           </widget>
          </item>
-         <item row="5" column="0">
-          <widget class="QLCDNumber" name="lcdNumber_5">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="digitCount">
-            <number>1</number>
-           </property>
-           <property name="intValue" stdset="0">
-            <number>5</number>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLCDNumber" name="lcdSPC4">
+         <item row="3" column="2">
+          <widget class="QLCDNumber" name="lcdSPC3_2">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -803,28 +1163,137 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLCDNumber" name="lcdNumber_2">
+         <item row="4" column="2">
+          <widget class="QLCDNumber" name="lcdSPC4_2">
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
            <property name="digitCount">
-            <number>1</number>
+            <number>13</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
            </property>
            <property name="intValue" stdset="0">
-            <number>2</number>
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
+          <widget class="QLCDNumber" name="lcdSPC5_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="digitCount">
+            <number>13</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="2">
+          <widget class="QLCDNumber" name="lcdSPC6_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);</string>
+           </property>
+           <property name="digitCount">
+            <number>13</number>
+           </property>
+           <property name="segmentStyle">
+            <enum>QLCDNumber::Flat</enum>
+           </property>
+           <property name="intValue" stdset="0">
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QLabel" name="label_21">
+           <property name="text">
+            <string>TDC 2 单道计数</string>
            </property>
           </widget>
          </item>
         </layout>
        </item>
+       <item row="6" column="1">
+        <widget class="QPushButton" name="buttonStatistics">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>统计</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
         <widget class="QLabel" name="label_10">
          <property name="text">
           <string>累计时间(s)</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="1">
+        <widget class="QPushButton" name="buttonStopCount">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>停止计数</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="accumulateTimeText">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>1</string>
          </property>
         </widget>
        </item>

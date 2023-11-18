@@ -20,6 +20,7 @@ SOURCES += \
     sources/mergeDataFiles.cpp \
     sources/vectorProcessing.cpp \
     tools/QSimpleLed.cpp \
+    tools/acqiris_tdc.cpp \
     tools/acquisitionthread.cpp \
     tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
@@ -63,6 +64,7 @@ HEADERS += \
     include/projectInfo.h \
     include/stdafx.h \
     tools/QSimpleLed.h \
+    tools/acqiris_tdc.h \
     tools/acquisitionthread.h \
     tools/cliplcdnumber.h \
     tools/customizedfunctions.hpp \

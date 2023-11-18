@@ -27,13 +27,14 @@ public:
 public slots:
     void dealTestReturn(int index);
     // 关闭测试子widget
-    void dealAcqThreadStarted();
+    void dealAcqThreadStarted(); void dealAcqThreadStarted_2();
     // 处理采集线程开启
-    void dealAcqThreadFinished();
+    void dealAcqThreadFinished(); void dealAcqThreadFinished_2();
     // 采集线程关闭后续
 //    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
+    void dealAcqThreadBankSwitchSCC_2(AqT3DataDescriptor*);
     // 计算单道计数
     void dealCountTimeOut();
     // 定时刷新单道计数
@@ -130,28 +131,29 @@ private:
     double freqCOM = 1000.0;             // kHz
     bool enableCountEvents = false;
     int countEvents = 10;           // kHz
-    bool channelConfig[7];
-    double level[7] = {0.5};
-    int slope[7] = {0};
+    bool channelConfig[7], channelConfig_2[7];
+    double level[7] = {0.5}, level_2[7] = {0.5};
+    int slope[7] = {0}, slope_2[7] = {0};
 
     // 采集过程用到的参数
 signals:
     void acqParamReady(bool*,ViSession,AqT3ReadParameters*);
+    void acqParamReady_2(bool*,ViSession,AqT3ReadParameters*);
 private:
-    AcquisitionThread *acqThread;
-    bool* acqStopPtr = new bool();
-    ViSession idInstr;
-    ViStatus status;
-    ViStatus configStatus = -1;
+    AcquisitionThread *acqThread, *acqThread_2;
+    bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
+    ViSession idInstr, idInstr_2;
+    ViStatus status, status_2;
+    ViStatus configStatus = -1, configStatus_2 = -1;
     AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
+    AqT3ReadParameters* readParamPtr_2 = new AqT3ReadParameters();
     QSimpleLed *statusIndicator = new QSimpleLed(this);
-    QVector<AqT3DataDescriptor*> dataPtrList;
 
     // 单道计数参数
 private:
-    int nbrSCC[6] = {0};
-    int nbrSCCfuture[6] = {0};
-    double delayCN[7] = {0.0};
+    int nbrSCC[6] = {0}, nbrSCC_2[6] = {0};
+    int nbrSCCfuture[6] = {0}, nbrSCCfuture_2[6] = {0};
+    double delayCN[7] = {0.0}, delayCN_2[7] = {0.0};
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
@@ -159,12 +161,9 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
-    int nbrCOMbuffer = 1;
+
 public:
     int* getSingleCountPtr();
-//    void updateDataPtrList(AqT3DataDescriptor*);
-//signals:
-//    void dataPtrListUpdated(QVector<AqT3DataDescriptor*>);
 
     // 数据保存参数
 private:
@@ -187,7 +186,7 @@ public:
 
     // 保存配置
 private:
-    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
+    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     QString iniName = iniPath + "/Configurations/general.ini";
     QString tempFileName_SCC = iniPath + "/Data/SingleCount.txt";   // 单道计数临时文件
     QFile *fSingleCount = new QFile();
@@ -196,7 +195,7 @@ public:
     void saveToIni();
     // 保存当前配置到配置文件
     void loadFromIni();
-    // 从配置文件加载配置
+    // 从配置文件加载配置s
 
 private:
     // 外部功能子窗口（序列）
