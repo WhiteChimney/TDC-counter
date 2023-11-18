@@ -1,11 +1,11 @@
-#include "acquisitionthread.h"
+#include "acqiris_acquisitionthread.h"
 
-AcquisitionThread::AcquisitionThread()
+Acqiris_AcquisitionThread::Acqiris_AcquisitionThread()
 {
 
 }
 
-void AcquisitionThread::run()
+void Acqiris_AcquisitionThread::run()
 {
     emit acqThreadStarted();
 
@@ -41,7 +41,7 @@ void AcquisitionThread::run()
     emit acqThreadFinished();
 }
 
-void AcquisitionThread::dealAcqParamReady
+void Acqiris_AcquisitionThread::dealAcqParamReady
         (bool* acqStopPtr0,
          ViSession idInstr0,
          AqT3ReadParameters* readParamPtr0)

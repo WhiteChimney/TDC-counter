@@ -2,14 +2,18 @@
 #define ACQUISITIONTHREAD_H
 
 #include <QObject>
+#include <QThread>
+#include <QMutex>
+#include <QWaitCondition>
 
-#include "stdafx.h"
+#include "AcqirisImport.h"
+#include "AcqirisT3Import.h"
 
-class AcquisitionThread : public QThread
+class Acqiris_AcquisitionThread : public QThread
 {
     Q_OBJECT
 public:
-    AcquisitionThread();
+    Acqiris_AcquisitionThread();
 
 protected:
     void run();
