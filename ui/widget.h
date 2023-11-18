@@ -183,9 +183,9 @@ public:
 
     // 保存配置
 private:
-    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    QString iniName = iniPath + "/Configurations/general.ini";
-    QString tempFileName_SCC = iniPath + "/Data/SingleCount.txt";   // 单道计数临时文件
+    QString iniPath;
+    QString iniName;
+    QString tempFileName_SCC;   // 单道计数临时文件
     QFile *fSingleCount = new QFile();
     QTextStream fStream;
 public:

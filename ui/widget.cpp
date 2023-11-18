@@ -15,11 +15,14 @@ Widget::Widget(QWidget *parent)
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
 //    清空临时文件
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     iniPath = iniPath + "/" + appVersion;
+    iniName = iniPath + "/Configurations/general.ini";
+    tempFileName_SCC = iniPath + "/Data/SingleCount.txt";
+
     QDir tempDataPath(iniPath + "/Data");
     if (tempDataPath.isReadable())
     {
-        qDebug() << "readable";
         if (! tempDataPath.isEmpty())
         {
             tempDataPath.removeRecursively();
