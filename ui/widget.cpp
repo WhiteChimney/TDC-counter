@@ -6,26 +6,29 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr("Acqiris TDC 计数程序 V")
-                           + tr(PROJECT_VERSION_0) + tr(".")
-                           + tr(PROJECT_VERSION_1) + tr(".")
-                           + tr(PROJECT_VERSION_2));
+
+    QString appVersion = "V" + tr(PROJECT_VERSION_0) + tr(".")
+                             + tr(PROJECT_VERSION_1) + tr(".")
+                             + tr(PROJECT_VERSION_2);
+    this->setWindowTitle(tr("Acqiris TDC 计数程序 ") + appVersion);
     this->setupAcqIndicator();
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
 //    清空临时文件
+    iniPath = iniPath + "/" + appVersion;
     QDir tempDataPath(iniPath + "/Data");
     if (tempDataPath.isReadable())
     {
+        qDebug() << "readable";
         if (! tempDataPath.isEmpty())
         {
             tempDataPath.removeRecursively();
             QThread::msleep(100);
-            tempDataPath.mkdir(iniPath + "/Data");
+            tempDataPath.mkpath(iniPath + "/Data");
         }
     }
     else
-        tempDataPath.mkdir(iniPath + "/Data");
+        tempDataPath.mkpath(iniPath + "/Data");
 
 //    检查是否存在配置文件（ini）
     QFileInfo iniInfo(iniName);
@@ -52,12 +55,17 @@ Widget::Widget(QWidget *parent)
     connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
     tdc->initialize();
 
+    tdc_2 = new Acqiris_TDC("PCI::INSTR1",this);
+    connect(tdc_2,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted_2);
+    connect(tdc_2,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished_2);
+    tdc_2->initialize();
+
     QString errorMsg = "未发现可操控设备";
     if (tdc->getStatus() != VI_SUCCESS)
-//        errorMsg.append(" TDC 1");
-//    if (status_2 != VI_SUCCESS)
-//        errorMsg.append(" TDC 2");
-//    if (status != VI_SUCCESS or status_2 != VI_SUCCESS)
+        errorMsg.append(" TDC 1");
+    if (tdc_2->getStatus() != VI_SUCCESS)
+        errorMsg.append(" TDC 2");
+    if (tdc->getStatus() != VI_SUCCESS or tdc_2->getStatus() != VI_SUCCESS)
         QMessageBox::critical(this,
                           QString("警告"),
                           QString(errorMsg),

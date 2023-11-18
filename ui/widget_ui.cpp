@@ -3,14 +3,23 @@
 
 void Widget::setupAcqIndicator()
 {
-    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
-    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
     QSizePolicy p1;
     p1.setHorizontalPolicy(QSizePolicy::Expanding);
     p1.setVerticalPolicy(QSizePolicy::Expanding);
+
+    statusIndicator = new QSimpleLed(this);
+    statusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    statusIndicator->setCustomOffColor0(QSimpleLed::RED);
     statusIndicator->setSizePolicy(p1);
     ui->horizontalLayout_6->insertWidget(0,statusIndicator);
     statusIndicator->setStates(QSimpleLed::OFF);
+
+    statusIndicator_2 = new QSimpleLed(this);
+    statusIndicator_2->setCustomOnColor0(QSimpleLed::GREEN);
+    statusIndicator_2->setCustomOffColor0(QSimpleLed::RED);
+    statusIndicator_2->setSizePolicy(p1);
+    ui->horizontalLayout_6->insertWidget(1,statusIndicator_2);
+    statusIndicator_2->setStates(QSimpleLed::OFF);
 }
 
 void Widget::on_buttonExit_released()
@@ -52,6 +61,7 @@ void Widget::fetchUiData()
         countEvents = int(freqCOM/100.0);
         ui->textCountEvents->setText(QString::number(countEvents/1000));
     }
+
     channelConfig[0] = true;
     channelConfig[1] = ui->checkBoxCN1->isChecked();
     channelConfig[2] = ui->checkBoxCN2->isChecked();
@@ -92,6 +102,60 @@ void Widget::fetchUiData()
         delayCN[k] = delayCN[k] - minDelay;
     }
     delayCN[6] = maxDelay - minDelay;
+    ui->textDelayCN1->setText(QString::number(delayCN[0]));
+    ui->textDelayCN2->setText(QString::number(delayCN[1]));
+    ui->textDelayCN3->setText(QString::number(delayCN[2]));
+    ui->textDelayCN4->setText(QString::number(delayCN[3]));
+    ui->textDelayCN5->setText(QString::number(delayCN[4]));
+    ui->textDelayCN6->setText(QString::number(delayCN[5]));
+
+
+    channelConfig_2[0] = true;
+    channelConfig_2[1] = ui->checkBoxCN1_2->isChecked();
+    channelConfig_2[2] = ui->checkBoxCN2_2->isChecked();
+    channelConfig_2[3] = ui->checkBoxCN3_2->isChecked();
+    channelConfig_2[4] = ui->checkBoxCN4_2->isChecked();
+    channelConfig_2[5] = ui->checkBoxCN5_2->isChecked();
+    channelConfig_2[6] = ui->checkBoxCN6_2->isChecked();
+    level_2[0] = ui->levelTextCNCOM_2->text().toDouble();
+    level_2[1] = ui->levelTextCN1_2->text().toDouble();
+    level_2[2] = ui->levelTextCN2_2->text().toDouble();
+    level_2[3] = ui->levelTextCN3_2->text().toDouble();
+    level_2[4] = ui->levelTextCN4_2->text().toDouble();
+    level_2[5] = ui->levelTextCN5_2->text().toDouble();
+    level_2[6] = ui->levelTextCN6_2->text().toDouble();
+    slope_2[0] = ui->slopeCNCOM_2->currentIndex();
+    slope_2[1] = ui->slopeCN1_2->currentIndex();
+    slope_2[2] = ui->slopeCN2_2->currentIndex();
+    slope_2[3] = ui->slopeCN3_2->currentIndex();
+    slope_2[4] = ui->slopeCN4_2->currentIndex();
+    slope_2[5] = ui->slopeCN5_2->currentIndex();
+    slope_2[6] = ui->slopeCN6_2->currentIndex();
+    delayCN_2[0] = ui->textDelayCN1_2->text().toDouble();
+    delayCN_2[1] = ui->textDelayCN2_2->text().toDouble();
+    delayCN_2[2] = ui->textDelayCN3_2->text().toDouble();
+    delayCN_2[3] = ui->textDelayCN4_2->text().toDouble();
+    delayCN_2[4] = ui->textDelayCN5_2->text().toDouble();
+    delayCN_2[5] = ui->textDelayCN6_2->text().toDouble();
+    minDelay = delayCN_2[0]; maxDelay = delayCN_2[0];
+    for (int k = 1; k < 6; k++)
+    {
+        if (delayCN_2[k] < minDelay)
+            minDelay = delayCN_2[k];
+        if (delayCN_2[k] > maxDelay)
+            maxDelay = delayCN_2[k];
+    }
+    for (int k = 0; k < 6; k++)
+    {
+        delayCN_2[k] = delayCN_2[k] - minDelay;
+    }
+    delayCN_2[6] = maxDelay - minDelay;
+    ui->textDelayCN1_2->setText(QString::number(delayCN_2[0]));
+    ui->textDelayCN2_2->setText(QString::number(delayCN_2[1]));
+    ui->textDelayCN3_2->setText(QString::number(delayCN_2[2]));
+    ui->textDelayCN4_2->setText(QString::number(delayCN_2[3]));
+    ui->textDelayCN5_2->setText(QString::number(delayCN_2[4]));
+    ui->textDelayCN6_2->setText(QString::number(delayCN_2[5]));
 
     // 单道计数设置
     accumulateTime = ui->accumulateTimeText->text().toDouble();
@@ -111,6 +175,7 @@ void Widget::pushUiData()
     ui->checkboxEnableCountEvents->setChecked(enableCountEvents);
     ui->textCountEvents->setEnabled(enableCountEvents);
     ui->textCountEvents->setText(QString::number(countEvents/1000));
+
     ui->checkBoxCN1->setChecked(channelConfig[1]);
     ui->checkBoxCN2->setChecked(channelConfig[2]);
     ui->checkBoxCN3->setChecked(channelConfig[3]);
@@ -137,6 +202,33 @@ void Widget::pushUiData()
     ui->textDelayCN4->setText(QString::number(delayCN[3]));
     ui->textDelayCN5->setText(QString::number(delayCN[4]));
     ui->textDelayCN6->setText(QString::number(delayCN[5]));
+
+    ui->checkBoxCN1_2->setChecked(channelConfig_2[1]);
+    ui->checkBoxCN2_2->setChecked(channelConfig_2[2]);
+    ui->checkBoxCN3_2->setChecked(channelConfig_2[3]);
+    ui->checkBoxCN4_2->setChecked(channelConfig_2[4]);
+    ui->checkBoxCN5_2->setChecked(channelConfig_2[5]);
+    ui->checkBoxCN6_2->setChecked(channelConfig_2[6]);
+    ui->levelTextCNCOM_2->setText(QString::number(level_2[0]));
+    ui->levelTextCN1_2->setText(QString::number(level_2[1]));
+    ui->levelTextCN2_2->setText(QString::number(level_2[2]));
+    ui->levelTextCN3_2->setText(QString::number(level_2[3]));
+    ui->levelTextCN4_2->setText(QString::number(level_2[4]));
+    ui->levelTextCN5_2->setText(QString::number(level_2[5]));
+    ui->levelTextCN6_2->setText(QString::number(level_2[6]));
+    ui->slopeCNCOM_2->setCurrentIndex(slope_2[0]);
+    ui->slopeCN1_2->setCurrentIndex(slope_2[1]);
+    ui->slopeCN2_2->setCurrentIndex(slope_2[2]);
+    ui->slopeCN3_2->setCurrentIndex(slope_2[3]);
+    ui->slopeCN4_2->setCurrentIndex(slope_2[4]);
+    ui->slopeCN5_2->setCurrentIndex(slope_2[5]);
+    ui->slopeCN6_2->setCurrentIndex(slope_2[6]);
+    ui->textDelayCN1_2->setText(QString::number(delayCN_2[0]));
+    ui->textDelayCN2_2->setText(QString::number(delayCN_2[1]));
+    ui->textDelayCN3_2->setText(QString::number(delayCN_2[2]));
+    ui->textDelayCN4_2->setText(QString::number(delayCN_2[3]));
+    ui->textDelayCN5_2->setText(QString::number(delayCN_2[4]));
+    ui->textDelayCN6_2->setText(QString::number(delayCN_2[5]));
 
     // 单道计数设置
     ui->accumulateTimeText->setText(QString::number(accumulateTime));
@@ -168,6 +260,11 @@ void Widget::saveToIni()
         configIni->setValue("TDC配置/level"+QString::number(i),level[i]);
         configIni->setValue("TDC配置/slope"+QString::number(i),slope[i]);
         configIni->setValue("TDC配置/delayCN"+QString::number(i),delayCN[i]);
+
+        configIni->setValue("TDC配置/channelConfig_2"+QString::number(i),channelConfig_2[i]);
+        configIni->setValue("TDC配置/level_2"+QString::number(i),level_2[i]);
+        configIni->setValue("TDC配置/slope_2"+QString::number(i),slope_2[i]);
+        configIni->setValue("TDC配置/delayCN_2"+QString::number(i),delayCN_2[i]);
     }
 
     //    configure single count
@@ -202,6 +299,11 @@ void Widget::loadFromIni()
         level[i] = configIni->value("TDC配置/level"+QString::number(i)).toDouble();
         slope[i] = configIni->value("TDC配置/slope"+QString::number(i)).toInt();
         delayCN[i] = configIni->value("TDC配置/delayCN"+QString::number(i)).toDouble();
+
+        channelConfig_2[i] = configIni->value("TDC配置/channelConfig_2"+QString::number(i)).toBool();
+        level_2[i] = configIni->value("TDC配置/level_2"+QString::number(i)).toDouble();
+        slope_2[i] = configIni->value("TDC配置/slope_2"+QString::number(i)).toInt();
+        delayCN_2[i] = configIni->value("TDC配置/delayCN_2"+QString::number(i)).toDouble();
     }
 
 //    configure single count
