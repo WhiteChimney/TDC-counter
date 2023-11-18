@@ -1,7 +1,7 @@
 #include "acqiris_tdc.h"
 
 Acqiris_TDC::Acqiris_TDC(QString m_resourceName,
-                         ViSession *m_instrId,
+                         ViSession m_instrId,
                          QObject *parent) : QObject(parent)
 {
     resourceName = m_resourceName.toLatin1().data();
@@ -11,21 +11,24 @@ Acqiris_TDC::Acqiris_TDC(QString m_resourceName,
 int Acqiris_TDC::initialize()
 {
     status = Acqrs_InitWithOptions(resourceName, VI_FALSE,
-                                   VI_FALSE, "CAL=0", instrId);
+                                   VI_FALSE, "CAL=0", &instrId);
     return status;
 }
 
-int Acqiris_TDC::config()
+int Acqiris_TDC::config(bool(&channelConfig)[NUM_CHANNELS+1],
+                        double(&level)[NUM_CHANNELS+1],
+                        int(&slope)[NUM_CHANNELS+1],
+                        int countEvents)
 {
     //设定连续运行模式并允许内部测试信号
-    AcqrsT3_configMode(*instrId, 2, 1, 0);//TC890 mode2, multiple acquisitions, 第三个数据为0：internal reference clock，1：external reference clock
+    AcqrsT3_configMode(instrId, 2, 1, 0);//TC890 mode2, multiple acquisitions, 第三个数据为0：internal reference clock，1：external reference clock
 
     //设定一个（较长的）超时时间8秒
-    AcqrsT3_configAcqConditions(idInstr, 8, 0, 0);// start timeout counter on Arm
+    AcqrsT3_configAcqConditions(instrId, 8, 0, 0);// start timeout counter on Arm
 
     //设置bank switch(最大8MBit)
     ViInt32 memorySize = 1 * 1024 * 1024;
-    AcqrsT3_configMemorySwitch(idInstr,2,countEvents,memorySize, 0);
+    AcqrsT3_configMemorySwitch(instrId,2,countEvents,memorySize, 0);
 //    第二个参数
 //    2, switch on count of events on common channel
 //    4, switch on memory size limit
@@ -34,18 +37,14 @@ int Acqiris_TDC::config()
 //    切换内存后可以处理数据
 
     //设置信道。Configure channels, common on negative slope, other left on positive
-    long long channelConfigCode[7] = {0x80000000};
-    for (int i = 0; i < 7; i++)
+    long long channelConfigCode[NUM_CHANNELS+1] = {0x80000000};
+    for (int i = 0; i < NUM_CHANNELS+1; i++)
         if (channelConfig[i])
             channelConfigCode[i] = 0x00000000;
 
-    ViStatus configStatus;
-    configStatus = AcqrsT3_configChannel(idInstr, -1, channelConfigCode[0], level[0], slope[0]);//channel common,positive slope,vth=1.0V
-    for (int i = 1; i < 7; i++)
-    {
-        ViStatus status = AcqrsT3_configChannel(idInstr, i, channelConfigCode[i], level[i], slope[i]);//channel 1
-        configStatus = configStatus + status;
-    }
+    status = AcqrsT3_configChannel(instrId, -1, channelConfigCode[0], level[0], slope[0]);//channel common,positive slope,vth=1.0V
+    for (int i = 1; i < NUM_CHANNELS+1; i++)
+        status += AcqrsT3_configChannel(instrId, i, channelConfigCode[i], level[i], slope[i]);//channel 1
 
     // 生成读取结构AqT3ReadParameters dataArray
     // dataArray 中包括了 start 信号与 marker 信号
@@ -63,6 +62,45 @@ int Acqiris_TDC::config()
     readParamPtr->dataType = ReadRawData;
     readParamPtr->readMode = AqT3ReadContinuous;
 
-    return configStatus;
+    return status;
 
+}
+
+void Acqiris_TDC::startAcquisition()
+{
+    readParamPtr = new AqT3ReadParameters();
+    acqThread = new Acqiris_AcquisitionThread(instrId, readParamPtr);
+    connect(acqThread,&Acqiris_AcquisitionThread::acqThreadBankSwitch,this,&Acqiris_TDC::dealAcqThreadBankSwitch);
+    connect(acqThread,&Acqiris_AcquisitionThread::acquisitionFinished,this,&Acqiris_TDC::dealAcqThreadFinished);
+    acqThread->startAcquisition();
+}
+
+void Acqiris_TDC::stopAcquisition()
+{
+    acqThread->stopAcquisition();
+}
+
+int Acqiris_TDC::getStatus()
+{
+    return status;
+}
+
+int Acqiris_TDC::close()
+{
+    status = Acqrs_closeAll();
+    return status;
+}
+
+void Acqiris_TDC::dealAcqThreadBankSwitch(AqT3DataDescriptor* dataDescPtr)
+{
+    emit dataReturned(dataDescPtr);
+}
+
+void Acqiris_TDC::dealAcqThreadFinished(ViStatus m_status)
+{
+    status = m_status;
+    disconnect(acqThread,&Acqiris_AcquisitionThread::acqThreadBankSwitch,this,&Acqiris_TDC::dealAcqThreadBankSwitch);
+    disconnect(acqThread,&Acqiris_AcquisitionThread::acquisitionFinished,this,&Acqiris_TDC::dealAcqThreadFinished);
+    delete acqThread;
+    delete readParamPtr;
 }
