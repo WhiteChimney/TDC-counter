@@ -6,6 +6,7 @@
 #include <QwtPlotHistogram>
 #include "stdafx.h"
 #include "projectInfo.h"
+#include "acqiris_tdc.h"
 
 namespace Ui {
 class HistogramWidget;
@@ -28,8 +29,12 @@ signals:
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
-    void dealRequestHistParam(int index, double *delayCN, double freqCOM);
+    void dealRequestHistParam(int index,
+                              double *delayCN,
+                              double *delayCN_2,
+                              double freqCOM, int countEvents);
     void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
+    void dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDescPtr_2); // 内存切换时累计计数
 
 private slots:
     void on_buttonReturn_released();
@@ -41,18 +46,23 @@ private:
 
     // UI 参数
     int device1, device2;
+    int computeMode;
     int channel1, channel2;        // 通道
     double accumulateTime = 1.0;   // 累计时间
     double delay = 0.0;            // 延时
 
     // TDC 参数
-    QVector<QVector<double>> timeSeq1, timeSeq2;
-    int nbrCOMdelay[6] = {0};
-    int delayInCOM[6] = {0};
+    QVector<QVector<double>> timeSeq1, timeSeq2, timeSeq1_2, timeSeq2_2;
+    QVector<QVector<double>> timeSeqX1, timeSeqX2;
+    int nbrCOMdelay[NUM_CHANNELS] = {0}, nbrCOMdelay_2[NUM_CHANNELS] = {0};
+    int maxNbrCOMdelay = 0;
+    int delayInCOM[NUM_CHANNELS] = {0}, delayInCOM_2[NUM_CHANNELS] = {0};
     int timeCOMunit;
-    int COM_HEAD = 0;
-    double *delayCN;           // 各通道固有延时
-    double freqCOM;               // TDC COM 重复频率
+    int COM_HEAD = 0, COM_HEAD_2 = 0, COM_HEAD_X = 0;
+    double *delayCN, *delayCN_2;           // 各通道固有延时
+    double freqCOM;
+    int countEvents;               // TDC COM 重复频率
+    int dataToBeRemoved = 0, dataToBeRemoved_2 = 0;
 
     // 画图参数
     double timeStart, timeStop;    // 起止时间

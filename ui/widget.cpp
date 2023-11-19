@@ -41,7 +41,9 @@ Widget::Widget(QWidget *parent)
     {
         ui->textDataDirectory->setCurrentText(
                     QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+
         saveToIni();     // 否则保存当前配置
+
     }
     fSingleCount->setFileName(tempFileName_SCC);
     fStream.setDevice(fSingleCount);

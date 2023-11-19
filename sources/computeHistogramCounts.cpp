@@ -2,6 +2,8 @@
 #include "AcqirisT3Import.h"
 #include <QDebug>
 
+void resizeSeqLength(QVector<QVector<double>> *v, int l);
+
 // 计算统计直方图计数
 
 bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
@@ -129,4 +131,76 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
                          delayInCOM,
                          timeCOMunit,
                          COM_HEAD);
+}
+
+QVector<QVector<double>> computeHistogramCountAcrossDevices_HOLD
+                         (AqT3DataDescriptor* dataDescPtr,
+                          int channel1,
+                          int *nbrCOMdelay,
+                          int maxNbrCOMdelay,
+                          int *delayInCOM,
+                          int timeCOMunit,
+                          int countEvents)
+{
+    QVector<QVector<double>> timeSeq;
+    resizeSeqLength(&timeSeq, countEvents + maxNbrCOMdelay + 2);
+
+    int comNum = 0;
+
+    long nbrSamples = dataDescPtr->nbrSamples;
+
+    for (long n = 0 ; n < nbrSamples ; ++n)
+    {
+        int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
+        int channel = (sample & 0x70000000) >> 28;   //右移28位为channel位
+
+        if (channel == channel1)
+        {
+            int indexCOM;
+            int TimeOfFlight = sample & 0x0FFFFFFF;             //最右侧28位为计数值
+            TimeOfFlight += delayInCOM[channel-1];
+            if (TimeOfFlight > timeCOMunit)
+            {
+                TimeOfFlight -= timeCOMunit;
+                indexCOM = nbrCOMdelay[channel-1] + 1 + comNum;
+            }
+            else
+                indexCOM = nbrCOMdelay[channel-1] + comNum;
+            timeSeq[indexCOM].append(TimeOfFlight/20.0);
+        }
+        else if (channel == 0 or channel == 7)
+            comNum++;
+    }
+
+    return timeSeq;
+}
+
+
+int computeHistogramCountAcrossDevices_COMPUTE
+    (QVector<QVector<double>> timeSeqX1, QVector<QVector<double>> timeSeqX2,
+     double delay, double timeStart, double binWidth, int nbrIntervals, int* binHeight)
+{
+    int minSize;
+    int size1 = timeSeqX1.size();
+    int size2 = timeSeqX2.size();
+    if (size1 < size2)
+        minSize = size1;
+    else
+        minSize = size2;
+
+    for (int n = 0; n < minSize; n++)
+    {
+        for (int i = 0; i < timeSeqX1[n].size(); i++)
+        {
+            for (int j = 0; j < timeSeqX2[n].size(); j++)
+            {
+                double timeDiff = timeSeqX2[n][j] - timeSeqX1[n][i];
+                int index = int((timeDiff+delay-timeStart)/binWidth);
+                if (index >= 0 and index < nbrIntervals)
+                    binHeight[index]++;
+            }
+        }
+    }
+
+    return minSize;
 }

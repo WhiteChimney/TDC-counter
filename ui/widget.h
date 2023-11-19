@@ -120,7 +120,10 @@ private:
 signals:
     void countParamReady(bool*, int*);
     void coinParamReady(int index, double *delayCN, double freqCOM);
-    void histParamReady(int index, double *delayCN, double freqCOM);
+    void histParamReady(int index,
+                        double *delayCN,
+                        double *delayCN_2,
+                        double freqCOM, int countEvents);
 
 public:
     void setupAcqIndicator();
@@ -131,26 +134,21 @@ private:
     double freqCOM = 1000.0;             // kHz
     bool enableCountEvents = false;
     int countEvents = 10;           // kHz
-    bool channelConfig[7], channelConfig_2[7];
-    double level[7] = {0.5}, level_2[7] = {0.5};
-    int slope[7] = {0}, slope_2[7] = {0};
+    bool channelConfig[NUM_CHANNELS+1], channelConfig_2[NUM_CHANNELS+1];
+    double level[NUM_CHANNELS+1] = {0.5}, level_2[NUM_CHANNELS+1] = {0.5};
+    int slope[NUM_CHANNELS+1] = {0}, slope_2[NUM_CHANNELS+1] = {0};
 
     // 采集过程用到的参数/
 private:
     Acqiris_TDC *tdc, *tdc_2;
     bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
-//    ViSession idInstr, idInstr_2;
-//    ViStatus status, status_2;
-//    ViStatus configStatus = -1, configStatus_2 = -1;
-//    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
-//    AqT3ReadParameters* readParamPtr_2 = new AqT3ReadParameters();
     QSimpleLed *statusIndicator, *statusIndicator_2;
 
     // 单道计数参数
 private:
-    int nbrSCC[6] = {0}, nbrSCC_2[6] = {0};
-    int nbrSCCfuture[6] = {0}, nbrSCCfuture_2[6] = {0};
-    double delayCN[7] = {0.0}, delayCN_2[7] = {0.0};
+    int nbrSCC[NUM_CHANNELS] = {0}, nbrSCC_2[NUM_CHANNELS] = {0};
+    int nbrSCCfuture[NUM_CHANNELS] = {0}, nbrSCCfuture_2[NUM_CHANNELS] = {0};
+    double delayCN[NUM_CHANNELS+1] = {0.0}, delayCN_2[NUM_CHANNELS+1] = {0.0};
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
