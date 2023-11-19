@@ -42,7 +42,7 @@ public slots:
     // 关闭符合子窗口
     void dealRequestCoinParam(int index);
 
-    void dealAskDealAcqBankSwitchCoin(int index);
+    void dealAskDealAcqBankSwitchCoin(int index, int computeMode);
     // 将 Bank 切换信号与符合子窗口的槽对接
     void dealAskStopDealAcqBankSwitchCoin(int index);
     // 停止对接 Bank 切换信号与符合子窗口的槽
@@ -119,7 +119,10 @@ private:
 
 signals:
     void countParamReady(bool*, int*);
-    void coinParamReady(int index, double *delayCN, double freqCOM);
+    void coinParamReady(int index,
+                        double *delayCN,
+                        double *delayCN_2,
+                        double freqCOM, int countEvents);
     void histParamReady(int index,
                         double *delayCN,
                         double *delayCN_2,

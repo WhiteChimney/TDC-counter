@@ -28,6 +28,12 @@ void CoincidenceWidget::fetchUiData()
     channelMark_2[4] = ui->checkBoxCN5_2->isChecked(); delayMulti_2[4] = int(20*ui->textDelayCN5_2->text().toDouble());
     channelMark_2[5] = ui->checkBoxCN6_2->isChecked(); delayMulti_2[5] = int(20*ui->textDelayCN6_2->text().toDouble());
 
+    if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
+        computeMode = device1 + device2;
+    else
+        computeMode = (channelMark[0] or channelMark[1] or channelMark[2] or channelMark[3] or channelMark[4] or channelMark[5])
+                + (channelMark_2[0] or channelMark_2[1] or channelMark_2[2] or channelMark_2[3] or channelMark_2[4] or channelMark_2[5]);
+
     accumulateTimeMulti = ui->accumTimeCoin_Multi->text().toDouble();
     enableAccumulateTimeMulti = ui->checkboxAccumlateTime_Multi->isChecked();
     toleranceMulti = int(20*ui->tolerance_Multi->text().toDouble());

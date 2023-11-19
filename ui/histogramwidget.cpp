@@ -199,13 +199,10 @@ void HistogramWidget::dealRequestHistParam(int m_index,
         resizeSeqLength(&timeSeq2_2, maxNbrCOMdelay+2);
         COM_HEAD_2 = 0;
 
-//        timeSeqX1.clear();
-//        timeSeqX2.clear();
         resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay + 2));
         resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay + 2));
         COM_HEAD_X = 0;
         comRange = ceil((timeStop - timeStart) * freqCOM / 1.0e9 / 2);
-//        qDebug() << comRange;
 
         emit askDealAcqBankSwitchHist(index, computeMode);
     }
@@ -231,25 +228,13 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
             channel = channel1;
         else
             channel = channel2;
-//        timeSeqX1.remove(0,dataToBeRemoved);
-//        dataToBeRemoved = 0;
-//        timeSeqX1.append(computeHistogramCountAcrossDevices_HOLD(
-//                             dataDescPtr,
-//                             channel,
-//                             nbrCOMdelay,
-//                             maxNbrCOMdelay,
-//                             delayInCOM,
-//                             timeCOMunit,
-//                             countEvents));
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr,
                                   &timeSeqX1,
                                   channel,
                                   nbrCOMdelay,
-        //                          int maxNbrCOMdelay,
                                   delayInCOM,
                                   timeCOMunit,
-        //                          int countEvents,
                                   &COM_HEAD);
         break;
     case 2:
@@ -271,26 +256,13 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
             channel = channel2;
         else
             channel = channel1;
-//        timeSeqX2.remove(0,dataToBeRemoved_2);
-//        dataToBeRemoved_2 = 0;
-//        timeSeqX2.append(computeHistogramCountAcrossDevices_HOLD(
-//                             dataDescPtr_2,
-//                             channel,
-//                             nbrCOMdelay_2,
-//                             maxNbrCOMdelay,
-//                             delayInCOM_2,
-//                             timeCOMunit,
-//                             countEvents));
-
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr_2,
                                   &timeSeqX2,
                                   channel,
                                   nbrCOMdelay_2,
-        //                          int maxNbrCOMdelay,
                                   delayInCOM_2,
                                   timeCOMunit,
-        //                          int countEvents,
                                   &COM_HEAD_2);
         // TDC 2 再计算数据
 

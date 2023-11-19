@@ -34,19 +34,33 @@ void Widget::dealCoincidenceReturn(int index)
 
 void Widget::dealRequestCoinParam(int index)
 {
-    emit coinParamReady(index, delayCN, freqCOM);
+    emit coinParamReady(index, delayCN, delayCN_2, freqCOM, countEvents);
 }
 
-void Widget::dealAskDealAcqBankSwitchCoin(int index)
+void Widget::dealAskDealAcqBankSwitchCoin(int index, int computeMode)
 {
     coinW = vCoinWidget.at(index);
-    connect(tdc,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    switch (computeMode) {
+    case 0:
+        connect(tdc,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+        break;
+    case 1:
+        connect(tdc,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+        connect(tdc_2,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin_2);
+        break;
+    case 2:
+        connect(tdc_2,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin_2);
+        break;
+    default:
+        break;
+    }
 }
 
 void Widget::dealAskStopDealAcqBankSwitchCoin(int index)
 {
     coinW = vCoinWidget.at(index);
     disconnect(tdc,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin);
+    disconnect(tdc_2,&Acqiris_TDC::dataReturned,coinW,&CoincidenceWidget::dealAcqThreadBankSwitchCoin_2);
 }
 
 void Widget::dealCoinTimerNeedsSync(int index)

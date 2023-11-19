@@ -62,7 +62,7 @@ private:
     double *delayCN, *delayCN_2;           // 各通道固有延时
     double freqCOM;
     int countEvents;               // TDC COM 重复频率
-    int dataToBeRemoved = 0, dataToBeRemoved_2 = 0;
+//    int dataToBeRemoved = 0, dataToBeRemoved_2 = 0;
     int comRange = 0;
 
     // 画图参数

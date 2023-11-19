@@ -2,8 +2,6 @@
 #include "AcqirisT3Import.h"
 #include <QDebug>
 
-void resizeSeqLength(QVector<QVector<double>> *v, int l);
-
 // 计算统计直方图计数
 
 bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
