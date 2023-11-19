@@ -28,11 +28,23 @@ void Widget::dealRequestHistParam(int index)
     emit histParamReady(index, delayCN, delayCN_2, freqCOM, countEvents);
 }
 
-void Widget::dealAskDealAcqBankSwitchHist(int index)
+void Widget::dealAskDealAcqBankSwitchHist(int index, int computeMode)
 {
     histW = vHistWidget.at(index);
-    connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
-    connect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
+    switch (computeMode) {
+    case 0:
+        connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+        break;
+    case 1:
+        connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+        connect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
+        break;
+    case 2:
+        connect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
+        break;
+    default:
+        break;
+    }
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)

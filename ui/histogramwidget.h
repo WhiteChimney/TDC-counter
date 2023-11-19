@@ -24,7 +24,7 @@ public:
 signals:
     void returnSignal(int index);                  // 返回信号
     void requestHistParam(int index);              // 请求用于画直方图的参数
-    void askDealAcqBankSwitchHist(int index);      // 通知主窗口接上内存切换信号
+    void askDealAcqBankSwitchHist(int index, int computeMode);      // 通知主窗口接上内存切换信号
     void askStopDealAcqBankSwitchHist(int index);  // 通知主窗口断掉内存切换信号
 
 public slots:
@@ -63,6 +63,7 @@ private:
     double freqCOM;
     int countEvents;               // TDC COM 重复频率
     int dataToBeRemoved = 0, dataToBeRemoved_2 = 0;
+    int comRange = 0;
 
     // 画图参数
     double timeStart, timeStop;    // 起止时间

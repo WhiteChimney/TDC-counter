@@ -76,17 +76,20 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
                            int timeCOMunit,
                            int *COM_HEAD);
 
-QVector<QVector<double>> computeHistogramCountAcrossDevices_HOLD
+void computeHistogramCountAcrossDevices_HOLD
                          (AqT3DataDescriptor* dataDescPtr,
+                          QVector<QVector<double>> *timeSeq1,
                           int channel1,
                           int *nbrCOMdelay,
-                          int maxNbrCOMdelay,
+//                          int maxNbrCOMdelay,
                           int *delayInCOM,
                           int timeCOMunit,
-                          int countEvents);
+//                          int countEvents,
+                          int *COM_HEAD);
 
-int computeHistogramCountAcrossDevices_COMPUTE
-    (QVector<QVector<double>> timeSeqX1, QVector<QVector<double>> timeSeqX2,
+void computeHistogramCountAcrossDevices_COMPUTE
+    (QVector<QVector<double>>& timeSeqX1, QVector<QVector<double>>& timeSeqX2,
+     int comRange, int timeCOMunit, int *COM_HEAD, int *COM_HEAD_2, int *COM_HEAD_X,
      double delay, double timeStart, double binWidth, int nbrIntervals, int* binHeight);
 
 enum RecordMode {notRecording, SingleCountOnly, CoinCountOnly, SingleAndCoinCount};

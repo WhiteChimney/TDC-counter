@@ -54,7 +54,7 @@ public slots:
     // 关闭直方图子窗口
     void dealRequestHistParam(int index);
 
-    void dealAskDealAcqBankSwitchHist(int index);
+    void dealAskDealAcqBankSwitchHist(int index, int computeMode);
     // 对接 Bank 切换与直方图槽函数
     void dealAskStopDealAcqBankSwitchHist(int index);
     // 停止将数据传入直方图
