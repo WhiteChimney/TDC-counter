@@ -31,7 +31,7 @@ void CoincidenceWidget::fetchUiData()
     if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
         computeMode = device1 + device2;
     else
-        computeMode = (channelMark[0] or channelMark[1] or channelMark[2] or channelMark[3] or channelMark[4] or channelMark[5])
+        computeMode = not(channelMark[0] or channelMark[1] or channelMark[2] or channelMark[3] or channelMark[4] or channelMark[5])
                 + (channelMark_2[0] or channelMark_2[1] or channelMark_2[2] or channelMark_2[3] or channelMark_2[4] or channelMark_2[5]);
 
     accumulateTimeMulti = ui->accumTimeCoin_Multi->text().toDouble();
