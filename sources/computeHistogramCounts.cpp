@@ -7,7 +7,7 @@
 bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
 
 void countSingle(AqT3DataDescriptor* dataDescPtr,
-                 QVector<QVector<double>> timeSeq1,
+                 QVector<QVector<double>> &timeSeq1,
                  int channel1,
                  double timeStart, double binWidth, int nbrIntervals, int* binHeight,
                  int *nbrCOMdelay,
@@ -38,7 +38,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
         }
         else if (channel == 0 or channel == 7)
         {
-            for (int i = 0; i < timeSeq1.size(); i++)
+            for (int i = 0; i < timeSeq1[*COM_HEAD].size(); i++)
             {
                 int index = int((timeSeq1[*COM_HEAD][i]-timeStart)/binWidth);
                 if (index >= 0 and index < nbrIntervals)
@@ -51,7 +51,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
 }
 
 void countDifference(AqT3DataDescriptor* dataDescPtr,
-                     QVector<QVector<double>> timeSeq1, QVector<QVector<double>> timeSeq2,
+                     QVector<QVector<double>> &timeSeq1, QVector<QVector<double>> &timeSeq2,
                      int channel1, int channel2, double delay,
                      double timeStart, double binWidth, int nbrIntervals, int* binHeight,
                      int *nbrCOMdelay,
@@ -103,7 +103,7 @@ void countDifference(AqT3DataDescriptor* dataDescPtr,
 }
 
 void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
-                           QVector<QVector<double>> timeSeq1, QVector<QVector<double>> timeSeq2,
+                           QVector<QVector<double>> &timeSeq1, QVector<QVector<double>> &timeSeq2,
                            int channel1, int channel2, double delay,
                            double timeStart, double binWidth, int nbrIntervals, int* binHeight,
                            int *nbrCOMdelay,
