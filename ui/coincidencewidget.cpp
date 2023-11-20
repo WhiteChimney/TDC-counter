@@ -187,7 +187,7 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
             {
                 channels_2[nbrChannels_2] = channel2-1;
                 nbrChannels_2++;
-                delayCalc[channel2-1] = delay;
+                delayCalc_2[channel2-1] = delay;
             }
         }
         else                                   // 多通道模式计算符合计数
@@ -300,14 +300,14 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
             resizeSeqLength(&timeSeqAcc_2, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc_2, maxNbrCOMdelayAcc+2);
         }
-        COM_HEAD_2 = 0;
+        COM_HEAD_2 = acquireComDelay;
 
         resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay+2));
         resizeSeqLength(&channelSeqX1, 3*(countEvents + maxNbrCOMdelay+2));
         resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay+2));
         resizeSeqLength(&channelSeqX2, 3*(countEvents + maxNbrCOMdelay+2));
         nbrChannels_X = nbrChannels + nbrChannels_2;
-        if (nbrChannels > 0 and nbrChannels_2 > 0)
+        if (nbrChannels == 1 and nbrChannels_2 == 1)
         {
             resizeSeqLength(&timeSeqAccX1, 3*(countEvents + maxNbrCOMdelayAcc+2));
             resizeSeqLength(&channelSeqAccX1, 3*(countEvents + maxNbrCOMdelayAcc+2));

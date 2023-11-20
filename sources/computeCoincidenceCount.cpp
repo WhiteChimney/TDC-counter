@@ -189,7 +189,7 @@ void computeCoincidenceCountAcrossDevices_HOLD
             if (!channelToBeCalculated(channel,channels,nbrChannels)) continue;
 
             int indexCOM, indexCOMAcc;
-            if (nbrChannels == 2)
+            if (nbrChannels == 1)
                 TimeOfFlightAcc = TimeOfFlight + delayInCOMAcc[channel-1];
             TimeOfFlight += delayInCOM[channel-1];
             // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
@@ -203,7 +203,8 @@ void computeCoincidenceCountAcrossDevices_HOLD
             index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
             timeSeq[indexCOM].insert(index, TimeOfFlight);
             channelSeq[indexCOM].insert(index, channel-1);
-            if (nbrChannels == 2)
+
+            if (nbrChannels == 1)
             {
                 if (TimeOfFlightAcc > timeCOMunit)
                 {

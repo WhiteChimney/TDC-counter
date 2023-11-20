@@ -14,7 +14,7 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="7" column="5" colspan="2">
+   <item row="8" column="4" colspan="2">
     <widget class="QGroupBox" name="groupBox_4">
      <property name="title">
       <string/>
@@ -80,10 +80,10 @@
      </layout>
     </widget>
    </item>
-   <item row="0" column="6">
+   <item row="0" column="5">
     <widget class="QStackedWidget" name="stackCoin">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="stackCoin_Dual">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -267,6 +267,48 @@
          </layout>
         </widget>
        </item>
+       <item row="3" column="0">
+        <widget class="QLCDNumber" name="lcdAccCoin">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);</string>
+         </property>
+         <property name="digitCount">
+          <number>9</number>
+         </property>
+         <property name="segmentStyle">
+          <enum>QLCDNumber::Flat</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>偶然符合额外延时(ns)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="delayAccCoin">
+            <property name="text">
+             <string>20</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
        <item row="0" column="1" rowspan="4">
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
@@ -439,48 +481,6 @@
          </property>
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
-         </property>
-         <property name="digitCount">
-          <number>9</number>
-         </property>
-         <property name="segmentStyle">
-          <enum>QLCDNumber::Flat</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QGroupBox" name="groupBox_3">
-         <property name="title">
-          <string/>
-         </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <item>
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>偶然符合额外延时(ns)</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="delayAccCoin">
-            <property name="text">
-             <string>20</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLCDNumber" name="lcdAccCoin">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="digitCount">
           <number>9</number>
@@ -1126,6 +1126,24 @@
       </layout>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="5">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>TDC 1 与 TDC 2 间 COM 通道采集延迟数</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="textAcquireComDelay">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

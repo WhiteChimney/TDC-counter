@@ -98,6 +98,7 @@ private:
     double *delayCN, *delayCN_2;           // 各通道固有延时
     double freqCOM;               // TDC COM 重复频率
     int countEvents;
+    int acquireComDelay = 0;    // 由于采集线程不同步导致的数据返回时错开的 COM 数
 
     // 数据保存
     bool coinSavable = false;  // 判断是否可保存

@@ -145,7 +145,6 @@ void HistogramWidget::dealRequestHistParam(int m_index,
                                            double m_freqCOM,
                                            int m_countEvents)
 {
-
     if (index == m_index)
     {
         delayCN = m_delayCN;
@@ -267,37 +266,6 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
                                   &COM_HEAD_2);
 
         // TDC 2 再计算数据
-
-//        static int saveiii = 0;
-//        if (saveiii++ % 100 == 0)
-//        {
-//            QString fileName = "D:/Qt/QtProjects/testdata11.txt";
-//            QFile f(fileName);
-//            QTextStream fs;
-//            f.open(QIODevice::WriteOnly);
-//            fs.setDevice(&f);
-//            for (int i = 0; i < timeSeqX1.size(); i++)
-//            {
-//                for (int j = 0; j < timeSeqX1[i].size(); j++)
-//                    fs << timeSeqX1[i][j] << "\t";
-//                fs << "\n";
-//            }
-//            f.close();
-
-//            QString fileName2 = "D:/Qt/QtProjects/testdata21.txt";
-//            QFile f2(fileName2);
-//            QTextStream fs2;
-//            f2.open(QIODevice::WriteOnly);
-//            fs2.setDevice(&f2);
-//            for (int i = 0; i < timeSeqX2.size(); i++)
-//            {
-//                for (int j = 0; j < timeSeqX2[i].size(); j++)
-//                    fs2 << timeSeqX2[i][j] << "\t";
-//                fs2 << "\n";
-//            }
-//            f2.close();
-//        }
-
         computeHistogramCountAcrossDevices_COMPUTE(
                             timeSeqX1, timeSeqX2, comRange, timeCOMunit,
                             &COM_HEAD, &COM_HEAD_2, &COM_HEAD_X,
@@ -361,6 +329,6 @@ void HistogramWidget::loadFromIni()
 
 void HistogramWidget::on_buttonPlusOne_released()
 {
-    COM_HEAD = (COM_HEAD + 1) % timeSeqX1.size();
+    COM_HEAD_2 = (COM_HEAD_2 + 1) % timeSeqX2.size();
 }
 

@@ -204,24 +204,13 @@ void computeHistogramCountAcrossDevices_COMPUTE
     for (int m = *COM_HEAD_X; m < *COM_HEAD_X + computeLength; m++)
     {
         int mm = m % vectorSize;
-        int n = mm;
-//        for (int n = mm - comRange; n < mm + comRange; n++)
+        for (int n = mm - comRange; n < mm + comRange; n++)
         {
             int nn = n;
-//            if (n < 0)
-//                nn = n + vectorSize;
-//            else if (n >= vectorSize)
-//                nn = n - vectorSize;
-
-            static int iii = 0;
-            if (iii++ % 199973 == 0)
-            {
-                qDebug() << "head: " << *COM_HEAD << *COM_HEAD_2 << *COM_HEAD_X << vectorSize << computeLength;
-                qDebug() << "size: " << timeSeqX1[mm].size() << timeSeqX2[nn].size();
-                qDebug() << "range: " << n - mm;
-//                qDebug() << "location: " << index << nbrIntervals;
-            }
-
+            if (n < 0)
+                nn = n + vectorSize;
+            else if (n >= vectorSize)
+                nn = n - vectorSize;
             for (int i = 0; i < timeSeqX1[mm].size(); i++)
             {
                 for (int j = 0; j < timeSeqX2[nn].size(); j++)
@@ -230,7 +219,6 @@ void computeHistogramCountAcrossDevices_COMPUTE
                     int index = int((timeDiff+delay-timeStart)/binWidth);
                     if (index >= 0 and index < nbrIntervals)
                         binHeight[index]++;
-
                 }
             }
         }
