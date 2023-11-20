@@ -114,6 +114,7 @@ void HistogramWidget::on_buttonReturn_released()
 
 void HistogramWidget::on_buttonStart_released()
 {
+    on_buttonStop_released();
     fetchUiData();
     binHeight = new int[nbrIntervals]();
     histIntervals = new QwtInterval[nbrIntervals]();
@@ -230,7 +231,7 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
             channel = channel2;
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr,
-                                  &timeSeqX1,
+                                  timeSeqX1,
                                   channel,
                                   nbrCOMdelay,
                                   delayInCOM,
@@ -258,13 +259,44 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
             channel = channel1;
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr_2,
-                                  &timeSeqX2,
+                                  timeSeqX2,
                                   channel,
                                   nbrCOMdelay_2,
                                   delayInCOM_2,
                                   timeCOMunit,
                                   &COM_HEAD_2);
+
         // TDC 2 再计算数据
+
+//        static int saveiii = 0;
+//        if (saveiii++ % 100 == 0)
+//        {
+//            QString fileName = "D:/Qt/QtProjects/testdata11.txt";
+//            QFile f(fileName);
+//            QTextStream fs;
+//            f.open(QIODevice::WriteOnly);
+//            fs.setDevice(&f);
+//            for (int i = 0; i < timeSeqX1.size(); i++)
+//            {
+//                for (int j = 0; j < timeSeqX1[i].size(); j++)
+//                    fs << timeSeqX1[i][j] << "\t";
+//                fs << "\n";
+//            }
+//            f.close();
+
+//            QString fileName2 = "D:/Qt/QtProjects/testdata21.txt";
+//            QFile f2(fileName2);
+//            QTextStream fs2;
+//            f2.open(QIODevice::WriteOnly);
+//            fs2.setDevice(&f2);
+//            for (int i = 0; i < timeSeqX2.size(); i++)
+//            {
+//                for (int j = 0; j < timeSeqX2[i].size(); j++)
+//                    fs2 << timeSeqX2[i][j] << "\t";
+//                fs2 << "\n";
+//            }
+//            f2.close();
+//        }
 
         computeHistogramCountAcrossDevices_COMPUTE(
                             timeSeqX1, timeSeqX2, comRange, timeCOMunit,
@@ -326,3 +358,9 @@ void HistogramWidget::loadFromIni()
 
     pushUiData();
 }
+
+void HistogramWidget::on_buttonPlusOne_released()
+{
+    COM_HEAD = (COM_HEAD + 1) % timeSeqX1.size();
+}
+

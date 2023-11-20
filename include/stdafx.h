@@ -107,7 +107,7 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
 
 void computeHistogramCountAcrossDevices_HOLD
                          (AqT3DataDescriptor* dataDescPtr,
-                          QVector<QVector<double>> *timeSeq1,
+                          QVector<QVector<double>> &timeSeq1,
                           int channel1,
                           int *nbrCOMdelay,
 //                          int maxNbrCOMdelay,

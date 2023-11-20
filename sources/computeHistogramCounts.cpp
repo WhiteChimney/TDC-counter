@@ -38,7 +38,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
         }
         else if (channel == 0 or channel == 7)
         {
-            for (int i = 0; i < timeSeq1.size(); i++)
+            for (int i = 0; i < timeSeq1[*COM_HEAD].size(); i++)
             {
                 int index = int((timeSeq1[*COM_HEAD][i]-timeStart)/binWidth);
                 if (index >= 0 and index < nbrIntervals)
@@ -133,14 +133,14 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
 
 void computeHistogramCountAcrossDevices_HOLD
                          (AqT3DataDescriptor* dataDescPtr,
-                          QVector<QVector<double>> *timeSeq1,
+                          QVector<QVector<double>> &timeSeq1,
                           int channel1,
                           int *nbrCOMdelay,
                           int *delayInCOM,
                           int timeCOMunit,
                           int *COM_HEAD)
 {
-    int vectorSize = timeSeq1->size();
+    int vectorSize = timeSeq1.size();
 
     long nbrSamples = dataDescPtr->nbrSamples;
 
@@ -161,9 +161,9 @@ void computeHistogramCountAcrossDevices_HOLD
             }
             else
                 indexCOM = (nbrCOMdelay[channel-1] + *COM_HEAD) % vectorSize;
-            (*timeSeq1)[indexCOM].append(TimeOfFlight/20.0);
+            timeSeq1[indexCOM].append(TimeOfFlight/20.0);
         }
-        else if (channel == 0 or channel == 7)
+        else if (channel == 0)
         {
             (*COM_HEAD)++;
             if (*COM_HEAD >= vectorSize)
@@ -204,25 +204,36 @@ void computeHistogramCountAcrossDevices_COMPUTE
     for (int m = *COM_HEAD_X; m < *COM_HEAD_X + computeLength; m++)
     {
         int mm = m % vectorSize;
-        int nn = mm;
+        int n = mm;
 //        for (int n = mm - comRange; n < mm + comRange; n++)
-//        {
-//            int nn = n;
+        {
+            int nn = n;
 //            if (n < 0)
 //                nn = n + vectorSize;
-//            if (n >= vectorSize)
+//            else if (n >= vectorSize)
 //                nn = n - vectorSize;
+
+            static int iii = 0;
+            if (iii++ % 199973 == 0)
+            {
+                qDebug() << "head: " << *COM_HEAD << *COM_HEAD_2 << *COM_HEAD_X << vectorSize << computeLength;
+                qDebug() << "size: " << timeSeqX1[mm].size() << timeSeqX2[nn].size();
+                qDebug() << "range: " << n - mm;
+//                qDebug() << "location: " << index << nbrIntervals;
+            }
+
             for (int i = 0; i < timeSeqX1[mm].size(); i++)
             {
                 for (int j = 0; j < timeSeqX2[nn].size(); j++)
                 {
-                    double timeDiff = timeSeqX2[nn][j] - timeSeqX1[mm][i]/* + (n-mm)*timeCOMunit*/;
+                    double timeDiff = timeSeqX2[nn][j] - timeSeqX1[mm][i] + (n-mm)*timeCOMunit;
                     int index = int((timeDiff+delay-timeStart)/binWidth);
                     if (index >= 0 and index < nbrIntervals)
                         binHeight[index]++;
+
                 }
             }
-//        }
+        }
     }
 
     for (int m = *COM_HEAD_X; m < *COM_HEAD_X + computeLength; m++)

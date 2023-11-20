@@ -41,6 +41,8 @@ private slots:
     void on_buttonStart_released();
     void on_buttonStop_released();
 
+    void on_buttonPlusOne_released();
+
 private:
     Ui::HistogramWidget *ui;
 
