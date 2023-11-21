@@ -43,10 +43,10 @@ void computeSingleChannelCount
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-         QList<QVector<int>> timeSeqAcc,
-         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         QList<QVector<int>> channelSeqAcc,
+         QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> &timeSeqAcc,
+         QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> &channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
@@ -97,7 +97,7 @@ void resizeSeqLength(QVector<QVector<int>> *v, int l);
 void resizeSeqLength(QVector<QVector<double>> *v, int l);
 
 void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
-                           QVector<QVector<double>> timeSeq1, QVector<QVector<double>> timeSeq2,
+                           QVector<QVector<double>> &timeSeq1, QVector<QVector<double>> &timeSeq2,
                            int channel1, int channel2, double delay,
                            double timeStart, double binWidth, int nbrIntervals, int* binHeight,
                            int *nbrCOMdelay,

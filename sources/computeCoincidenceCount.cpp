@@ -51,10 +51,10 @@ int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, in
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-         QList<QVector<int>> timeSeqAcc,
-         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         QList<QVector<int>> channelSeqAcc,
+         QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> &timeSeqAcc,
+         QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> &channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,
@@ -79,6 +79,7 @@ void computeCoincidenceCount
 //        int flag = (sample & 0x80000000) >> 31;      //“sample”值右移31位为flag位
         int channel = (sample & 0x70000000) >> 28;   //右移28位为channel位
         int TimeOfFlight = sample & 0x0FFFFFFF;             //最右侧28位为计数值
+
         int TimeOfFlightAcc = 0;
         // flag 为 0 表示 COM 信号，channel 为 7 表示内存切换
         if (channel != 0 and channel != 7)                        // Channel=1-6 are the physical channels;
@@ -88,7 +89,7 @@ void computeCoincidenceCount
             if (!channelToBeCalculated(channel,channels,nbrChannels)) continue;
 
             int indexCOM, indexCOMAcc;
-            if (nbrChannels == 2)
+            if (timeSeqAcc.size() == timeSeq.size())
                 TimeOfFlightAcc = TimeOfFlight + delayInCOMAcc[channel-1];
             TimeOfFlight += delayInCOM[channel-1];
             // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
@@ -102,7 +103,7 @@ void computeCoincidenceCount
             index = findInsertPosition(timeSeq[indexCOM], TimeOfFlight);        // 按时间升序排列
             timeSeq[indexCOM].insert(index, TimeOfFlight);
             channelSeq[indexCOM].insert(index, channel-1);
-            if (nbrChannels == 2)
+            if (timeSeqAcc.size() == timeSeq.size())
             {
                 if (TimeOfFlightAcc > timeCOMunit)
                 {
@@ -130,7 +131,7 @@ void computeCoincidenceCount
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
                     }
                 }
-                if (nbrChannels == 2)
+                if (timeSeqAcc.size() == timeSeq.size())
                 {
                     for (int i = 0; i < timeSeqAcc[*COM_HEAD].size()-2+1; i++)
                     {
@@ -146,7 +147,7 @@ void computeCoincidenceCount
             mark = false;
             timeSeq[*COM_HEAD].clear();
             channelSeq[*COM_HEAD].clear();
-            if (nbrChannels == 2)
+            if (timeSeqAcc.size() == timeSeq.size())
             {
                 timeSeqAcc[*COM_HEAD].clear();
                 channelSeqAcc[*COM_HEAD].clear();
@@ -189,7 +190,7 @@ void computeCoincidenceCountAcrossDevices_HOLD
             if (!channelToBeCalculated(channel,channels,nbrChannels)) continue;
 
             int indexCOM, indexCOMAcc;
-            if (nbrChannels == 1)
+            if (timeSeqAcc.size() == timeSeq.size())
                 TimeOfFlightAcc = TimeOfFlight + delayInCOMAcc[channel-1];
             TimeOfFlight += delayInCOM[channel-1];
             // channel-1 通道所插入的序列编号应为 nbrCOMdelay[channel-1]
@@ -204,7 +205,7 @@ void computeCoincidenceCountAcrossDevices_HOLD
             timeSeq[indexCOM].insert(index, TimeOfFlight);
             channelSeq[indexCOM].insert(index, channel-1);
 
-            if (nbrChannels == 1)
+            if (timeSeqAcc.size() == timeSeq.size())
             {
                 if (TimeOfFlightAcc > timeCOMunit)
                 {
@@ -237,28 +238,28 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
                  int* nbrCoin,
                  int tolerance,
                  int* nbrCoinAcc,
-                 int *COM_HEAD, int *COM_HEAD_2, int *COM_HEAD_X)
+                 int *COM_HEAD_X1, int *COM_HEAD_X2, int *COM_HEAD_compute)
 {
     int vectorSize = timeSeqX1.size();
-    int computeLength = *COM_HEAD - *COM_HEAD_X;
+    int computeLength = *COM_HEAD_X1 - *COM_HEAD_compute;
 
-    if (*COM_HEAD < *COM_HEAD_X and *COM_HEAD_2 < *COM_HEAD_X)
+    if (*COM_HEAD_X1 < *COM_HEAD_compute and *COM_HEAD_X2 < *COM_HEAD_compute)
     {
-        if (*COM_HEAD > *COM_HEAD_2)        // 2 < 1 < X
-            computeLength = vectorSize - *COM_HEAD_X + *COM_HEAD_2;
+        if (*COM_HEAD_X1 > *COM_HEAD_X2)        // 2 < 1 < X
+            computeLength = vectorSize - *COM_HEAD_compute + *COM_HEAD_X2;
         else                                // 1 < 2 < X
-            computeLength = vectorSize - *COM_HEAD_X + *COM_HEAD;
+            computeLength = vectorSize - *COM_HEAD_compute + *COM_HEAD_X1;
 
     }
     else
     {
-        if (*COM_HEAD < *COM_HEAD_X)        // 1 < X < 2
-            computeLength = *COM_HEAD_2 - *COM_HEAD_X;
+        if (*COM_HEAD_X1 < *COM_HEAD_compute)        // 1 < X < 2
+            computeLength = *COM_HEAD_X2 - *COM_HEAD_compute;
         else
         {
-            if (*COM_HEAD > *COM_HEAD_2 and *COM_HEAD_2 > *COM_HEAD_X)
+            if (*COM_HEAD_X1 > *COM_HEAD_X2 and *COM_HEAD_X2 > *COM_HEAD_compute)
                                             // X < 2 < 1
-                computeLength = *COM_HEAD_2 - *COM_HEAD_X;
+                computeLength = *COM_HEAD_X2 - *COM_HEAD_compute;
         }
     }
     int nbrChannels = nbrChannelsX1 + nbrChannelsX2;
@@ -270,18 +271,19 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
 
     int index, spacing;
 
-    for (int m = *COM_HEAD_X; m < *COM_HEAD_X + computeLength; m++)
+    for (int m = *COM_HEAD_compute; m < *COM_HEAD_compute + computeLength; m++)
     {
         int mm = m % vectorSize;
 
         if (timeSeqX1[mm].size() + timeSeqX2[mm].size() >= nbrChannels)                            // 计算上一轮符合
         {
+            // 先将 X2 的时间及通道数据合并到 X1 向量中
             for (int j = 0; j < timeSeqX2[mm].size(); j++)
             {
                 index = findInsertPosition(timeSeqX1[mm], timeSeqX2[mm][j]);
                 timeSeqX1[mm].insert(index, timeSeqX2[mm][j]);
                 channelSeqX1[mm].insert(index, channelSeqX2[mm][j] + 6);
-                if (nbrChannels == 2)
+                if (timeSeqAccX1.size() == timeSeqX1.size())
                 {
                     index = findInsertPosition(timeSeqAccX1[mm], timeSeqAccX2[mm][j]);
                     timeSeqAccX1[mm].insert(index, timeSeqAccX2[mm][j]);
@@ -298,7 +300,7 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
                     i = i+spacing;                                     // 计算过符合的区间可以跳过
                 }
             }
-            if (nbrChannels == 2)
+            if (timeSeqAccX1.size() == timeSeqX1.size())
             {
                 for (int i = 0; i < timeSeqAccX1[mm].size()-2+1; i++)
                 {
@@ -316,7 +318,7 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
         channelSeqX1[mm].clear();
         timeSeqX2[mm].clear();
         channelSeqX2[mm].clear();
-        if (nbrChannels == 2)
+        if (timeSeqAccX1.size() == timeSeqX1.size())
         {
             timeSeqAccX1[mm].clear();
             channelSeqAccX1[mm].clear();
@@ -324,6 +326,6 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
             channelSeqAccX2[mm].clear();
         }
     }
-    *COM_HEAD_X = (*COM_HEAD_X + computeLength) % vectorSize;
+    *COM_HEAD_compute = (*COM_HEAD_compute + computeLength) % vectorSize;
     delete[] channels;
 }

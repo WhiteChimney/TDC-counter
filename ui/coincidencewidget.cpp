@@ -215,87 +215,86 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
         double timeCOM = 1000000.0/freqCOM;           // 单位为 us
         timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
         double delayTotal[6] = {0.0}, delayTotalAcc[6] = {0.0};
+        double delayTotal_2[6] = {0.0}, delayTotalAcc_2[6] = {0.0};
 
         double minDelay = delayCN[0] + delayCalc[0]/20.0/1000.0;
         for (int i = 0; i < 6; i++)
         {
             delayTotal[i] = delayCN[i] + delayCalc[i]/20.0/1000.0;
+            delayTotal_2[i] = delayCN_2[i] + delayCalc_2[i]/20.0/1000.0;
             if (delayTotal[i] < minDelay)
                 minDelay = delayTotal[i];
-            if (nbrChannels == 2)
+            if (delayTotal_2[i] < minDelay)
+                minDelay = delayTotal_2[i];
+            if (ui->stackCoin->currentIndex()==0)
             {
                 delayTotalAcc[i] = delayTotal[i];
-                if(i == channels[1])
-                    delayTotalAcc[i] += delayAcc/20.0/1000.0;
+                delayTotalAcc_2[i] = delayTotal_2[i];
+                switch (computeMode)
+                {
+                case 0:
+                    if (i == channels[1])
+                        delayTotalAcc[i] += delayAcc/20.0/1000.0;
+                    break;
+                case 1:
+                    if (device2 == 0 and i == channels[0])
+                        delayTotalAcc[i] += delayAcc/20.0/1000.0;
+                    if (device2 == 1 and i == channels_2[0])
+                        delayTotalAcc_2[i] += delayAcc/20.0/1000.0;
+                    break;
+                case 2:
+                    if(i == channels_2[1])
+                        delayTotalAcc_2[i] += delayAcc/20.0/1000.0;
+                    break;
+                default:
+                    break;
+                }
             }
         }
-        if (nbrChannels == 2 && delayAcc < 0)
+        if (ui->stackCoin->currentIndex()==0 && delayAcc < 0)
             minDelay += delayAcc;
 
         maxNbrCOMdelay = 0, maxNbrCOMdelayAcc = 0;
         for (int i = 0; i < 6; i++)
         {
             delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+            delayTotal_2[i] -= minDelay;             // 保证所有延时均为非负
             nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
+            nbrCOMdelay_2[i] = floor(delayTotal_2[i]/timeCOM);
             if (nbrCOMdelay[i] > maxNbrCOMdelay)
                 maxNbrCOMdelay = nbrCOMdelay[i];
-            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
-            if (nbrChannels == 2)
-            {
-                delayTotalAcc[i] -= minDelay;
-                nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
-                if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
-                    maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
-                delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
-            }
-        }
-
-        minDelay = delayCN_2[0] + delayCalc_2[0]/20.0/1000.0;
-        for (int i = 0; i < 6; i++)
-        {
-            delayTotal[i] = delayCN_2[i] + delayCalc_2[i]/20.0/1000.0;
-            if (delayTotal[i] < minDelay)
-                minDelay = delayTotal[i];
-            if (nbrChannels_2 == 2)
-            {
-                delayTotalAcc[i] = delayTotal[i];
-                if(i == channels[1])
-                    delayTotalAcc[i] += delayAcc/20.0/1000.0;
-            }
-        }
-        if (nbrChannels_2 == 2 && delayAcc < 0)
-            minDelay += delayAcc;
-
-        for (int i = 0; i < 6; i++)
-        {
-            delayTotal[i] -= minDelay;             // 保证所有延时均为非负
-            nbrCOMdelay_2[i] = floor(delayTotal[i]/timeCOM);
             if (nbrCOMdelay_2[i] > maxNbrCOMdelay)
                 maxNbrCOMdelay = nbrCOMdelay_2[i];
-            delayInCOM_2[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay_2[i]);
-            if (nbrChannels_2 == 2)
+            delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
+            delayInCOM_2[i] = int(20*1000.0*(delayTotal_2[i] - timeCOM*nbrCOMdelay_2[i]));
+            if (ui->stackCoin->currentIndex()==0)
             {
                 delayTotalAcc[i] -= minDelay;
-                nbrCOMdelayAcc_2[i] = floor(delayTotalAcc[i]/timeCOM);
+                delayTotalAcc_2[i] -= minDelay;
+                nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
+                nbrCOMdelayAcc_2[i] = floor(delayTotalAcc_2[i]/timeCOM);
+                if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
+                    maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
                 if (nbrCOMdelayAcc_2[i] > maxNbrCOMdelayAcc)
                     maxNbrCOMdelayAcc = nbrCOMdelayAcc_2[i];
-                delayInCOMAcc_2[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc_2[i]);
+                delayInCOMAcc[i] = int(20*1000.0*(delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]));
+                delayInCOMAcc_2[i] = int(20*1000.0*(delayTotalAcc_2[i] - timeCOM*nbrCOMdelayAcc_2[i]));
             }
         }
 
     //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
         resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
         resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
-        if (nbrChannels == 2)
+        if (ui->stackCoin->currentIndex()==0)
         {
             resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
         }
-        COM_HEAD = acquireComDelay;
+        COM_HEAD = 0;
 
         resizeSeqLength(&timeSeq_2, maxNbrCOMdelay+2);
         resizeSeqLength(&channelSeq_2, maxNbrCOMdelay+2);
-        if (nbrChannels_2 == 2)
+        if (ui->stackCoin->currentIndex()==0)
         {
             resizeSeqLength(&timeSeqAcc_2, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc_2, maxNbrCOMdelayAcc+2);
@@ -307,14 +306,24 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
         resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay+2));
         resizeSeqLength(&channelSeqX2, 3*(countEvents + maxNbrCOMdelay+2));
         nbrChannels_X = nbrChannels + nbrChannels_2;
-        if (nbrChannels == 1 and nbrChannels_2 == 1)
+        if (ui->stackCoin->currentIndex()==0)
         {
             resizeSeqLength(&timeSeqAccX1, 3*(countEvents + maxNbrCOMdelayAcc+2));
             resizeSeqLength(&channelSeqAccX1, 3*(countEvents + maxNbrCOMdelayAcc+2));
             resizeSeqLength(&timeSeqAccX2, 3*(countEvents + maxNbrCOMdelayAcc+2));
             resizeSeqLength(&channelSeqAccX2, 3*(countEvents + maxNbrCOMdelayAcc+2));
         }
-        COM_HEAD_X = 0;
+        if (COM_offset < 0)
+        {
+            COM_HEAD_X1 = (-COM_offset) % timeSeqX1.size();
+            COM_HEAD_X2 = 0;
+        }
+        else
+        {
+            COM_HEAD_X1 = 0;
+            COM_HEAD_X2 = COM_offset % timeSeqX2.size();
+        }
+        COM_HEAD_compute = 0;
 
         emit askDealAcqBankSwitchCoin(index, computeMode);
     }
@@ -347,7 +356,7 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDesc
                  nbrCOMdelay, nbrCOMdelayAcc,
                  delayInCOM, delayInCOMAcc,
                  timeCOMunit,
-                 &COM_HEAD);
+                 &COM_HEAD_X1);
         break;
     case 2:
         break;
@@ -374,7 +383,7 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin_2(AqT3DataDescriptor* dataDe
                  nbrCOMdelay_2, nbrCOMdelayAcc_2,
                  delayInCOM_2, delayInCOMAcc_2,
                  timeCOMunit,
-                 &COM_HEAD_2);
+                 &COM_HEAD_X2);
 
         // TDC 2 再计算数据
         computeCoincidenceCountAcrossDevices_COMPUTE(
@@ -388,10 +397,10 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin_2(AqT3DataDescriptor* dataDe
                          channelSeqAccX2,
                          nbrChannels, nbrChannels_2,
                          channels, channels_2,
-                         &nbrCoin,
-                         tolerance,
                          nbrCoinCalc,
-                         &COM_HEAD, &COM_HEAD_2, &COM_HEAD_X);
+                         tolerance,
+                         &nbrAccCoin,
+                         &COM_HEAD_X1, &COM_HEAD_X2, &COM_HEAD_compute);
         break;
     case 2:
         computeCoincidenceCount

@@ -339,7 +339,7 @@ void HistogramWidget::loadFromIni()
     pushUiData();
 }
 
-void HistogramWidget::on_buttonPlusOne_released()
+void HistogramWidget::on_buttonPlus1_released()
 {
     if (timeSeqX2.size() == 0) return;
 
@@ -348,7 +348,7 @@ void HistogramWidget::on_buttonPlusOne_released()
     COM_HEAD_X2 = (COM_HEAD_X2 + 1) % timeSeqX2.size();
 }
 
-void HistogramWidget::on_buttonMinusOne_released()
+void HistogramWidget::on_buttonMinus1_released()
 {
     if (timeSeqX1.size() == 0) return;
 
@@ -358,7 +358,7 @@ void HistogramWidget::on_buttonMinusOne_released()
 }
 
 
-void HistogramWidget::on_buttonPlusTen_released()
+void HistogramWidget::on_buttonPlus10_released()
 {
     if (timeSeqX2.size() == 0) return;
 
@@ -367,12 +367,30 @@ void HistogramWidget::on_buttonPlusTen_released()
     COM_HEAD_X2 = (COM_HEAD_X2 + 10) % timeSeqX2.size();
 }
 
-void HistogramWidget::on_buttonMinusTen_released()
+void HistogramWidget::on_buttonMinus10_released()
 {
     if (timeSeqX1.size() == 0) return;
 
     COM_offset -= 10;
     ui->lcdComDelay->display(COM_offset);
     COM_HEAD_X1 = (COM_HEAD_X1 + 10) % timeSeqX1.size();
+}
+
+void HistogramWidget::on_buttonPlus100_released()
+{
+    if (timeSeqX2.size() == 0) return;
+
+    COM_offset += 100;
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X2 = (COM_HEAD_X2 + 100) % timeSeqX2.size();
+}
+
+void HistogramWidget::on_buttonMinus100_released()
+{
+    if (timeSeqX1.size() == 0) return;
+
+    COM_offset -= 100;
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X1 = (COM_HEAD_X1 + 100) % timeSeqX1.size();
 }
 

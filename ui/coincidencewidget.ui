@@ -1137,7 +1137,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="textAcquireComDelay">
+      <widget class="QLineEdit" name="textComOffset">
        <property name="text">
         <string>0</string>
        </property>
