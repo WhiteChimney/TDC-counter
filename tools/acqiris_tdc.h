@@ -48,6 +48,8 @@ public:
     int close();
 
 public slots:
+
+    void dealReadyToAcquireData();
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
 
@@ -56,6 +58,7 @@ public slots:
     void dealAcqThreadFinished(ViStatus m_status);
 
 signals:
+    void readyToAcquireData(ViSession instrId);
     void acquisitionStarted();
     void acquisitionFinished(ViStatus status);
     void dataReturned(AqT3DataDescriptor*);

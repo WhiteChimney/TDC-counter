@@ -8,6 +8,7 @@ Acqiris_TDC::Acqiris_TDC(QString m_resourceName,
 
     readParamPtr = new AqT3ReadParameters();
     acqThread = new Acqiris_AcquisitionThread(instrId, readParamPtr);
+    connect(acqThread,&Acqiris_AcquisitionThread::readyToAcquireData,this,&Acqiris_TDC::dealReadyToAcquireData);
     connect(acqThread,&Acqiris_AcquisitionThread::acqThreadBankSwitch,this,&Acqiris_TDC::dealAcqThreadBankSwitch);
     connect(acqThread,&Acqiris_AcquisitionThread::acquisitionStarted,this,&Acqiris_TDC::dealAcqThreadStarted);
     connect(acqThread,&Acqiris_AcquisitionThread::acquisitionFinished,this,&Acqiris_TDC::dealAcqThreadFinished);
@@ -81,6 +82,11 @@ void Acqiris_TDC::startAcquisition()
     if (status != VI_SUCCESS) return;
 
     acqThread->startAcquisition();
+}
+
+void Acqiris_TDC::dealReadyToAcquireData()
+{
+    emit readyToAcquireData(instrId);
 }
 
 void Acqiris_TDC::dealAcqThreadStarted()

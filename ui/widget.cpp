@@ -58,11 +58,13 @@ Widget::Widget(QWidget *parent)
     tdc = new Acqiris_TDC("PCI::INSTR0",this);
     connect(tdc,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted);
     connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
+    connect(tdc,&Acqiris_TDC::readyToAcquireData,this,&Widget::startAcquisitionSync);
     tdc->initialize();
 
     tdc_2 = new Acqiris_TDC("PCI::INSTR1",this);
     connect(tdc_2,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted_2);
     connect(tdc_2,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished_2);
+    connect(tdc_2,&Acqiris_TDC::readyToAcquireData,this,&Widget::startAcquisitionSync);
     tdc_2->initialize();
 
     QString errorMsg = "未发现可操控设备";

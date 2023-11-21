@@ -43,7 +43,7 @@ signals:
     void runThreadFinished();          // 进程结束
     void acquisitionFinished(ViStatus status);
 
-    void readyToAcquireData(ViSession instrId);
+    void readyToAcquireData();
 
 public slots:
     void dealRunThreadFinished();

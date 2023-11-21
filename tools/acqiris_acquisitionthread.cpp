@@ -37,7 +37,7 @@ void Acqiris_AcquisitionThread::run()
 
     // 暂停线程，等待同步
     mutex.lock();
-    emit readyToAcquireData(instrId);
+    emit readyToAcquireData();
     waitCond.wait(&mutex);
     mutex.unlock();
 
@@ -48,6 +48,8 @@ void Acqiris_AcquisitionThread::run()
     acqStop = false;
 
     emit acquisitionStarted();
+
+    qDebug() << "acquisition started: " << instrId;
 
     while(!acqStop)
     {

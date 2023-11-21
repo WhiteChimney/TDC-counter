@@ -17,6 +17,8 @@ void Widget::on_buttonStartAcquisition_released()
 
 void Widget::on_buttonStopAcq_released()
 {
+    instrIds.clear();
+
     if (tdc->isAcquringData())
         tdc->stopAcquisition();
 
@@ -49,8 +51,12 @@ void Widget::dealAcqThreadFinished_2()
 void Widget::startAcquisitionSync(ViSession instrId)
 {
     QWaitCondition waitCond;
+    qDebug() << instrId;
     if (!instrIds.contains(instrId))
         instrIds.append(instrId);
     if (instrIds.size() > 1)
+    {
+        qDebug() << "waking up";
         waitCond.wakeAll();
+    }
 }
