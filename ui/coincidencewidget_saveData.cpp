@@ -11,7 +11,7 @@ void CoincidenceWidget::createTempDataFile()
     {
         fStream << tr("符合计数") << index+1 << "\n"
                 << tr("当前时间：") << QDateTime::currentDateTime().toString() << "\n"
-                << tr("符合通道：Channel ") << channel1 << tr(" & ") << channel2 << "\n"
+                << tr("符合通道：Channel ") << 6*device1 + channel1 << tr(" & ") << 6*device2 + channel2 << "\n"
                 << tr("符合门宽：") << tolerance/20.0 << tr("ns") << "\n"
                 << tr("延时：") << delay/20.0 << tr("ns") << "\n"
                 << tr("偶然符合额外延时：") << delayAcc/20.0 << tr("ns") << "\n";
@@ -41,6 +41,13 @@ void CoincidenceWidget::createTempDataFile()
                 strChannel.append(QString::number(i+1));
                 strChannel.append(" & ");
                 strDelay.append(QString::number(delayMulti[i]/20.0));
+                strDelay.append("ns, ");
+            }
+            if (channelMark_2[i])
+            {
+                strChannel.append(QString::number(i+1+6));
+                strChannel.append(" & ");
+                strDelay.append(QString::number(delayMulti_2[i]/20.0));
                 strDelay.append("ns, ");
             }
         }
@@ -77,7 +84,8 @@ void CoincidenceWidget::dealSaveCoinData()
     if (coinSavable)
     {
         fCoin->open(QIODevice::ReadWrite | QIODevice::Append | QIODevice::Text);
-        if (! ui->checkboxAccumlateTime->isChecked())
+        if ((ui->stackCoin->currentIndex() == 0 and (!enableAccumulateTime))
+                or (ui->stackCoin->currentIndex() == 1 and (!enableAccumulateTimeMulti)))
         {// 如果不与单道同步，则记录时间；否则不记录，之后合并
             timeToc = QDateTime::currentMSecsSinceEpoch();
             fStream << timeToc - timeTic << "\t";

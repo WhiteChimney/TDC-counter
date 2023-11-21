@@ -18,11 +18,11 @@ HistogramWidget::HistogramWidget(QWidget *parent, int m_index, int m_comOffset) 
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
 
-    QString appVersion = "V" + tr(PROJECT_VERSION_0) + tr(".")
-                             + tr(PROJECT_VERSION_1) + tr(".")
-                             + tr(PROJECT_VERSION_2);
-    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    iniPath = iniPath + "/" + appVersion;
+    QString appVersion = "V" + QString(PROJECT_VERSION_0) + "."
+                             + QString(PROJECT_VERSION_1) + "."
+                             + QString(PROJECT_VERSION_2);
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/" + appVersion;
     iniName = iniPath + "/Configurations/histogram" + QString::number(index) +".ini";
 
     QFileInfo iniInfo(iniName);
@@ -347,14 +347,10 @@ void HistogramWidget::changeComOffset(int newOffset)
     {
         if (timeSeqX1.size() == 0) return;
         COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
-
-        qDebug() << "x1: " << COM_HEAD_X1;
     }
     else
     {
         if (timeSeqX2.size() == 0) return;
         COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
-
-        qDebug() << "x2: " << COM_HEAD_X2;
     }
 }

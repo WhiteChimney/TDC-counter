@@ -5,6 +5,7 @@
 #include "AcqirisT3Import.h"
 
 #include <cstring>
+#include <QString>
 #include <QDebug>
 #include <QLabel>
 #include <QMessageBox>
@@ -24,6 +25,14 @@
 #include <QLCDNumber>
 
 #include "QSimpleLed.h"
+
+//#include "projectInfo.h"
+//QString appVersion = "V" + QString(PROJECT_VERSION_0) + "."
+//                         + QString(PROJECT_VERSION_1) + "."
+//                         + QString(PROJECT_VERSION_2);
+//QString iniPath =
+//        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+//        + "/" + appVersion;
 
 void initializeConfigurations();
 

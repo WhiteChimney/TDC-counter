@@ -7,16 +7,17 @@ Widget::Widget(QWidget *parent)
 {
     ui->setupUi(this);
 
-    QString appVersion = "V" + tr(PROJECT_VERSION_0) + tr(".")
-                             + tr(PROJECT_VERSION_1) + tr(".")
-                             + tr(PROJECT_VERSION_2);
+    QString appVersion = "V" + QString(PROJECT_VERSION_0) + "."
+                             + QString(PROJECT_VERSION_1) + "."
+                             + QString(PROJECT_VERSION_2);
+
     this->setWindowTitle(tr("Acqiris TDC 计数程序 ") + appVersion);
     this->setupAcqIndicator();
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
 //    清空临时文件
-    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    iniPath = iniPath + "/" + appVersion;
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/" + appVersion;
     iniName = iniPath + "/Configurations/general.ini";
     tempFileName_SCC = iniPath + "/Data/SingleCount.txt";
 
