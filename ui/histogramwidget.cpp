@@ -90,6 +90,8 @@ void HistogramWidget::fetchUiData()
     nbrIntervals = ceil(abs(timeStop-timeStart)/binWidth);
     timeStop = timeStart + nbrIntervals*binWidth;
 
+    COM_offset = ui->lcdComDelay->value();
+
     pushUiData();
 }
 
@@ -193,7 +195,7 @@ void HistogramWidget::dealRequestHistParam(int m_index,
     //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
         resizeSeqLength(&timeSeq1, maxNbrCOMdelay+2);
         resizeSeqLength(&timeSeq2, maxNbrCOMdelay+2);
-        COM_HEAD = ui->textComDelay->text().toInt();
+        COM_HEAD = 0;
 
         resizeSeqLength(&timeSeq1_2, maxNbrCOMdelay+2);
         resizeSeqLength(&timeSeq2_2, maxNbrCOMdelay+2);
@@ -201,7 +203,17 @@ void HistogramWidget::dealRequestHistParam(int m_index,
 
         resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay + 2));
         resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay + 2));
-        COM_HEAD_X = 0;
+        if (COM_offset < 0)
+        {
+            COM_HEAD_X1 = (-COM_offset) % timeSeqX1.size();
+            COM_HEAD_X2 = 0;
+        }
+        else
+        {
+            COM_HEAD_X1 = 0;
+            COM_HEAD_X2 = COM_offset % timeSeqX2.size();
+        }
+        COM_HEAD_compute = 0;
         comRange = ceil((timeStop - timeStart) * freqCOM / 1.0e9 / 2);
 
         emit askDealAcqBankSwitchHist(index, computeMode);
@@ -235,7 +247,7 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
                                   nbrCOMdelay,
                                   delayInCOM,
                                   timeCOMunit,
-                                  &COM_HEAD);
+                                  &COM_HEAD_X1);
         break;
     case 2:
         break;
@@ -263,12 +275,12 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
                                   nbrCOMdelay_2,
                                   delayInCOM_2,
                                   timeCOMunit,
-                                  &COM_HEAD_2);
+                                  &COM_HEAD_X2);
 
         // TDC 2 再计算数据
         computeHistogramCountAcrossDevices_COMPUTE(
                             timeSeqX1, timeSeqX2, comRange, timeCOMunit,
-                            &COM_HEAD, &COM_HEAD_2, &COM_HEAD_X,
+                            &COM_HEAD_X1, &COM_HEAD_X2, &COM_HEAD_compute,
                             delay, timeStart, binWidth, nbrIntervals, binHeight);
 
         break;
@@ -329,7 +341,38 @@ void HistogramWidget::loadFromIni()
 
 void HistogramWidget::on_buttonPlusOne_released()
 {
+    if (timeSeqX2.size() == 0) return;
+
     COM_offset++;
-    COM_HEAD = (COM_HEAD + 1) % timeSeqX1.size();
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X2 = (COM_HEAD_X2 + 1) % timeSeqX2.size();
+}
+
+void HistogramWidget::on_buttonMinusOne_released()
+{
+    if (timeSeqX1.size() == 0) return;
+
+    COM_offset--;
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X1 = (COM_HEAD_X1 + 1) % timeSeqX1.size();
+}
+
+
+void HistogramWidget::on_buttonPlusTen_released()
+{
+    if (timeSeqX2.size() == 0) return;
+
+    COM_offset += 10;
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X2 = (COM_HEAD_X2 + 10) % timeSeqX2.size();
+}
+
+void HistogramWidget::on_buttonMinusTen_released()
+{
+    if (timeSeqX1.size() == 0) return;
+
+    COM_offset -= 10;
+    ui->lcdComDelay->display(COM_offset);
+    COM_HEAD_X1 = (COM_HEAD_X1 + 10) % timeSeqX1.size();
 }
 

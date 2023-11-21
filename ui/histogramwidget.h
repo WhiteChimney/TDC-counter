@@ -43,6 +43,12 @@ private slots:
 
     void on_buttonPlusOne_released();
 
+    void on_buttonMinusOne_released();
+
+    void on_buttonPlusTen_released();
+
+    void on_buttonMinusTen_released();
+
 private:
     Ui::HistogramWidget *ui;
 
@@ -60,7 +66,8 @@ private:
     int maxNbrCOMdelay = 0;
     int delayInCOM[NUM_CHANNELS] = {0}, delayInCOM_2[NUM_CHANNELS] = {0};
     int timeCOMunit;
-    int COM_HEAD = 0, COM_HEAD_2 = 0, COM_HEAD_X = 0, COM_offset = 0;
+    int COM_HEAD = 0, COM_HEAD_2 = 0;
+    int COM_HEAD_X1 = 0, COM_HEAD_X2 = 0, COM_HEAD_compute = 0, COM_offset = 0;
     double *delayCN, *delayCN_2;           // 各通道固有延时
     double freqCOM;
     int countEvents;               // TDC COM 重复频率
