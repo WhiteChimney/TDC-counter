@@ -439,8 +439,7 @@ bool CoincidenceWidget::getCoinParam(QString* coinChannelNamePtr, int **nbrCoinP
     fetchUiData();
     if (ui->stackCoin->currentIndex()==0)
     {
-        *coinChannelNamePtr = QString::number(device1+1) + "-" + QString::number(channel1) + " & " +
-                QString::number(device2+1) + "-" + QString::number(channel2);
+        *coinChannelNamePtr = QString::number(channel1) + " & " + QString::number(channel2+6);
         *nbrCoinPtrPtr = &nbrCoin;
         *nbrAccCoinPtrPtr = &nbrAccCoin;
         return false;
