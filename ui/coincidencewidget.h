@@ -15,7 +15,7 @@ class CoincidenceWidget : public QWidget
 
 public:
     int index;        // 用以辅助标记窗口号
-    explicit CoincidenceWidget(QWidget *parent = nullptr, int index = 0);
+    explicit CoincidenceWidget(QWidget *parent = nullptr, int index = 0, int comOffset = 0);
     ~CoincidenceWidget();
 
 signals:
@@ -116,6 +116,8 @@ public:
     bool getCoinParam(QString* coinChannelName, int** nbrCoinPtr, int** nbrAccCoinPtr);
     int* getCoinCountPtr();
     int* getAccCoinCountPtr();
+
+    void changeComOffset(int newOffset);
 };
 
 #endif // COINCIDENCEWIDGET_H

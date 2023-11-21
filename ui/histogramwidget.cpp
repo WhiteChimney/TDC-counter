@@ -1,7 +1,7 @@
 #include "histogramwidget.h"
 #include "ui_histogramwidget.h"
 
-HistogramWidget::HistogramWidget(QWidget *parent, int m_index) :
+HistogramWidget::HistogramWidget(QWidget *parent, int m_index, int m_comOffset) :
     QWidget(parent),
     ui(new Ui::HistogramWidget)
 {
@@ -30,6 +30,8 @@ HistogramWidget::HistogramWidget(QWidget *parent, int m_index) :
         loadFromIni();
     else
         saveToIni();
+
+    COM_offset = m_comOffset;
 }
 
 HistogramWidget::~HistogramWidget()
@@ -89,8 +91,6 @@ void HistogramWidget::fetchUiData()
     if (binWidth < 0.05) binWidth = 0.05;
     nbrIntervals = ceil(abs(timeStop-timeStart)/binWidth);
     timeStop = timeStart + nbrIntervals*binWidth;
-
-    COM_offset = ui->lcdComDelay->value();
 
     pushUiData();
 }
@@ -339,58 +339,22 @@ void HistogramWidget::loadFromIni()
     pushUiData();
 }
 
-void HistogramWidget::on_buttonPlus1_released()
+void HistogramWidget::changeComOffset(int newOffset)
 {
-    if (timeSeqX2.size() == 0) return;
+    int offsetChange = newOffset - COM_offset;
+    COM_offset = newOffset;
+    if (offsetChange < 0)
+    {
+        if (timeSeqX1.size() == 0) return;
+        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
 
-    COM_offset++;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X2 = (COM_HEAD_X2 + 1) % timeSeqX2.size();
+        qDebug() << "x1: " << COM_HEAD_X1;
+    }
+    else
+    {
+        if (timeSeqX2.size() == 0) return;
+        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+
+        qDebug() << "x2: " << COM_HEAD_X2;
+    }
 }
-
-void HistogramWidget::on_buttonMinus1_released()
-{
-    if (timeSeqX1.size() == 0) return;
-
-    COM_offset--;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X1 = (COM_HEAD_X1 + 1) % timeSeqX1.size();
-}
-
-
-void HistogramWidget::on_buttonPlus10_released()
-{
-    if (timeSeqX2.size() == 0) return;
-
-    COM_offset += 10;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X2 = (COM_HEAD_X2 + 10) % timeSeqX2.size();
-}
-
-void HistogramWidget::on_buttonMinus10_released()
-{
-    if (timeSeqX1.size() == 0) return;
-
-    COM_offset -= 10;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X1 = (COM_HEAD_X1 + 10) % timeSeqX1.size();
-}
-
-void HistogramWidget::on_buttonPlus100_released()
-{
-    if (timeSeqX2.size() == 0) return;
-
-    COM_offset += 100;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X2 = (COM_HEAD_X2 + 100) % timeSeqX2.size();
-}
-
-void HistogramWidget::on_buttonMinus100_released()
-{
-    if (timeSeqX1.size() == 0) return;
-
-    COM_offset -= 100;
-    ui->lcdComDelay->display(COM_offset);
-    COM_HEAD_X1 = (COM_HEAD_X1 + 100) % timeSeqX1.size();
-}
-

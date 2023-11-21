@@ -106,6 +106,20 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
+    void on_textComOffset_editingFinished();
+
+    void on_buttonMinus1_released();
+
+    void on_buttonPlus1_released();
+
+    void on_buttonMinus10_released();
+
+    void on_buttonPlus10_released();
+
+    void on_buttonMinus100_released();
+
+    void on_buttonPlus100_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -145,12 +159,12 @@ private:
 private:
     Acqiris_TDC *tdc, *tdc_2;
     QList<ViSession> instrIds;
-    QList<QWaitCondition*> waitConds;
+//    QList<QWaitCondition*> waitConds;
     bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
     QSimpleLed *statusIndicator, *statusIndicator_2;
-
-//public slots:
-//    void startAcquisitionSync(ViSession instrId, QWaitCondition *waitCond);
+    int comOffset = 0;
+public:
+    void updateComOffset();
 
     // 单道计数参数
 private:

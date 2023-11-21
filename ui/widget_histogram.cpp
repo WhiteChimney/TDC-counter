@@ -4,7 +4,7 @@
 void Widget::on_buttonHistogram_released()
 {
     int index = vHistWidget.count();
-    histW = new HistogramWidget(0, index);
+    histW = new HistogramWidget(0, index, comOffset);
     vHistWidget.append(histW);
     connect(histW,&HistogramWidget::returnSignal,this,&Widget::dealHistogramReturn);
     connect(histW,&HistogramWidget::requestHistParam,this,&Widget::dealRequestHistParam);

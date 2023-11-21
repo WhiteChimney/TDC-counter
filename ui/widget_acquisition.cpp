@@ -20,7 +20,7 @@ void Widget::on_buttonStartAcquisition_released()
 void Widget::on_buttonStopAcq_released()
 {
     instrIds.clear();
-    waitConds.clear();
+//    waitConds.clear();
 
     if (tdc->isAcquringData())
         tdc->stopAcquisition();

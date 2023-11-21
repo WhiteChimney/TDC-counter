@@ -38,7 +38,6 @@ void CoincidenceWidget::fetchUiData()
     enableAccumulateTimeMulti = ui->checkboxAccumlateTime_Multi->isChecked();
     toleranceMulti = int(20*ui->tolerance_Multi->text().toDouble());
 
-    COM_offset = ui->textComOffset->text().toInt();
     pushUiData();
 }
 
@@ -75,7 +74,6 @@ void CoincidenceWidget::pushUiData()
     ui->accumTimeCoin_Multi->setEnabled(!enableAccumulateTimeMulti);
     ui->tolerance_Multi->setText(QString::number(toleranceMulti/20.0));
 
-    ui->textComOffset->setText(QString::number(COM_offset));
 }
 
 void CoincidenceWidget::saveToIni()

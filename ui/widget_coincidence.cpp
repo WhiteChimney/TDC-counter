@@ -4,7 +4,7 @@
 void Widget::on_buttonCoincidence_released()
 {
     int index = vCoinWidget.count();
-    coinW = new CoincidenceWidget(0,index);
+    coinW = new CoincidenceWidget(0,index,comOffset);
     vCoinWidget.append(coinW);
     vCoinWidgetSyncState.append(false);
     connect(coinW,&CoincidenceWidget::returnSignal,this,&Widget::dealCoincidenceReturn);

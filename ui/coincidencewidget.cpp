@@ -1,7 +1,7 @@
 #include "coincidencewidget.h"
 #include "ui_coincidencewidget.h"
 
-CoincidenceWidget::CoincidenceWidget(QWidget *parent, int m_index) :
+CoincidenceWidget::CoincidenceWidget(QWidget *parent, int m_index, int m_comOffset) :
     QWidget(parent),
     ui(new Ui::CoincidenceWidget)
 {
@@ -28,6 +28,8 @@ CoincidenceWidget::CoincidenceWidget(QWidget *parent, int m_index) :
         loadFromIni();
     else
         saveToIni();
+
+    COM_offset = m_comOffset;
 }
 
 CoincidenceWidget::~CoincidenceWidget()
@@ -471,4 +473,20 @@ int* CoincidenceWidget::getCoinCountPtr()
 int* CoincidenceWidget::getAccCoinCountPtr()
 {
     return &nbrAccCoin;
+}
+
+void CoincidenceWidget::changeComOffset(int newOffset)
+{
+    int offsetChange = newOffset - COM_offset;
+    COM_offset = newOffset;
+    if (offsetChange < 0)
+    {
+        if (timeSeqX1.size() == 0) return;
+        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
+    }
+    else
+    {
+        if (timeSeqX2.size() == 0) return;
+        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+    }
 }

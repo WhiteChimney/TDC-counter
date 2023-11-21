@@ -18,7 +18,7 @@ class HistogramWidget : public QWidget
 
 public:
     int index;          // 辅助窗口计数
-    explicit HistogramWidget(QWidget *parent = nullptr, int index = 0);
+    explicit HistogramWidget(QWidget *parent = nullptr, int index = 0, int comOffset = 0);
     ~HistogramWidget();
 
 signals:
@@ -40,18 +40,6 @@ private slots:
     void on_buttonReturn_released();
     void on_buttonStart_released();
     void on_buttonStop_released();
-
-    void on_buttonPlus1_released();
-
-    void on_buttonMinus1_released();
-
-    void on_buttonPlus10_released();
-
-    void on_buttonMinus10_released();
-
-    void on_buttonMinus100_released();
-
-    void on_buttonPlus100_released();
 
 private:
     Ui::HistogramWidget *ui;
@@ -95,6 +83,7 @@ private:
 public:
     void fetchUiData(), pushUiData(); // 获取与推送 ui 数据
     void saveToIni(), loadFromIni();  // 保存与读取配置文件
+    void changeComOffset(int newOffset);
 };
 
 #endif // HISTOGRAMWIDGET_H

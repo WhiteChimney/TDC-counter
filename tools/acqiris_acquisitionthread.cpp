@@ -42,10 +42,6 @@ void Acqiris_AcquisitionThread::run()
     waitCond->wait(&mutex);
     mutex.unlock();
 
-    QDateTime time = QDateTime::currentDateTime();
-    qDebug() << "current time: " << time.currentMSecsSinceEpoch();
-    qDebug() << "acquisition started: " << instrId;
-
     // Start acquisitions
     status = AcqrsT3_acquire(instrId);
     if (status != VI_SUCCESS) return;

@@ -109,7 +109,6 @@ void Widget::fetchUiData()
     ui->textDelayCN5->setText(QString::number(delayCN[4]));
     ui->textDelayCN6->setText(QString::number(delayCN[5]));
 
-
     channelConfig_2[0] = true;
     channelConfig_2[1] = ui->checkBoxCN1_2->isChecked();
     channelConfig_2[2] = ui->checkBoxCN2_2->isChecked();
@@ -156,6 +155,8 @@ void Widget::fetchUiData()
     ui->textDelayCN4_2->setText(QString::number(delayCN_2[3]));
     ui->textDelayCN5_2->setText(QString::number(delayCN_2[4]));
     ui->textDelayCN6_2->setText(QString::number(delayCN_2[5]));
+
+    comOffset = ui->textComOffset->text().toInt();
 
     // 单道计数设置
     accumulateTime = ui->accumulateTimeText->text().toDouble();
@@ -229,6 +230,8 @@ void Widget::pushUiData()
     ui->textDelayCN4_2->setText(QString::number(delayCN_2[3]));
     ui->textDelayCN5_2->setText(QString::number(delayCN_2[4]));
     ui->textDelayCN6_2->setText(QString::number(delayCN_2[5]));
+
+    ui->textComOffset->setText(QString::number(comOffset));
 
     // 单道计数设置
     ui->accumulateTimeText->setText(QString::number(accumulateTime));
@@ -333,3 +336,55 @@ void Widget::on_buttonCheckUpdate_released()
     QUrl myUrl = QUrl(PROJECT_RELEASE_PAGE);
     QDesktopServices::openUrl(myUrl);
 }
+
+void Widget::on_textComOffset_editingFinished()
+{
+    comOffset = ui->textComOffset->text().toInt();
+    this->updateComOffset();
+}
+
+void Widget::on_buttonMinus1_released()
+{
+    comOffset--;
+    this->updateComOffset();
+}
+
+void Widget::on_buttonPlus1_released()
+{
+    comOffset++;
+    this->updateComOffset();
+}
+
+void Widget::on_buttonMinus10_released()
+{
+    comOffset -= 10;
+    this->updateComOffset();
+}
+
+void Widget::on_buttonPlus10_released()
+{
+    comOffset += 10;
+    this->updateComOffset();
+}
+
+void Widget::on_buttonMinus100_released()
+{
+    comOffset -= 100;
+    this->updateComOffset();
+}
+
+void Widget::on_buttonPlus100_released()
+{
+    comOffset += 100;
+    this->updateComOffset();
+}
+
+void Widget::updateComOffset()
+{
+    ui->textComOffset->setText(QString::number(comOffset));
+    for (int i = 0; i < vCoinWidget.size(); i++)
+        vCoinWidget[i]->changeComOffset(comOffset);
+    for (int i = 0; i < vHistWidget.size(); i++)
+        vHistWidget[i]->changeComOffset(comOffset);
+}
+
