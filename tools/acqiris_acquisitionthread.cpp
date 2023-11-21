@@ -14,8 +14,9 @@ void Acqiris_AcquisitionThread::setInstrId(ViSession m_instrId)
     instrId = m_instrId;
 }
 
-void Acqiris_AcquisitionThread::startAcquisition()
+void Acqiris_AcquisitionThread::startAcquisition(QWaitCondition *m_waitCond)
 {
+    waitCond = m_waitCond;
     this->start();
 }
 
@@ -37,19 +38,19 @@ void Acqiris_AcquisitionThread::run()
 
     // 暂停线程，等待同步
     mutex.lock();
-    emit readyToAcquireData();
-    waitCond.wait(&mutex);
+    emit acquisitionStarted();
+    waitCond->wait(&mutex);
     mutex.unlock();
+
+    QDateTime time = QDateTime::currentDateTime();
+    qDebug() << "current time: " << time.currentMSecsSinceEpoch();
+    qDebug() << "acquisition started: " << instrId;
 
     // Start acquisitions
     status = AcqrsT3_acquire(instrId);
     if (status != VI_SUCCESS) return;
 
     acqStop = false;
-
-    emit acquisitionStarted();
-
-    qDebug() << "acquisition started: " << instrId;
 
     while(!acqStop)
     {

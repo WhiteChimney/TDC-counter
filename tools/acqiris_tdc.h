@@ -27,6 +27,7 @@ private:
 //    采集参数
     Acqiris_AcquisitionThread *acqThread;
     AqT3ReadParameters* readParamPtr;
+    QWaitCondition waitCond;
 
 public:
 //    仪器初始化
@@ -38,6 +39,8 @@ public:
                     int countEvents);
 //    开始采集
     void startAcquisition();
+//    控制同步
+    void wakeToAquireData();
 //    停止采集
     void stopAcquisition();
 //    获取仪器的状态信息
@@ -48,8 +51,6 @@ public:
     int close();
 
 public slots:
-
-    void dealReadyToAcquireData();
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
 
@@ -58,7 +59,6 @@ public slots:
     void dealAcqThreadFinished(ViStatus m_status);
 
 signals:
-    void readyToAcquireData(ViSession instrId);
     void acquisitionStarted();
     void acquisitionFinished(ViStatus status);
     void dataReturned(AqT3DataDescriptor*);

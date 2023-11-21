@@ -291,7 +291,7 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
             resizeSeqLength(&timeSeqAcc, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc, maxNbrCOMdelayAcc+2);
         }
-        COM_HEAD = 0;
+        COM_HEAD = acquireComDelay;
 
         resizeSeqLength(&timeSeq_2, maxNbrCOMdelay+2);
         resizeSeqLength(&channelSeq_2, maxNbrCOMdelay+2);
@@ -300,7 +300,7 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
             resizeSeqLength(&timeSeqAcc_2, maxNbrCOMdelayAcc+2);
             resizeSeqLength(&channelSeqAcc_2, maxNbrCOMdelayAcc+2);
         }
-        COM_HEAD_2 = acquireComDelay;
+        COM_HEAD_2 = 0;
 
         resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay+2));
         resizeSeqLength(&channelSeqX1, 3*(countEvents + maxNbrCOMdelay+2));

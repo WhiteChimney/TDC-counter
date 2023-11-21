@@ -193,7 +193,7 @@ void HistogramWidget::dealRequestHistParam(int m_index,
     //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
         resizeSeqLength(&timeSeq1, maxNbrCOMdelay+2);
         resizeSeqLength(&timeSeq2, maxNbrCOMdelay+2);
-        COM_HEAD = 0;
+        COM_HEAD = ui->textComDelay->text().toInt();
 
         resizeSeqLength(&timeSeq1_2, maxNbrCOMdelay+2);
         resizeSeqLength(&timeSeq2_2, maxNbrCOMdelay+2);
@@ -329,6 +329,7 @@ void HistogramWidget::loadFromIni()
 
 void HistogramWidget::on_buttonPlusOne_released()
 {
-    COM_HEAD_2 = (COM_HEAD_2 + 1) % timeSeqX2.size();
+    COM_offset++;
+    COM_HEAD = (COM_HEAD + 1) % timeSeqX1.size();
 }
 

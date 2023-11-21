@@ -3,6 +3,8 @@
 
 void Widget::on_buttonStartAcquisition_released()
 {
+    on_buttonStopAcq_released();
+
     fetchUiData();
     tdc->config(channelConfig,level,slope,countEvents);
     tdc_2->config(channelConfig,level,slope,countEvents);
@@ -18,6 +20,7 @@ void Widget::on_buttonStartAcquisition_released()
 void Widget::on_buttonStopAcq_released()
 {
     instrIds.clear();
+    waitConds.clear();
 
     if (tdc->isAcquringData())
         tdc->stopAcquisition();
@@ -29,13 +32,29 @@ void Widget::on_buttonStopAcq_released()
 void Widget::dealAcqThreadStarted()
 {
     if (tdc->getStatus() == VI_SUCCESS)
+    {
         statusIndicator->setStates(QSimpleLed::ON);
+        if (statusIndicator->states() == QSimpleLed::ON
+                and statusIndicator_2->states() == QSimpleLed::ON)
+        {
+            tdc->wakeToAquireData();
+            tdc_2->wakeToAquireData();
+        }
+    }
 }
 
 void Widget::dealAcqThreadStarted_2()
 {
     if (tdc_2->getStatus() == VI_SUCCESS)
+    {
         statusIndicator_2->setStates(QSimpleLed::ON);
+        if (statusIndicator->states() == QSimpleLed::ON
+                and statusIndicator_2->states() == QSimpleLed::ON)
+        {
+            tdc->wakeToAquireData();
+            tdc_2->wakeToAquireData();
+        }
+    }
 }
 
 void Widget::dealAcqThreadFinished()
@@ -48,15 +67,27 @@ void Widget::dealAcqThreadFinished_2()
     statusIndicator_2->setStates(QSimpleLed::OFF);
 }
 
-void Widget::startAcquisitionSync(ViSession instrId)
-{
-    QWaitCondition waitCond;
-    qDebug() << instrId;
-    if (!instrIds.contains(instrId))
-        instrIds.append(instrId);
-    if (instrIds.size() > 1)
-    {
-        qDebug() << "waking up";
-        waitCond.wakeAll();
-    }
-}
+//void Widget::startAcquisitionSync(ViSession instrId, QWaitCondition *waitCond)
+//{
+//    if (!instrIds.contains(instrId))
+//    {
+//        if (instrIds.size() > 0 and instrId < instrIds[0])
+//        {
+//            instrIds.insert(0,instrId);
+//            waitConds.insert(0,waitCond);
+//        }
+//        else
+//        {
+//            instrIds.append(instrId);
+//            waitConds.append(waitCond);
+//        }
+//    }
+//    if (instrIds.size() > 1)
+//    {
+//        for (int i = 0; i < instrIds.size(); i++)
+//            qDebug() << instrIds[i];
+//        for (int i = 0; i < waitConds.size(); i++)
+//            waitConds[i]->wakeAll();
+//    }
+
+//}
