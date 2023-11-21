@@ -45,3 +45,12 @@ void Widget::dealAcqThreadFinished_2()
 {
     statusIndicator_2->setStates(QSimpleLed::OFF);
 }
+
+void Widget::startAcquisitionSync(ViSession instrId)
+{
+    QWaitCondition waitCond;
+    if (!instrIds.contains(instrId))
+        instrIds.append(instrId);
+    if (instrIds.size() > 1)
+        waitCond.wakeAll();
+}

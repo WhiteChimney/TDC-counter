@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QThread>
 #include <QDebug>
+#include <QMutex>
+#include <QWaitCondition>
 
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
@@ -26,6 +28,9 @@ private:
 
     bool acqStop;                  // 控制采集进程停止
 
+    QMutex mutex;                      // 用于进程间通信同步
+    QWaitCondition waitCond;
+
 public:
     void setInstrId(ViSession m_instrId);
     void startAcquisition();
@@ -37,6 +42,8 @@ signals:
     void acquisitionStarted();
     void runThreadFinished();          // 进程结束
     void acquisitionFinished(ViStatus status);
+
+    void readyToAcquireData(ViSession instrId);
 
 public slots:
     void dealRunThreadFinished();

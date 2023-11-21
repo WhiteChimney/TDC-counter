@@ -35,6 +35,12 @@ void Acqiris_AcquisitionThread::run()
     status = Acqrs_calibrate(instrId);
     if (status != VI_SUCCESS) return;
 
+    // 暂停线程，等待同步
+    mutex.lock();
+    emit readyToAcquireData(instrId);
+    waitCond.wait(&mutex);
+    mutex.unlock();
+
     // Start acquisitions
     status = AcqrsT3_acquire(instrId);
     if (status != VI_SUCCESS) return;

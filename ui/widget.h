@@ -144,8 +144,12 @@ private:
     // 采集过程用到的参数/
 private:
     Acqiris_TDC *tdc, *tdc_2;
+    QList<ViSession> instrIds;
     bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
     QSimpleLed *statusIndicator, *statusIndicator_2;
+
+public slots:
+    void startAcquisitionSync(ViSession instrId);
 
     // 单道计数参数
 private:
