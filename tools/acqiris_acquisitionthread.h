@@ -4,6 +4,9 @@
 #include <QObject>
 #include <QThread>
 #include <QDebug>
+#include <QMutex>
+#include <QWaitCondition>
+#include <QDateTime>
 
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
@@ -26,9 +29,12 @@ private:
 
     bool acqStop;                  // 控制采集进程停止
 
+    QMutex mutex;                      // 用于进程间通信同步
+    QWaitCondition *waitCond;
+
 public:
     void setInstrId(ViSession m_instrId);
-    void startAcquisition();
+    void startAcquisition(QWaitCondition *waitCond);
     void stopAcquisition();
     bool isAcquringData();
 

@@ -1,14 +1,14 @@
 #include "histogramwidget.h"
 #include "ui_histogramwidget.h"
 
-HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
+HistogramWidget::HistogramWidget(QWidget *parent, int m_index, int m_comOffset) :
     QWidget(parent),
     ui(new Ui::HistogramWidget)
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
 //    this->setAttribute(Qt::WA_DeleteOnClose);   // 退出时执行析构函数，有点问题，会导致程序崩溃
-    index = index0;
+    index = m_index;
 
     qwtHistPlot = new QwtPlotHistogram();
     qwtHistPlot->attach(ui->qwtPlot);
@@ -18,13 +18,20 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
 
-    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
-    iniName = iniPath + "/AcqirisTDC_qt/Configurations/histogram" + QString::number(index) +".ini";
+    QString appVersion = "V" + QString(PROJECT_VERSION_0) + "."
+                             + QString(PROJECT_VERSION_1) + "."
+                             + QString(PROJECT_VERSION_2);
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/" + appVersion;
+    iniName = iniPath + "/Configurations/histogram" + QString::number(index) +".ini";
+
     QFileInfo iniInfo(iniName);
     if (iniInfo.isFile())
         loadFromIni();
     else
         saveToIni();
+
+    COM_offset = m_comOffset;
 }
 
 HistogramWidget::~HistogramWidget()
@@ -65,6 +72,9 @@ void HistogramWidget::testPlot()
 
 void HistogramWidget::fetchUiData()
 {
+    device1 = ui->comboDevice1->currentIndex();
+    device2 = ui->comboDevice2->currentIndex();
+    computeMode = device1 + device2;
     channel1 = ui->comboChannel1->currentText().toInt();
     channel2 = ui->comboChannel2->currentText().toInt();
     accumulateTime = ui->textAccumlateTime->text().toDouble();
@@ -87,6 +97,8 @@ void HistogramWidget::fetchUiData()
 
 void HistogramWidget::pushUiData()
 {
+    ui->comboDevice1->setCurrentIndex(device1);
+    ui->comboDevice2->setCurrentIndex(device2);
     ui->comboChannel1->setCurrentText(QString::number(channel1));
     ui->comboChannel2->setCurrentText(QString::number(channel2));
     ui->textAccumlateTime->setText(QString::number(accumulateTime));
@@ -104,6 +116,7 @@ void HistogramWidget::on_buttonReturn_released()
 
 void HistogramWidget::on_buttonStart_released()
 {
+    on_buttonStop_released();
     fetchUiData();
     binHeight = new int[nbrIntervals]();
     histIntervals = new QwtInterval[nbrIntervals]();
@@ -128,18 +141,25 @@ void HistogramWidget::dealTimeOut()
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
 }
 
-void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double freqCOM0)
+void HistogramWidget::dealRequestHistParam(int m_index,
+                                           double *m_delayCN,
+                                           double *m_delayCN_2,
+                                           double m_freqCOM,
+                                           int m_countEvents)
 {
-
-    if (index == index0)
+    if (index == m_index)
     {
-        delayCN = delayCN0;
-        freqCOM = freqCOM0;
+        delayCN = m_delayCN;
+        delayCN_2 = m_delayCN_2;
+        freqCOM = m_freqCOM;
+        countEvents = m_countEvents;
 
         //    预处理 TDC 参数
         double timeCOM = 1000000.0/freqCOM;           // 单位为 us
         timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
         double delayTotal[6] = {0.0};
+
+        maxNbrCOMdelay = 0;
         double minDelay = delayCN[0];
         for (int i = 0; i < 6; i++)
         {
@@ -147,7 +167,6 @@ void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double 
             if (delayTotal[i] < minDelay)
                 minDelay = delayTotal[i];
         }
-        int maxNbrCOMdelay = 0;
         for (int i = 0; i < 6; i++)
         {
             delayTotal[i] -= minDelay;             // 保证所有延时均为非负
@@ -157,28 +176,127 @@ void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double 
             delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
         }
 
+        minDelay = delayCN_2[0];
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] = delayCN_2[i];
+            if (delayTotal[i] < minDelay)
+                minDelay = delayTotal[i];
+        }
+        for (int i = 0; i < 6; i++)
+        {
+            delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+            nbrCOMdelay_2[i] = floor(delayTotal[i]/timeCOM);
+            if (nbrCOMdelay_2[i] > maxNbrCOMdelay)
+                maxNbrCOMdelay = nbrCOMdelay_2[i];
+            delayInCOM_2[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay_2[i]);
+        }
+
     //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
         resizeSeqLength(&timeSeq1, maxNbrCOMdelay+2);
         resizeSeqLength(&timeSeq2, maxNbrCOMdelay+2);
         COM_HEAD = 0;
 
-        emit askDealAcqBankSwitchHist(index);
+        resizeSeqLength(&timeSeq1_2, maxNbrCOMdelay+2);
+        resizeSeqLength(&timeSeq2_2, maxNbrCOMdelay+2);
+        COM_HEAD_2 = 0;
+
+        resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay + 2));
+        resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay + 2));
+        if (COM_offset < 0)
+        {
+            COM_HEAD_X1 = (-COM_offset) % timeSeqX1.size();
+            COM_HEAD_X2 = 0;
+        }
+        else
+        {
+            COM_HEAD_X1 = 0;
+            COM_HEAD_X2 = COM_offset % timeSeqX2.size();
+        }
+        COM_HEAD_compute = 0;
+        comRange = ceil((timeStop - timeStart) * freqCOM / 1.0e9 / 2);
+
+        emit askDealAcqBankSwitchHist(index, computeMode);
     }
 }
 
 void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr)
 {
-//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
-    // prepare samples to plot
-    computeHistogramCount(dataDescPtr,
-                          timeSeq1, timeSeq2,
-                          channel1, channel2, delay,
-                          timeStart, binWidth, nbrIntervals, binHeight,
-                          nbrCOMdelay,
-                          delayInCOM,
-                          timeCOMunit,
-                          &COM_HEAD);
-//    computeHistogramCount(dataDescPtr, channel1, channel2, delay, timeStart, binWidth, nbrIntervals, binHeight);
+    switch (computeMode) {
+    case 0:
+        computeHistogramCount(dataDescPtr,
+                              timeSeq1, timeSeq2,
+                              channel1, channel2, delay,
+                              timeStart, binWidth, nbrIntervals, binHeight,
+                              nbrCOMdelay,
+                              delayInCOM,
+                              timeCOMunit,
+                              &COM_HEAD);
+        break;
+    case 1:
+        // TDC 1 先存数据
+        int channel;
+        if (device1 == 0)
+            channel = channel1;
+        else
+            channel = channel2;
+        computeHistogramCountAcrossDevices_HOLD
+                                 (dataDescPtr,
+                                  timeSeqX1,
+                                  channel,
+                                  nbrCOMdelay,
+                                  delayInCOM,
+                                  timeCOMunit,
+                                  &COM_HEAD_X1);
+        break;
+    case 2:
+        break;
+    default:
+        break;
+    }
+}
+
+void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDescPtr_2)
+{
+    switch (computeMode) {
+    case 0:
+        break;
+    case 1:
+        // TDC 2 先存数据
+        int channel;
+        if (device1 == 0)
+            channel = channel2;
+        else
+            channel = channel1;
+        computeHistogramCountAcrossDevices_HOLD
+                                 (dataDescPtr_2,
+                                  timeSeqX2,
+                                  channel,
+                                  nbrCOMdelay_2,
+                                  delayInCOM_2,
+                                  timeCOMunit,
+                                  &COM_HEAD_X2);
+
+        // TDC 2 再计算数据
+        computeHistogramCountAcrossDevices_COMPUTE(
+                            timeSeqX1, timeSeqX2, comRange, timeCOMunit,
+                            &COM_HEAD_X1, &COM_HEAD_X2, &COM_HEAD_compute,
+                            delay, timeStart, binWidth, nbrIntervals, binHeight);
+
+        break;
+    case 2:
+        computeHistogramCount(dataDescPtr_2,
+                              timeSeq1_2, timeSeq2_2,
+                              channel1, channel2, delay,
+                              timeStart, binWidth, nbrIntervals, binHeight,
+                              nbrCOMdelay_2,
+                              delayInCOM_2,
+                              timeCOMunit,
+                              &COM_HEAD_2);
+        break;
+    default:
+        break;
+    }
 }
 
 void HistogramWidget::on_buttonStop_released()
@@ -192,6 +310,8 @@ void HistogramWidget::saveToIni()
     fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    configIni->setValue("直方图配置/device1",device1);
+    configIni->setValue("直方图配置/device2",device2);
     configIni->setValue("直方图配置/channel1",channel1);
     configIni->setValue("直方图配置/channel2",channel2);
     configIni->setValue("直方图配置/accumulateTime",accumulateTime);
@@ -205,6 +325,8 @@ void HistogramWidget::saveToIni()
 void HistogramWidget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
+    device1 = configIni->value("直方图配置/device1").toInt();
+    device2 = configIni->value("直方图配置/device2").toInt();
     channel1 = configIni->value("直方图配置/channel1").toInt();
     channel2 = configIni->value("直方图配置/channel2").toInt();
     accumulateTime = configIni->value("直方图配置/accumulateTime").toDouble();
@@ -215,4 +337,20 @@ void HistogramWidget::loadFromIni()
     delete configIni;
 
     pushUiData();
+}
+
+void HistogramWidget::changeComOffset(int newOffset)
+{
+    int offsetChange = newOffset - COM_offset;
+    COM_offset = newOffset;
+    if (offsetChange < 0)
+    {
+        if (timeSeqX1.size() == 0) return;
+        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
+    }
+    else
+    {
+        if (timeSeqX2.size() == 0) return;
+        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+    }
 }

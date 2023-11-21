@@ -8,7 +8,9 @@ void Widget::createTempDataFile()
             << tr("当前时间：") << dateTime.currentDateTime().toString() << endl
             << tr("计数累计时间：") << accumulateTime << endl
             << endl
-            << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6") << endl;
+            << tr("时间/ms\tChannel 1\tChannel 2\tChannel 3\tChannel 4\tChannel 5\tChannel 6")
+            << tr("\tChannel 7\tChannel 8\tChannel 9\tChannel 10\tChannel 11\tChannel 12")
+            << endl;
     fSingleCount->close();
 }
 
@@ -103,9 +105,9 @@ void Widget::dealRecordSingleCount()
     timeRelative = timeToc - timeTic;
     fStream << timeRelative;
     for (int i = 0; i < 6; i++)
-    {
         fStream << "\t" << nbrSCC[i];
-    }
+    for (int i = 0; i < 6; i++)
+        fStream << "\t" << nbrSCC_2[i];
     fStream << endl;
 }
 

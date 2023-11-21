@@ -80,7 +80,12 @@ void Acqiris_TDC::startAcquisition()
     // 检查仪器状态是否有问题
     if (status != VI_SUCCESS) return;
 
-    acqThread->startAcquisition();
+    acqThread->startAcquisition(&waitCond);
+}
+
+void Acqiris_TDC::wakeToAquireData()
+{
+    waitCond.wakeOne();
 }
 
 void Acqiris_TDC::dealAcqThreadStarted()

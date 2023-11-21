@@ -12,7 +12,6 @@ void Widget::mergeDataFiles
 {
     QString line;
     QFile fMerge(fileName);
-    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
     QString tempFileName_SCC = iniPath + "/Data/SingleCount.txt";
     QFile fSingle(tempFileName_SCC);
     switch (modeRecord)
@@ -34,8 +33,7 @@ void Widget::mergeDataFiles
         {
             if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
             {
-                QString tempFileName_C = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                       + "/AcqirisTDC_qt/Data/Coincidence" + QString::number(i) +".txt";
+                QString tempFileName_C = iniPath + "/Data/Coincidence" + QString::number(i) +".txt";
                 QFile *fCoin = new QFile();
                 fCoin->setFileName(tempFileName_C);
                 fCoin->open(QIODevice::ReadOnly | QIODevice::Text);
@@ -86,7 +84,7 @@ void Widget::mergeDataFiles
         {
             QFileInfo fileInfo(fileName);
             QDir coinPath;
-            coinPath.mkdir(fileInfo.path() + "/Coincidences");
+            coinPath.mkpath(fileInfo.path() + "/Coincidences");
             if (vCoinWidget.at(i)->windowState() == Qt::WindowActive)
             {
                 QString copiedFileName = fileInfo.path() + "/Coincidences/Coincidence" + QString::number(i) +".txt";
@@ -96,8 +94,7 @@ void Widget::mergeDataFiles
                 fStream << tr(metaData.toStdString().data()) << "\n"
                         << "\n";
 
-                QString tempFileName_C = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
-                                       + "/AcqirisTDC_qt/Data/Coincidence" + QString::number(i) +".txt";
+                QString tempFileName_C = iniPath + "/Data/Coincidence" + QString::number(i) +".txt";
                 QFile *fCoin = new QFile();
                 fCoin->setFileName(tempFileName_C);
                 fCoin->open(QIODevice::ReadOnly | QIODevice::Text);

@@ -27,13 +27,14 @@ public:
 public slots:
     void dealTestReturn(int index);
     // 关闭测试子widget
-    void dealAcqThreadStarted();
+    void dealAcqThreadStarted(); void dealAcqThreadStarted_2();
     // 处理采集线程开启
-    void dealAcqThreadFinished();
+    void dealAcqThreadFinished(); void dealAcqThreadFinished_2();
     // 采集线程关闭后续
 //    void dealAcqThreadBankSwitch(AqT3DataDescriptor*);
     // 当发生 Bank 切换时，可以处理数据
     void dealAcqThreadBankSwitchSCC(AqT3DataDescriptor*);
+    void dealAcqThreadBankSwitchSCC_2(AqT3DataDescriptor*);
     // 计算单道计数
     void dealCountTimeOut();
     // 定时刷新单道计数
@@ -41,7 +42,7 @@ public slots:
     // 关闭符合子窗口
     void dealRequestCoinParam(int index);
 
-    void dealAskDealAcqBankSwitchCoin(int index);
+    void dealAskDealAcqBankSwitchCoin(int index, int computeMode);
     // 将 Bank 切换信号与符合子窗口的槽对接
     void dealAskStopDealAcqBankSwitchCoin(int index);
     // 停止对接 Bank 切换信号与符合子窗口的槽
@@ -53,7 +54,7 @@ public slots:
     // 关闭直方图子窗口
     void dealRequestHistParam(int index);
 
-    void dealAskDealAcqBankSwitchHist(int index);
+    void dealAskDealAcqBankSwitchHist(int index, int computeMode);
     // 对接 Bank 切换与直方图槽函数
     void dealAskStopDealAcqBankSwitchHist(int index);
     // 停止将数据传入直方图
@@ -105,6 +106,20 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
+    void on_textComOffset_editingFinished();
+
+    void on_buttonMinus1_released();
+
+    void on_buttonPlus1_released();
+
+    void on_buttonMinus10_released();
+
+    void on_buttonPlus10_released();
+
+    void on_buttonMinus100_released();
+
+    void on_buttonPlus100_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -118,8 +133,14 @@ private:
 
 signals:
     void countParamReady(bool*, int*);
-    void coinParamReady(int index, double *delayCN, double freqCOM);
-    void histParamReady(int index, double *delayCN, double freqCOM);
+    void coinParamReady(int index,
+                        double *delayCN,
+                        double *delayCN_2,
+                        double freqCOM, int countEvents);
+    void histParamReady(int index,
+                        double *delayCN,
+                        double *delayCN_2,
+                        double freqCOM, int countEvents);
 
 public:
     void setupAcqIndicator();
@@ -130,23 +151,26 @@ private:
     double freqCOM = 1000.0;             // kHz
     bool enableCountEvents = false;
     int countEvents = 10;           // kHz
-    bool channelConfig[7];
-    double level[7] = {0.5};
-    int slope[7] = {0};
+    bool channelConfig[NUM_CHANNELS+1], channelConfig_2[NUM_CHANNELS+1];
+    double level[NUM_CHANNELS+1] = {0.5}, level_2[NUM_CHANNELS+1] = {0.5};
+    int slope[NUM_CHANNELS+1] = {0}, slope_2[NUM_CHANNELS+1] = {0};
 
-    // 采集过程用到的参数
+    // 采集过程用到的参数/
 private:
-    Acqiris_TDC *tdc;
-    bool* acqStopPtr = new bool();
-//    int status;
-//    AqT3ReadParameters* readParamPtr = new AqT3ReadParameters();
-    QSimpleLed *statusIndicator = new QSimpleLed(this);
+    Acqiris_TDC *tdc, *tdc_2;
+    QList<ViSession> instrIds;
+//    QList<QWaitCondition*> waitConds;
+    bool *acqStopPtr = new bool(), *acqStopPtr_2 = new bool();
+    QSimpleLed *statusIndicator, *statusIndicator_2;
+    int comOffset = 0;
+public:
+    void updateComOffset();
 
     // 单道计数参数
 private:
-    int nbrSCC[6] = {0};
-    int nbrSCCfuture[6] = {0};
-    double delayCN[7] = {0.0};
+    int nbrSCC[NUM_CHANNELS] = {0}, nbrSCC_2[NUM_CHANNELS] = {0};
+    int nbrSCCfuture[NUM_CHANNELS] = {0}, nbrSCCfuture_2[NUM_CHANNELS] = {0};
+    double delayCN[NUM_CHANNELS+1] = {0.0}, delayCN_2[NUM_CHANNELS+1] = {0.0};
     QTimer *timerCount;
     double accumulateTime = 1.0;
     bool countSavable = false;
@@ -154,7 +178,7 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
-    int nbrCOMbuffer = 1;
+
 public:
     int* getSingleCountPtr();
 
@@ -179,16 +203,16 @@ public:
 
     // 保存配置
 private:
-    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
-    QString iniName = iniPath + "/Configurations/general.ini";
-    QString tempFileName_SCC = iniPath + "/Data/SingleCount.txt";   // 单道计数临时文件
+    QString iniPath;
+    QString iniName;
+    QString tempFileName_SCC;   // 单道计数临时文件
     QFile *fSingleCount = new QFile();
     QTextStream fStream;
 public:
     void saveToIni();
     // 保存当前配置到配置文件
     void loadFromIni();
-    // 从配置文件加载配置
+    // 从配置文件加载配置s
 
 private:
     // 外部功能子窗口（序列）

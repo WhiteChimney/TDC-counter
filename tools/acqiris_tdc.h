@@ -27,6 +27,7 @@ private:
 //    采集参数
     Acqiris_AcquisitionThread *acqThread;
     AqT3ReadParameters* readParamPtr;
+    QWaitCondition waitCond;
 
 public:
 //    仪器初始化
@@ -38,6 +39,8 @@ public:
                     int countEvents);
 //    开始采集
     void startAcquisition();
+//    控制同步
+    void wakeToAquireData();
 //    停止采集
     void stopAcquisition();
 //    获取仪器的状态信息

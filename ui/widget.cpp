@@ -6,14 +6,21 @@ Widget::Widget(QWidget *parent)
     , ui(new Ui::Widget)
 {
     ui->setupUi(this);
-    this->setWindowTitle(tr("Acqiris TDC 计数程序 V")
-                           + tr(PROJECT_VERSION_0) + tr(".")
-                           + tr(PROJECT_VERSION_1) + tr(".")
-                           + tr(PROJECT_VERSION_2));
+
+    QString appVersion = "V" + QString(PROJECT_VERSION_0) + "."
+                             + QString(PROJECT_VERSION_1) + "."
+                             + QString(PROJECT_VERSION_2);
+
+    this->setWindowTitle(tr("Acqiris TDC 计数程序 ") + appVersion);
     this->setupAcqIndicator();
     ui->tabWidget->setCurrentWidget(ui->pageSettings);
 
 //    清空临时文件
+    iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation)
+            + "/" + appVersion;
+    iniName = iniPath + "/Configurations/general.ini";
+    tempFileName_SCC = iniPath + "/Data/SingleCount.txt";
+
     QDir tempDataPath(iniPath + "/Data");
     if (tempDataPath.isReadable())
     {
@@ -21,11 +28,11 @@ Widget::Widget(QWidget *parent)
         {
             tempDataPath.removeRecursively();
             QThread::msleep(100);
-            tempDataPath.mkdir(iniPath + "/Data");
+            tempDataPath.mkpath(iniPath + "/Data");
         }
     }
     else
-        tempDataPath.mkdir(iniPath + "/Data");
+        tempDataPath.mkpath(iniPath + "/Data");
 
 //    检查是否存在配置文件（ini）
     QFileInfo iniInfo(iniName);
@@ -35,7 +42,9 @@ Widget::Widget(QWidget *parent)
     {
         ui->textDataDirectory->setCurrentText(
                     QStandardPaths::writableLocation(QStandardPaths::DesktopLocation));
+
         saveToIni();     // 否则保存当前配置
+
     }
     fSingleCount->setFileName(tempFileName_SCC);
     fStream.setDevice(fSingleCount);
@@ -50,15 +59,25 @@ Widget::Widget(QWidget *parent)
     tdc = new Acqiris_TDC("PCI::INSTR0",this);
     connect(tdc,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted);
     connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
+//    connect(tdc,&Acqiris_TDC::readyToAcquireData,this,&Widget::startAcquisitionSync);
     tdc->initialize();
 
+    tdc_2 = new Acqiris_TDC("PCI::INSTR1",this);
+    connect(tdc_2,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted_2);
+    connect(tdc_2,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished_2);
+//    connect(tdc_2,&Acqiris_TDC::readyToAcquireData,this,&Widget::startAcquisitionSync);
+    tdc_2->initialize();
+
+    QString errorMsg = "未发现可操控设备";
     if (tdc->getStatus() != VI_SUCCESS)
-    {
+        errorMsg.append(" TDC 1");
+    if (tdc_2->getStatus() != VI_SUCCESS)
+        errorMsg.append(" TDC 2");
+    if (tdc->getStatus() != VI_SUCCESS or tdc_2->getStatus() != VI_SUCCESS)
         QMessageBox::critical(this,
-                              QString("警告"),
-                              QString("未发现可操控设备"),
-                              QMessageBox::Ok);
-    }
+                          QString("警告"),
+                          QString(errorMsg),
+                          QMessageBox::Ok);
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);

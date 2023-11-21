@@ -14,8 +14,9 @@ void Acqiris_AcquisitionThread::setInstrId(ViSession m_instrId)
     instrId = m_instrId;
 }
 
-void Acqiris_AcquisitionThread::startAcquisition()
+void Acqiris_AcquisitionThread::startAcquisition(QWaitCondition *m_waitCond)
 {
+    waitCond = m_waitCond;
     this->start();
 }
 
@@ -35,13 +36,17 @@ void Acqiris_AcquisitionThread::run()
     status = Acqrs_calibrate(instrId);
     if (status != VI_SUCCESS) return;
 
+    // 暂停线程，等待同步
+    mutex.lock();
+    emit acquisitionStarted();
+    waitCond->wait(&mutex);
+    mutex.unlock();
+
     // Start acquisitions
     status = AcqrsT3_acquire(instrId);
     if (status != VI_SUCCESS) return;
 
     acqStop = false;
-
-    emit acquisitionStarted();
 
     while(!acqStop)
     {

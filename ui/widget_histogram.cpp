@@ -4,7 +4,7 @@
 void Widget::on_buttonHistogram_released()
 {
     int index = vHistWidget.count();
-    histW = new HistogramWidget(0, index);
+    histW = new HistogramWidget(0, index, comOffset);
     vHistWidget.append(histW);
     connect(histW,&HistogramWidget::returnSignal,this,&Widget::dealHistogramReturn);
     connect(histW,&HistogramWidget::requestHistParam,this,&Widget::dealRequestHistParam);
@@ -25,17 +25,31 @@ void Widget::dealHistogramReturn(int index)
 
 void Widget::dealRequestHistParam(int index)
 {
-    emit histParamReady(index, delayCN, freqCOM);
+    emit histParamReady(index, delayCN, delayCN_2, freqCOM, countEvents);
 }
 
-void Widget::dealAskDealAcqBankSwitchHist(int index)
+void Widget::dealAskDealAcqBankSwitchHist(int index, int computeMode)
 {
     histW = vHistWidget.at(index);
-    connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    switch (computeMode) {
+    case 0:
+        connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+        break;
+    case 1:
+        connect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+        connect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
+        break;
+    case 2:
+        connect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
+        break;
+    default:
+        break;
+    }
 }
 
 void Widget::dealAskStopDealAcqBankSwitchHist(int index)
 {
     histW = vHistWidget.at(index);
     disconnect(tdc,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist);
+    disconnect(tdc_2,&Acqiris_TDC::dataReturned,histW,&HistogramWidget::dealAcqThreadBankSwitchHist_2);
 }
