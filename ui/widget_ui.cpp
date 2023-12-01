@@ -386,5 +386,7 @@ void Widget::updateComOffset()
         vCoinWidget[i]->changeComOffset(comOffset);
     for (int i = 0; i < vHistWidget.size(); i++)
         vHistWidget[i]->changeComOffset(comOffset);
+    for (int i = 0; i < vQKDWidget.size(); i++)
+        vQKDWidget[i]->changeComOffset(comOffset);
 }
 

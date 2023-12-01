@@ -95,6 +95,29 @@ void computeCoincidenceCountAcrossDevices_COMPUTE(
                  int* nbrCoinAcc,
                  int *COM_HEAD, int *COM_HEAD_2, int *COM_HEAD_X);
 
+void computeQKDAcrossDevices_HOLD
+            (AqT3DataDescriptor* dataDescPtr,
+             QList<QVector<int>>& timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+             QList<QVector<int>>& channelSeq,    // 升序排列后的时间，与通道编号一一对应
+             int *nbrCOMdelay,
+             int *delayInCOM,
+             int timeCOMunit,
+             int *COM_HEAD);
+
+void computeQKDAcrossDevices_COMPUTE(
+                 QList<QVector<int>> &timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+                 QList<QVector<int>> &channelSeqX1,    // 升序排列后的时间，与通道编号一一对应
+                 QList<QVector<int>> &timeSeqX2,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+                 QList<QVector<int>> &channelSeqX2,    // 升序排列后的时间，与通道编号一一对应
+                 int nbrChannelsX1, int nbrChannelsX2,
+                 int* channelsX1, int *channelsX2,
+                 int* axbx11, int* axbx12, int* axbx22, int* axbx11error, int* axbx22error,
+                 int* azbz11, int* azbz12, int* azbz22, int* azbz11error, int* azbz22error,
+                 int* abandon,
+                 int  period,
+                 int tolerance,
+                 int *COM_HEAD, int *COM_HEAD_2, int *COM_HEAD_X);
+
 void clear2DintVector(QList<QVector<int>> *v);
 
 void resizeSeqLength(QList<QVector<int>> *v, int l);

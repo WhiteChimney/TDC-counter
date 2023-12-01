@@ -102,3 +102,8 @@ Widget::~Widget()
     tempDataPath.mkdir(iniPath + "/Data");
     delete ui;
 }
+
+
+
+
+

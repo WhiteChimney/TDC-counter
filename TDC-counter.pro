@@ -17,6 +17,7 @@ SOURCES += \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
     sources/customizedCommands.cpp \
+    sources/hyperEBQKDgeneratekey.cpp \
     sources/mergeDataFiles.cpp \
     sources/vectorProcessing.cpp \
     tools/QSimpleLed.cpp \
@@ -35,9 +36,11 @@ SOURCES += \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
     ui/histogramwidget.cpp \
+    ui/hyperEBQKDwidget.cpp \
     ui/statisticswidget.cpp \
     ui/testwidget.cpp \
     ui/widget.cpp \
+    ui/widget_QKD.cpp \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
     ui/widget_extApp.cpp \
@@ -75,6 +78,7 @@ HEADERS += \
     ui/coincidencewidget.h \
     ui/externalapplicationswidget.h \
     ui/histogramwidget.h \
+    ui/hyperEBQKDwidget.h \
     ui/statisticswidget.h \
     ui/testwidget.h \
     ui/widget.h
@@ -83,6 +87,7 @@ FORMS += \
     ui/coincidencewidget.ui \
     ui/externalapplicationswidget.ui \
     ui/histogramwidget.ui \
+    ui/hyperEBQKDwidget.ui \
     ui/statisticswidget.ui \
     ui/testwidget.ui \
     ui/widget.ui

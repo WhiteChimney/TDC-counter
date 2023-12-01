@@ -11,6 +11,7 @@
 #include "statisticswidget.h"
 #include "externalapplicationswidget.h"
 #include "acqiris_tdc.h"
+#include "hyperEBQKDwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -41,6 +42,7 @@ public slots:
     void dealCoincidenceReturn(int index);
     // 关闭符合子窗口
     void dealRequestCoinParam(int index);
+    void dealRequestQKDParam(int index);
 
     void dealAskDealAcqBankSwitchCoin(int index, int computeMode);
     // 将 Bank 切换信号与符合子窗口的槽对接
@@ -68,6 +70,15 @@ public slots:
     // 统计时钟同步
     void dealStatisticsRequestStopSync();
     // 统计时钟停止同步
+
+    void dealQKDReturn(int index);
+    // 关闭QKD子窗口
+    void dealAskDealAcqBankSwitchQKD(int index);
+    // 将 Bank 切换信号与符合子窗口的槽对接
+    void dealAskStopDealAcqBankSwitchQKD(int index);
+    void dealQKDTimerNeedsSync(int index);
+    // 将符合子窗口的定时转为单道计数主时钟，以同步
+    void dealQKDTimerStopsSync(int index);
 
 private slots:
     void on_buttonTempFilePath_released();
@@ -120,6 +131,8 @@ private slots:
 
     void on_buttonPlus100_released();
 
+    void on_pushButtonQKD_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -130,6 +143,9 @@ private:
     // 直方图子窗口（序列）
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
     StatisticsWidget *statW; bool statWidgetLaunched = false;
+    // QKD子窗口（序列）
+    QVector<hyperentanglementQKD*> vQKDWidget; hyperentanglementQKD *QKDW;
+    QVector<bool> vQKDWidgetSyncState;
 
 signals:
     void countParamReady(bool*, int*);
@@ -141,6 +157,11 @@ signals:
                         double *delayCN,
                         double *delayCN_2,
                         double freqCOM, int countEvents);
+    void QKDParamReady(int index,
+                        double *delayCN,
+                        double *delayCN_2,
+                        double freqCOM, int countEvents);     //要修改延时的设置，导入QKD面板的设置
+
 
 public:
     void setupAcqIndicator();

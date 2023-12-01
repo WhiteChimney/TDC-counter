@@ -1,7 +1,8 @@
 #include "testwidget.h"
 #include "ui_testwidget.h"
 #include <QDebug>
-
+#include <QList>
+#include<QVector>
 #include "stdafx.h"
 
 // 测试子窗口
@@ -34,7 +35,7 @@ void TestWidget::on_buttonReturn_released()
 
 QString TestWidget::testTC890()
 {
-    QString text = "";
+/*    QString text = "";
     QString textResult = "";
 
     // Initializes instrument
@@ -131,5 +132,6 @@ QString TestWidget::testTC890()
     // Cleanup readout structures
     delete[] dataArrayP;
 
-    return textResult;
+    return textResult; */
+
 }
