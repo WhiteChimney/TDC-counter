@@ -37,6 +37,13 @@ void hyperentanglementQKD::fetchUiData()
 
     toleranceMulti = 30;    //符合窗口选择1.5ns
     zperiod = int(20*ui->Zperiod->text().toDouble());
+    // 数据保存设置
+    pathName = ui->textDataDirectory->currentText();
+    fileName = ui->textDataFileName->text();
+//    metaData = ui->textMetaData->toPlainText();
+//    enableRecordTime = ui->checkboxRecordTime->isChecked();
+//    recordTime = ui->textRecordTime->text().toDouble();
+
     pushUiData();
 }
 
@@ -276,16 +283,68 @@ void hyperentanglementQKD::changeComOffset(int newOffset)
     }
 }
 
+//数据记录
+
+void hyperentanglementQKD::createTempDataFile()
+{
+    QString fullFileName = pathName + "/" + fileName + "." + ui->comboDataFileSuffix->currentText();
+    fQKD->setFileName(fullFileName);
+    fStream.setDevice(fQKD);
+    fQKD->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream << tr("有效计数") << "\n";
+}
+
+
 void hyperentanglementQKD::on_buttonStartRecord_released()
 {
-
+    ui->buttonStartRecord->setEnabled(false);
+    fetchUiData();
+    timeTic = dateTime.currentMSecsSinceEpoch();
+    if (windowState()!=Qt::WindowActive)
+   {
+    createTempDataFile();
+//    emit QKDSaveDataNeedsSync(index);
+    }
 }
+
+/*void hyperentanglementQKD::dealSaveDataTimeOut()
+{
+    timeToc = dateTime.currentMSecsSinceEpoch();
+    timeRelative = timeToc -timeTic;
+    fStream << "\t" <<timeRelative <<"\n";
+} */
 
 
 void hyperentanglementQKD::on_buttonStopRecord_released()
 {
-
+    fetchUiData();
+    timeToc = dateTime.currentMSecsSinceEpoch();
+    timeRelative = timeToc -timeTic;
+    fStream << tr("总用时 (ms)") << timeRelative <<endl;
+    fQKD->close();
+//    emit QKDSaveDataStopsSync(index);
 }
 
 
+
+
+void hyperentanglementQKD::on_buttonDataDirectory_released()
+{
+    pathName = QFileDialog::getExistingDirectory
+                        (this,tr("Open Directory"),
+                         QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),
+                         QFileDialog::ShowDirsOnly
+                         | QFileDialog::DontResolveSymlinks);
+    ui->textDataDirectory->setCurrentText(pathName);
+    ui->textDataDirectory->addItem(pathName);
+}
+
+
+
+
+void hyperentanglementQKD::on_buttonOpenDataDir_released()
+{
+    fetchUiData();
+    QDesktopServices::openUrl(QUrl::fromLocalFile(pathName));
+}
 

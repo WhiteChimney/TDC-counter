@@ -79,6 +79,10 @@ public slots:
     void dealQKDTimerNeedsSync(int index);
     // 将符合子窗口的定时转为单道计数主时钟，以同步
     void dealQKDTimerStopsSync(int index);
+//    void dealQKDSaveDataNeedsSync(int index);
+//    void dealQKDSaveDataStopsSync(int index);
+
+
 
 private slots:
     void on_buttonTempFilePath_released();

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <QVector>
 #include <QDebug>
+#include "hyperEBQKDwidget.h"
 
 //bool channelToBeCalculated(int channel, int *channels, int nbrChannels);
 
@@ -119,7 +120,7 @@ int checkkey(int ax[], int az[], int bx[], int bz[], int axn, int azn, int bxn, 
 }
 
 
-void computeQKDAcrossDevices_HOLD
+void hyperentanglementQKD::computeQKDAcrossDevices_HOLD
             (AqT3DataDescriptor* dataDescPtr,
              QList<QVector<int>>& timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
              QList<QVector<int>>& channelSeq,    // 升序排列后的时间，与通道编号一一对应
@@ -166,7 +167,7 @@ void computeQKDAcrossDevices_HOLD
 }
 
 
-void computeQKDAcrossDevices_COMPUTE(
+void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                  QList<QVector<int>> &timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
                  QList<QVector<int>> &channelSeqX1,    // 升序排列后的时间，与通道编号一一对应
                  QList<QVector<int>> &timeSeqX2,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
@@ -400,6 +401,7 @@ void computeQKDAcrossDevices_COMPUTE(
                 }
                 i=i+spacing_qkd;
                 qDebug() << channelrecord<<"\n";
+                fStream << channelrecord << "\n";
            }
 
 

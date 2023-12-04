@@ -25,7 +25,8 @@ signals:
     void askStopDealAcqBankSwitchQKD(int index);  // 告知主窗口断开内存切换信号与本窗口的连接
     void QKDTimerNeedsSync(int index);            // 告知主窗口时钟需要同步
     void QKDTimerStopsSync(int index);            // 告知主窗口停止同步时钟
-
+//    void QKDSaveDataNeedsSync(int index);       //保存数据的时钟
+//    void QKDSaveDataStopsSync(int index);
  public slots:
       void dealAcqThreadBankSwitchQKD(AqT3DataDescriptor* dataDescPtr);  // 内存切换，计算计数
       void dealAcqThreadBankSwitchQKD_2(AqT3DataDescriptor* dataDescPtr_2);  // 内存切换，计算计数
@@ -35,7 +36,7 @@ signals:
                                 double *delayCN_2,
                                 double freqCOM,
                                 int countEvents);
-
+//      void dealSaveDataTimeOut();
 
 
 private slots:
@@ -44,6 +45,10 @@ private slots:
     void on_buttonStartRecord_released();  //开始记录按键按下
     void on_buttonStopRecord_released();   //停止记录按键按下
     void on_ButtonRetornQKD_released();
+
+    void on_buttonDataDirectory_released();
+
+    void on_buttonOpenDataDir_released();
 
 private:
     Ui::hyperentanglementQKD *ui;
@@ -78,7 +83,10 @@ private:
 
     // 用于保存数据
     bool QKDSavable = false;     //判断是否可以保存
-
+    qint64 timeTic, timeToc, timeRelative;   // 记录时间用
+    QFile *fQKD = new QFile();
+    QTextStream fStream;
+    QDateTime dateTime;            // 记录当前时间
 
     //计算参数
     int nbraxbx11 = 0, nbraxbx12 = 0, nbraxbx22 = 0, nbraxbx11error = 0, nbraxbx22error = 0;
@@ -96,10 +104,41 @@ private:
     double freqCOM;               // TDC COM 重复频率
     int countEvents;
 
+ private:
+    QString pathName = "D:/Data";
+    QString fileName = "test1";
+    QString metaData = "# e.g. 实验条件：……";
+
 
 public:
     void fetchUiData(), pushUiData(); // 获取与推送 ui 数据
     void changeComOffset(int newOffset);
+    void createTempDataFile();
+
+
+    void computeQKDAcrossDevices_HOLD
+                (AqT3DataDescriptor* dataDescPtr,
+                 QList<QVector<int>>& timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+                 QList<QVector<int>>& channelSeq,    // 升序排列后的时间，与通道编号一一对应
+                 int *nbrCOMdelay,
+                 int *delayInCOM,
+                 int timeCOMunit,
+                 int *COM_HEAD);
+
+    void computeQKDAcrossDevices_COMPUTE(
+                     QList<QVector<int>> &timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+                     QList<QVector<int>> &channelSeqX1,    // 升序排列后的时间，与通道编号一一对应
+                     QList<QVector<int>> &timeSeqX2,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+                     QList<QVector<int>> &channelSeqX2,    // 升序排列后的时间，与通道编号一一对应
+                     int nbrChannelsX1, int nbrChannelsX2,
+                     int* channelsX1, int *channelsX2,
+                     int* axbx11, int* axbx12, int* axbx22, int* axbx11error, int* axbx22error,
+                     int* azbz11, int* azbz12, int* azbz22, int* azbz11error, int* azbz22error,
+                     int* abandon,
+                     int  period,
+                     int tolerance,
+                     int *COM_HEAD, int *COM_HEAD_2, int *COM_HEAD_X);
+
 };
 
 #endif // HYPEREBQKDWIDGET_H

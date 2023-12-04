@@ -40,6 +40,15 @@ void Widget::on_buttonExit_released()
             dealHistogramReturn(i);
         vHistWidget.removeLast();
     }
+    for (int i = vQKDWidget.count()-1; i>=0; i--)
+    {
+  //      vQKDWidget.at(i)->saveToIni();
+        if (vQKDWidget.at(i)->windowState() != Qt::WindowNoState)
+            dealQKDReturn(i);
+        vQKDWidget.removeLast();
+        vQKDWidgetSyncState.removeLast();
+    }
+
     on_buttonStopRecord_released();
     on_buttonStopCount_released();
     on_buttonStopAcq_released();
