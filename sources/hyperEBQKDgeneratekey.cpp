@@ -207,7 +207,7 @@ void computeQKDAcrossDevices_COMPUTE(
     for (int i = 0; i < nbrChannelsX1; i++)
         channels[i] = channelsX1[i];
     for (int i = 0; i < nbrChannelsX2; i++)
-        channels[i+nbrChannelsX1] = channelsX2[i] + 6;
+        channels[i+nbrChannelsX1] = channelsX2[i] + 10;
 
     int index;
 
@@ -229,9 +229,9 @@ void computeQKDAcrossDevices_COMPUTE(
             for(int i=0; i < timeSeqX1[mm].size()-1; i++)
             {
                 int spacing_qkd=0, channelrecord = 0;
-                bool channelbool[16];
+//                bool channelbool[16];
                 int aliceX[4], aliceZ[4], bobX[4], bobZ[4];
-                memset(channelbool,false,sizeof(channelbool));
+//                memset(channelbool,false,sizeof(channelbool));
                 memset(aliceX,0,sizeof(aliceX));
                 memset(bobX,0,sizeof(bobX));
                 memset(aliceZ,0,sizeof(aliceZ));
@@ -309,7 +309,7 @@ void computeQKDAcrossDevices_COMPUTE(
                        }
                        channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1];
                        int spacing_qkdz=1;
-                        while ((timeSeqX1[mm].at(i+spacing_qkd+1+spacing_qkdz)-timeSeqX1[mm].at(i+spacing_qkd+1)<=toleranceMulti) and (i+spacing_qkd+1 < timeSeqX1[mm].size()))
+                        while ((timeSeqX1[mm].at(i+spacing_qkd+1+spacing_qkdz)-timeSeqX1[mm].at(i+spacing_qkd+1)<=toleranceMulti) and (i+spacing_qkd+1+spacing_qkdz < timeSeqX1[mm].size()))
                        {
                          indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1+spacing_qkdz], timeSeqX1[mm][i+spacing_qkd+1+spacing_qkdz], period);
                             if(indexcheck<4)
@@ -332,7 +332,7 @@ void computeQKDAcrossDevices_COMPUTE(
                             channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1+spacing_qkdz];
                             spacing_qkdz++;
                        }
-                      spacing_qkd += spacing_qkdz;
+                      spacing_qkd += spacing_qkdz; 
                    }
                 }
                 else{
@@ -358,6 +358,7 @@ void computeQKDAcrossDevices_COMPUTE(
                             }
                         }
                         spacing_qkd++;
+                        channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1];
                     }
                 }
                 switch(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)){
@@ -398,6 +399,7 @@ void computeQKDAcrossDevices_COMPUTE(
                     break;
                 }
                 i=i+spacing_qkd;
+                qDebug() << channelrecord<<"\n";
            }
 
 
