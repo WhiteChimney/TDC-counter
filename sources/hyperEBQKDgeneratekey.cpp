@@ -401,6 +401,7 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                 }
                 i=i+spacing_qkd;
                 qDebug() << channelrecord<<"\n";
+                if (QKDSavable)
                 fStream << channelrecord << "\n";
            }
 

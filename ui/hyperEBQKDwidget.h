@@ -50,6 +50,8 @@ private slots:
 
     void on_buttonOpenDataDir_released();
 
+
+
 private:
     Ui::hyperentanglementQKD *ui;
 

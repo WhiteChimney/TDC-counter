@@ -79,14 +79,14 @@ void hyperentanglementQKD::on_ButtonStartQKD_released()
     on_ButtonStopQKD_released();
     fetchUiData();
     emit QKDTimerNeedsSync(index);
-    QKDSavable = true; // 此时可保存数据
+//    QKDSavable = true; // 此时可保存数据
     emit requestQKDParam(index);
 }
 
 
 void hyperentanglementQKD::on_ButtonStopQKD_released()
 {
-   QKDSavable= false;
+//   QKDSavable= false;
    emit askStopDealAcqBankSwitchQKD(index);
    emit QKDTimerStopsSync(index);
 
@@ -297,6 +297,7 @@ void hyperentanglementQKD::createTempDataFile()
 
 void hyperentanglementQKD::on_buttonStartRecord_released()
 {
+    QKDSavable = true;
     ui->buttonStartRecord->setEnabled(false);
     fetchUiData();
     timeTic = dateTime.currentMSecsSinceEpoch();
@@ -317,6 +318,7 @@ void hyperentanglementQKD::on_buttonStartRecord_released()
 
 void hyperentanglementQKD::on_buttonStopRecord_released()
 {
+    QKDSavable = false;
     fetchUiData();
     timeToc = dateTime.currentMSecsSinceEpoch();
     timeRelative = timeToc -timeTic;
@@ -347,4 +349,6 @@ void hyperentanglementQKD::on_buttonOpenDataDir_released()
     fetchUiData();
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathName));
 }
+
+
 
