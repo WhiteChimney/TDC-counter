@@ -7,7 +7,7 @@ void Widget::on_buttonStartAcquisition_released()
 
     fetchUiData();
     tdc->config(channelConfig,level,slope,countEvents);
-    tdc_2->config(channelConfig,level,slope,countEvents);
+    tdc_2->config(channelConfig_2,level_2,slope_2,countEvents);
 
     // start Acquisition
     if (tdc->getStatus() == VI_SUCCESS)

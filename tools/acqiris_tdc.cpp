@@ -49,11 +49,12 @@ int Acqiris_TDC::config(bool(&channelConfig)[NUM_CHANNELS+1],
     long long channelConfigCode[NUM_CHANNELS+1] = {0x80000000};
     for (int i = 0; i < NUM_CHANNELS+1; i++)
         if (channelConfig[i])
-            channelConfigCode[i] = 0x00000000;
+            channelConfigCode[i] = slope[i];
+       qDebug()<<slope[0];
 
-    status = AcqrsT3_configChannel(instrId, -1, channelConfigCode[0], level[0], slope[0]);//channel common,positive slope,vth=1.0V
+    status = AcqrsT3_configChannel(instrId, -1, channelConfigCode[0], level[0], 0);//channel common,positive slope,vth=1.0V
     for (int i = 1; i < NUM_CHANNELS+1; i++)
-        status += AcqrsT3_configChannel(instrId, i, channelConfigCode[i], level[i], slope[i]);//channel 1
+        status += AcqrsT3_configChannel(instrId, i, channelConfigCode[i], level[i], 0);//channel 1
 
     // 生成读取结构AqT3ReadParameters dataArray
     // dataArray 中包括了 start 信号与 marker 信号

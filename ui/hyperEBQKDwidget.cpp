@@ -63,7 +63,7 @@ void hyperentanglementQKD::pushUiData()
      ui->TDC2delay4->setText(QString::number(delayMulti_2[3]/20.0));
      ui->TDC2delay5->setText(QString::number(delayMulti_2[4]/20.0));
      ui->TDC2delay6->setText(QString::number(delayMulti_2[5]/20.0));
-     ui->Zperiod->setText(QString::number(toleranceMulti/20.0));
+     ui->Zperiod->setText(QString::number(zperiod/20));
 
 }
 
@@ -264,7 +264,16 @@ void hyperentanglementQKD::dealTimeOut()
     ui->FullSpaceXQBER -> display(1-((double)nbraxbx11+nbraxbx22)/(nbraxbx11+nbraxbx11error+nbraxbx22+nbraxbx22error+nbraxbx12));
     ui->FullSpaceZCount -> display(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12);
     ui->FullSpaceZQBER -> display(1-((double)nbrazbz11+nbrazbz22)/(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12));
-
+    memset(&nbraxbx11,0,sizeof(nbraxbx11));
+    memset(&nbraxbx11error,0,sizeof(nbraxbx11error));
+    memset(&nbraxbx22,0,sizeof(nbraxbx22));
+    memset(&nbraxbx22error,0,sizeof(nbraxbx22error));
+    memset(&nbraxbx12,0,sizeof(nbraxbx12));
+    memset(&nbrazbz11,0,sizeof(nbrazbz11));
+    memset(&nbrazbz11error,0,sizeof(nbrazbz11error));
+    memset(&nbrazbz22,0,sizeof(nbrazbz22));
+    memset(&nbrazbz22error,0,sizeof(nbrazbz22error));
+    memset(&nbrazbz12,0,sizeof(nbrazbz12));
 }
 
 void hyperentanglementQKD::changeComOffset(int newOffset)
@@ -292,6 +301,7 @@ void hyperentanglementQKD::createTempDataFile()
     fStream.setDevice(fQKD);
     fQKD->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream << tr("有效计数") << "\n";
+    qDebug() << "创建文件";
 }
 
 
@@ -301,11 +311,15 @@ void hyperentanglementQKD::on_buttonStartRecord_released()
     ui->buttonStartRecord->setEnabled(false);
     fetchUiData();
     timeTic = dateTime.currentMSecsSinceEpoch();
-    if (windowState()!=Qt::WindowActive)
-   {
-    createTempDataFile();
+    QString fullFileName = pathName + "/" + fileName + "." + ui->comboDataFileSuffix->currentText();
+    fQKD->setFileName(fullFileName);
+    fStream.setDevice(fQKD);
+    fQKD->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream << tr("有效计数") << "\n";
+    qDebug() << "创建文件:"<<fullFileName;;
+//    createTempDataFile();
 //    emit QKDSaveDataNeedsSync(index);
-    }
+
 }
 
 /*void hyperentanglementQKD::dealSaveDataTimeOut()
@@ -319,6 +333,7 @@ void hyperentanglementQKD::on_buttonStartRecord_released()
 void hyperentanglementQKD::on_buttonStopRecord_released()
 {
     QKDSavable = false;
+    ui->buttonStartRecord->setEnabled(true);
     fetchUiData();
     timeToc = dateTime.currentMSecsSinceEpoch();
     timeRelative = timeToc -timeTic;

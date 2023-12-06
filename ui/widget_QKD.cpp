@@ -11,7 +11,7 @@ void Widget::on_pushButtonQKD_released()
     connect(QKDW,&hyperentanglementQKD::requestQKDParam,this,&Widget::dealRequestQKDParam);
     connect(this,&Widget::QKDParamReady,QKDW,&hyperentanglementQKD::dealRequestQKDParam);
     connect(QKDW,&hyperentanglementQKD::askDealAcqBankSwitchQKD,this,&Widget::dealAskDealAcqBankSwitchQKD);
-    connect(QKDW,&hyperentanglementQKD::askStopDealAcqBankSwitchQKD,this,&Widget::dealAskStopDealAcqBankSwitchCoin);
+    connect(QKDW,&hyperentanglementQKD::askStopDealAcqBankSwitchQKD,this,&Widget::dealAskStopDealAcqBankSwitchQKD);
     connect(QKDW,&hyperentanglementQKD::QKDTimerNeedsSync,this,&Widget::dealQKDTimerNeedsSync);
     connect(QKDW,&hyperentanglementQKD::QKDTimerStopsSync,this,&Widget::dealQKDTimerStopsSync);
 //    connect(QKDW,&hyperentanglementQKD::QKDSaveDataNeedsSync,this,&Widget::dealQKDSaveDataNeedsSync);

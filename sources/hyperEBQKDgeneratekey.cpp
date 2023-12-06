@@ -227,7 +227,7 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
             }
 
            //先将Alice和Bob的响应分类存到数组aliceX[4], aliceZ[4], bobX[4], bobZ[4]中，然后判断是否有符合;
-            for(int i=0; i < timeSeqX1[mm].size()-1; i++)
+            for(int i=0; i < timeSeqX1[mm].size()-1; i++)    //-1
             {
                 int spacing_qkd=0, channelrecord = 0;
 //                bool channelbool[16];
@@ -240,7 +240,11 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                 int indexcheck;
                 int aliceXnum=0, bobXnum=0, aliceZnum=0, bobZnum=0;
                 indexcheck=checkoutcome(channelSeqX1[mm][i], timeSeqX1[mm][i], period);
-                if(indexcheck<4)
+//               fStream << indexcheck << "a" << "\t";
+ //              fStream << timeSeqX1[mm][i] << "\t";
+ //              fStream << toleranceMulti << "\t";
+ //               fStream << 1/3*30 <<"\t"<< 100-1/3*30 << "\t";
+               if(indexcheck<4)
                 {
                     aliceX[0] = indexcheck;
                     aliceXnum++;
@@ -259,12 +263,13 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                         bobZnum++;
                     }
                 }
-                channelrecord = 10*channelrecord+channelSeqX1[mm][i];
+                channelrecord = 100*channelrecord+indexcheck;
                 if((timeSeqX1[mm][i]/period)%2==0)
                 {
                     while (timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=toleranceMulti and i+spacing_qkd+1 < timeSeqX1[mm].size())
                     { //
                     indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1],timeSeqX1[mm][i+spacing_qkd+1], period);
+//                    fStream << indexcheck << "b" << "\t";
                     if(indexcheck<4)
                     {aliceX[aliceXnum] = indexcheck;
                         aliceXnum++;
@@ -283,14 +288,15 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                             bobZnum++;    //每个基中的数量
                         }
                     }
-                    channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1];
+                    channelrecord = 100*channelrecord+indexcheck;
                     spacing_qkd++;
                     }
-
-                   if((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)>=period-1/3*toleranceMulti) and ((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=period+toleranceMulti))
+//
+                   if((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)>=period-toleranceMulti/3) and ((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=period+toleranceMulti))
                            and (bobZnum>0 or aliceZnum>0) and i+spacing_qkd+1 < timeSeqX1[mm].size())
                    {
                        indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1], timeSeqX1[mm][i+spacing_qkd+1], period);
+//                       fStream << indexcheck << "c" << "\t";
                        if(indexcheck<4)
                        {
                           qDebug()<<"checkoutcome error";
@@ -308,12 +314,13 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                                bobZnum++;
                            }
                        }
-                       channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1];
+                       channelrecord = 100*channelrecord+indexcheck;
                        int spacing_qkdz=1;
                         while ((timeSeqX1[mm].at(i+spacing_qkd+1+spacing_qkdz)-timeSeqX1[mm].at(i+spacing_qkd+1)<=toleranceMulti) and (i+spacing_qkd+1+spacing_qkdz < timeSeqX1[mm].size()))
                        {
                          indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1+spacing_qkdz], timeSeqX1[mm][i+spacing_qkd+1+spacing_qkdz], period);
-                            if(indexcheck<4)
+//                         fStream << indexcheck << "d" << "\t";
+                         if(indexcheck<4)
                             {
                                qDebug()<<"checkoutcome error";
                             }
@@ -323,23 +330,25 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                                     aliceZnum++;
                                 }
                                 else if(indexcheck<12){
-                                    qDebug()<<"checkoutcome error 2";
+                                   qDebug()<<"checkoutcome error 2";
                                 }
                                 else{
                                     bobZ[bobZnum] = indexcheck-12;
                                     bobZnum++;
                                 }
                             }
-                            channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1+spacing_qkdz];
+                            channelrecord = 100*channelrecord+indexcheck;
                             spacing_qkdz++;
                        }
                       spacing_qkd += spacing_qkdz; 
                    }
+
                 }
                 else{
                     while (timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=toleranceMulti and i+spacing_qkd+1 < timeSeqX1[mm].size())
                     { //
                         indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1],timeSeqX1[mm][i+spacing_qkd+1], period);
+//                         fStream << indexcheck << "e" << "\t";
                         if(indexcheck<4)
                         {aliceX[aliceXnum] = indexcheck;
                             aliceXnum++;
@@ -359,7 +368,7 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                             }
                         }
                         spacing_qkd++;
-                        channelrecord = 10*channelrecord+channelSeqX1[mm][i+spacing_qkd+1];
+                        channelrecord = 100*channelrecord+indexcheck;
                     }
                 }
                 switch(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)){
@@ -400,9 +409,11 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                     break;
                 }
                 i=i+spacing_qkd;
-                qDebug() << channelrecord<<"\n";
+//                qDebug() << channelrecord<<"\n";
                 if (QKDSavable)
-                fStream << channelrecord << "\n";
+                    if(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)!=11)
+                fStream << channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)<< "\n";
+//                fStream << "\n";
            }
 
 

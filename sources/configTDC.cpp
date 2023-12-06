@@ -24,13 +24,15 @@ ViStatus configTDC(ViSession idInstr, int countEvents, bool *channelConfig, doub
     long long channelConfigCode[7] = {0x80000000};
     for (int i = 0; i < 7; i++)
         if (channelConfig[i])
-            channelConfigCode[i] = 0x00000000;
+            channelConfigCode[i] = slope[i];
+       qDebug()<<slope[0];
+
 
     ViStatus configStatus;
-    configStatus = AcqrsT3_configChannel(idInstr, -1, channelConfigCode[0], level[0], slope[0]);//channel common,positive slope,vth=1.0V
+    configStatus = AcqrsT3_configChannel(idInstr, -1, 1, level[0], 0);//channel common,positive slope,vth=1.0V
     for (int i = 1; i < 7; i++)
     {
-        ViStatus status = AcqrsT3_configChannel(idInstr, i, channelConfigCode[i], level[i], slope[i]);//channel 1
+        ViStatus status = AcqrsT3_configChannel(idInstr, i, channelConfigCode[i], level[i], 0);//channel 1
         configStatus = configStatus + status;
     }
 
