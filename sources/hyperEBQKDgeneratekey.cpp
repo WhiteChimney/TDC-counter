@@ -412,7 +412,7 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
 //                qDebug() << channelrecord<<"\n";
                 if (QKDSavable)
                     if(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)!=11)
-                fStream << channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)<< "\n";
+                fStream << (flag_adjvol1 or flag_adjvol2) <<"\t" << flag_adjvol1 << flag_adjvol2 <<"\t" <<channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)<< "\n";
 //                fStream << "\n";
            }
 

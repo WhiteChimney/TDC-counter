@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>563</width>
-    <height>500</height>
+    <width>559</width>
+    <height>539</height>
    </rect>
   </property>
   <property name="font">
@@ -208,7 +208,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>440</y>
+     <y>450</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -226,7 +226,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>380</y>
+     <y>390</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -242,7 +242,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>430</y>
+     <y>440</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -258,7 +258,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>250</y>
+     <y>260</y>
      <width>221</width>
      <height>21</height>
     </rect>
@@ -276,7 +276,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>290</y>
+     <y>300</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -300,7 +300,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>340</y>
+     <y>350</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -318,7 +318,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>280</y>
+     <y>290</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -337,7 +337,7 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>390</y>
+     <y>400</y>
      <width>71</width>
      <height>21</height>
     </rect>
@@ -361,7 +361,7 @@
    <property name="geometry">
     <rect>
      <x>90</x>
-     <y>330</y>
+     <y>340</y>
      <width>171</width>
      <height>41</height>
     </rect>
@@ -567,8 +567,8 @@
   <widget class="QPushButton" name="ButtonStartQKD">
    <property name="geometry">
     <rect>
-     <x>290</x>
-     <y>240</y>
+     <x>10</x>
+     <y>490</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -580,8 +580,8 @@
   <widget class="QPushButton" name="ButtonStopQKD">
    <property name="geometry">
     <rect>
-     <x>380</x>
-     <y>240</y>
+     <x>100</x>
+     <y>490</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -593,8 +593,8 @@
   <widget class="QPushButton" name="ButtonRetornQKD">
    <property name="geometry">
     <rect>
-     <x>470</x>
-     <y>240</y>
+     <x>190</x>
+     <y>490</y>
      <width>81</width>
      <height>31</height>
     </rect>
@@ -607,13 +607,13 @@
    <property name="geometry">
     <rect>
      <x>290</x>
-     <y>280</y>
+     <y>240</y>
      <width>261</width>
-     <height>211</height>
+     <height>291</height>
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <property name="elideMode">
     <enum>Qt::ElideMiddle</enum>
@@ -626,7 +626,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>10</y>
+       <y>20</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -636,7 +636,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>40</y>
+       <y>50</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -646,7 +646,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>70</y>
+       <y>80</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -656,7 +656,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>100</y>
+       <y>110</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -666,7 +666,7 @@
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>130</y>
+       <y>140</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -675,8 +675,8 @@
     <widget class="QLineEdit" name="TDC1delay6">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>10</y>
+       <x>10</x>
+       <y>170</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -686,7 +686,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>10</y>
+       <y>20</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -696,7 +696,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>40</y>
+       <y>50</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -706,7 +706,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>70</y>
+       <y>80</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -716,7 +716,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>100</y>
+       <y>110</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -726,7 +726,7 @@
      <property name="geometry">
       <rect>
        <x>180</x>
-       <y>130</y>
+       <y>140</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -735,8 +735,8 @@
     <widget class="QLineEdit" name="TDC2delay1">
      <property name="geometry">
       <rect>
-       <x>110</x>
-       <y>130</y>
+       <x>180</x>
+       <y>170</y>
        <width>61</width>
        <height>20</height>
       </rect>
@@ -745,8 +745,8 @@
     <widget class="QLabel" name="label_16">
      <property name="geometry">
       <rect>
-       <x>80</x>
-       <y>90</y>
+       <x>90</x>
+       <y>30</y>
        <width>81</width>
        <height>12</height>
       </rect>
@@ -755,26 +755,13 @@
       <string>延时（ns）</string>
      </property>
     </widget>
-    <widget class="QLabel" name="label_17">
-     <property name="geometry">
-      <rect>
-       <x>80</x>
-       <y>40</y>
-       <width>51</width>
-       <height>20</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>从左往右</string>
-     </property>
-    </widget>
     <widget class="QLabel" name="label_18">
      <property name="geometry">
       <rect>
        <x>80</x>
-       <y>60</y>
-       <width>91</width>
-       <height>21</height>
+       <y>0</y>
+       <width>121</width>
+       <height>16</height>
       </rect>
      </property>
      <property name="text">
@@ -784,8 +771,8 @@
     <widget class="QLineEdit" name="Zperiod">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>160</y>
+       <x>110</x>
+       <y>200</y>
        <width>121</width>
        <height>20</height>
       </rect>
@@ -794,14 +781,373 @@
     <widget class="QLabel" name="label_19">
      <property name="geometry">
       <rect>
-       <x>0</x>
-       <y>160</y>
+       <x>10</x>
+       <y>200</y>
        <width>91</width>
        <height>20</height>
       </rect>
      </property>
      <property name="text">
       <string> Z 基周期（ns）</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>主动稳定</string>
+    </attribute>
+    <widget class="QPushButton" name="buttonCloseSP">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>40</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>关闭串口</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonOpenSP">
+     <property name="geometry">
+      <rect>
+       <x>90</x>
+       <y>40</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>打开串口</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonRefresh">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>40</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>刷新串口</string>
+     </property>
+    </widget>
+    <widget class="QWidget" name="horizontalLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>10</y>
+       <width>251</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_SP">
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_21">
+        <property name="text">
+         <string>串口号</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="comboBoxSPList"/>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="buttonsendvol">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>230</y>
+       <width>71</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>发送</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_25">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>70</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>半波1(V)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="hwvol">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>70</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_26">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>70</y>
+       <width>51</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>半波2(V)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="hwvol_2">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>70</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_23">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>101</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>电压1(V)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="volset">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>120</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_24">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>81</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>电压2(V)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="volset_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>180</y>
+       <width>81</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonp1">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>100</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm1">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>130</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonp01">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>100</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+0.1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm01">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>130</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-0.1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton001">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>100</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+0.01</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm001">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>130</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-0.01</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm001_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>200</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-0.01</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonp01_2">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>170</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+0.1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm1_2">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>200</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonm01_2">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>200</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>-0.1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButtonp1_2">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>170</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+1</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton001_2">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>170</y>
+       <width>41</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>+0.01</string>
      </property>
     </widget>
    </widget>
@@ -812,10 +1158,10 @@
     <widget class="QPushButton" name="buttonStopRecord">
      <property name="geometry">
       <rect>
-       <x>160</x>
-       <y>120</y>
-       <width>75</width>
-       <height>56</height>
+       <x>140</x>
+       <y>70</y>
+       <width>61</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -831,10 +1177,10 @@
     <widget class="QPushButton" name="buttonStartRecord">
      <property name="geometry">
       <rect>
-       <x>20</x>
-       <y>120</y>
-       <width>75</width>
-       <height>57</height>
+       <x>40</x>
+       <y>70</y>
+       <width>61</width>
+       <height>21</height>
       </rect>
      </property>
      <property name="sizePolicy">
@@ -906,8 +1252,8 @@
     <widget class="QLineEdit" name="textDataFileName">
      <property name="geometry">
       <rect>
-       <x>60</x>
-       <y>60</y>
+       <x>62</x>
+       <y>40</y>
        <width>131</width>
        <height>20</height>
       </rect>
@@ -916,8 +1262,8 @@
     <widget class="QLabel" name="label_20">
      <property name="geometry">
       <rect>
-       <x>10</x>
-       <y>60</y>
+       <x>12</x>
+       <y>40</y>
        <width>51</width>
        <height>21</height>
       </rect>
@@ -934,8 +1280,8 @@
     <widget class="QComboBox" name="comboDataFileSuffix">
      <property name="geometry">
       <rect>
-       <x>198</x>
-       <y>60</y>
+       <x>200</x>
+       <y>40</y>
        <width>51</width>
        <height>22</height>
       </rect>
@@ -950,6 +1296,88 @@
        <string>dat</string>
       </property>
      </item>
+    </widget>
+    <widget class="QPushButton" name="ButtonStopAdjVol">
+     <property name="geometry">
+      <rect>
+       <x>150</x>
+       <y>230</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>停止</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="whiteBoard">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>231</width>
+       <height>91</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="ButtonStartAdjVol">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>开始稳定</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_27">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>100</y>
+       <width>41</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string> 阈值</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="threshold">
+     <property name="geometry">
+      <rect>
+       <x>180</x>
+       <y>100</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_22">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>100</y>
+       <width>71</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>累积时间(s)</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="accumulatedtime">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>100</y>
+       <width>61</width>
+       <height>20</height>
+      </rect>
+     </property>
     </widget>
    </widget>
   </widget>

@@ -7,8 +7,14 @@ hyperentanglementQKD::hyperentanglementQKD(QWidget *parent, int m_index, int m_c
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
-    index = m_index;
 
+
+    VolSPstatusIndicator = new QSimpleLed(this);
+    this->setupvolSPIndicator();
+
+    this -> refreshPorts();
+
+    index = m_index;
     COM_offset = m_comOffset;
 
 }
@@ -43,6 +49,8 @@ void hyperentanglementQKD::fetchUiData()
 //    metaData = ui->textMetaData->toPlainText();
 //    enableRecordTime = ui->checkboxRecordTime->isChecked();
 //    recordTime = ui->textRecordTime->text().toDouble();
+    // 电压调节设置
+
 
     pushUiData();
 }
@@ -264,6 +272,8 @@ void hyperentanglementQKD::dealTimeOut()
     ui->FullSpaceXQBER -> display(1-((double)nbraxbx11+nbraxbx22)/(nbraxbx11+nbraxbx11error+nbraxbx22+nbraxbx22error+nbraxbx12));
     ui->FullSpaceZCount -> display(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12);
     ui->FullSpaceZQBER -> display(1-((double)nbrazbz11+nbrazbz22)/(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12));
+    emit senddatapersecond(nbraxbx11, nbraxbx11error, nbraxbx22, nbraxbx22error);
+
     memset(&nbraxbx11,0,sizeof(nbraxbx11));
     memset(&nbraxbx11error,0,sizeof(nbraxbx11error));
     memset(&nbraxbx22,0,sizeof(nbraxbx22));
@@ -294,7 +304,7 @@ void hyperentanglementQKD::changeComOffset(int newOffset)
 
 //数据记录
 
-void hyperentanglementQKD::createTempDataFile()
+/*void hyperentanglementQKD::createTempDataFile()
 {
     QString fullFileName = pathName + "/" + fileName + "." + ui->comboDataFileSuffix->currentText();
     fQKD->setFileName(fullFileName);
@@ -302,7 +312,7 @@ void hyperentanglementQKD::createTempDataFile()
     fQKD->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream << tr("有效计数") << "\n";
     qDebug() << "创建文件";
-}
+}*/
 
 
 void hyperentanglementQKD::on_buttonStartRecord_released()
@@ -317,6 +327,12 @@ void hyperentanglementQKD::on_buttonStartRecord_released()
     fQKD->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream << tr("有效计数") << "\n";
     qDebug() << "创建文件:"<<fullFileName;;
+
+    QString fullFileName2 = pathName + "/" + "Cumulativedata.txt";
+    fQKD2->setFileName(fullFileName2);
+    fStream2.setDevice(fQKD2);
+    fQKD2->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream2 << tr("累积数据") << "\n";
 //    createTempDataFile();
 //    emit QKDSaveDataNeedsSync(index);
 
@@ -338,7 +354,9 @@ void hyperentanglementQKD::on_buttonStopRecord_released()
     timeToc = dateTime.currentMSecsSinceEpoch();
     timeRelative = timeToc -timeTic;
     fStream << tr("总用时 (ms)") << timeRelative <<endl;
+    fStream2 << tr("总用时 (ms)") << timeRelative <<endl;
     fQKD->close();
+    fQKD2->close();
 //    emit QKDSaveDataStopsSync(index);
 }
 
@@ -365,5 +383,410 @@ void hyperentanglementQKD::on_buttonOpenDataDir_released()
     QDesktopServices::openUrl(QUrl::fromLocalFile(pathName));
 }
 
+//  主动稳定相位部分  调节控制PZT的电压
 
+void hyperentanglementQKD::setupvolSPIndicator()
+{
+    VolSPstatusIndicator->setCustomOnColor0(QSimpleLed::GREEN);
+    VolSPstatusIndicator->setCustomOffColor0(QSimpleLed::RED);
+    QSizePolicy p1;
+   p1.setHorizontalPolicy(QSizePolicy::Minimum);
+   p1.setVerticalPolicy(QSizePolicy::Preferred);
+   VolSPstatusIndicator->setSizePolicy(p1);
+   ui->horizontalLayout_SP->insertWidget(0,VolSPstatusIndicator);
+   VolSPstatusIndicator->setStates(QSimpleLed::OFF);
+}
+
+void hyperentanglementQKD::refreshPorts()
+{
+    ui->comboBoxSPList->clear();
+    spList.clear();
+    spList = QSerialPortInfo::availablePorts();
+    for (int i = 0; i < spList.size(); i++)
+    ui->comboBoxSPList->addItem(spList.at(i).portName());
+}
+
+
+void hyperentanglementQKD::on_buttonRefresh_released()
+{// 刷新串口 按钮
+    this -> refreshPorts();
+}
+
+
+void hyperentanglementQKD::on_buttonOpenSP_released()
+{// 打开串口 按钮
+    if (VolSPstatusIndicator->states() == QSimpleLed::OFF)
+    {
+        serialsetvol.setPort(spList.at(ui->comboBoxSPList->currentIndex()));
+        serialsetvol.setBaudRate(QSerialPort::Baud9600);
+        serialsetvol.setDataBits(QSerialPort::Data8);
+        serialsetvol.setParity(QSerialPort::NoParity);
+        serialsetvol.setStopBits(QSerialPort::OneStop);
+        serialsetvol.setFlowControl(QSerialPort::NoFlowControl);
+        if(!serialsetvol.open(QIODevice::ReadWrite))
+        {
+            QMessageBox::about(NULL,"提示","无法打开串口！");
+            return;
+        }
+        else
+            VolSPstatusIndicator->setStates(QSimpleLed::ON);
+
+    }
+}
+
+
+void hyperentanglementQKD::on_buttonCloseSP_released()
+{// 关闭串口按钮
+       if (VolSPstatusIndicator->states() == QSimpleLed::ON)
+       {
+           if(serialsetvol.isOpen())
+           VolSPstatusIndicator->setStates(QSimpleLed::OFF);
+       }
+}
+
+
+void hyperentanglementQKD::on_ButtonStartAdjVol_released()
+{
+    accumtimes = int(ui->accumulatedtime->text().toDouble());
+    thresholdcalc = ui ->threshold ->text().toDouble();
+    connect(this, &hyperentanglementQKD::senddatapersecond,this,&hyperentanglementQKD::dealsenddatapersecond);
+}
+
+
+void hyperentanglementQKD::on_ButtonStopAdjVol_released()
+{
+    disconnect(this, &hyperentanglementQKD::senddatapersecond,this,&hyperentanglementQKD::dealsenddatapersecond);
+}
+
+
+void hyperentanglementQKD::adjvol(int steptotal_m, int nbr_calc_m, int nbrerror_calc_m, bool subspacechoice)
+{
+  if(!subspacechoice)
+  {
+    switch(steptotal_m)
+    {case 1:    //判断需不需要调制
+        if((double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m) <= thresholdcalc)
+        {
+          nbrinstep1 = 0;
+          nbrerrorinstep1 = 0;
+          step1_num = 0;
+        }
+        else
+        {
+            nbrinstep1 += nbr_calc_m;
+            nbrerrorinstep1 += nbrerror_calc_m;
+            step1_num ++;
+            if(step1_num > 1)      // 连续几次超过阈值开始调制, 为了方便先设置为0
+            {steptotal = 2;
+             avererrorstep1 = (double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m);  //累计三次的平均误码
+             errorpre = avererrorstep1;
+             phi = 1 - (acos(2*avererrorstep1-1))/3.1415926535897;
+             if(ModulationDir)
+             {    volset1 -= phi*halfwavevol1;
+                 dealvolset(volset1, halfwavevol1, false);
+                 ui -> volset -> setText(QString::number(volset1));
+             }
+             else
+             {    volset1 += phi*halfwavevol1;
+                  dealvolset(volset1, halfwavevol1, false);
+                  ui -> volset -> setText(QString::number(volset1));
+             }
+                 flag_adjvol1 = true;
+                 nbrinstep1 = 0;
+                 nbrerrorinstep1 = 0;
+                 step1_num = 0;
+            }
+        }
+        break;
+
+     case 2:    // 调制
+        step2_num++;
+        errorcurr = (double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m);
+        flag_adjvol1 = true;
+        if (errorcurr <= (thresholdcalc-0.01))
+        {
+            steptotal = 1;
+            flag_adjvol1 = false;
+            step2_num = 0;
+        }
+        else
+        {
+            phi = 1 - (acos(2*errorcurr-1))/3.1415926535897;
+            if (step2_num<5)
+            {
+                if (errorcurr > errorpre)
+                    ModulationDir = !ModulationDir;
+                if(ModulationDir)
+                   volset1 -= phi*halfwavevol1;
+                else
+                   volset1 += phi*halfwavevol1;
+              dealvolset(volset1, halfwavevol1, false);
+              ui -> volset -> setText(QString::number(volset1));
+              errorpre = errorcurr;
+            }
+            else
+            {
+                if (errorcurr > errorpre)
+                    ModulationDir = !ModulationDir;
+                if(ModulationDir)
+                   volset1 -= 1;
+                else
+                   volset1 += 1;
+              dealvolset(volset1, halfwavevol1, false);
+              ui -> volset -> setText(QString::number(volset1));
+              errorpre = errorcurr;
+            }
+        }
+        break;
+    default:
+        break;
+    }
+  }
+  else {
+      switch(steptotal_m)
+      {case 1:    //判断需不需要调制
+          if((double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m) <= thresholdcalc)
+          {
+            nbrinstep1_2 = 0;
+            nbrerrorinstep1_2 = 0;
+            step1_num_2 = 0;
+          }
+          else
+          {
+              nbrinstep1_2 += nbr_calc_m;
+              nbrerrorinstep1_2 += nbrerror_calc_m;
+              step1_num_2 ++;
+              if(step1_num_2 > 0)      // 连续几次超过阈值开始调制, 为了方便先设置为0
+              {steptotal_2 = 2;
+               avererrorstep1_2 = (double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m);  //累计三次的平均误码
+               errorpre_2 = avererrorstep1_2;
+               phi_2 = 1 - (acos(2*avererrorstep1_2-1))/3.1415926535897;
+               if(ModulationDir_2)
+               {    volset2 -= phi_2*halfwavevol2;
+                   dealvolset(volset2, halfwavevol2, true);
+                   ui -> volset_2 -> setText(QString::number(volset2));
+               }
+               else
+               {    volset2 += phi_2*halfwavevol2;
+                    dealvolset(volset2, halfwavevol2, true);
+                    ui -> volset_2 -> setText(QString::number(volset2));
+               }
+                   flag_adjvol2 = true;
+                   nbrinstep1_2 = 0;
+                   nbrerrorinstep1_2 = 0;
+                   step1_num_2 = 0;
+              }
+          }
+          break;
+
+       case 2:    // 调制
+          step2_num_2++;
+          errorcurr_2 = (double)nbrerror_calc_m/(nbr_calc_m + nbrerror_calc_m);
+          flag_adjvol2 = true;
+          if (errorcurr_2 <= (thresholdcalc-0.01))
+          {
+              steptotal_2 = 1;
+              flag_adjvol2 = false;
+              step2_num_2 = 0;
+          }
+          else
+          {
+              phi_2 = 1 - (acos(2*errorcurr_2-1))/3.1415926535897;
+              if (step2_num_2<5)
+              {
+                  if (errorcurr_2 > errorpre_2)
+                      ModulationDir_2 = !ModulationDir_2;
+                  if(ModulationDir_2)
+                     volset2 -= phi_2*halfwavevol2;
+                  else
+                     volset2 += phi_2*halfwavevol2;
+                dealvolset(volset2, halfwavevol2, false);
+                ui -> volset_2 -> setText(QString::number(volset2));
+                errorpre_2 = errorcurr_2;
+              }
+              else
+              {
+                  if (errorcurr_2 > errorpre_2)
+                      ModulationDir_2 = !ModulationDir_2;
+                  if(ModulationDir_2)
+                     volset2 -= 1;
+                  else
+                     volset2 += 1;
+                dealvolset(volset2, halfwavevol2, false);
+                ui -> volset_2 -> setText(QString::number(volset2));
+                errorpre_2 = errorcurr_2;
+              }
+          }
+          break;
+      default:
+          break;
+      }
+  }
+}
+
+void hyperentanglementQKD::dealsenddatapersecond(int m_x11, int m_x11e, int m_x22, int m_x22e)
+{
+    nbraxbx11_calc += m_x11;
+    nbraxbx11error_calc += m_x11e;
+    nbraxbx22_calc += m_x22;
+    nbraxbx22error_calc += m_x22e;
+    accumnum++;
+    if (accumnum > accumtimes)
+    {
+        adjvol(steptotal, nbraxbx11_calc, nbraxbx11error_calc, false);
+        adjvol(steptotal_2, nbraxbx22_calc, nbraxbx22error_calc, true);
+        if (QKDSavable)
+        {
+            fStream2 << nbraxbx11_calc <<"\t" << nbraxbx11error_calc <<"\t" << nbraxbx22_calc <<"\t" << nbraxbx22error_calc <<"\n" ;
+        }
+
+        nbraxbx11_calc = 0;
+        nbraxbx11error_calc = 0;
+        nbraxbx22_calc = 0;
+        nbraxbx22error_calc = 0;
+        accumnum = 1;
+    }
+
+}
+
+QString stage(double v, int precision)
+{
+    return (v>=0.00 ? QString::number(v, 'f', precision) : "");
+}
+
+void hyperentanglementQKD::dealvolset(double doublevolset, double hwvol, bool subspacechoice)
+{ // doublevolset 设置的电压， hwvol PZT的半波电压  subspacechoice 选择哪个PZT加电压  FALSE 表示subspace0 TRUE subspace 1
+      while(doublevolset < 1)
+        {
+            doublevolset += 2*hwvol;
+        }
+       while(doublevolset > 100)
+       {
+          doublevolset -= 2*hwvol;
+       }
+       if (doublevolset >=1 and doublevolset <=100)
+       {
+
+       QString strNum = stage(doublevolset,2).remove(".");
+        if (doublevolset < 10)
+        strNum = strNum.prepend("0");
+          if (!subspacechoice)   // PZT1
+          {
+              strNum = strNum.append("az");
+              QByteArray V_pzt= strNum.toUtf8();
+              serialsetvol.write(V_pzt);
+              ui -> volset -> setText(stage(doublevolset,2));
+          }
+          else     // PZT2
+          {
+              strNum = strNum.append("bz");
+              QByteArray V_pzt= strNum.toUtf8();
+              serialsetvol.write(V_pzt);
+              ui -> volset_2 -> setText(stage(doublevolset,2));
+          }
+       }
+       else
+       {
+          qDebug() << "电压设置错误!" << "\n";
+       }
+    //先加上电压判断，是否超过100小于0，然后发送信号给电路
+}
+
+
+void hyperentanglementQKD::on_buttonsendvol_released()
+{
+    volset1 = ui-> volset->text().toDouble();
+    volset2 = ui-> volset_2->text().toDouble();
+    halfwavevol1 = ui -> hwvol ->text().toDouble();
+    halfwavevol2 = ui -> hwvol_2 -> text().toDouble();
+
+    ui -> volset -> setText(QString::number(volset1));
+    ui -> volset_2 -> setText(QString::number(volset2));
+    ui -> hwvol -> setText(QString::number(halfwavevol1));
+    ui -> hwvol_2 ->setText(QString::number(halfwavevol2));
+
+    dealvolset(volset1, halfwavevol1, false);
+    dealvolset(volset2, halfwavevol2, true);
+//    QString abs = stage(volset1,2).remove(".");
+//    abs = abs.prepend("0");
+//    qDebug() << abs << "\n";
+//    qDebug() << stage(volset2,2).remove(".") << "\n";
+
+}
+
+
+
+// 调节电压按钮
+void hyperentanglementQKD::on_pushButtonp1_released()
+{
+    volset1 += 1;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButtonm1_released()
+{
+    volset1 -= 1;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButtonp01_released()
+{
+    volset1 += 0.1;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButtonm01_released()
+{
+    volset1 -= 0.1;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButton001_released()
+{
+    volset1 += 0.01;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButtonm001_released()
+{
+    volset1 -= 0.01;
+    dealvolset(volset1, halfwavevol1, false);
+    ui -> volset -> setText(QString::number(volset1));
+}
+void hyperentanglementQKD::on_pushButtonp1_2_released()
+{
+    volset2 += 1;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
+void hyperentanglementQKD::on_pushButtonm1_2_released()
+{
+    volset2 -= 1;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
+void hyperentanglementQKD::on_pushButtonp01_2_released()
+{
+    volset2 += 0.1;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
+void hyperentanglementQKD::on_pushButtonm01_2_released()
+{
+    volset2 -= 0.1;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
+void hyperentanglementQKD::on_pushButton001_2_released()
+{
+    volset2 += 0.01;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
+void hyperentanglementQKD::on_pushButtonm001_2_released()
+{
+    volset2 -= 0.01;
+    dealvolset(volset2, halfwavevol2, true);
+    ui -> volset_2 -> setText(QString::number(volset2));
+}
 

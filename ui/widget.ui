@@ -27,7 +27,7 @@
        <item row="0" column="0" rowspan="3">
         <widget class="QTabWidget" name="deviceTab">
          <property name="currentIndex">
-          <number>0</number>
+          <number>1</number>
          </property>
          <widget class="QWidget" name="tabDevice1">
           <attribute name="title">
