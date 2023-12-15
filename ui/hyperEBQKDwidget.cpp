@@ -440,7 +440,8 @@ void hyperentanglementQKD::on_buttonCloseSP_released()
        if (VolSPstatusIndicator->states() == QSimpleLed::ON)
        {
            if(serialsetvol.isOpen())
-           VolSPstatusIndicator->setStates(QSimpleLed::OFF);
+           {VolSPstatusIndicator->setStates(QSimpleLed::OFF);
+               serialsetvol.close();}
        }
 }
 
@@ -672,14 +673,14 @@ void hyperentanglementQKD::dealvolset(double doublevolset, double hwvol, bool su
         strNum = strNum.prepend("0");
           if (!subspacechoice)   // PZT1
           {
-              strNum = strNum.append("az");
+              strNum = strNum.append("bz");
               QByteArray V_pzt= strNum.toUtf8();
               serialsetvol.write(V_pzt);
               ui -> volset -> setText(stage(doublevolset,2));
           }
           else     // PZT2
           {
-              strNum = strNum.append("bz");
+              strNum = strNum.append("cz");
               QByteArray V_pzt= strNum.toUtf8();
               serialsetvol.write(V_pzt);
               ui -> volset_2 -> setText(stage(doublevolset,2));
@@ -707,6 +708,11 @@ void hyperentanglementQKD::on_buttonsendvol_released()
 
     dealvolset(volset1, halfwavevol1, false);
     dealvolset(volset2, halfwavevol2, true);
+
+    QString closechannel = "0100dz";
+     serialsetvol.write(closechannel.toUtf8());
+    closechannel = "0100ez";
+    serialsetvol.write(closechannel.toUtf8());
 //    QString abs = stage(volset1,2).remove(".");
 //    abs = abs.prepend("0");
 //    qDebug() << abs << "\n";
