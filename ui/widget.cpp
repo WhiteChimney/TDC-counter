@@ -52,13 +52,22 @@ Widget::Widget(QWidget *parent)
     connect(tdc,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished);
     tdc->initialize();
 
+/*    tdc_2 = new Acqiris_TDC("PCI::INSTR1",this);
+    connect(tdc_2,&Acqiris_TDC::acquisitionStarted,this,&Widget::dealAcqThreadStarted_2);
+    connect(tdc_2,&Acqiris_TDC::acquisitionFinished,this,&Widget::dealAcqThreadFinished_2);
+//    connect(tdc_2,&Acqiris_TDC::readyToAcquireData,this,&Widget::startAcquisitionSync);
+    tdc_2->initialize();
+*/
+/*    QString errorMsg = "未发现可操控设备";
     if (tdc->getStatus() != VI_SUCCESS)
-    {
+        errorMsg.append(" TDC 1");
+   if (tdc_2->getStatus() != VI_SUCCESS)
+        errorMsg.append(" TDC 2");
+    if (tdc->getStatus() != VI_SUCCESS or tdc_2->getStatus() != VI_SUCCESS)
         QMessageBox::critical(this,
-                              QString("警告"),
-                              QString("未发现可操控设备"),
-                              QMessageBox::Ok);
-    }
+                          QString("警告"),
+                          QString(errorMsg),
+                          QMessageBox::Ok); */
 
 //    单道计数时钟，主时钟
     timerCount = new QTimer(this);
@@ -83,3 +92,18 @@ Widget::~Widget()
     tempDataPath.mkdir(iniPath + "/Data");
     delete ui;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

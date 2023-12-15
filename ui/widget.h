@@ -154,7 +154,15 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
-    int nbrCOMbuffer = 1;
+
+    //探测效率
+    int nbrPhoton=0;
+    int nbrAP=0;
+public:
+    void dealEffTimeOut();
+    void computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr);
+    void dealAcqThreadBankSwitchEff(AqT3DataDescriptor* dataDescPtr);
+
 public:
     int* getSingleCountPtr();
 
