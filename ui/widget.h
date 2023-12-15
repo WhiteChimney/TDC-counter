@@ -137,6 +137,10 @@ private slots:
 
     void on_pushButtonQKD_released();
 
+    void on_buttonStarteff_released();
+
+    void on_buttonStopCount_2_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -203,6 +207,15 @@ private:
     QString coinChannelName;
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
+
+    //探测效率
+    int nbrPhoton=0;
+    int nbrAP=0;
+public:
+    void dealEffTimeOut();
+    void computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr);
+    void dealAcqThreadBankSwitchEff(AqT3DataDescriptor* dataDescPtr);
+
 
 public:
     int* getSingleCountPtr();

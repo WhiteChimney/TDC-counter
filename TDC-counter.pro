@@ -43,6 +43,7 @@ SOURCES += \
     ui/widget_QKD.cpp \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
+    ui/widget_efficiency.cpp \
     ui/widget_extApp.cpp \
     ui/widget_histogram.cpp \
     ui/widget_saveData.cpp \
