@@ -8,14 +8,6 @@
 void Widget::on_buttonStarteff_released()
 {
 
-    fetchUiData();
-    tdc->config(channelConfig,level,slope,countEvents);
-
-
-    // start Acquisition
-    if (tdc->getStatus() == VI_SUCCESS)
-        tdc->startAcquisition();
-
     this->dealEffTimeOut();
     if (tdc->isAcquringData()) // 当采集已经开启时
     {
@@ -50,7 +42,8 @@ void Widget::computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr)
                                                 // Data = an integer giving the time value in units of 50 ps
                                                 // Channel=7 is for marker data.
          {
-            if(TimeOfFlight%200==1)    // 200为开门周期，
+            nbrcount ++;
+            if((TimeOfFlight/periodeff)%(2000/periodeff)== (numphoton-1))    // 200为开门周期，
             nbrPhoton ++;    // 光子计数
             else
             nbrAP ++;     //后脉冲计数
@@ -67,15 +60,29 @@ void Widget::dealAcqThreadBankSwitchEff(AqT3DataDescriptor* dataDescPtr)
 }
 
 
+void Widget::on_pushButtongatenum_released()
+{
+    numphoton = int(ui->levelTextgatenum-> text().toDouble());
+    periodeff = int(20000/ui->levelTextfreq ->text().toDouble());
+    ui->levelTextgatenum->setText(QString::number(numphoton));
+    ui->levelTextfreq->setText(QString::number(20000/periodeff));
+
+}
+
 
 
 void Widget::dealEffTimeOut()
 {
     ui->lcdSPC1_3->display((double)nbrPhoton/1000000);
-    ui->lcdSPC1_4->display((double)nbrAP/nbrPhoton);
+    ui->lcdSPC1_4->display((double)nbrAP/nbrPhoton*100);
+    ui->lcdSPC1_count->display(nbrcount);
+    ui->lcdSPC1_photoncount->display(nbrPhoton);
+    ui->lcdSPC1_apcount_3->display(nbrAP);
+
 
     memset(&nbrPhoton,0,sizeof(nbrPhoton));
     memset(&nbrAP, 0, sizeof(nbrAP));
+    memset(&nbrcount, 0, sizeof(nbrcount));
 
 }
 

@@ -105,6 +105,12 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
+    void on_buttonStarteff_released();
+
+    void on_buttonStopCount_2_released();
+
+    void on_pushButtongatenum_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -158,10 +164,15 @@ private:
     //探测效率
     int nbrPhoton=0;
     int nbrAP=0;
+    int nbrcount = 0;
+    int numphoton = 0;   //光子在第几个门
+    int periodeff = 200;   //开门重复频率
+
 public:
     void dealEffTimeOut();
     void computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr);
     void dealAcqThreadBankSwitchEff(AqT3DataDescriptor* dataDescPtr);
+
 
 public:
     int* getSingleCountPtr();

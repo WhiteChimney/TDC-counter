@@ -1128,8 +1128,8 @@
       <widget class="QLCDNumber" name="lcdSPC1_3">
        <property name="geometry">
         <rect>
-         <x>30</x>
-         <y>60</y>
+         <x>160</x>
+         <y>120</y>
          <width>261</width>
          <height>57</height>
         </rect>
@@ -1159,8 +1159,8 @@
       <widget class="QLCDNumber" name="lcdSPC1_4">
        <property name="geometry">
         <rect>
-         <x>297</x>
-         <y>60</y>
+         <x>160</x>
+         <y>210</y>
          <width>260</width>
          <height>57</height>
         </rect>
@@ -1190,21 +1190,21 @@
       <widget class="QLabel" name="label_22">
        <property name="geometry">
         <rect>
-         <x>307</x>
-         <y>40</y>
+         <x>170</x>
+         <y>190</y>
          <width>260</width>
          <height>12</height>
         </rect>
        </property>
        <property name="text">
-        <string>后脉冲</string>
+        <string>后脉冲 %</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_23">
        <property name="geometry">
         <rect>
-         <x>40</x>
-         <y>40</y>
+         <x>170</x>
+         <y>100</y>
          <width>261</width>
          <height>12</height>
         </rect>
@@ -1216,8 +1216,8 @@
       <widget class="QPushButton" name="buttonStarteff">
        <property name="geometry">
         <rect>
-         <x>80</x>
-         <y>152</y>
+         <x>150</x>
+         <y>280</y>
          <width>133</width>
          <height>82</height>
         </rect>
@@ -1236,7 +1236,7 @@
        <property name="geometry">
         <rect>
          <x>320</x>
-         <y>150</y>
+         <y>280</y>
          <width>133</width>
          <height>81</height>
         </rect>
@@ -1249,6 +1249,203 @@
        </property>
        <property name="text">
         <string>停止计数</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="levelTextgatenum">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
+         <width>108</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>10</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_24">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>10</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>第几个门</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_25">
+       <property name="geometry">
+        <rect>
+         <x>170</x>
+         <y>10</y>
+         <width>261</width>
+         <height>12</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>总计数</string>
+       </property>
+      </widget>
+      <widget class="QLCDNumber" name="lcdSPC1_count">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>30</y>
+         <width>261</width>
+         <height>57</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="digitCount">
+        <number>13</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+       <property name="value" stdset="0">
+        <double>0.000000000000000</double>
+       </property>
+       <property name="intValue" stdset="0">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButtongatenum">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>110</y>
+         <width>75</width>
+         <height>23</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>确认</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="levelTextfreq">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>80</y>
+         <width>108</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>100</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_26">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>60</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>开门周期 MHz</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_27">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>10</y>
+         <width>261</width>
+         <height>12</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>光子计数</string>
+       </property>
+      </widget>
+      <widget class="QLCDNumber" name="lcdSPC1_photoncount">
+       <property name="geometry">
+        <rect>
+         <x>440</x>
+         <y>30</y>
+         <width>261</width>
+         <height>57</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="digitCount">
+        <number>13</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+       <property name="value" stdset="0">
+        <double>0.000000000000000</double>
+       </property>
+       <property name="intValue" stdset="0">
+        <number>0</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_28">
+       <property name="geometry">
+        <rect>
+         <x>450</x>
+         <y>100</y>
+         <width>261</width>
+         <height>12</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>后脉冲计数</string>
+       </property>
+      </widget>
+      <widget class="QLCDNumber" name="lcdSPC1_apcount_3">
+       <property name="geometry">
+        <rect>
+         <x>440</x>
+         <y>120</y>
+         <width>261</width>
+         <height>57</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="digitCount">
+        <number>13</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+       <property name="value" stdset="0">
+        <double>0.000000000000000</double>
+       </property>
+       <property name="intValue" stdset="0">
+        <number>0</number>
        </property>
       </widget>
      </widget>
