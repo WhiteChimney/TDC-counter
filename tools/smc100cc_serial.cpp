@@ -25,6 +25,11 @@ bool SMC100CC_Serial::initializeDevice(QSerialPortInfo spInfo,
         return false;
 }
 
+bool SMC100CC_Serial::homingDevice(int address)
+{
+    return sendCommand(QString::number(address) + "OR");
+}
+
 bool SMC100CC_Serial::closeDevice()
 {
     if (serial->isOpen())
@@ -75,11 +80,9 @@ QString SMC100CC_Serial::readReply()
         return QString("");
 }
 
-bool SMC100CC_Serial::getVoltage(int channel, double *voltage)
+bool SMC100CC_Serial::getAbsoluteAngle(int address, double* angle)
 {
-    QString command = ":APPL? CH";
-    command += QString::number(channel);
-    command += ",VOLT";
+    QString command = QString::number(address) + "PA?";
     bool status = sendCommand(command);
     if (status)
     {
@@ -87,7 +90,8 @@ bool SMC100CC_Serial::getVoltage(int channel, double *voltage)
         status = readReply(&reply);
         if (status)
         {
-            *voltage = reply.toDouble();
+            qDebug() << reply;
+            *angle = reply.toDouble();
             return true;
         }
         else
@@ -97,20 +101,21 @@ bool SMC100CC_Serial::getVoltage(int channel, double *voltage)
         return false;
 }
 
-double SMC100CC_Serial::getVoltage(int channel)
+double SMC100CC_Serial::getAbsoluteAngle(int address)
 {
-    QString command = ":APPL? CH";
-    command += QString::number(channel);
-    command += ",VOLT";
+    QString command = QString::number(address) + "PA?";
     sendCommand(command);
     return readReply().toDouble();
 }
 
-bool SMC100CC_Serial::setVoltage(int channel, double voltage)
+bool SMC100CC_Serial::setAbsoluteAngle(int address, double angle)
 {
-    QString command = ":APPL CH";
-    command += QString::number(channel);
-    command += ",";
-    command += QString::number(voltage);
+    QString command = QString::number(address) + "PA" + QString::number(angle);
+    return sendCommand(command);
+}
+
+bool SMC100CC_Serial::setRelativeAngle(int address, double angle)
+{
+    QString command = QString::number(address) + "PR" + QString::number(angle);
     return sendCommand(command);
 }

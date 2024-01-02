@@ -16,6 +16,7 @@
 #include "tsp01.h"
 #include "dp832a_serial.h"
 #include "dp832a_usb.h"
+#include "smc100cc_serial.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -36,6 +37,7 @@ private:
 private:
     DP832A_USB* dp832usb;
     DP832A_Serial* dp832serial;
+    SMC100CC_Serial* smc100cc;
     QList<QSerialPortInfo> spList;
     QSerialPort::BaudRate baudRate;
     QSerialPort::DataBits dataBits;

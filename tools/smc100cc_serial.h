@@ -25,14 +25,16 @@ public:
                           QSerialPort::DataBits dataBits,
                           QSerialPort::StopBits stopBits,
                           QSerialPort::Parity parity);
+    bool homingDevice(int address);
     bool closeDevice();
     bool readReply(QString* reply);
     QString readReply();
     bool sendCommand(QString command);
 
-    bool getVoltage(int channel, double* voltage);
-    double getVoltage(int channel);
-    bool setVoltage(int channel, double voltage);
+    bool getAbsoluteAngle(int address, double* angle);
+    double getAbsoluteAngle(int address);
+    bool setAbsoluteAngle(int address, double angle);
+    bool setRelativeAngle(int address, double angle);
 
 };
 
