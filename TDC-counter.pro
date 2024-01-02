@@ -24,6 +24,7 @@ SOURCES += \
     tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
     tools/dp832a_usb.cpp \
+    tools/smc100cc_serial.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
@@ -68,6 +69,7 @@ HEADERS += \
     tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \
+    tools/smc100cc_serial.h \
     tools/statisticschannel.h \
     tools/tsp01.h \
     ui/coincidencewidget.h \
