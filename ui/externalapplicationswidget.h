@@ -17,6 +17,7 @@
 #include "dp832a_serial.h"
 #include "dp832a_usb.h"
 #include "smc100cc_serial.h"
+#include "qaskydelayboard.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -32,12 +33,12 @@ public:
 
 private:
     Ui::ExternalApplicationsWidget *ui;
-    QSimpleLed *SPstatusIndicator, *TSP01statusIndicator, *DP832UsbIndicator;
 
+    // 串口
 private:
-    DP832A_USB* dp832usb;
-    DP832A_Serial* dp832serial;
-    SMC100CC_Serial* smc100cc;
+    QSimpleLed *SPstatusIndicator;
+//    DP832A_Serial* spDevice;
+    SMC100CC_Serial* spDevice;
     QList<QSerialPortInfo> spList;
     QSerialPort::BaudRate baudRate;
     QSerialPort::DataBits dataBits;
@@ -45,42 +46,58 @@ private:
     QSerialPort::Parity parity;
     QByteArray receivedBytes, sentBytes;
 
-
 public:
-    void setupSPIndicator(), setupTSPIndicator(), setupDP832UsbIndicator();
+    void setupSPIndicator();
     void fetchUiData();
     void pushUiData();
     void saveToIni();
     void loadFromIni();
     void refreshPorts();
 
+    // TSP01
 private:
+    QSimpleLed *TSP01statusIndicator;
     TSP01 *tsp;
     QList<QString> tspList;
     double temperature, temperatureOffset;
     double humidity, humidityOffset;
 
 public:
+    void setupTSPIndicator();
     void refreshTSPlist();
+
+    // dp832a
+private:
+    QSimpleLed *DP832UsbIndicator;
+    DP832A_USB* dp832usb;
+
+public:
+    void setupDP832UsbIndicator();
+
+    // qasky_delayboard
+private:
+    QaskyDelayBoard *delayBoard;
+public:
+
+    // 通用
+private:
+    int *nbrSCC;
+    QVector<int*> vNbrCoin;
+    bool dataRec = false;
 
 signals:
     void requestData();
     void dataReceived();
     void externalAppStopped();
 
-private:
-    int *nbrSCC;
-    QVector<int*> vNbrCoin;
-    bool dataRec = false;
+public:
+    void customizedSPcommands_start();
+    void customizedSPcommands_stop();
 
 public slots:
     void dealRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
     void dealSingleCountTimeup();
     void dealMainAppClosed();
-
-public:
-    void customizedSPcommands_start();
-    void customizedSPcommands_stop();
 
 private slots:
     void on_checkboxSPcustomize_stateChanged(int checkState);
@@ -101,7 +118,7 @@ private slots:
     void on_buttonDP832UsbClose_released();
     void on_buttonDP832UsbTest_released();
     void on_buttonDP832UsbSendCmd_released();
-
+    void on_buttonSetDelay_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

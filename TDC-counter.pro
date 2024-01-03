@@ -24,14 +24,16 @@ SOURCES += \
     tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
     tools/dp832a_usb.cpp \
+    tools/qaskydelayboard.cpp \
     tools/smc100cc_serial.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
     ui/coincidencewidget_saveData.cpp \
     ui/coincidencewidget_ui.cpp \
-    ui/extAppWidget_dp832a_serial.cpp \
     ui/extAppWidget_dp832a_usb.cpp \
+    ui/extAppWidget_qasky_delayboard.cpp \
+    ui/extAppWidget_serial_port.cpp \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
     ui/histogramwidget.cpp \
@@ -41,6 +43,7 @@ SOURCES += \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
     ui/widget_config.cpp \
+    ui/widget_delay_test.cpp \
     ui/widget_extApp.cpp \
     ui/widget_histogram.cpp \
     ui/widget_saveData.cpp \
@@ -69,6 +72,7 @@ HEADERS += \
     tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \
+    tools/qaskydelayboard.h \
     tools/smc100cc_serial.h \
     tools/statisticschannel.h \
     tools/tsp01.h \
