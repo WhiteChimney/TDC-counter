@@ -77,7 +77,16 @@ public:
     // qasky_delayboard
 private:
     QaskyDelayBoard *delayBoard;
-public:
+    QList<QLineEdit*> countChannelList;
+    QList<QLineEdit*> delayChannelList;
+
+signals:
+    void requestDelayFeedback();
+    void requestStopDelayFeedback();
+
+public slots:
+    void dealDelayFeedbackDataReceived(int* m_nbrSCC);
+    void doSingleCountTimeoutFeedback();
 
     // 通用
 private:
@@ -119,6 +128,11 @@ private slots:
     void on_buttonDP832UsbTest_released();
     void on_buttonDP832UsbSendCmd_released();
     void on_buttonSetDelay_released();
+    void on_comboDelayboardSpList_activated(int index);
+    void on_buttonDelayFeedbackAdd_released();
+    void on_buttonDelayFeedbackRemove_released();
+    void on_buttonDelayFeedbackStart_released();
+    void on_buttonDelayFeedbackStop_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

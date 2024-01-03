@@ -49,9 +49,7 @@ public:
     // 最后 2 位为固定 0x16
     QString generateCommand();
     bool setVoltage(int channel, double m_voltage);
-    bool setVoltage(double* m_voltage);
     bool setDelay(int channel, double m_delay);
-    bool setDelay(double* m_delay);
 
 
 };

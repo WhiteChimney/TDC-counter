@@ -209,10 +209,13 @@ public:
     void setupExtAppWidget();
 public slots:
     void dealExtAppRequestData();
-    void dealExpAppDataReceived();
-    void dealExpAppStopped();
+    void dealExtAppDataReceived();
+    void dealExtAppStopped();
+    void dealExtAppRequestDelayFeedback();
+    void dealExtAppStopRequestDelayFeedback();
 signals:
-    void sendExpAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
+    void sendExtAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
+    void sendExtAppDelayFeedbackData(int* nbrSCC);
     void mainAppClosing();
 
     // 测试延时板

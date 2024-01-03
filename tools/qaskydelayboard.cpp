@@ -95,7 +95,6 @@ QString QaskyDelayBoard::generateCommand()
         command += QString("%1").arg(delay[i],4,16,QLatin1Char('0'));
     }
     command += "16";
-    qDebug() << command;
     return command;
 }
 
@@ -113,6 +112,6 @@ bool QaskyDelayBoard::setDelay(int channel, double m_delay)
     if (channel < 0 or channel > 7) return false;
     if (m_delay < MIN_DELAY) delay[channel] = MIN_DELAY;
     if (m_delay > MAX_DELAY) delay[channel] = 4095;
-    delay[channel] = int(m_delay/20)*4095;
+    delay[channel] = int(m_delay/20*4095);
     return true;
 }
