@@ -54,6 +54,8 @@ void ExternalApplicationsWidget::on_buttonDelayFeedbackRemove_released()
 
 void ExternalApplicationsWidget::on_buttonDelayFeedbackStart_released()
 {
+    delayBoard->initializeDevice(
+                spList.at(ui->comboDelayboardSpList->currentIndex()));
     emit requestDelayFeedback();
 }
 
@@ -72,25 +74,28 @@ void ExternalApplicationsWidget::dealDelayFeedbackDataReceived(int *m_nbrSCC)
 void ExternalApplicationsWidget::doSingleCountTimeoutFeedback()
 {
     currentRound++;
-    if (currentRound < ui->textAverageRounds->text().toInt())
-        // 未到调整轮次，计算均值
-    {
-        for (int i = 0; i < countChannelList.size(); i++)
-        {
-            countCurrent[i] = (1-1.0/currentRound)*countCurrent[i]
-                    + double(countCurrent[i])/currentRound;
-        }
-    }
-    else
-    {
+
+    // 每轮计算均值
+    for (int i = 0; i < countChannelList.size(); i++)
+        countCurrent[i] = (1-1.0/currentRound)*countCurrent[i]
+                + double(nbrSCC[countChannelList[i]->text().toInt()-1])/currentRound;
+
+    if (currentRound >= ui->textAverageRounds->text().toInt())
         // 对每一对绑定的通道，进行延时反馈
+    {
         for (int i = 0; i < countChannelList.size(); i++)
         {
-    //        delayBoard->setDelay(countChannelList[i],
-    //                             amountDelay(countChannelList[i],delayChannelList[i],nbrSCC));
+            if (countCurrent[i] < countBefore[i])
+                delayAdjustDirection[i] = -delayAdjustDirection[i];
+            delayBoard->setRelativeDelay(delayChannelList[i]->text().toInt(),
+                delayAdjustDirection[i]*ui->textDelayAdj->text().toDouble()/1000.0);
+            qDebug() << countBefore[i] << countCurrent[i]
+                     << delayAdjustDirection[i]
+                     << delayBoard->getDelay(delayChannelList[i]->text().toInt());
             countBefore[i] = countCurrent[i];
+            countCurrent[i] = 0;
         }
-        delayBoard->sendCommand();
+        qDebug() << delayBoard->sendCommand();
         currentRound = 0;
     }
 }
@@ -98,5 +103,6 @@ void ExternalApplicationsWidget::doSingleCountTimeoutFeedback()
 void ExternalApplicationsWidget::on_buttonDelayFeedbackStop_released()
 {
     emit requestStopDelayFeedback();
+    delayBoard->closeDevice();
 }
 

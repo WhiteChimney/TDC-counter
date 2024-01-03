@@ -11,7 +11,7 @@
 #define MIN_VOLTAGE 0
 #define MAX_VOLTAGE 2047
 #define MIN_DELAY 0
-#define MAX_DELAY 20
+#define MAX_DELAY 4095
 
 class QaskyDelayBoard : public QObject
 {
@@ -48,8 +48,11 @@ public:
     // 以上为一个通道的数据格式，8 个通道依次往后排
     // 最后 2 位为固定 0x16
     QString generateCommand();
-    bool setVoltage(int channel, double m_voltage);
+    bool setVoltage(int channel, int m_voltage);
+    int getVoltage(int channel);
     bool setDelay(int channel, double m_delay);
+    bool setRelativeDelay(int channel, double m_delay);
+    double getDelay(int channel);
 
 
 };

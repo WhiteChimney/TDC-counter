@@ -98,20 +98,41 @@ QString QaskyDelayBoard::generateCommand()
     return command;
 }
 
-bool QaskyDelayBoard::setVoltage(int channel, double m_voltage)
+bool QaskyDelayBoard::setVoltage(int channel, int m_voltage)
 {
     if (channel < 0 or channel > 7) return false;
     if (m_voltage < MIN_VOLTAGE) voltage[channel] = MIN_VOLTAGE;
     if (m_voltage > MAX_VOLTAGE) voltage[channel] = MAX_VOLTAGE;
-    voltage[channel] = int(m_voltage);
+    voltage[channel] = m_voltage;
     return true;
+}
+
+int QaskyDelayBoard::getVoltage(int channel)
+{
+    return voltage[channel];
 }
 
 bool QaskyDelayBoard::setDelay(int channel, double m_delay)
 {
     if (channel < 0 or channel > 7) return false;
-    if (m_delay < MIN_DELAY) delay[channel] = MIN_DELAY;
-    if (m_delay > MAX_DELAY) delay[channel] = 4095;
-    delay[channel] = int(m_delay/20*4095);
+    int delay0 = int(m_delay/20*4095);
+    if (delay0 < MIN_DELAY) delay0 = MIN_DELAY;
+    if (delay0 > MAX_DELAY) delay0 = MAX_DELAY;
+    delay[channel] = delay0;
     return true;
+}
+
+bool QaskyDelayBoard::setRelativeDelay(int channel, double m_delay)
+{
+    if (channel < 0 or channel > 7) return false;
+    int delay0 = int(m_delay/20*4095) + delay[channel];
+    if (delay0 < MIN_DELAY) delay0 = MIN_DELAY;
+    if (delay0 > MAX_DELAY) delay0 = MAX_DELAY;
+    delay[channel] = delay0;
+    return true;
+}
+
+double QaskyDelayBoard::getDelay(int channel)
+{
+    return delay[channel]/4095.0*20.0;
 }
