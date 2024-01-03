@@ -60,17 +60,39 @@ void ExternalApplicationsWidget::on_buttonDelayFeedbackStart_released()
 void ExternalApplicationsWidget::dealDelayFeedbackDataReceived(int *m_nbrSCC)
 {
     nbrSCC = m_nbrSCC;
+    for (int i = 0; i < countChannelList.size(); i++)
+    {
+        delayAdjustDirection.append(1);
+        countBefore.append(0);
+        countCurrent.append(0);
+        currentRound = 0;
+    }
 }
 
 void ExternalApplicationsWidget::doSingleCountTimeoutFeedback()
 {
-    // 对每一对绑定的通道，进行延时反馈
-    for (int i = 0; i < countChannelList.size(); i++)
+    currentRound++;
+    if (currentRound < ui->textAverageRounds->text().toInt())
+        // 未到调整轮次，计算均值
     {
-//        delayBoard->setDelay(countChannelList[i],
-//                             amountDelay(countChannelList[i],delayChannelList[i],nbrSCC));
+        for (int i = 0; i < countChannelList.size(); i++)
+        {
+            countCurrent[i] = (1-1.0/currentRound)*countCurrent[i]
+                    + double(countCurrent[i])/currentRound;
+        }
     }
-    delayBoard->sendCommand();
+    else
+    {
+        // 对每一对绑定的通道，进行延时反馈
+        for (int i = 0; i < countChannelList.size(); i++)
+        {
+    //        delayBoard->setDelay(countChannelList[i],
+    //                             amountDelay(countChannelList[i],delayChannelList[i],nbrSCC));
+            countBefore[i] = countCurrent[i];
+        }
+        delayBoard->sendCommand();
+        currentRound = 0;
+    }
 }
 
 void ExternalApplicationsWidget::on_buttonDelayFeedbackStop_released()

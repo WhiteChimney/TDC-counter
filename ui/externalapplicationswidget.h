@@ -79,6 +79,10 @@ private:
     QaskyDelayBoard *delayBoard;
     QList<QLineEdit*> countChannelList;
     QList<QLineEdit*> delayChannelList;
+    QList<int> delayAdjustDirection;
+    QList<double> countBefore;
+    QList<double> countCurrent;
+    int currentRound;
 
 signals:
     void requestDelayFeedback();

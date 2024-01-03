@@ -688,15 +688,29 @@
           <string>根据单道计数进行延时反馈</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0" rowspan="2">
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>每次延时调整量（ps）</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>延时调整间隔轮数</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="buttonDelayFeedbackAdd">
+            <property name="text">
+             <string>添加</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="4">
            <layout class="QGridLayout" name="layoutDelayFeedback">
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>单道计数编号</string>
-              </property>
-             </widget>
-            </item>
             <item row="0" column="1">
              <widget class="QLabel" name="label_24">
               <property name="text">
@@ -704,23 +718,16 @@
               </property>
              </widget>
             </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_23">
+              <property name="text">
+               <string>单道计数编号</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
-          <item row="0" column="1">
-           <widget class="QPushButton" name="buttonDelayFeedbackAdd">
-            <property name="text">
-             <string>添加</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="buttonDelayFeedbackRemove">
-            <property name="text">
-             <string>删除</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
+          <item row="3" column="1">
            <widget class="QPushButton" name="buttonDelayFeedbackStart">
             <property name="text">
              <string>开始</string>
@@ -728,9 +735,39 @@
            </widget>
           </item>
           <item row="1" column="2">
+           <widget class="QLineEdit" name="textDelayAdj">
+            <property name="text">
+             <string>5</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="textAverageRounds">
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QPushButton" name="buttonDelayFeedbackRemove">
+            <property name="text">
+             <string>删除</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
            <widget class="QPushButton" name="buttonDelayFeedbackStop">
             <property name="text">
              <string>结束</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="3">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>注：每隔 n 次单道计数刷新后进行单道计数的均值计算，
+根据单道计数的变化方向调整一定的延时量。 
+延时量的最小值为 20000/4095 = 4.884 ps</string>
             </property>
            </widget>
           </item>
