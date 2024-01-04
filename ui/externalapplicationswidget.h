@@ -92,6 +92,25 @@ public slots:
     void dealDelayFeedbackDataReceived(int* m_nbrSCC);
     void doSingleCountTimeoutFeedback();
 
+
+    // qasky_delayboard
+private:
+    SMC100CC_Serial *smc;
+    QList<QLineEdit*> smcCountChannelList;
+    QList<QLineEdit*> smcChannelList;
+    QList<int> angleAdjustDirection;
+    QList<double> smcCountBefore;
+    QList<double> smcCountCurrent;
+    int smcCurrentRound;
+
+signals:
+    void requestAngleFeedback();
+    void requestStopAngleFeedback();
+
+public slots:
+    void dealAngleFeedbackDataReceived(int* m_nbrSCC);
+    void doSmcSingleCountTimeoutFeedback();
+
     // 通用
 private:
     int *nbrSCC;
@@ -136,7 +155,16 @@ private slots:
     void on_buttonDelayFeedbackAdd_released();
     void on_buttonDelayFeedbackRemove_released();
     void on_buttonDelayFeedbackStart_released();
+    void on_buttonSmcSetAngle_released();
     void on_buttonDelayFeedbackStop_released();
+    void on_comboSmcSpList_activated(int index);
+    void on_buttonAngleFeedbackAdd_released();
+    void on_buttonAngleFeedbackRemove_released();
+    void on_buttonAngleFeedbackStart_released();
+    void on_buttonAngleFeedbackStop_released();
+    void on_buttonSmcOpenPort_released();
+    void on_buttonSmcClosePort_released();
+    void on_buttonSmcHoming_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

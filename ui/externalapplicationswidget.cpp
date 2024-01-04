@@ -31,6 +31,7 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
     this->refreshTSPlist();
 
     delayBoard = new QaskyDelayBoard(this);
+    smc = new SMC100CC_Serial(this);
 
 }
 
@@ -84,3 +85,4 @@ void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkSt
         ui->buttonStop->setEnabled(false);
     }
 }
+

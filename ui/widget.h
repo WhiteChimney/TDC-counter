@@ -105,9 +105,9 @@ private slots:
 
     void on_buttonCheckUpdate_released();
 
-    void on_buttonDelayStart_released();
+//    void on_buttonDelayStart_released();
 
-    void on_buttonDelayStop_released();
+//    void on_buttonDelayStop_released();
 
 private:
     Ui::Widget *ui;
@@ -213,25 +213,28 @@ public slots:
     void dealExtAppStopped();
     void dealExtAppRequestDelayFeedback();
     void dealExtAppStopRequestDelayFeedback();
+    void dealExtAppRequestAngleFeedback();
+    void dealExtAppStopRequestAngleFeedback();
 signals:
     void sendExtAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
     void sendExtAppDelayFeedbackData(int* nbrSCC);
+    void sendExtAppAngleFeedbackData(int* nbrSCC);
     void mainAppClosing();
 
-    // 测试延时板
-private:
-    QFile sFile;
-    QTextStream sStream;
-    double freq = 9.973e6;              // 重复频率
-    int period;        // 一个周期对应多少个 TDC 最小单位（50 ps）
-    int nCOM = 0;
-    int calcPeriod; // 计算达到时间的平均值，计算周期约为 1e5 个 COM，即 0.1 s
-    double currentPeriod = 0.0;
-    double TOF[3] = {0.0};         // 用于存放一个计算周期内的各个通道的时间均值
-    int nTOF[3] = {0};               // 用于计数当前有多少个时间戳
+//    // 测试延时板
+//private:
+//    QFile sFile;
+//    QTextStream sStream;
+//    double freq = 9.973e6;              // 重复频率
+//    int period;        // 一个周期对应多少个 TDC 最小单位（50 ps）
+//    int nCOM = 0;
+//    int calcPeriod; // 计算达到时间的平均值，计算周期约为 1e5 个 COM，即 0.1 s
+//    double currentPeriod = 0.0;
+//    double TOF[3] = {0.0};         // 用于存放一个计算周期内的各个通道的时间均值
+//    int nTOF[3] = {0};               // 用于计数当前有多少个时间戳
 
-public slots:
-    void dealDelayTest(AqT3DataDescriptor*);
+//public slots:
+//    void dealDelayTest(AqT3DataDescriptor*);
 
 };
 #endif // WIDGET_H

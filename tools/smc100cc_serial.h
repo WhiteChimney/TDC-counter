@@ -21,10 +21,10 @@ private:
 
 public:
     bool initializeDevice(QSerialPortInfo spInfo,
-                          QSerialPort::BaudRate baudRate,
-                          QSerialPort::DataBits dataBits,
-                          QSerialPort::StopBits stopBits,
-                          QSerialPort::Parity parity);
+                          QSerialPort::BaudRate baudRate = QSerialPort::Baud57600,
+                          QSerialPort::DataBits dataBits = QSerialPort::Data8,
+                          QSerialPort::StopBits stopBits = QSerialPort::OneStop,
+                          QSerialPort::Parity parity = QSerialPort::NoParity);
     bool homingDevice(int address);
     bool closeDevice();
     bool readReply(QString* reply);

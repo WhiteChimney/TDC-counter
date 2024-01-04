@@ -34,6 +34,7 @@ SOURCES += \
     ui/extAppWidget_dp832a_usb.cpp \
     ui/extAppWidget_qasky_delayboard.cpp \
     ui/extAppWidget_serial_port.cpp \
+    ui/extAppWidget_smc100cc.cpp \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
     ui/histogramwidget.cpp \
