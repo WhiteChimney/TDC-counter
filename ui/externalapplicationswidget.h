@@ -97,6 +97,7 @@ public slots:
 private:
     SMC100CC_Serial *smc;
     QList<QLineEdit*> smcCountChannelList;
+    QList<QLineEdit*> smcTargetCountList;
     QList<QLineEdit*> smcChannelList;
     QList<int> angleAdjustDirection;
     QList<double> smcCountBefore;

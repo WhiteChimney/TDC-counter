@@ -680,17 +680,24 @@
           </item>
           <item row="0" column="0" rowspan="4">
            <layout class="QGridLayout" name="layoutAngleFeedback">
-            <item row="0" column="1">
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_35">
+              <property name="text">
+               <string>单道计数编号</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="2">
              <widget class="QLabel" name="label_34">
               <property name="text">
                <string>波片通道编号</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_35">
+            <item row="0" column="1">
+             <widget class="QLabel" name="label_30">
               <property name="text">
-               <string>单道计数编号</string>
+               <string>目标计数值</string>
               </property>
              </widget>
             </item>

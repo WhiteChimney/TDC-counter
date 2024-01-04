@@ -16,48 +16,54 @@ void ExternalApplicationsWidget::on_comboSmcSpList_activated(int index)
 
 void ExternalApplicationsWidget::on_buttonSmcOpenPort_released()
 {
-    qDebug() << smc->initializeDevice(
+    smc->initializeDevice(
                 spList.at(ui->comboSmcSpList->currentIndex()));
 }
 
 void ExternalApplicationsWidget::on_buttonSmcClosePort_released()
 {
-    qDebug() << smc->closeDevice();
+    smc->closeDevice();
 }
 
 void ExternalApplicationsWidget::on_buttonSmcHoming_released()
 {
-    qDebug() << smc->homingDevice(ui->textSmcAddr->text().toInt());
+    smc->homingDevice(ui->textSmcAddr->text().toInt());
 }
 
 void ExternalApplicationsWidget::on_buttonSmcSetAngle_released()
 {
-    qDebug() << smc->setAbsoluteAngle(
+    smc->setAbsoluteAngle(
                 ui->textSmcAddr->text().toInt(),
                 ui->textSmcAngle->text().toDouble());
 }
 
 void ExternalApplicationsWidget::on_buttonAngleFeedbackAdd_released()
 {
-    QLineEdit *a, *b;
+    QLineEdit *a, *b, *c;
     a = new QLineEdit(this);
     b = new QLineEdit(this);
+    c = new QLineEdit(this);
     smcCountChannelList.append(a);
-    smcChannelList.append(b);
+    smcTargetCountList.append(b);
+    smcChannelList.append(c);
     ui->layoutAngleFeedback->addWidget(
                 a,ui->layoutAngleFeedback->rowCount(),0,1,1);
     ui->layoutAngleFeedback->addWidget(
                 b,ui->layoutAngleFeedback->rowCount()-1,1,1,1);
+    ui->layoutAngleFeedback->addWidget(
+                c,ui->layoutAngleFeedback->rowCount()-1,2,1,1);
 }
 
 void ExternalApplicationsWidget::on_buttonAngleFeedbackRemove_released()
 {
-    if (countChannelList.isEmpty())
+    if (smcCountChannelList.isEmpty())
         return;
 
     ui->layoutAngleFeedback->removeWidget(smcCountChannelList.last());
+    ui->layoutAngleFeedback->removeWidget(smcTargetCountList.last());
     ui->layoutAngleFeedback->removeWidget(smcChannelList.last());
     smcCountChannelList.removeLast();
+    smcTargetCountList.removeLast();
     smcChannelList.removeLast();
 }
 

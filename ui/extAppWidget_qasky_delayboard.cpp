@@ -95,7 +95,7 @@ void ExternalApplicationsWidget::doSingleCountTimeoutFeedback()
             countBefore[i] = countCurrent[i];
             countCurrent[i] = 0;
         }
-        qDebug() << delayBoard->sendCommand();
+        delayBoard->sendCommand();
         currentRound = 0;
     }
 }
