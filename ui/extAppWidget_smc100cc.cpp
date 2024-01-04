@@ -115,8 +115,7 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
                 smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
                     -smcAngleDirList[i]->currentText().toInt()*
                                       ui->textAngleAdj->text().toDouble());
-            qDebug() << smcCountCurrent[i]
-                     << smc->getAbsoluteAngle(smcChannelList[i]->text().toInt());
+            qDebug() << "angle count: " << smcCountCurrent[i];
             smcCountCurrent[i] = 0;
         }
         smcCurrentRound = 0;

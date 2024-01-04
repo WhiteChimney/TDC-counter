@@ -5,10 +5,16 @@ void Widget::setupExtAppWidget()
 {
     extAppW = new ExternalApplicationsWidget(this);
     extAppW->setWindowTitle("外接功能");
+
     connect(extAppW,&ExternalApplicationsWidget::requestData,this,&Widget::dealExtAppRequestData);
+
     connect(extAppW,&ExternalApplicationsWidget::requestDelayFeedback,this,&Widget::dealExtAppRequestDelayFeedback);
     connect(this,&Widget::sendExtAppDelayFeedbackData,extAppW,&ExternalApplicationsWidget::dealDelayFeedbackDataReceived);
     connect(extAppW,&ExternalApplicationsWidget::requestStopDelayFeedback,this,&Widget::dealExtAppStopRequestDelayFeedback);
+
+    connect(extAppW,&ExternalApplicationsWidget::requestAngleFeedback,this,&Widget::dealExtAppRequestAngleFeedback);
+    connect(this,&Widget::sendExtAppAngleFeedbackData,extAppW,&ExternalApplicationsWidget::dealAngleFeedbackDataReceived);
+    connect(extAppW,&ExternalApplicationsWidget::requestStopAngleFeedback,this,&Widget::dealExtAppStopRequestAngleFeedback);
 }
 
 void Widget::on_buttonExternalApplications_released()
