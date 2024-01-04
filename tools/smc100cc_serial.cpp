@@ -39,7 +39,7 @@ bool SMC100CC_Serial::closeDevice()
 
 bool SMC100CC_Serial::sendCommand(QString dataText)
 {
-    qDebug() << dataText;
+//    qDebug() << dataText;
     if (serial->isOpen())
     {
         serial->write(dataText.toLocal8Bit().append("\r\n"));

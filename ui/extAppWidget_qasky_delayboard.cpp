@@ -89,9 +89,9 @@ void ExternalApplicationsWidget::doSingleCountTimeoutFeedback()
                 delayAdjustDirection[i] = -delayAdjustDirection[i];
             delayBoard->setRelativeDelay(delayChannelList[i]->text().toInt(),
                 delayAdjustDirection[i]*ui->textDelayAdj->text().toDouble()/1000.0);
-            qDebug() << countBefore[i] << countCurrent[i]
-                     << delayAdjustDirection[i]
-                     << delayBoard->getDelay(delayChannelList[i]->text().toInt());
+//            qDebug() << countBefore[i] << countCurrent[i]
+//                     << delayAdjustDirection[i]
+//                     << delayBoard->getDelay(delayChannelList[i]->text().toInt());
             countBefore[i] = countCurrent[i];
             countCurrent[i] = 0;
         }
