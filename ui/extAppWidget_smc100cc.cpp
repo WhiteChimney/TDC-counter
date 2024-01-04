@@ -40,18 +40,25 @@ void ExternalApplicationsWidget::on_buttonSmcSetAngle_released()
 void ExternalApplicationsWidget::on_buttonAngleFeedbackAdd_released()
 {
     QLineEdit *a, *b, *c;
+    QComboBox *d;
     a = new QLineEdit(this);
     b = new QLineEdit(this);
     c = new QLineEdit(this);
+    d = new QComboBox(this);
+    d->addItem("1");
+    d->addItem("-1");
     smcCountChannelList.append(a);
     smcTargetCountList.append(b);
     smcChannelList.append(c);
+    smcAngleDirList.append(d);
     ui->layoutAngleFeedback->addWidget(
                 a,ui->layoutAngleFeedback->rowCount(),0,1,1);
     ui->layoutAngleFeedback->addWidget(
                 b,ui->layoutAngleFeedback->rowCount()-1,1,1,1);
     ui->layoutAngleFeedback->addWidget(
                 c,ui->layoutAngleFeedback->rowCount()-1,2,1,1);
+    ui->layoutAngleFeedback->addWidget(
+                d,ui->layoutAngleFeedback->rowCount()-1,3,1,1);
 }
 
 void ExternalApplicationsWidget::on_buttonAngleFeedbackRemove_released()
@@ -62,9 +69,11 @@ void ExternalApplicationsWidget::on_buttonAngleFeedbackRemove_released()
     ui->layoutAngleFeedback->removeWidget(smcCountChannelList.last());
     ui->layoutAngleFeedback->removeWidget(smcTargetCountList.last());
     ui->layoutAngleFeedback->removeWidget(smcChannelList.last());
+    ui->layoutAngleFeedback->removeWidget(smcAngleDirList.last());
     smcCountChannelList.removeLast();
     smcTargetCountList.removeLast();
     smcChannelList.removeLast();
+    smcAngleDirList.removeLast();
 }
 
 void ExternalApplicationsWidget::on_buttonAngleFeedbackStart_released()

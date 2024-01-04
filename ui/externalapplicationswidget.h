@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QFile>
+#include <QComboBox>
 #include "QSimpleLed.h"
 
 #include <QtSerialPort/QSerialPort>
@@ -99,6 +100,7 @@ private:
     QList<QLineEdit*> smcCountChannelList;
     QList<QLineEdit*> smcTargetCountList;
     QList<QLineEdit*> smcChannelList;
+    QList<QComboBox*> smcAngleDirList;
     QList<int> angleAdjustDirection;
     QList<double> smcCountBefore;
     QList<double> smcCountCurrent;
