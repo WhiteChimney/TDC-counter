@@ -101,8 +101,8 @@ private:
     QList<QLineEdit*> smcTargetCountList;
     QList<QLineEdit*> smcChannelList;
     QList<QComboBox*> smcAngleDirList;
-    QList<int> angleAdjustDirection;
-    QList<double> smcCountBefore;
+//    QList<int> angleAdjustDirection;
+//    QList<double> smcCountBefore;
     QList<double> smcCountCurrent;
     int smcCurrentRound;
 

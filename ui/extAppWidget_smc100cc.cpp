@@ -86,8 +86,8 @@ void ExternalApplicationsWidget::dealAngleFeedbackDataReceived(int *m_nbrSCC)
     nbrSCC = m_nbrSCC;
     for (int i = 0; i < countChannelList.size(); i++)
     {
-        angleAdjustDirection.append(1);
-        smcCountBefore.append(0);
+//        angleAdjustDirection.append(1);
+//        smcCountBefore.append(0);
         smcCountCurrent.append(0);
         smcCurrentRound = 0;
     }
@@ -107,14 +107,16 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
     {
         for (int i = 0; i < smcCountChannelList.size(); i++)
         {
-            if (smcCountCurrent[i] < smcCountBefore[i])
-                angleAdjustDirection[i] = -angleAdjustDirection[i];
-            smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
-                angleAdjustDirection[i]*ui->textAngleAdj->text().toDouble()/1000.0);
-            qDebug() << smcCountBefore[i] << smcCountCurrent[i]
-                     << angleAdjustDirection[i]
+            if (smcCountCurrent[i] < smcTargetCountList[i]->text().toInt())
+                smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
+                    smcAngleDirList[i]->currentText().toInt()*
+                                      ui->textAngleAdj->text().toDouble());
+            else
+                smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
+                    -smcAngleDirList[i]->currentText().toInt()*
+                                      ui->textAngleAdj->text().toDouble());
+            qDebug() << smcCountCurrent[i]
                      << smc->getAbsoluteAngle(smcChannelList[i]->text().toInt());
-            smcCountBefore[i] = smcCountCurrent[i];
             smcCountCurrent[i] = 0;
         }
         smcCurrentRound = 0;
