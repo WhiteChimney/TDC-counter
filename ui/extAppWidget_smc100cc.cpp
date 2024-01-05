@@ -107,15 +107,12 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
     {
         for (int i = 0; i < smcCountChannelList.size(); i++)
         {
-            if (smcCountCurrent[i] < smcTargetCountList[i]->text().toInt())
-                smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
-                    smcAngleDirList[i]->currentText().toInt()*
-                                      ui->textAngleAdj->text().toDouble());
-            else
-                smc->setRelativeAngle(smcChannelList[i]->text().toInt(),
-                    -smcAngleDirList[i]->currentText().toInt()*
-                                      ui->textAngleAdj->text().toDouble());
-//            qDebug() << "angle count: " << smcCountCurrent[i];
+            double countDiff = 1-smcCountCurrent[i]/smcTargetCountList[i]->text().toDouble();
+            double angleAdj =                                               // 计算角度调整量
+                    countDiff/0.1*ui->textAngleAdj->text().toDouble()       // 调整量为 偏移百分比是 10% 的多少倍，就把 10% 角度偏移量乘多少倍
+                    *smcAngleDirList[i]->currentText().toInt();             // 再乘上提前试好的角度调节方向
+            smc->setRelativeAngle(smcChannelList[i]->text().toInt(),angleAdj);
+            qDebug() << "angle: " << angleAdj;
             smcCountCurrent[i] = 0;
         }
         smcCurrentRound = 0;
