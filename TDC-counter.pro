@@ -37,6 +37,7 @@ SOURCES += \
     ui/extAppWidget_smc100cc.cpp \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
+    ui/heraldqkdwidget.cpp \
     ui/histogramwidget.cpp \
     ui/statisticswidget.cpp \
     ui/testwidget.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
     tools/tsp01.h \
     ui/coincidencewidget.h \
     ui/externalapplicationswidget.h \
+    ui/heraldqkdwidget.h \
     ui/histogramwidget.h \
     ui/statisticswidget.h \
     ui/testwidget.h \
@@ -87,6 +89,7 @@ HEADERS += \
 FORMS += \
     ui/coincidencewidget.ui \
     ui/externalapplicationswidget.ui \
+    ui/heraldqkdwidget.ui \
     ui/histogramwidget.ui \
     ui/statisticswidget.ui \
     ui/testwidget.ui \
