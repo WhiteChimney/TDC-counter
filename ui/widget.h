@@ -11,6 +11,7 @@
 #include "acquisitionthread.h"
 #include "statisticswidget.h"
 #include "externalapplicationswidget.h"
+#include "heraldqkdwidget.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class Widget; }
@@ -61,12 +62,20 @@ public slots:
     // 记录单道计数
     void dealRecordTimeOut();
     // 数据记录倒计时结束
+
     void dealStatisticsReturn();
-    // 关闭直方图子窗口
+    // 关闭统计子窗口
     void dealStatisticsRequestSync();
     // 统计时钟同步
     void dealStatisticsRequestStopSync();
     // 统计时钟停止同步
+
+    void dealHeraldQkdReturn();
+    // 关闭标记 QKD 子窗口
+    void dealHeraldQkdRequestSync();
+    // 标记 QKD 时钟同步
+    void dealHeraldQkdRequestStopSync();
+    // 标记 QKD 时钟停止同步
 
 private slots:
     void on_buttonTempFilePath_released();
@@ -109,6 +118,8 @@ private slots:
 
 //    void on_buttonDelayStop_released();
 
+    void on_buttonQkd_released();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -119,6 +130,7 @@ private:
     // 直方图子窗口（序列）
     QVector<HistogramWidget*> vHistWidget;   HistogramWidget *histW;
     StatisticsWidget *statW; bool statWidgetLaunched = false;
+    HeraldQkdWidget *qkdW; bool qkdWidgetLaunched = false;
 
 signals:
     void countParamReady(bool*, int*);

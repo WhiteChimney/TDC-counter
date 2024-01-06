@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="buttonStart">
    <property name="geometry">
     <rect>
      <x>130</x>
@@ -23,10 +23,10 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>开始</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_2">
+  <widget class="QPushButton" name="buttonStop">
    <property name="geometry">
     <rect>
      <x>340</x>
@@ -36,7 +36,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>停止</string>
    </property>
   </widget>
   <widget class="QGroupBox" name="groupYields">
@@ -51,18 +51,11 @@
    <property name="title">
     <string>响应计数值</string>
    </property>
-   <layout class="QGridLayout" name="gridLayout">
+   <layout class="QGridLayout" name="layoutYields">
     <item row="2" column="2">
      <widget class="QLabel" name="label_6">
       <property name="text">
        <string>34</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="4">
-     <widget class="QLabel" name="label_36">
-      <property name="text">
-       <string>B34</string>
       </property>
      </widget>
     </item>
@@ -80,24 +73,10 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="3">
-     <widget class="QLabel" name="label_35">
-      <property name="text">
-       <string>B14</string>
-      </property>
-     </widget>
-    </item>
     <item row="0" column="2">
      <widget class="QLabel" name="label_2">
       <property name="text">
        <string>AB34</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1">
-     <widget class="QLabel" name="label_33">
-      <property name="text">
-       <string>B12</string>
       </property>
      </widget>
     </item>
@@ -157,20 +136,6 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0">
-     <widget class="QLabel" name="label_12">
-      <property name="text">
-       <string>单 B 响应</string>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2">
-     <widget class="QLabel" name="label_34">
-      <property name="text">
-       <string>B34</string>
-      </property>
-     </widget>
-    </item>
     <item row="4" column="2">
      <widget class="QLabel" name="label_14">
       <property name="text">
@@ -192,6 +157,41 @@
       </property>
      </widget>
     </item>
+    <item row="6" column="1">
+     <widget class="QLabel" name="label_33">
+      <property name="text">
+       <string>B12</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QLabel" name="label_34">
+      <property name="text">
+       <string>B34</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="3">
+     <widget class="QLabel" name="label_35">
+      <property name="text">
+       <string>B14</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="4">
+     <widget class="QLabel" name="label_36">
+      <property name="text">
+       <string>B34</string>
+      </property>
+     </widget>
+    </item>
+    <item row="7" column="0">
+     <widget class="QLabel" name="label_12">
+      <property name="text">
+       <string>单 B 响应</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QLabel" name="label_37">
@@ -205,6 +205,19 @@
    </property>
    <property name="text">
     <string>注：A、B 分别为左右两个标记探测器，1 是 LH，2 是 LV，3 是 RH，4 是 RV</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="buttonReturn">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>330</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>返回</string>
    </property>
   </widget>
  </widget>

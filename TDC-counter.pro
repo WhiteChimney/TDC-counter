@@ -47,6 +47,7 @@ SOURCES += \
     ui/widget_config.cpp \
     ui/widget_delay_test.cpp \
     ui/widget_extApp.cpp \
+    ui/widget_heraldQkd.cpp \
     ui/widget_histogram.cpp \
     ui/widget_saveData.cpp \
     ui/widget_singleCount.cpp \
