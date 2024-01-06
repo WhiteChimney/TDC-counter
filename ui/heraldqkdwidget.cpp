@@ -7,8 +7,11 @@ HeraldQkdWidget::HeraldQkdWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
+    this->setWindowTitle(tr("标记 MDI 计数器"));
 
     this->setupLcdCounts();
+
+    ui->labelPic->setStyleSheet("border-image: url(:/pic/heraldQkd/herald_MDI_detection.jpeg);");
 }
 
 void HeraldQkdWidget::setupLcdCounts()
