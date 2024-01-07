@@ -3,9 +3,11 @@
 
 #include <QWidget>
 #include <QDebug>
-#include <QAction>
 
 #include "cliplcdnumber.h"
+
+#include "AcqirisImport.h"
+#include "AcqirisT3Import.h"
 
 namespace Ui {
 class HeraldQkdWidget;
@@ -26,6 +28,8 @@ private slots:
 
 private:
     Ui::HeraldQkdWidget *ui;
+    QList<QList<ClipLcdNumber*>> vLcdCounts;
+    double vCounts[4][4] = {{0.0}};
 
 signals:
     void sendReturnSignal();
@@ -33,6 +37,8 @@ signals:
     void heraldQkdRequestStopSync();
 
 public slots:
+    void dealDataReturned(AqT3DataDescriptor *dataDescPtr);
+    void dealTimeOut();
 
 public:
     void setupLcdCounts();
