@@ -38,7 +38,7 @@ private:
     int delayCN[6] = {0};
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;
-    double vCounts[4][4] = {{0.0}};
+    long long vCounts[4][4] = {{0}};
     QList<QVector<int>> timeSeq;       // 用于存放时间序列
     QList<QVector<int>> channelSeq; // 用于存放通道序列
     double freqCOM;

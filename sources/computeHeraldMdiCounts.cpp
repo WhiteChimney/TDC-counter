@@ -8,7 +8,7 @@ int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight);
 
 int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti);
 
-bool findHeraldCoincidence(QVector<int> channelSeq, int start, int end, double nbrCounts[][4])
+bool findHeraldCoincidence(QVector<int> channelSeq, int start, int end, long long nbrCounts[][4])
 {
     // 使用六位的十进制数来表示所有通道的存在性
     // 最低位表示通道 1，最高位表示通道 6
@@ -45,7 +45,7 @@ void computeHeraldMdiCounts
         (AqT3DataDescriptor *dataDescPtr,
          QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
          QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         double nbrCounts[][4],
+         long long nbrCounts[][4],
          int tolerance,
          int *nbrCOMdelay,
          int *delayInCOM,

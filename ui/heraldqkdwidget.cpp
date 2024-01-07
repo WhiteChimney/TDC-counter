@@ -44,6 +44,8 @@ void HeraldQkdWidget::on_buttonStart_released()
 {
     on_buttonStop_released();
 
+    ui->lcdTimeElapsed->display(0);
+
     for (int i = 0; i < 4; i++)
     {
         for (int j = 0; j < 4; j++)
@@ -54,9 +56,6 @@ void HeraldQkdWidget::on_buttonStart_released()
     }
 
     emit heraldQkdRequestParam();
-
-    qDebug() << "started";
-
 }
 
 void HeraldQkdWidget::on_buttonStop_released()
@@ -123,5 +122,7 @@ void HeraldQkdWidget::dealTimeOut()
     // 更新计数显示
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            vLcdCounts[i][j]->display(vCounts[i][j]);
+            vLcdCounts[i][j]->display(double(vCounts[i][j]));
+
+    ui->lcdTimeElapsed->display(ui->lcdTimeElapsed->intValue()+1);
 }
