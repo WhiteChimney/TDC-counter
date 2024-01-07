@@ -133,7 +133,8 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, doubl
 {
     if (index == index0)
     {
-        delayCN = delayCN0;
+        for (int i = 0; i < 6; i++)
+            delayCN[i] = delayCN0[i];
         freqCOM = freqCOM0;
         if (ui->stackCoin->currentIndex()==0) // 双通道模式计算符合计数
         {

@@ -52,10 +52,10 @@ int checkCoincidence(int* channels, int nbrChannels, QVector<int> channelSeq, in
 
 void computeCoincidenceCount
         (AqT3DataDescriptor* dataDescPtr,
-         QList<QVector<int>> timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
-         QList<QVector<int>> timeSeqAcc,
-         QList<QVector<int>> channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         QList<QVector<int>> channelSeqAcc,
+         QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
+         QList<QVector<int>> &timeSeqAcc,
+         QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
+         QList<QVector<int>> &channelSeqAcc,
          int nbrChannels,
          int* channels,
          int* nbrCoin,

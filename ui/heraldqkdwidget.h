@@ -6,8 +6,7 @@
 
 #include "cliplcdnumber.h"
 
-#include "AcqirisImport.h"
-#include "AcqirisT3Import.h"
+#include "stdafx.h"
 
 namespace Ui {
 class HeraldQkdWidget;
@@ -28,15 +27,30 @@ private slots:
 
 private:
     Ui::HeraldQkdWidget *ui;
+
+    int nbrCOMdelay[6] = {0};
+    int maxNbrCOMdelay = 0;
+    int delayInCOM[6] = {0};
+    int timeCOMunit;
+    int COM_HEAD = 0;
+
+    int tolerance;
+    int delayCN[6] = {0};
+
     QList<QList<ClipLcdNumber*>> vLcdCounts;
     double vCounts[4][4] = {{0.0}};
+    QList<QVector<int>> timeSeq;       // 用于存放时间序列
+    QList<QVector<int>> channelSeq; // 用于存放通道序列
+    double freqCOM;
 
 signals:
     void sendReturnSignal();
+    void heraldQkdRequestParam();
     void heraldQkdRequestSync();
     void heraldQkdRequestStopSync();
 
 public slots:
+    void dealQkdParamReceived(double *m_delayCN, double m_freqCOM);
     void dealDataReturned(AqT3DataDescriptor *dataDescPtr);
     void dealTimeOut();
 

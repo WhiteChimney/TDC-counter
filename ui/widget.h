@@ -72,6 +72,8 @@ public slots:
 
     void dealHeraldQkdReturn();
     // 关闭标记 QKD 子窗口
+    void dealHeraldQkdRequestParam();
+    // 处理数据传递
     void dealHeraldQkdRequestSync();
     // 标记 QKD 时钟同步
     void dealHeraldQkdRequestStopSync();
@@ -136,6 +138,7 @@ signals:
     void countParamReady(bool*, int*);
     void coinParamReady(int index, double *delayCN, double freqCOM);
     void histParamReady(int index, double *delayCN, double freqCOM);
+    void qkdParamReady(double *delayCN, double freqCOM);
 
 public:
     void setupAcqIndicator();

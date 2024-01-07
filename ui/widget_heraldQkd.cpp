@@ -15,6 +15,8 @@ void Widget::on_buttonQkd_released()
         qkdW = new HeraldQkdWidget(this);
 
         connect(qkdW,&HeraldQkdWidget::sendReturnSignal,this,&Widget::dealHeraldQkdReturn);
+        connect(qkdW,&HeraldQkdWidget::heraldQkdRequestParam,this,&Widget::dealHeraldQkdRequestParam);
+        connect(this,&Widget::qkdParamReady,qkdW,&HeraldQkdWidget::dealQkdParamReceived);
         connect(qkdW,&HeraldQkdWidget::heraldQkdRequestSync,this,&Widget::dealHeraldQkdRequestSync);
         connect(qkdW,&HeraldQkdWidget::heraldQkdRequestStopSync,this,&Widget::dealHeraldQkdRequestStopSync);
 
@@ -27,6 +29,11 @@ void Widget::dealHeraldQkdReturn()
 {
     qkdW->close();
     qkdWidgetLaunched = false;
+}
+
+void Widget::dealHeraldQkdRequestParam()
+{
+    emit qkdParamReady(delayCN, freqCOM);
 }
 
 void Widget::dealHeraldQkdRequestSync()
