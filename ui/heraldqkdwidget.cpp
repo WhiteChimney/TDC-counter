@@ -84,7 +84,7 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
     double minDelay = delayCN[0];
     for (int i = 0; i < 6; i++)
     {
-        delayTotal[i] = delayCN[i] + delayUi[i]/20.0/1000.0;
+        delayTotal[i] = delayCN[i] + delayUi[i]/1000.0;
         if (delayTotal[i] < minDelay)
             minDelay = delayTotal[i];
     }

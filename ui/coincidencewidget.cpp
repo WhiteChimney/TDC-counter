@@ -92,6 +92,7 @@ void CoincidenceWidget::on_buttonStart_released()
         }
     }
     coinSavable = true; // 此时可保存数据
+
     emit requestCoinParam(index);
 }
 
@@ -133,6 +134,7 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, doubl
 {
     if (index == index0)
     {
+        delayCN = new double[6]();
         for (int i = 0; i < 6; i++)
             delayCN[i] = delayCN0[i];
         freqCOM = freqCOM0;

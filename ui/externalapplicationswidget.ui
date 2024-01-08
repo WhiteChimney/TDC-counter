@@ -660,7 +660,7 @@
           <item row="0" column="2">
            <widget class="QLabel" name="label_32">
             <property name="text">
-             <string>每次角度调整量</string>
+             <string>偏离10%时角度调整量</string>
             </property>
            </widget>
           </item>
@@ -724,7 +724,7 @@
           <item row="1" column="2">
            <widget class="QLineEdit" name="textAngleAdj">
             <property name="text">
-             <string>0.1</string>
+             <string>1</string>
             </property>
            </widget>
           </item>

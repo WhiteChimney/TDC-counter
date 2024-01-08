@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>656</width>
+    <width>768</width>
     <height>419</height>
    </rect>
   </property>
@@ -90,7 +90,11 @@
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="textDelay3"/>
+      <widget class="QLineEdit" name="textDelay3">
+       <property name="text">
+        <string>4.5</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_19">
@@ -100,7 +104,11 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="textDelay2"/>
+      <widget class="QLineEdit" name="textDelay2">
+       <property name="text">
+        <string>0.3</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_22">
@@ -110,10 +118,18 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="textDelay1"/>
+      <widget class="QLineEdit" name="textDelay1">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="3">
-      <widget class="QLineEdit" name="textDelay4"/>
+      <widget class="QLineEdit" name="textDelay4">
+       <property name="text">
+        <string>4.5</string>
+       </property>
+      </widget>
      </item>
      <item row="1" column="2">
       <widget class="QLabel" name="label_23">
@@ -137,13 +153,25 @@
       </widget>
      </item>
      <item row="1" column="3">
-      <widget class="QLineEdit" name="textDelay5"/>
+      <widget class="QLineEdit" name="textDelay5">
+       <property name="text">
+        <string>57.6</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="3">
-      <widget class="QLineEdit" name="textDelay6"/>
+      <widget class="QLineEdit" name="textDelay6">
+       <property name="text">
+        <string>65.7</string>
+       </property>
+      </widget>
      </item>
      <item row="5" column="1">
-      <widget class="QLineEdit" name="textTolerance"/>
+      <widget class="QLineEdit" name="textTolerance">
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
      </item>
      <item row="5" column="2">
       <widget class="QLabel" name="label_17">
@@ -153,7 +181,11 @@
       </widget>
      </item>
      <item row="5" column="3">
-      <widget class="QLineEdit" name="textDeadTime"/>
+      <widget class="QLineEdit" name="textDeadTime">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="label_21">

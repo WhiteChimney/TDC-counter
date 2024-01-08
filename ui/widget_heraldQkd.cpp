@@ -29,6 +29,7 @@ void Widget::dealHeraldQkdReturn()
 {
     qkdW->close();
     qkdWidgetLaunched = false;
+    qkdW->deleteLater();
 }
 
 void Widget::dealHeraldQkdRequestParam()
