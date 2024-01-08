@@ -83,6 +83,9 @@ void ExternalApplicationsWidget::on_buttonAngleFeedbackStart_released()
 
 void ExternalApplicationsWidget::dealAngleFeedbackDataReceived(int *m_nbrSCC)
 {
+    ui->buttonAngleFeedbackStart->setEnabled(false);
+    ui->buttonAngleFeedbackStop->setEnabled(true);
+
     nbrSCC = m_nbrSCC;
     for (int i = 0; i < countChannelList.size(); i++)
     {
@@ -122,5 +125,8 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
 void ExternalApplicationsWidget::on_buttonAngleFeedbackStop_released()
 {
     emit requestStopAngleFeedback();
+
+    ui->buttonAngleFeedbackStop->setEnabled(false);
+    ui->buttonAngleFeedbackStart->setEnabled(true);
 }
 

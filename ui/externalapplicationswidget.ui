@@ -744,6 +744,9 @@
           </item>
           <item row="3" column="2">
            <widget class="QPushButton" name="buttonAngleFeedbackStop">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>结束</string>
             </property>
@@ -949,6 +952,9 @@
           </item>
           <item row="3" column="2">
            <widget class="QPushButton" name="buttonDelayFeedbackStop">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>结束</string>
             </property>

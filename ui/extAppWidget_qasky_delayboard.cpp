@@ -61,6 +61,9 @@ void ExternalApplicationsWidget::on_buttonDelayFeedbackStart_released()
 
 void ExternalApplicationsWidget::dealDelayFeedbackDataReceived(int *m_nbrSCC)
 {
+    ui->buttonDelayFeedbackStart->setEnabled(false);
+    ui->buttonDelayFeedbackStop->setEnabled(true);
+
     nbrSCC = m_nbrSCC;
     for (int i = 0; i < countChannelList.size(); i++)
     {
@@ -104,5 +107,8 @@ void ExternalApplicationsWidget::on_buttonDelayFeedbackStop_released()
 {
     emit requestStopDelayFeedback();
     delayBoard->closeDevice();
+
+    ui->buttonDelayFeedbackStop->setEnabled(false);
+    ui->buttonDelayFeedbackStart->setEnabled(true);
 }
 
