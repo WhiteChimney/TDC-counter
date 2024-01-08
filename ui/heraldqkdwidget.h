@@ -35,13 +35,16 @@ private:
     int COM_HEAD = 0;
 
     int tolerance;
-    double delayCN[6] = {0.0};
+    int delayCN[6] = {0};
+    int deadTime;            // 死时间
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;
     long long vCounts[4][4] = {{0}};
     QList<QVector<int>> timeSeq;       // 用于存放时间序列
     QList<QVector<int>> channelSeq; // 用于存放通道序列
     double freqCOM;
+
+    QString iniName;
 
 signals:
     void sendReturnSignal();
@@ -56,6 +59,10 @@ public slots:
 
 public:
     void setupLcdCounts();
+    void fetchUiData();
+    void pushUiData();
+    void saveToIni();
+    void loadFromIni();
 };
 
 #endif // HERALDQKDWIDGET_H

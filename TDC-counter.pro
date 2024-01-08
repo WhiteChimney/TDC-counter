@@ -39,6 +39,7 @@ SOURCES += \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
     ui/heraldqkdwidget.cpp \
+    ui/heraldqkdwidget_ui.cpp \
     ui/histogramwidget.cpp \
     ui/statisticswidget.cpp \
     ui/testwidget.cpp \

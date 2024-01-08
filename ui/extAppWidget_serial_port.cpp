@@ -105,7 +105,6 @@ void ExternalApplicationsWidget::pushUiData()
     }
 }
 
-
 void ExternalApplicationsWidget::on_buttonOpenSP_released()
 {
     this->fetchUiData();

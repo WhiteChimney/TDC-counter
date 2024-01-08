@@ -8,7 +8,8 @@ int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight);
 
 int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti);
 
-bool findHeraldCoincidence(QVector<int> channelSeq, int start, int end, long long nbrCounts[][4])
+int findHeraldCoincidence
+    (QVector<int> channelSeq, int start, int end, long long nbrCounts[][4])
 {
     // 使用六位的十进制数 channelMark 来表示所有通道的存在性
     // 最低位表示通道 1，最高位表示通道 6
@@ -38,7 +39,7 @@ bool findHeraldCoincidence(QVector<int> channelSeq, int start, int end, long lon
     default:      channelMark = -1; break;
     }
 
-    return channelMark > 0;
+    return channelMark;
 }
 
 void computeHeraldMdiCounts
@@ -47,6 +48,7 @@ void computeHeraldMdiCounts
          QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
          long long nbrCounts[][4],
          int tolerance,
+         int deadTime,
          int *nbrCOMdelay,
          int *delayInCOM,
          int timeCOMunit,
@@ -92,9 +94,16 @@ void computeHeraldMdiCounts
                 for (int i = 0; i < timeSeq[*COM_HEAD].size()-1; i++)
                 {
                     spacing = findSpacing(timeSeq[*COM_HEAD], i, tolerance);          // 求符合窗口在起始位置处的跨度
-                    if (spacing > 0 and findHeraldCoincidence(channelSeq[*COM_HEAD], i, i+spacing, nbrCounts)) // 查看该跨度内是否有符合
+                    if (spacing > 0) // 该跨度内有符合
                     {
+                        findHeraldCoincidence
+                                (channelSeq[*COM_HEAD], i, i+spacing, nbrCounts);
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
+                        int endIndex = i;
+                        // 跳过死时间内的计数
+                        while (timeSeq[*COM_HEAD][i] - timeSeq[*COM_HEAD][endIndex] < deadTime
+                               and i < timeSeq[*COM_HEAD].size()-1)
+                            i++;
                     }
                 }
             }
