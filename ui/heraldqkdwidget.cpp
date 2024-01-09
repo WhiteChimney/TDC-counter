@@ -12,6 +12,14 @@ HeraldQkdWidget::HeraldQkdWidget(QWidget *parent) :
     this->setupLcdCounts();
 
     ui->labelPic->setStyleSheet("border-image: url(:/pic/heraldQkd/herald_MDI_detection.jpeg);");
+
+    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
+    iniName = iniPath + "/Configurations/heraldQkd.ini";
+    QFileInfo iniInfo(iniName);
+    if (iniInfo.isFile())
+        loadFromIni();
+    else
+        saveToIni();
 }
 
 void HeraldQkdWidget::setupLcdCounts()
@@ -32,6 +40,7 @@ void HeraldQkdWidget::setupLcdCounts()
 
 HeraldQkdWidget::~HeraldQkdWidget()
 {
+    saveToIni();
     delete ui;
 }
 
@@ -43,6 +52,8 @@ void HeraldQkdWidget::on_buttonReturn_released()
 void HeraldQkdWidget::on_buttonStart_released()
 {
     on_buttonStop_released();
+
+    saveToIni();
 
     ui->lcdTimeElapsed->display(0);
 
@@ -72,7 +83,6 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
     //    预处理 TDC 参数
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
-    tolerance = int(20*ui->textTolerance->text().toDouble());
     double delayUi[6] = {0.0};
     delayUi[0] = ui->textDelay1->text().toDouble();
     delayUi[1] = ui->textDelay2->text().toDouble();
@@ -110,19 +120,18 @@ void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
 {
     // 对每个响应事件进行分类累积
     computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
-             tolerance,
-             nbrCOMdelay,
-             delayInCOM,
-             timeCOMunit,
-             &COM_HEAD);
+        tolerance, deadTime, nbrCOMdelay, delayInCOM, timeCOMunit, &COM_HEAD);
 }
 
 void HeraldQkdWidget::dealTimeOut()
 {
+    int currentSeconds = ui->lcdTimeElapsed->intValue()+1;
+
     // 更新计数显示
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
-            vLcdCounts[i][j]->display(double(vCounts[i][j]));
+            vLcdCounts[i][j]->display(
+                        double(vCounts[i][j])/currentSeconds/freqCOM);
 
-    ui->lcdTimeElapsed->display(ui->lcdTimeElapsed->intValue()+1);
+    ui->lcdTimeElapsed->display(currentSeconds);
 }

@@ -26,6 +26,7 @@ int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight)
 
 int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti)
 {
+    // 只要 spacing > 0，则存在不止一个时间戳
     int spacing = 0;
     while (timeSeq.at(i+spacing+1) - timeSeq.at(i) <= toleranceMulti and i+spacing+1 < timeSeq.size())
         spacing++;
