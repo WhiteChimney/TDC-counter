@@ -131,7 +131,7 @@ void HeraldQkdWidget::dealTimeOut()
     for (int i = 0; i < 4; i++)
         for (int j = 0; j < 4; j++)
             vLcdCounts[i][j]->display(
-                        double(vCounts[i][j])/currentSeconds/freqCOM);
+                        double(vCounts[i][j]));
 
     ui->lcdTimeElapsed->display(currentSeconds);
 }
