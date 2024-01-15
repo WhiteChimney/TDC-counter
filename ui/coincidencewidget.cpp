@@ -190,14 +190,14 @@ void CoincidenceWidget::dealRequestCoinParam(int index0, double *delayCN0, doubl
             nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
             if (nbrCOMdelay[i] > maxNbrCOMdelay)
                 maxNbrCOMdelay = nbrCOMdelay[i];
-            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+            delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
             if (nbrChannels == 2)
             {
                 delayTotalAcc[i] -= minDelay;
                 nbrCOMdelayAcc[i] = floor(delayTotalAcc[i]/timeCOM);
                 if (nbrCOMdelayAcc[i] > maxNbrCOMdelayAcc)
                     maxNbrCOMdelayAcc = nbrCOMdelayAcc[i];
-                delayInCOMAcc[i] = int(20*1000.0*delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]);
+                delayInCOMAcc[i] = int(20*1000.0*(delayTotalAcc[i] - timeCOM*nbrCOMdelayAcc[i]));
             }
         }
 
