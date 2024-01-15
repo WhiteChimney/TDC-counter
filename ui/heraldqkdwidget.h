@@ -35,7 +35,7 @@ private:
     int COM_HEAD = 0;
 
     int tolerance;
-    int delayCN[6] = {0};
+    double delayCN[6] = {0.0};
     int deadTime;            // 死时间
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;

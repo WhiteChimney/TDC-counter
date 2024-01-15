@@ -105,7 +105,7 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
         nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
         if (nbrCOMdelay[i] > maxNbrCOMdelay)
             maxNbrCOMdelay = nbrCOMdelay[i];
-        delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+        delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
     }
 
 //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
