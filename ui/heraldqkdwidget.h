@@ -46,6 +46,11 @@ private:
 
     QString iniName;
 
+    QString fileName;
+    QFile *fSave = new QFile();
+    QTextStream fStream;
+
+
 signals:
     void sendReturnSignal();
     void heraldQkdRequestParam();

@@ -20,6 +20,9 @@ HeraldQkdWidget::HeraldQkdWidget(QWidget *parent) :
         loadFromIni();
     else
         saveToIni();
+
+    fileName = iniPath + "/Configurations/heraldQkd_data.txt";
+    fSave->setFileName(fileName);
 }
 
 void HeraldQkdWidget::setupLcdCounts()
@@ -71,6 +74,7 @@ void HeraldQkdWidget::on_buttonStart_released()
 
 void HeraldQkdWidget::on_buttonStop_released()
 {
+    fSave->close();
     emit heraldQkdRequestStopSync();
 }
 
@@ -114,6 +118,15 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
     COM_HEAD = 0;
 
     emit heraldQkdRequestSync();
+
+    fSave->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream.setDevice(fSave);
+
+    fStream << "Time (s)\t"
+            << "AB12\t" << "AB34\t" << "AB14\t" << "AB23\t"
+            << "12\t" << "34\t" << "14\t" << "23\t"
+            << "A12\t" << "A34\t" << "A14\t" << "A23\t"
+            << "B12\t" << "B34\t" << "B14\t" << "B23\n";
 }
 
 void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
@@ -127,11 +140,20 @@ void HeraldQkdWidget::dealTimeOut()
 {
     int currentSeconds = ui->lcdTimeElapsed->intValue()+1;
 
+    fStream << QString::number(currentSeconds);
     // 更新计数显示
     for (int i = 0; i < 4; i++)
+    {
         for (int j = 0; j < 4; j++)
+        {
+            fStream << "\t"
+                    << QString::number(vCounts[i][j] -
+                                       vLcdCounts[i][j]->intValue());
             vLcdCounts[i][j]->display(
                         double(vCounts[i][j]));
+        }
+    }
+    fStream << "\n";
 
     ui->lcdTimeElapsed->display(currentSeconds);
 }
