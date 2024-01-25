@@ -201,8 +201,8 @@ void HistogramWidget::dealRequestHistParam(int m_index,
         resizeSeqLength(&timeSeq2_2, maxNbrCOMdelay+2);
         COM_HEAD_2 = 0;
 
-        resizeSeqLength(&timeSeqX1, 3*(countEvents + maxNbrCOMdelay + 2));
-        resizeSeqLength(&timeSeqX2, 3*(countEvents + maxNbrCOMdelay + 2));
+        resizeSeqLength(&timeSeqX1, 10*(countEvents + maxNbrCOMdelay + 2));
+        resizeSeqLength(&timeSeqX2, 10*(countEvents + maxNbrCOMdelay + 2));
         if (COM_offset < 0)
         {
             COM_HEAD_X1 = (-COM_offset) % timeSeqX1.size();
