@@ -168,7 +168,8 @@ void computeCoincidenceCountAcrossDevices_HOLD
              int *nbrCOMdelay, int *nbrCOMdelayAcc,
              int *delayInCOM, int *delayInCOMAcc,
              int timeCOMunit,
-             int *COM_HEAD)
+             int *COM_HEAD,
+             int COM_START)
 {
 //    读取时间数据
     long nbrSamples = dataDescPtr->nbrSamples;
@@ -219,8 +220,14 @@ void computeCoincidenceCountAcrossDevices_HOLD
                 channelSeqAcc[indexCOMAcc].insert(index, channel-1);
             }
         }
-        else
-            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
+        else if (channel == 0)
+        {
+            int dnCOM = (sample & 0x0FFFFFFF) - COM_START;
+            *COM_HEAD = dnCOM % timeSeq.size();
+            while (*COM_HEAD < 0)
+                *COM_HEAD += timeSeq.size();
+        }
+//            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
     }
 }
 

@@ -77,7 +77,8 @@ void computeCoincidenceCountAcrossDevices_HOLD
              int *nbrCOMdelay, int *nbrCOMdelayAcc,
              int *delayInCOM, int *delayInCOMAcc,
              int timeCOMunit,
-             int *COM_HEAD);
+             int *COM_HEAD,
+             int com_start);
 
 void computeCoincidenceCountAcrossDevices_COMPUTE(
                  QList<QVector<int>> &timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）

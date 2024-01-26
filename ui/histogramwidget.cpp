@@ -245,7 +245,8 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
             channel = channel2;
         if (! COM_START_REGISTERED)
         {
-            COM_START = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF);
+//            COM_START = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF);
+            COM_START = 0;
             COM_START_REGISTERED = true;
             qDebug() << COM_START;
         }
@@ -280,7 +281,8 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
             channel = channel1;
         if (! COM_START_2_REGISTERED)
         {
-            COM_START_2 = (((long *)dataDescPtr_2->dataPtr)[0] & 0x0FFFFFFF);
+//            COM_START_2 = (((long *)dataDescPtr_2->dataPtr)[0] & 0x0FFFFFFF);
+            COM_START_2 = 0;
             COM_START_2_REGISTERED = true;
             qDebug() << COM_START_2;
         }
