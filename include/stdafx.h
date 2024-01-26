@@ -146,7 +146,8 @@ void computeHistogramCountAcrossDevices_HOLD
                           int *delayInCOM,
                           int timeCOMunit,
 //                          int countEvents,
-                          int *COM_HEAD);
+                          int *COM_HEAD,
+                          int COM_START);
 
 void computeHistogramCountAcrossDevices_COMPUTE
     (QVector<QVector<double>>& timeSeqX1, QVector<QVector<double>>& timeSeqX2,

@@ -217,6 +217,9 @@ void HistogramWidget::dealRequestHistParam(int m_index,
         comRange = ceil((timeStop - timeStart) * freqCOM / 1.0e9 / 2);
 
         emit askDealAcqBankSwitchHist(index, computeMode);
+
+        COM_START_REGISTERED = false;
+        COM_START_2_REGISTERED = false;
     }
 }
 
@@ -240,6 +243,12 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
             channel = channel1;
         else
             channel = channel2;
+        if (! COM_START_REGISTERED)
+        {
+            COM_START = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF);
+            COM_START_REGISTERED = true;
+            qDebug() << COM_START;
+        }
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr,
                                   timeSeqX1,
@@ -247,7 +256,8 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
                                   nbrCOMdelay,
                                   delayInCOM,
                                   timeCOMunit,
-                                  &COM_HEAD_X1);
+                                  &COM_HEAD_X1,
+                                  COM_START);
         break;
     case 2:
         break;
@@ -268,6 +278,12 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
             channel = channel2;
         else
             channel = channel1;
+        if (! COM_START_2_REGISTERED)
+        {
+            COM_START_2 = (((long *)dataDescPtr_2->dataPtr)[0] & 0x0FFFFFFF);
+            COM_START_2_REGISTERED = true;
+            qDebug() << COM_START_2;
+        }
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr_2,
                                   timeSeqX2,
@@ -275,7 +291,8 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
                                   nbrCOMdelay_2,
                                   delayInCOM_2,
                                   timeCOMunit,
-                                  &COM_HEAD_X2);
+                                  &COM_HEAD_X2,
+                                  COM_START_2);
 
         // TDC 2 再计算数据
         computeHistogramCountAcrossDevices_COMPUTE(
@@ -346,11 +363,13 @@ void HistogramWidget::changeComOffset(int newOffset)
     if (offsetChange < 0)
     {
         if (timeSeqX1.size() == 0) return;
-        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
+//        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
+        COM_START -= offsetChange;
     }
     else
     {
         if (timeSeqX2.size() == 0) return;
-        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+//        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+        COM_START_2 += offsetChange;
     }
 }
