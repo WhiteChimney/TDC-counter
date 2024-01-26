@@ -153,11 +153,11 @@ void CoincidenceWidget::loadFromIni()
 
 void CoincidenceWidget::on_coinChannel1_currentIndexChanged(int index)
 {
-    while (ui->coinChannel2->count())
-        ui->coinChannel2->removeItem(0);
-    for (int i = 1; i < 7; i++)
-        if (i != index+1)
-            ui->coinChannel2->addItem(QString::number(i));
+//    while (ui->coinChannel2->count())
+//        ui->coinChannel2->removeItem(0);
+//    for (int i = 1; i < 7; i++)
+//        if (i != index+1)
+//            ui->coinChannel2->addItem(QString::number(i));
 }
 
 void CoincidenceWidget::on_checkboxAccumlateTime_stateChanged(int checkState)
