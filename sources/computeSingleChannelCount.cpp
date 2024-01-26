@@ -42,8 +42,8 @@ void computeSingleChannelCount
 
     long nbrSamples = dataDescPtr->nbrSamples;
     int nCOM = 0;
-    int prenCOM = ((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF;
-    int numbercom_0 = ((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF;
+//    int prenCOM = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF)-1;
+    int numbercom_0 = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF)-1;
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
@@ -60,7 +60,7 @@ void computeSingleChannelCount
 //            if (nCOM != (TimeOfFlight) - numbercom_0 + 1 && channel == 0)
 //               qDebug() << nCOM;
             if(channel==0)
-              nCOM = TimeOfFlight - numbercom_0+1;
+              nCOM = TimeOfFlight - numbercom_0;
 //            if(nCOM + numbercom_0 - 1 != TimeOfFlight  and channel==0)
 //            qDebug() << TimeOfFlight ;
         }
