@@ -172,7 +172,6 @@ void computeCoincidenceCountAcrossDevices_HOLD
 {
 //    读取时间数据
     long nbrSamples = dataDescPtr->nbrSamples;
-    int prenCOM = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF)-1;
 
     int index = 0; // 用于标记元素插入位置
     for (long n = 0 ; n < nbrSamples ; ++n)
@@ -220,18 +219,8 @@ void computeCoincidenceCountAcrossDevices_HOLD
                 channelSeqAcc[indexCOMAcc].insert(index, channel-1);
             }
         }
-        else if (channel == 0)
-        {
-            int dnCOM = (sample & 0x0FFFFFFF) - prenCOM;
-//            if (dnCOM < 1)
-//            {
-//                qDebug() << "Hist error: " << dnCOM;
-////                continue;
-//            }
-            *COM_HEAD = (*COM_HEAD + dnCOM) % timeSeq.size();
-            prenCOM = sample & 0x0FFFFFFF;
-        }
-//            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
+        else
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
     }
 }
 

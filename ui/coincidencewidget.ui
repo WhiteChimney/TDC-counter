@@ -83,7 +83,7 @@
    <item row="0" column="5">
     <widget class="QStackedWidget" name="stackCoin">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="stackCoin_Dual">
       <layout class="QGridLayout" name="gridLayout_2">
@@ -120,11 +120,6 @@
             <property name="maxVisibleItems">
              <number>6</number>
             </property>
-            <item>
-             <property name="text">
-              <string>1</string>
-             </property>
-            </item>
             <item>
              <property name="text">
               <string>2</string>

@@ -16,6 +16,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
                  int *COM_HEAD)
 {
     long nbrSamples = dataDescPtr->nbrSamples;
+    int prenCOM = ((long *)dataDescPtr->dataPtr)[0]-1;
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
@@ -45,7 +46,15 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
                     binHeight[index]++;
             }
             timeSeq1[*COM_HEAD].clear();
-            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
+//            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
+            if(channel == 0)
+            {
+            int dnCOM = sample & 0x0FFFFFFF - prenCOM;
+            *COM_HEAD = (*COM_HEAD + dnCOM) % timeSeq1.size();
+            prenCOM = sample & 0x0FFFFFFF;
+//                if(dnCOM != 1)
+//                qDebug() << dnCOM;
+            }
         }
     }
 }
@@ -60,6 +69,8 @@ void countDifference(AqT3DataDescriptor* dataDescPtr,
                      int *COM_HEAD)
 {
     long nbrSamples = dataDescPtr->nbrSamples;
+
+    int prenCOM = ((long *)dataDescPtr->dataPtr)[0]-1;
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
@@ -96,7 +107,14 @@ void countDifference(AqT3DataDescriptor* dataDescPtr,
             }
             timeSeq1[*COM_HEAD].clear();
             timeSeq2[*COM_HEAD].clear();
-            *COM_HEAD = (*COM_HEAD+1) % timeSeq1.size();
+            if(channel == 0)
+            {
+            int dnCOM = sample & 0x0FFFFFFF - prenCOM;
+            *COM_HEAD = (*COM_HEAD + dnCOM) % timeSeq1.size();
+            prenCOM = sample & 0x0FFFFFFF;
+//                if(dnCOM != 1)
+//                qDebug() << dnCOM;
+            }
         }
     }
 }
@@ -143,7 +161,8 @@ void computeHistogramCountAcrossDevices_HOLD
 
     long nbrSamples = dataDescPtr->nbrSamples;
     int prenCOM = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF)-1;
-    int lastCOM = prenCOM;
+//    int asample = ((long *)dataDescPtr->dataPtr)[0];
+//    qDebug() << "channel: " << ((asample & 0x70000000) >> 28) << "\tnumber: " << (asample & 0x0FFFFFFF);
 
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
@@ -166,15 +185,21 @@ void computeHistogramCountAcrossDevices_HOLD
         }
         else if (channel == 0)
         {
-            prenCOM = sample & 0x0FFFFFFF;
-            int dnCOM = prenCOM - lastCOM;
-//            if (dnCOM < 1)
-//            {
-//                qDebug() << "Hist error: " << dnCOM;
-////                break;
-//            }
+            int dnCOM = (sample & 0x0FFFFFFF) - prenCOM;
+            if(dnCOM != 1)
+            {
+//                static int jjj = 0;
+//                if (jjj++ % 100000 == 0)
+                    qDebug() << "n = " << n
+                             << "\tdnCOM: " << dnCOM
+                             << "\tprenCom: " << prenCOM
+                             << "\tsample: " << (sample & 0x0FFFFFFF);
+
+            }
+//            dnCOM = 1;
             *COM_HEAD = (*COM_HEAD + dnCOM) % timeSeq1.size();
-            lastCOM = prenCOM;
+            prenCOM = sample & 0x0FFFFFFF;
+
         }
     }
 }
