@@ -66,7 +66,6 @@ private:
 //    int dataToBeRemoved = 0, dataToBeRemoved_2 = 0;
     int comRange = 0;
     int COM_START = 0, COM_START_2 = 0; // 这个是两个 TDC 固有的 COM 编号差（比如因启动时间差异导致）
-    bool COM_START_REGISTERED = false, COM_START_2_REGISTERED = false;
 
     // 画图参数
     double timeStart, timeStop;    // 起止时间

@@ -67,7 +67,6 @@ private:
     int COM_HEAD = 0, COM_HEAD_2 = 0;
     int COM_HEAD_X1 = 0, COM_HEAD_X2 = 0, COM_HEAD_compute = 0, COM_offset = 0;
     int COM_START = 0, COM_START_2 = 0; // 这个是两个 TDC 固有的 COM 编号差（比如因启动时间差异导致）
-    bool COM_START_REGISTERED = false, COM_START_2_REGISTERED = false;
 
     // 双通道
     int device1, device2;

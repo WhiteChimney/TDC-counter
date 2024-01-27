@@ -325,12 +325,11 @@ void CoincidenceWidget::dealRequestCoinParam(int m_index,
             COM_HEAD_X1 = 0;
             COM_HEAD_X2 = COM_offset % timeSeqX2.size();
         }
+        COM_START = COM_HEAD_X1;
+        COM_START_2 = COM_HEAD_X2;
         COM_HEAD_compute = 0;
 
         emit askDealAcqBankSwitchCoin(index, computeMode);
-
-        COM_START_REGISTERED = false;
-        COM_START_2_REGISTERED = false;
     }
 }
 
@@ -350,13 +349,6 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin(AqT3DataDescriptor* dataDesc
         break;
     case 1:
         // TDC 1 先存数据
-        if (! COM_START_REGISTERED)
-        {
-//            COM_START = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF);
-            COM_START = 0;
-            COM_START_REGISTERED = true;
-            qDebug() << COM_START;
-        }
         computeCoincidenceCountAcrossDevices_HOLD
                 (dataDescPtr,
                  timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
@@ -384,13 +376,6 @@ void CoincidenceWidget::dealAcqThreadBankSwitchCoin_2(AqT3DataDescriptor* dataDe
     case 0:
         break;
     case 1:
-        if (! COM_START_2_REGISTERED)
-        {
-//            COM_START_2 = (((long *)dataDescPtr_2->dataPtr)[0] & 0x0FFFFFFF);
-            COM_START_2 = 0;
-            COM_START_2_REGISTERED = true;
-            qDebug() << COM_START_2;
-        }
         // TDC 2 先存数据
         computeCoincidenceCountAcrossDevices_HOLD
                 (dataDescPtr_2,
@@ -501,13 +486,11 @@ void CoincidenceWidget::changeComOffset(int newOffset)
     if (offsetChange < 0)
     {
         if (timeSeqX1.size() == 0) return;
-//        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
-        COM_START -= offsetChange;
+        COM_START = (COM_START - offsetChange) % timeSeqX1.size();
     }
     else
     {
         if (timeSeqX2.size() == 0) return;
-//        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
-        COM_START_2 += offsetChange;
+        COM_START_2 = (COM_START_2 + offsetChange) % timeSeqX2.size();
     }
 }

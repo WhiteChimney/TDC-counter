@@ -213,13 +213,13 @@ void HistogramWidget::dealRequestHistParam(int m_index,
             COM_HEAD_X1 = 0;
             COM_HEAD_X2 = COM_offset % timeSeqX2.size();
         }
+        COM_START = COM_HEAD_X1;
+        COM_START_2 = COM_HEAD_X2;
         COM_HEAD_compute = 0;
         comRange = ceil((timeStop - timeStart) * freqCOM / 1.0e9 / 2);
 
         emit askDealAcqBankSwitchHist(index, computeMode);
 
-        COM_START_REGISTERED = false;
-        COM_START_2_REGISTERED = false;
     }
 }
 
@@ -243,13 +243,6 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
             channel = channel1;
         else
             channel = channel2;
-        if (! COM_START_REGISTERED)
-        {
-//            COM_START = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF);
-            COM_START = 0;
-            COM_START_REGISTERED = true;
-            qDebug() << COM_START;
-        }
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr,
                                   timeSeqX1,
@@ -279,13 +272,6 @@ void HistogramWidget::dealAcqThreadBankSwitchHist_2(AqT3DataDescriptor* dataDesc
             channel = channel2;
         else
             channel = channel1;
-        if (! COM_START_2_REGISTERED)
-        {
-//            COM_START_2 = (((long *)dataDescPtr_2->dataPtr)[0] & 0x0FFFFFFF);
-            COM_START_2 = 0;
-            COM_START_2_REGISTERED = true;
-            qDebug() << COM_START_2;
-        }
         computeHistogramCountAcrossDevices_HOLD
                                  (dataDescPtr_2,
                                   timeSeqX2,
@@ -365,13 +351,11 @@ void HistogramWidget::changeComOffset(int newOffset)
     if (offsetChange < 0)
     {
         if (timeSeqX1.size() == 0) return;
-//        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
-        COM_START -= offsetChange;
+        COM_START = (COM_START - offsetChange) % timeSeqX1.size();
     }
     else
     {
         if (timeSeqX2.size() == 0) return;
-//        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
-        COM_START_2 += offsetChange;
+        COM_START_2 = (COM_START_2 + offsetChange) % timeSeqX2.size();
     }
 }

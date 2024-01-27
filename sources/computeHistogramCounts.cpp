@@ -16,7 +16,6 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
                  int *COM_HEAD)
 {
     long nbrSamples = dataDescPtr->nbrSamples;
-    int prenCOM = (((long *)dataDescPtr->dataPtr)[0] & 0x0FFFFFFF)-1;
     for (long n = 0 ; n < nbrSamples ; ++n)
     {
         int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
@@ -46,15 +45,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
                     binHeight[index]++;
             }
             timeSeq1[*COM_HEAD].clear();
-//            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
-            if(channel == 0)
-            {
-            int dnCOM = (sample & 0x0FFFFFFF) - prenCOM;
-            *COM_HEAD = (*COM_HEAD + dnCOM) % timeSeq1.size();
-            prenCOM = sample & 0x0FFFFFFF;
-//                if(dnCOM != 1)
-//                qDebug() << dnCOM;
-            }
+            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq1.size();
         }
     }
 }
