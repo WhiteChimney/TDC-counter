@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QAbstractSlider>
 
 #include "projectInfo.h"
 #include "stdafx.h"
@@ -127,15 +128,13 @@ private slots:
 
     void on_buttonPlus1_released();
 
-    void on_buttonMinus10_released();
-
-    void on_buttonPlus10_released();
-
     void on_buttonMinus100_released();
 
     void on_buttonPlus100_released();
 
     void on_pushButtonQKD_released();
+
+    void on_dialComOffset_valueChanged(int value);
 
 private:
     Ui::Widget *ui;

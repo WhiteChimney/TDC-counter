@@ -364,15 +364,12 @@ void Widget::on_buttonPlus1_released()
     this->updateComOffset();
 }
 
-void Widget::on_buttonMinus10_released()
+void Widget::on_dialComOffset_valueChanged(int value)
 {
-    comOffset -= 10;
-    this->updateComOffset();
-}
-
-void Widget::on_buttonPlus10_released()
-{
-    comOffset += 10;
+    int smallOffset = comOffset % 100;
+    while (smallOffset < 0)
+        smallOffset += 100;
+    comOffset = comOffset - smallOffset + value;
     this->updateComOffset();
 }
 
@@ -391,6 +388,10 @@ void Widget::on_buttonPlus100_released()
 void Widget::updateComOffset()
 {
     ui->textComOffset->setText(QString::number(comOffset));
+    int smallOffset = comOffset % 100;
+    while (smallOffset < 0)
+        smallOffset += 100;
+    ui->dialComOffset->setValue(smallOffset);
     for (int i = 0; i < vCoinWidget.size(); i++)
         vCoinWidget[i]->changeComOffset(comOffset);
     for (int i = 0; i < vHistWidget.size(); i++)
