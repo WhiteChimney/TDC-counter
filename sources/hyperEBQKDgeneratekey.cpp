@@ -127,7 +127,8 @@ void hyperentanglementQKD::computeQKDAcrossDevices_HOLD
              int *nbrCOMdelay,
              int *delayInCOM,
              int timeCOMunit,
-             int *COM_HEAD)
+             int *COM_HEAD,
+             int COM_START)
 {
 //    读取时间数据
     long nbrSamples = dataDescPtr->nbrSamples;
@@ -161,8 +162,14 @@ void hyperentanglementQKD::computeQKDAcrossDevices_HOLD
             channelSeq[indexCOM].insert(index, channel);
 
         }
-        else
-            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
+        else if(channel == 0)
+        {
+            int dnCOM = (sample & 0x0FFFFFFF) - COM_START;
+            *COM_HEAD = dnCOM % timeSeq.size();
+            while (*COM_HEAD < 0)
+            *COM_HEAD += timeSeq.size();
+        }
+//            *COM_HEAD = ((*COM_HEAD)+1) % timeSeq.size();
     }
 }
 
@@ -264,6 +271,10 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                     }
                 }
                 channelrecord = 100*channelrecord+indexcheck;
+//                if (QKDSavable)
+//                fStream << timeSeqX1[mm][i] << "\t";
+//                if (QKDSavable)
+//                fStream << channelrecord << "\n";
                 if((timeSeqX1[mm][i]/period)%2==0)
                 {
                     while (timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=toleranceMulti and i+spacing_qkd+1 < timeSeqX1[mm].size())
@@ -289,10 +300,12 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                         }
                     }
                     channelrecord = 100*channelrecord+indexcheck;
+//                    if (QKDSavable)
+//                    fStream << timeSeqX1[mm][i] <<"\t";
                     spacing_qkd++;
                     }
 //
-                   if((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)>=period-toleranceMulti/3) and ((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=period+toleranceMulti))
+                   if((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)>=period-toleranceMulti/5) and ((timeSeqX1[mm].at(i+spacing_qkd+1)-timeSeqX1[mm].at(i)<=period+toleranceMulti))
                            and (bobZnum>0 or aliceZnum>0) and i+spacing_qkd+1 < timeSeqX1[mm].size())
                    {
                        indexcheck=checkoutcome(channelSeqX1[mm][i+spacing_qkd+1], timeSeqX1[mm][i+spacing_qkd+1], period);
@@ -338,10 +351,14 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                                 }
                             }
                             channelrecord = 100*channelrecord+indexcheck;
+//                            if (QKDSavable)
+//                            fStream << timeSeqX1[mm][i] <<"\t";
                             spacing_qkdz++;
                        }
                       spacing_qkd += spacing_qkdz; 
                    }
+//                   if (QKDSavable)
+//                   fStream << timeSeqX1[mm][i]<<"\t"<< timeSeqX1[mm].at(i+spacing_qkd+1) <<"\tchannelrecord"<< channelrecord <<"\t";
 
                 }
                 else{
@@ -369,6 +386,8 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                         }
                         spacing_qkd++;
                         channelrecord = 100*channelrecord+indexcheck;
+//                        if (QKDSavable)
+//                        fStream << timeSeqX1[mm][i] << "\t";
                     }
                 }
                 switch(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)){
@@ -408,20 +427,36 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                 default:
                     break;
                 }
-                i=i+spacing_qkd;
+                int k = i;
+                i=i+spacing_qkd+1;
 //                qDebug() << channelrecord<<"\n";
                 if (QKDSavable)
+                {
                     if(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)!=11)
-                fStream << (flag_adjvol1 or flag_adjvol2) <<"\t" << flag_adjvol1 << flag_adjvol2 <<"\t" <<channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)<< "\n";
+                    {
+                        for(int j = k; j<i; j++)
+                        {
+                            fStream << timeSeqX1[mm].at(j) <<"\t";
+                        }
+                        fStream << (flag_adjvol1 or flag_adjvol2) <<"\t" << flag_adjvol1 << flag_adjvol2 <<"\t" <<channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)
+                           <<"\n";
+                    }
+                    else
+                    {
+                        for(int j = k; j<i; j++)
+                        {
+                            fStream << timeSeqX1[mm].at(j) <<"\t";
+                        }
+                        fStream << "\n";
+                    }
+                }
 //                fStream << "\n";
            }
-
-
+     }
         timeSeqX1[mm].clear();
         channelSeqX1[mm].clear();
         timeSeqX2[mm].clear();
         channelSeqX2[mm].clear();
-     }
    }
     *COM_HEAD_compute = (*COM_HEAD_compute + computeLength) % vectorSize;
     delete[] channels;

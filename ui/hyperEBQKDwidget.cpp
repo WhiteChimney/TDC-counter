@@ -42,7 +42,7 @@ void hyperentanglementQKD::fetchUiData()
     channelMark_2[5] = true; delayMulti_2[5] = int(20*ui->TDC2delay6->text().toDouble());
 
     toleranceMulti = 30;    //符合窗口选择1.5ns
-    zperiod = int(20*ui->Zperiod->text().toDouble());
+    zperiod_c = int(20*ui->Zperiod->text().toDouble());
     // 数据保存设置
     pathName = ui->textDataDirectory->currentText();
     fileName = ui->textDataFileName->text();
@@ -71,7 +71,7 @@ void hyperentanglementQKD::pushUiData()
      ui->TDC2delay4->setText(QString::number(delayMulti_2[3]/20.0));
      ui->TDC2delay5->setText(QString::number(delayMulti_2[4]/20.0));
      ui->TDC2delay6->setText(QString::number(delayMulti_2[5]/20.0));
-     ui->Zperiod->setText(QString::number(zperiod/20));
+     ui->Zperiod->setText(QString::number(zperiod_c/20));
 
 }
 
@@ -210,6 +210,8 @@ void hyperentanglementQKD::dealRequestQKDParam(int m_index,
             COM_HEAD_X1 = 0;
             COM_HEAD_X2 = COM_offset % timeSeqX2.size();
         }
+        COM_START = COM_HEAD_X1;
+        COM_START_2 = COM_HEAD_X2;
         COM_HEAD_compute = 0;
 
         emit askDealAcqBankSwitchQKD(index);
@@ -227,7 +229,7 @@ void hyperentanglementQKD::dealAcqThreadBankSwitchQKD(AqT3DataDescriptor* dataDe
              nbrCOMdelay,
              delayInCOM,
              timeCOMunit,
-             &COM_HEAD_X1);
+             &COM_HEAD_X1,COM_START);
 }
 
 void hyperentanglementQKD::dealAcqThreadBankSwitchQKD_2(AqT3DataDescriptor* dataDescPtr_2)
@@ -239,7 +241,7 @@ void hyperentanglementQKD::dealAcqThreadBankSwitchQKD_2(AqT3DataDescriptor* data
              nbrCOMdelay_2,
              delayInCOM_2,
              timeCOMunit,
-             &COM_HEAD_X2);
+             &COM_HEAD_X2,COM_START_2);
 
     computeQKDAcrossDevices_COMPUTE(
                      timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
@@ -251,7 +253,7 @@ void hyperentanglementQKD::dealAcqThreadBankSwitchQKD_2(AqT3DataDescriptor* data
                      axbx11calc, axbx12calc, axbx22calc, axbx11errorcalc, axbx22errorcalc,
                      azbz11calc, azbz12calc, azbz22calc, azbz11errorcalc, azbz22errorcalc,
                      abandoncalc,
-                     zperiod,
+                     zperiod_c,
                      toleranceMulti,
                      &COM_HEAD_X1, &COM_HEAD_X2, &COM_HEAD_compute);
 }
@@ -293,12 +295,12 @@ void hyperentanglementQKD::changeComOffset(int newOffset)
     if (offsetChange < 0)
     {
         if (timeSeqX1.size() == 0) return;
-        COM_HEAD_X1 = (COM_HEAD_X1 - offsetChange) % timeSeqX1.size();
+        COM_START = (COM_START - offsetChange) % timeSeqX1.size();
     }
     else
     {
         if (timeSeqX2.size() == 0) return;
-        COM_HEAD_X2 = (COM_HEAD_X2 + offsetChange) % timeSeqX2.size();
+        COM_START_2 = (COM_START_2 + offsetChange) % timeSeqX2.size();
     }
 }
 

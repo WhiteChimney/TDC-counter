@@ -117,6 +117,8 @@ private:
     int delayInCOM_2[6] = {0};
     int timeCOMunit;
     int COM_HEAD_X1 = 0, COM_HEAD_X2 = 0, COM_HEAD_compute = 0;
+    int COM_START = 0, COM_START_2 = 0; // 这个是两个 TDC 固有的 COM 编号差（比如因启动时间差异导致）
+
 
     bool channelMark[6] = {0}; // 是否选择该通道
     int delayMulti[6] = {0}; // 延时
@@ -124,7 +126,7 @@ private:
     int delayMulti_2[6] = {0}; // 延时
     double accumulateTimeMulti = 1.0; // 累计时间（不同步）
     int toleranceMulti;               // 符合门宽
-    int zperiod;
+    int zperiod_c;
 
     int device1, device2;     // 实验中设备1是Alice设备2是Bob的信号
 //    int coinwindow;           //符合门宽
@@ -205,7 +207,8 @@ public:
                  int *nbrCOMdelay,
                  int *delayInCOM,
                  int timeCOMunit,
-                 int *COM_HEAD);
+                 int *COM_HEAD,
+                 int COM_START);
 
     void computeQKDAcrossDevices_COMPUTE(
                      QList<QVector<int>> &timeSeqX1,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）

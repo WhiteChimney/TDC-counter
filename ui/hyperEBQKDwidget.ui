@@ -700,7 +700,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay2">
+    <widget class="QLineEdit" name="TDC2delay1">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -713,7 +713,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay3">
+    <widget class="QLineEdit" name="TDC2delay2">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -726,7 +726,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay4">
+    <widget class="QLineEdit" name="TDC2delay3">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -739,7 +739,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay5">
+    <widget class="QLineEdit" name="TDC2delay4">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -752,7 +752,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay6">
+    <widget class="QLineEdit" name="TDC2delay5">
      <property name="geometry">
       <rect>
        <x>180</x>
@@ -765,7 +765,7 @@
       <string>0</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="TDC2delay1">
+    <widget class="QLineEdit" name="TDC2delay6">
      <property name="geometry">
       <rect>
        <x>180</x>
