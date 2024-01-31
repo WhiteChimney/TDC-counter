@@ -13,6 +13,7 @@ RC_ICONS = resources/TDC-Counter.ico
 SOURCES += \
     main.cpp \
     sources/computeCoincidenceCount.cpp \
+    sources/computeHeraldMdiCounts.cpp \
     sources/computeHistogramCounts.cpp \
     sources/computeSingleChannelCount.cpp \
     sources/configTDC.cpp \
@@ -26,15 +27,21 @@ SOURCES += \
     tools/cliplcdnumber.cpp \
     tools/dp832a_serial.cpp \
     tools/dp832a_usb.cpp \
+    tools/qaskydelayboard.cpp \
+    tools/smc100cc_serial.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
     ui/coincidencewidget_saveData.cpp \
     ui/coincidencewidget_ui.cpp \
-    ui/extAppWidget_dp832a_serial.cpp \
     ui/extAppWidget_dp832a_usb.cpp \
+    ui/extAppWidget_qasky_delayboard.cpp \
+    ui/extAppWidget_serial_port.cpp \
+    ui/extAppWidget_smc100cc.cpp \
     ui/extAppWidget_tsp01.cpp \
     ui/externalapplicationswidget.cpp \
+    ui/heraldqkdwidget.cpp \
+    ui/heraldqkdwidget_ui.cpp \
     ui/histogramwidget.cpp \
     ui/hyperEBQKDwidget.cpp \
     ui/statisticswidget.cpp \
@@ -43,7 +50,10 @@ SOURCES += \
     ui/widget_QKD.cpp \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
+    ui/widget_config.cpp \
+    ui/widget_delay_test.cpp \
     ui/widget_extApp.cpp \
+    ui/widget_heraldQkd.cpp \
     ui/widget_histogram.cpp \
     ui/widget_saveData.cpp \
     ui/widget_singleCount.cpp \
@@ -73,10 +83,13 @@ HEADERS += \
     tools/customizedfunctions.hpp \
     tools/dp832a_serial.h \
     tools/dp832a_usb.h \
+    tools/qaskydelayboard.h \
+    tools/smc100cc_serial.h \
     tools/statisticschannel.h \
     tools/tsp01.h \
     ui/coincidencewidget.h \
     ui/externalapplicationswidget.h \
+    ui/heraldqkdwidget.h \
     ui/histogramwidget.h \
     ui/hyperEBQKDwidget.h \
     ui/statisticswidget.h \
@@ -86,6 +99,7 @@ HEADERS += \
 FORMS += \
     ui/coincidencewidget.ui \
     ui/externalapplicationswidget.ui \
+    ui/heraldqkdwidget.ui \
     ui/histogramwidget.ui \
     ui/hyperEBQKDwidget.ui \
     ui/statisticswidget.ui \
@@ -113,4 +127,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     README.md
+
+RESOURCES += \
+    resources/pic.qrc
 

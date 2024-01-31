@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/pic/heraldQkd">
+        <file>herald_MDI_detection.jpeg</file>
+    </qresource>
+</RCC>

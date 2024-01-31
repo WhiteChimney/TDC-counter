@@ -15,6 +15,7 @@ ClipLcdNumber::ClipLcdNumber(uint numDigits, QWidget *parent)
 
 void ClipLcdNumber::setupUi()
 {
+    this->setSegmentStyle(QLCDNumber::Flat);
     this->setToolTip("点击复制");
     this->setCursor(Qt::PointingHandCursor);
 }

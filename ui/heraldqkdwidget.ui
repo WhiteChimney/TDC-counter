@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HeraldQkdWidget</class>
+ <widget class="QWidget" name="HeraldQkdWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>768</width>
+    <height>419</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="3" column="2">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="2" column="1">
+      <widget class="QPushButton" name="buttonStop">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>停止</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0" colspan="2">
+      <widget class="QPushButton" name="buttonReturn">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>返回</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QLCDNumber" name="lcdTimeElapsed">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="digitCount">
+        <number>9</number>
+       </property>
+       <property name="segmentStyle">
+        <enum>QLCDNumber::Flat</enum>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QPushButton" name="buttonStart">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="text">
+        <string>开始</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="label_25">
+       <property name="text">
+        <string>计数刷新次数（与单道同步）</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="1" rowspan="2">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_20">
+       <property name="text">
+        <string>延时 2（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="textDelay3">
+       <property name="text">
+        <string>4.5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_19">
+       <property name="text">
+        <string>延时 1（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="textDelay2">
+       <property name="text">
+        <string>0.3</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_22">
+       <property name="text">
+        <string>延时 4（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="textDelay1">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="3">
+      <widget class="QLineEdit" name="textDelay4">
+       <property name="text">
+        <string>4.5</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_23">
+       <property name="text">
+        <string>延时 5（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_18">
+       <property name="text">
+        <string>符合窗口（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_24">
+       <property name="text">
+        <string>延时 6（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="3">
+      <widget class="QLineEdit" name="textDelay5">
+       <property name="text">
+        <string>57.6</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="3">
+      <widget class="QLineEdit" name="textDelay6">
+       <property name="text">
+        <string>65.7</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="textTolerance">
+       <property name="text">
+        <string>1</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="2">
+      <widget class="QLabel" name="label_17">
+       <property name="text">
+        <string>死时间（ns）</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QLineEdit" name="textDeadTime">
+       <property name="text">
+        <string>0</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_21">
+       <property name="text">
+        <string>延时 3（ns）</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="0" colspan="3">
+    <widget class="QGroupBox" name="groupYields">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="title">
+      <string>响应计数值</string>
+     </property>
+     <layout class="QGridLayout" name="layoutYields">
+      <item row="2" column="2">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>双响应</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="label_10">
+        <property name="text">
+         <string>双不响应</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>AB34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="2">
+       <widget class="QLabel" name="label_14">
+        <property name="text">
+         <string>A34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="4">
+       <widget class="QLabel" name="label_36">
+        <property name="text">
+         <string>B34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="4">
+       <widget class="QLabel" name="label_16">
+        <property name="text">
+         <string>A34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="label_12">
+        <property name="text">
+         <string>单 B 响应</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>14</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="4">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>23</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="label_33">
+        <property name="text">
+         <string>B12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_11">
+        <property name="text">
+         <string>单 A 响应</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="2">
+       <widget class="QLabel" name="label_34">
+        <property name="text">
+         <string>B34</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QLabel" name="label_15">
+        <property name="text">
+         <string>A14</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QLabel" name="label_35">
+        <property name="text">
+         <string>B14</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>AB12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_5">
+        <property name="text">
+         <string>12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_13">
+        <property name="text">
+         <string>A12</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>AB14</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>AB23</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="3">
+    <widget class="QLabel" name="label_37">
+     <property name="text">
+      <string>注：A、B 分别为左右两个标记探测器，分别接 TDC 的 5、6 通道；1 是 LH，2 是 LV，3 是 RH，4 是 RV，分别接 TDC 的 1、2、3、4 通道</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" rowspan="2">
+    <widget class="QLabel" name="labelPic">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

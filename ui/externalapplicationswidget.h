@@ -9,6 +9,7 @@
 #include <QSettings>
 #include <QStandardPaths>
 #include <QFile>
+#include <QComboBox>
 #include "QSimpleLed.h"
 
 #include <QtSerialPort/QSerialPort>
@@ -16,6 +17,8 @@
 #include "tsp01.h"
 #include "dp832a_serial.h"
 #include "dp832a_usb.h"
+#include "smc100cc_serial.h"
+#include "qaskydelayboard.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -31,11 +34,12 @@ public:
 
 private:
     Ui::ExternalApplicationsWidget *ui;
-    QSimpleLed *SPstatusIndicator, *TSP01statusIndicator, *DP832UsbIndicator;
 
+    // 串口
 private:
-    DP832A_USB* dp832usb;
-    DP832A_Serial* dp832serial;
+    QSimpleLed *SPstatusIndicator;
+//    DP832A_Serial* spDevice;
+    SMC100CC_Serial* spDevice;
     QList<QSerialPortInfo> spList;
     QSerialPort::BaudRate baudRate;
     QSerialPort::DataBits dataBits;
@@ -43,42 +47,92 @@ private:
     QSerialPort::Parity parity;
     QByteArray receivedBytes, sentBytes;
 
-
 public:
-    void setupSPIndicator(), setupTSPIndicator(), setupDP832UsbIndicator();
+    void setupSPIndicator();
     void fetchUiData();
     void pushUiData();
     void saveToIni();
     void loadFromIni();
     void refreshPorts();
 
+    // TSP01
 private:
+    QSimpleLed *TSP01statusIndicator;
     TSP01 *tsp;
     QList<QString> tspList;
     double temperature, temperatureOffset;
     double humidity, humidityOffset;
 
 public:
+    void setupTSPIndicator();
     void refreshTSPlist();
+
+    // dp832a
+private:
+    QSimpleLed *DP832UsbIndicator;
+    DP832A_USB* dp832usb;
+
+public:
+    void setupDP832UsbIndicator();
+
+    // qasky_delayboard
+private:
+    QaskyDelayBoard *delayBoard;
+    QList<QLineEdit*> countChannelList;
+    QList<QLineEdit*> delayChannelList;
+    QList<int> delayAdjustDirection;
+    QList<double> countBefore;
+    QList<double> countCurrent;
+    int currentRound;
+
+signals:
+    void requestDelayFeedback();
+    void requestStopDelayFeedback();
+
+public slots:
+    void dealDelayFeedbackDataReceived(int* m_nbrSCC);
+    void doSingleCountTimeoutFeedback();
+
+
+    // qasky_delayboard
+private:
+    SMC100CC_Serial *smc;
+    QList<QLineEdit*> smcCountChannelList;
+    QList<QLineEdit*> smcTargetCountList;
+    QList<QLineEdit*> smcChannelList;
+    QList<QComboBox*> smcAngleDirList;
+//    QList<int> angleAdjustDirection;
+//    QList<double> smcCountBefore;
+    QList<double> smcCountCurrent;
+    int smcCurrentRound;
+
+signals:
+    void requestAngleFeedback();
+    void requestStopAngleFeedback();
+
+public slots:
+    void dealAngleFeedbackDataReceived(int* m_nbrSCC);
+    void doSmcSingleCountTimeoutFeedback();
+
+    // 通用
+private:
+    int *nbrSCC;
+    QVector<int*> vNbrCoin;
+    bool dataRec = false;
 
 signals:
     void requestData();
     void dataReceived();
     void externalAppStopped();
 
-private:
-    int *nbrSCC;
-    QVector<int*> vNbrCoin;
-    bool dataRec = false;
+public:
+    void customizedSPcommands_start();
+    void customizedSPcommands_stop();
 
 public slots:
     void dealRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
     void dealSingleCountTimeup();
     void dealMainAppClosed();
-
-public:
-    void customizedSPcommands_start();
-    void customizedSPcommands_stop();
 
 private slots:
     void on_checkboxSPcustomize_stateChanged(int checkState);
@@ -99,7 +153,21 @@ private slots:
     void on_buttonDP832UsbClose_released();
     void on_buttonDP832UsbTest_released();
     void on_buttonDP832UsbSendCmd_released();
-
+    void on_buttonSetDelay_released();
+    void on_comboDelayboardSpList_activated(int index);
+    void on_buttonDelayFeedbackAdd_released();
+    void on_buttonDelayFeedbackRemove_released();
+    void on_buttonDelayFeedbackStart_released();
+    void on_buttonSmcSetAngle_released();
+    void on_buttonDelayFeedbackStop_released();
+    void on_comboSmcSpList_activated(int index);
+    void on_buttonAngleFeedbackAdd_released();
+    void on_buttonAngleFeedbackRemove_released();
+    void on_buttonAngleFeedbackStart_released();
+    void on_buttonAngleFeedbackStop_released();
+    void on_buttonSmcOpenPort_released();
+    void on_buttonSmcClosePort_released();
+    void on_buttonSmcHoming_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H

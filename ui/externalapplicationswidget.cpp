@@ -16,6 +16,10 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
 
     SPstatusIndicator = new QSimpleLed(this);
     this->setupSPIndicator();
+
+//    spDevice = new DP832A_Serial(this);
+    spDevice = new SMC100CC_Serial(this);
+
     TSP01statusIndicator = new QSimpleLed(this);
     this->setupTSPIndicator();
     DP832UsbIndicator = new QSimpleLed(this);
@@ -25,6 +29,9 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
 
     tsp = new TSP01(this);
     this->refreshTSPlist();
+
+    delayBoard = new QaskyDelayBoard(this);
+    smc = new SMC100CC_Serial(this);
 
 }
 
@@ -78,3 +85,4 @@ void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkSt
         ui->buttonStop->setEnabled(false);
     }
 }
+

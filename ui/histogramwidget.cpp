@@ -173,7 +173,7 @@ void HistogramWidget::dealRequestHistParam(int m_index,
             nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
             if (nbrCOMdelay[i] > maxNbrCOMdelay)
                 maxNbrCOMdelay = nbrCOMdelay[i];
-            delayInCOM[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay[i]);
+            delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
         }
 
         minDelay = delayCN_2[0];
