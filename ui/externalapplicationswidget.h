@@ -116,7 +116,7 @@ public slots:
 
     // 通用
 private:
-    int *nbrSCC;
+    int *nbrSCC, *nbrSCC_2;
     QVector<int*> vNbrCoin;
     bool dataRec = false;
 

@@ -39,12 +39,12 @@ void Widget::dealHeraldQkdRequestParam()
 
 void Widget::dealHeraldQkdRequestSync()
 {
-    connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,qkdW,&HeraldQkdWidget::dealDataReturned);
+    connect(tdc,&Acqiris_TDC::dataReturned,qkdW,&HeraldQkdWidget::dealDataReturned);
     connect(timerCount,&QTimer::timeout,qkdW,&HeraldQkdWidget::dealTimeOut);
 }
 
 void Widget::dealHeraldQkdRequestStopSync()
 {
-    disconnect(acqThread,&AcquisitionThread::acqThreadBankSwitch,qkdW,&HeraldQkdWidget::dealDataReturned);
+    disconnect(tdc,&Acqiris_TDC::dataReturned,qkdW,&HeraldQkdWidget::dealDataReturned);
     disconnect(timerCount,&QTimer::timeout,qkdW,&HeraldQkdWidget::dealTimeOut);
 }

@@ -50,8 +50,6 @@ SOURCES += \
     ui/widget_QKD.cpp \
     ui/widget_acquisition.cpp \
     ui/widget_coincidence.cpp \
-    ui/widget_config.cpp \
-    ui/widget_delay_test.cpp \
     ui/widget_extApp.cpp \
     ui/widget_heraldQkd.cpp \
     ui/widget_histogram.cpp \

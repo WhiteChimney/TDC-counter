@@ -57,7 +57,13 @@ void Widget::dealExtAppStopped()
 
 void Widget::dealExtAppRequestDelayFeedback()
 {
-    emit sendExtAppDelayFeedbackData(nbrSCC);
+    int nbrSCC_combined[12] = {0};
+    for (int i = 0; i < 6; i++)
+    {
+        nbrSCC_combined[i] = nbrSCC[i];
+        nbrSCC_combined[i+6] = nbrSCC_2[i];
+    }
+    emit sendExtAppDelayFeedbackData(nbrSCC_combined);
     disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
     connect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::doSingleCountTimeoutFeedback);
     connect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
