@@ -427,28 +427,28 @@ void hyperentanglementQKD::computeQKDAcrossDevices_COMPUTE(
                 default:
                     break;
                 }
-                int k = i;
+//                int k = i;
                 i=i+spacing_qkd+1;
 //                qDebug() << channelrecord<<"\n";
                 if (QKDSavable)
                 {
                     if(checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)!=11)
                     {
-                        for(int j = k; j<i; j++)
-                        {
-                            fStream << timeSeqX1[mm].at(j) <<"\t";
-                        }
+//                        for(int j = k; j<i; j++)
+//                        {
+//                            fStream << timeSeqX1[mm].at(j) <<"\t";
+//                        }
                         fStream << (flag_adjvol1 or flag_adjvol2) <<"\t" << flag_adjvol1 << flag_adjvol2 <<"\t" <<channelrecord << "\t"<< checkkey(aliceX, aliceZ,bobX,bobZ,aliceXnum,aliceZnum,bobXnum,bobZnum)
                            <<"\n";
                     }
-                    else
-                    {
-                        for(int j = k; j<i; j++)
-                        {
-                            fStream << timeSeqX1[mm].at(j) <<"\t";
-                        }
-                        fStream << "\n";
-                    }
+//                    else
+//                    {
+//                        for(int j = k; j<i; j++)
+//                        {
+//                            fStream << timeSeqX1[mm].at(j) <<"\t";
+//                        }
+//                        fStream << "\n";
+//                    }
                 }
 //                fStream << "\n";
            }

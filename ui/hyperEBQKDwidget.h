@@ -144,6 +144,9 @@ private:
     int nbraxbx11 = 0, nbraxbx12 = 0, nbraxbx22 = 0, nbraxbx11error = 0, nbraxbx22error = 0;
     int nbrazbz11 = 0, nbrazbz12 = 0, nbrazbz22 = 0, nbrazbz11error = 0, nbrazbz22error = 0;
     int nbrnbrabandon = 0;
+    int nbraxbx11total = 0, nbraxbx22total=0, nbraxbx11errortotal = 0, nbraxbx22errortotal = 0, nbraxbx12total = 0;
+    int nbrazbz11total = 0, nbrazbz12total = 0, nbrazbz22total = 0, nbrazbz11errortotal = 0, nbrazbz22errortotal = 0;
+    int acctimes = 1, acctimeset;
 
     // 统计不同密钥结果
     QList<QVector<int>> timeSeq, timeSeqAcc;       // 用于存放时间序列
@@ -181,12 +184,12 @@ private:
     bool  ModulationDir = false;   //false 减小电压
     bool  ModulationDir_2 = false;   //false 减小电压
 
-    int   steptotal = 0, step1_num = 0, step2_num = 0;
+    int   steptotal = 1, step1_num = 0, step2_num = 0;
     int   nbrinstep1 = 0, nbrinstep2 = 0;
     int  nbrerrorinstep1 = 0, nbrerrorinstep2 = 0;
     double avererrorstep1;
 
-    int   steptotal_2 = 0, step1_num_2 = 0, step2_num_2 = 0;
+    int   steptotal_2 = 1, step1_num_2 = 0, step2_num_2 = 0;
     int   nbrinstep1_2 = 0, nbrinstep2_2 = 0;
     int  nbrerrorinstep1_2 = 0, nbrerrorinstep2_2 = 0;
     double avererrorstep1_2;

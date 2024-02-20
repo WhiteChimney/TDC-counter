@@ -189,7 +189,7 @@ void HistogramWidget::dealRequestHistParam(int m_index,
             nbrCOMdelay_2[i] = floor(delayTotal[i]/timeCOM);
             if (nbrCOMdelay_2[i] > maxNbrCOMdelay)
                 maxNbrCOMdelay = nbrCOMdelay_2[i];
-            delayInCOM_2[i] = int(20*1000.0*delayTotal[i] - timeCOM*nbrCOMdelay_2[i]);
+            delayInCOM_2[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay_2[i]));
         }
 
     //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2

@@ -51,7 +51,7 @@ void hyperentanglementQKD::fetchUiData()
 //    recordTime = ui->textRecordTime->text().toDouble();
     // 电压调节设置
 
-
+    acctimeset = int(ui->accumulatedtime_2->text().toDouble());
     pushUiData();
 }
 
@@ -72,6 +72,7 @@ void hyperentanglementQKD::pushUiData()
      ui->TDC2delay5->setText(QString::number(delayMulti_2[4]/20.0));
      ui->TDC2delay6->setText(QString::number(delayMulti_2[5]/20.0));
      ui->Zperiod->setText(QString::number(zperiod_c/20));
+     ui->accumulatedtime_2->setText(QString::number(acctimeset));
 
 }
 
@@ -275,7 +276,55 @@ void hyperentanglementQKD::dealTimeOut()
     ui->FullSpaceZCount -> display(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12);
     ui->FullSpaceZQBER -> display(1-((double)nbrazbz11+nbrazbz22)/(nbrazbz11+nbrazbz11error+nbrazbz22+nbrazbz22error+nbrazbz12));
     emit senddatapersecond(nbraxbx11, nbraxbx11error, nbraxbx22, nbraxbx22error);
+    nbraxbx11total += nbraxbx11;
+    nbraxbx11errortotal += nbraxbx11error;
+    nbraxbx22total += nbraxbx22;
+    nbraxbx22errortotal += nbraxbx22error;
+    nbraxbx12total += nbraxbx12;
+    nbrazbz11total += nbrazbz11;
+    nbrazbz11errortotal += nbrazbz11error;
+    nbrazbz12total += nbrazbz12;
+    nbrazbz22total += nbrazbz22;
+    nbrazbz22errortotal += nbrazbz22error;
+    acctimes++;
+    if (acctimes > acctimeset)
+    {
+        ui -> accX0011 -> display(nbraxbx11total);
+        ui -> accX2233 -> display(nbraxbx22total);
+        ui -> accX0110 -> display(nbraxbx11errortotal);
+        ui -> accX2332 -> display(nbraxbx22errortotal);
+        ui -> error01 -> display((double)nbraxbx11errortotal/(nbraxbx11total+nbraxbx11errortotal));
+        ui -> error23 -> display((double)nbraxbx22errortotal/(nbraxbx22total+nbraxbx22errortotal));
 
+        ui -> polarization_HH -> display(nbrazbz11errortotal + nbrazbz11total);
+        ui -> polarization_VV -> display(nbrazbz22total + nbrazbz22errortotal);
+        ui -> polarization_HV -> display(nbrazbz12total);
+        ui -> polarization_err -> display((double)nbrazbz12total/(nbrazbz12total+nbrazbz11errortotal + nbrazbz11total+nbrazbz22total + nbrazbz22errortotal));
+
+        ui -> polarization_DD -> display(nbraxbx11errortotal + nbraxbx11total);
+        ui -> polarization_AA -> display(nbraxbx22total + nbraxbx22errortotal);
+        ui -> polarization_DA -> display(nbraxbx12total);
+        ui -> polarization_errAD -> display((double)nbraxbx12total/(nbraxbx12total+nbraxbx11errortotal + nbraxbx11total+nbraxbx22total + nbraxbx22errortotal));
+
+        if(QKDSavable)
+        {
+            fStream2 << nbraxbx11total << "\t" << nbraxbx11errortotal << "\t" << nbraxbx22total << "\t" << nbraxbx22errortotal << "\t" << nbraxbx12total << "\t"
+                        <<nbrazbz11total << "\t" << nbrazbz11errortotal << "\t" << nbrazbz22total << "\t" << nbrazbz22errortotal << "\t" << nbrazbz12total << "\n";
+        }
+        nbraxbx11total =0;
+        nbraxbx11errortotal = 0;
+        nbraxbx22total = 0;
+        nbraxbx22errortotal = 0;
+        nbraxbx12total = 0;
+
+        nbrazbz11total = 0;
+        nbrazbz11errortotal = 0;
+        nbrazbz22errortotal = 0;
+        nbrazbz22total = 0;
+        nbrazbz12total = 0;
+
+        acctimes = 1;
+    }
     memset(&nbraxbx11,0,sizeof(nbraxbx11));
     memset(&nbraxbx11error,0,sizeof(nbraxbx11error));
     memset(&nbraxbx22,0,sizeof(nbraxbx22));
@@ -330,14 +379,15 @@ void hyperentanglementQKD::on_buttonStartRecord_released()
     fStream << tr("有效计数") << "\n";
     qDebug() << "创建文件:"<<fullFileName;;
 
-    QString fullFileName2 = pathName + "/" + "Cumulativedata.txt";
+    QString fullFileName2 = pathName + "/" + fileName + "_Cumulativedata.txt";
     fQKD2->setFileName(fullFileName2);
     fStream2.setDevice(fQKD2);
     fQKD2->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream2 << tr("累积数据") << "\n";
-//    createTempDataFile();
+    fStream2 << "AXBX11" << "\tAXBX11error" <<"\tAXBX22" << "\tAXBX22error" << "\tAXBX12" << "\tAZBZ11" <<
+                "\tAZBZ11error" <<"\tAZBZ22" << "\tAZBZ22error" << "\tAZBZ12" <<"\n";
+ //   createTempDataFile();
 //    emit QKDSaveDataNeedsSync(index);
-
 }
 
 /*void hyperentanglementQKD::dealSaveDataTimeOut()
@@ -634,15 +684,16 @@ void hyperentanglementQKD::dealsenddatapersecond(int m_x11, int m_x11e, int m_x2
     nbraxbx22_calc += m_x22;
     nbraxbx22error_calc += m_x22e;
     accumnum++;
+    qDebug() << accumnum <<"\n";
     if (accumnum > accumtimes)
     {
         adjvol(steptotal, nbraxbx11_calc, nbraxbx11error_calc, false);
         adjvol(steptotal_2, nbraxbx22_calc, nbraxbx22error_calc, true);
-        if (QKDSavable)
-        {
-            fStream2 << nbraxbx11_calc <<"\t" << nbraxbx11error_calc <<"\t" << nbraxbx22_calc <<"\t" << nbraxbx22error_calc <<"\n" ;
-        }
-
+//        if (QKDSavable)
+//        {
+//            fStream2 << nbraxbx11_calc <<"\t" << nbraxbx11error_calc <<"\t" << nbraxbx22_calc <<"\t" << nbraxbx22error_calc <<"\n" ;
+//        }
+//        qDebug() << accumnum <<"\n";
         nbraxbx11_calc = 0;
         nbraxbx11error_calc = 0;
         nbraxbx22_calc = 0;
