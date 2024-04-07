@@ -2,6 +2,7 @@
 #define WIDGET_H
 
 #include <QWidget>
+#include <QSpinBox>
 
 #include "projectInfo.h"
 #include "stdafx.h"
@@ -121,6 +122,18 @@ private slots:
 //    void on_buttonDelayStop_released();
 
     void on_buttonQkd_released();
+
+    void on_spinBoxCn1_valueChanged(int arg1);
+
+    void on_spinBoxCn2_valueChanged(int arg1);
+
+    void on_spinBoxCn3_valueChanged(int arg1);
+
+    void on_spinBoxCn4_valueChanged(int arg1);
+
+    void on_spinBoxCn5_valueChanged(int arg1);
+
+    void on_spinBoxCn6_valueChanged(int arg1);
 
 private:
     Ui::Widget *ui;

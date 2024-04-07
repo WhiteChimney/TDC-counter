@@ -43,3 +43,40 @@ int* Widget::getSingleCountPtr()
 {
     return nbrSCC;
 }
+
+void Widget::on_spinBoxCn1_valueChanged(int arg1)
+{
+    ui->textDelayCN1->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn2_valueChanged(int arg1)
+{
+    ui->textDelayCN2->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn3_valueChanged(int arg1)
+{
+    ui->textDelayCN3->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn4_valueChanged(int arg1)
+{
+    ui->textDelayCN4->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn5_valueChanged(int arg1)
+{
+    ui->textDelayCN5->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn6_valueChanged(int arg1)
+{
+    ui->textDelayCN6->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+

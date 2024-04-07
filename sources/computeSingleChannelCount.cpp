@@ -40,6 +40,9 @@ void computeSingleChannelCount
 
 //    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
 
+    double gatetime = 1.0;
+    double period = 1000.0/99.73;
+
     long nbrSamples = dataDescPtr->nbrSamples;
     int nCOM = 0;
     for (long n = 0 ; n < nbrSamples ; ++n)
@@ -57,8 +60,12 @@ void computeSingleChannelCount
         }
         else
         {
+            if (fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, period) > gatetime)
+                continue;
             if (nCOM + nbrCOMdelay[channel-1] < countEvents)
-                nbrSCC[channel-1]++;
+            {
+                    nbrSCC[channel-1]++;
+            }
             else
             {
                 if (nCOM + nbrCOMdelay[channel-1] == countEvents
