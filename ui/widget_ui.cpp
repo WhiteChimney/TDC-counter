@@ -43,73 +43,73 @@ void Widget::on_buttonExit_released()
 void Widget::on_checkBoxEnableGating1_stateChanged(int arg1)
 {
     ui->textGating1->setEnabled(arg1);
-    fetchUiData();
+    enableGating[0] = arg1;
 }
 
 void Widget::on_checkBoxEnableGating2_stateChanged(int arg1)
 {
     ui->textGating2->setEnabled(arg1);
-    fetchUiData();
+    enableGating[1] = arg1;
 }
 
 void Widget::on_checkBoxEnableGating3_stateChanged(int arg1)
 {
     ui->textGating3->setEnabled(arg1);
-    fetchUiData();
+    enableGating[2] = arg1;
 }
 
 void Widget::on_checkBoxEnableGating4_stateChanged(int arg1)
 {
     ui->textGating4->setEnabled(arg1);
-    fetchUiData();
+    enableGating[3] = arg1;
 }
 
 void Widget::on_checkBoxEnableGating5_stateChanged(int arg1)
 {
     ui->textGating5->setEnabled(arg1);
-    fetchUiData();
+    enableGating[4] = arg1;
 }
 
 void Widget::on_checkBoxEnableGating6_stateChanged(int arg1)
 {
     ui->textGating6->setEnabled(arg1);
-    fetchUiData();
+    enableGating[5] = arg1;
 }
 
 void Widget::on_spinBoxCn1_valueChanged(int arg1)
 {
     ui->textDelayCN1->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[0] = arg1/20000.0;
 }
 
 void Widget::on_spinBoxCn2_valueChanged(int arg1)
 {
     ui->textDelayCN2->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[1] = arg1/20000.0;
 }
 
 void Widget::on_spinBoxCn3_valueChanged(int arg1)
 {
     ui->textDelayCN3->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[2] = arg1/20000.0;
 }
 
 void Widget::on_spinBoxCn4_valueChanged(int arg1)
 {
     ui->textDelayCN4->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[3] = arg1/20000.0;
 }
 
 void Widget::on_spinBoxCn5_valueChanged(int arg1)
 {
     ui->textDelayCN5->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[4] = arg1/20000.0;
 }
 
 void Widget::on_spinBoxCn6_valueChanged(int arg1)
 {
     ui->textDelayCN6->setText(QString::number(arg1/20000.0));
-    fetchUiData();
+    delayCN[5] = arg1/20000.0;
 }
 
 void Widget::fetchUiData()
@@ -164,17 +164,16 @@ void Widget::fetchUiData()
     {
         for (int k = 0; k < 6; k++)
             delayCN[k] = delayCN[k] - minDelay;
-        pushUiData();
     }
 
     // 单道计数设置
     accumulateTime = ui->accumulateTimeText->text().toDouble();
-    enableGating[0] = ui->checkBoxEnableGating1->isEnabled();
-    enableGating[1] = ui->checkBoxEnableGating2->isEnabled();
-    enableGating[2] = ui->checkBoxEnableGating3->isEnabled();
-    enableGating[3] = ui->checkBoxEnableGating4->isEnabled();
-    enableGating[4] = ui->checkBoxEnableGating5->isEnabled();
-    enableGating[5] = ui->checkBoxEnableGating6->isEnabled();
+    enableGating[0] = ui->textGating1->isEnabled();
+    enableGating[1] = ui->textGating2->isEnabled();
+    enableGating[2] = ui->textGating3->isEnabled();
+    enableGating[3] = ui->textGating4->isEnabled();
+    enableGating[4] = ui->textGating5->isEnabled();
+    enableGating[5] = ui->textGating6->isEnabled();
     gatingTime[0] = ui->textGating1->text().toDouble();
     gatingTime[1] = ui->textGating2->text().toDouble();
     gatingTime[2] = ui->textGating3->text().toDouble();
@@ -188,6 +187,8 @@ void Widget::fetchUiData()
     metaData = ui->textMetaData->toPlainText();
     enableRecordTime = ui->checkboxRecordTime->isChecked();
     recordTime = ui->textRecordTime->text().toDouble();
+
+    pushUiData();
 }
 
 void Widget::pushUiData()
@@ -232,6 +233,12 @@ void Widget::pushUiData()
     ui->textGating4->setEnabled(enableGating[3]);
     ui->textGating5->setEnabled(enableGating[4]);
     ui->textGating6->setEnabled(enableGating[5]);
+    ui->checkBoxEnableGating1->setChecked(enableGating[0]);
+    ui->checkBoxEnableGating2->setChecked(enableGating[1]);
+    ui->checkBoxEnableGating3->setChecked(enableGating[2]);
+    ui->checkBoxEnableGating4->setChecked(enableGating[3]);
+    ui->checkBoxEnableGating5->setChecked(enableGating[4]);
+    ui->checkBoxEnableGating6->setChecked(enableGating[5]);
     ui->textGating1->setText(QString::number(gatingTime[0]));
     ui->textGating2->setText(QString::number(gatingTime[1]));
     ui->textGating3->setText(QString::number(gatingTime[2]));
@@ -344,4 +351,34 @@ void Widget::on_buttonCheckUpdate_released()
 {
     QUrl myUrl = QUrl(PROJECT_RELEASE_PAGE);
     QDesktopServices::openUrl(myUrl);
+}
+
+void Widget::on_textDelayCN1_editingFinished()
+{
+    fetchUiData();
+}
+
+void Widget::on_textDelayCN2_editingFinished()
+{
+    fetchUiData();
+}
+
+void Widget::on_textDelayCN3_editingFinished()
+{
+    fetchUiData();
+}
+
+void Widget::on_textDelayCN4_editingFinished()
+{
+    fetchUiData();
+}
+
+void Widget::on_textDelayCN5_editingFinished()
+{
+    fetchUiData();
+}
+
+void Widget::on_textDelayCN6_editingFinished()
+{
+    fetchUiData();
 }

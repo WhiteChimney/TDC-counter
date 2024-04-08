@@ -147,6 +147,18 @@ private slots:
 
     void on_checkBoxEnableGating6_stateChanged(int arg1);
 
+    void on_textDelayCN1_editingFinished();
+
+    void on_textDelayCN2_editingFinished();
+
+    void on_textDelayCN3_editingFinished();
+
+    void on_textDelayCN4_editingFinished();
+
+    void on_textDelayCN5_editingFinished();
+
+    void on_textDelayCN6_editingFinished();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
