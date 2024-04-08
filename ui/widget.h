@@ -135,6 +135,18 @@ private slots:
 
     void on_spinBoxCn6_valueChanged(int arg1);
 
+    void on_checkBoxEnableGating1_stateChanged(int arg1);
+
+    void on_checkBoxEnableGating2_stateChanged(int arg1);
+
+    void on_checkBoxEnableGating3_stateChanged(int arg1);
+
+    void on_checkBoxEnableGating4_stateChanged(int arg1);
+
+    void on_checkBoxEnableGating5_stateChanged(int arg1);
+
+    void on_checkBoxEnableGating6_stateChanged(int arg1);
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）
@@ -192,6 +204,9 @@ private:
     int *nbrCoinPtr = new int();
     int *nbrAccCoinPtr = new int();
     int nbrCOMbuffer = 1;
+    bool enableGating[6] = {false};
+    double gatingTime[6] = {1.0};
+
 public:
     int* getSingleCountPtr();
 //    void updateDataPtrList(AqT3DataDescriptor*);

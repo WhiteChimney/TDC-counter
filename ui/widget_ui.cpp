@@ -40,6 +40,78 @@ void Widget::on_buttonExit_released()
     this->close();
 }
 
+void Widget::on_checkBoxEnableGating1_stateChanged(int arg1)
+{
+    ui->textGating1->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_checkBoxEnableGating2_stateChanged(int arg1)
+{
+    ui->textGating2->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_checkBoxEnableGating3_stateChanged(int arg1)
+{
+    ui->textGating3->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_checkBoxEnableGating4_stateChanged(int arg1)
+{
+    ui->textGating4->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_checkBoxEnableGating5_stateChanged(int arg1)
+{
+    ui->textGating5->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_checkBoxEnableGating6_stateChanged(int arg1)
+{
+    ui->textGating6->setEnabled(arg1);
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn1_valueChanged(int arg1)
+{
+    ui->textDelayCN1->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn2_valueChanged(int arg1)
+{
+    ui->textDelayCN2->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn3_valueChanged(int arg1)
+{
+    ui->textDelayCN3->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn4_valueChanged(int arg1)
+{
+    ui->textDelayCN4->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn5_valueChanged(int arg1)
+{
+    ui->textDelayCN5->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
+void Widget::on_spinBoxCn6_valueChanged(int arg1)
+{
+    ui->textDelayCN6->setText(QString::number(arg1/20000.0));
+    fetchUiData();
+}
+
 void Widget::fetchUiData()
 {
     // TDC 设置
@@ -73,12 +145,12 @@ void Widget::fetchUiData()
     slope[4] = ui->slopeCN4->currentIndex();
     slope[5] = ui->slopeCN5->currentIndex();
     slope[6] = ui->slopeCN6->currentIndex();
-    delayCN[0] = ui->textDelayCN1->text().toDouble();
-    delayCN[1] = ui->textDelayCN2->text().toDouble();
-    delayCN[2] = ui->textDelayCN3->text().toDouble();
-    delayCN[3] = ui->textDelayCN4->text().toDouble();
-    delayCN[4] = ui->textDelayCN5->text().toDouble();
-    delayCN[5] = ui->textDelayCN6->text().toDouble();
+    delayCN[0] = int(20*1000.0*ui->textDelayCN1->text().toDouble())/20000.0;
+    delayCN[1] = int(20*1000.0*ui->textDelayCN2->text().toDouble())/20000.0;
+    delayCN[2] = int(20*1000.0*ui->textDelayCN3->text().toDouble())/20000.0;
+    delayCN[3] = int(20*1000.0*ui->textDelayCN4->text().toDouble())/20000.0;
+    delayCN[4] = int(20*1000.0*ui->textDelayCN5->text().toDouble())/20000.0;
+    delayCN[5] = int(20*1000.0*ui->textDelayCN6->text().toDouble())/20000.0;
     int minDelay = delayCN[0], maxDelay = delayCN[0];
     for (int k = 1; k < 6; k++)
     {
@@ -87,14 +159,28 @@ void Widget::fetchUiData()
         if (delayCN[k] > maxDelay)
             maxDelay = delayCN[k];
     }
-    for (int k = 0; k < 6; k++)
-    {
-        delayCN[k] = delayCN[k] - minDelay;
-    }
     delayCN[6] = maxDelay - minDelay;
+    if (minDelay < 0)
+    {
+        for (int k = 0; k < 6; k++)
+            delayCN[k] = delayCN[k] - minDelay;
+        pushUiData();
+    }
 
     // 单道计数设置
     accumulateTime = ui->accumulateTimeText->text().toDouble();
+    enableGating[0] = ui->checkBoxEnableGating1->isEnabled();
+    enableGating[1] = ui->checkBoxEnableGating2->isEnabled();
+    enableGating[2] = ui->checkBoxEnableGating3->isEnabled();
+    enableGating[3] = ui->checkBoxEnableGating4->isEnabled();
+    enableGating[4] = ui->checkBoxEnableGating5->isEnabled();
+    enableGating[5] = ui->checkBoxEnableGating6->isEnabled();
+    gatingTime[0] = ui->textGating1->text().toDouble();
+    gatingTime[1] = ui->textGating2->text().toDouble();
+    gatingTime[2] = ui->textGating3->text().toDouble();
+    gatingTime[3] = ui->textGating4->text().toDouble();
+    gatingTime[4] = ui->textGating5->text().toDouble();
+    gatingTime[5] = ui->textGating6->text().toDouble();
 
     // 数据保存设置
     pathName = ui->textDataDirectory->currentText();
@@ -140,6 +226,24 @@ void Widget::pushUiData()
 
     // 单道计数设置
     ui->accumulateTimeText->setText(QString::number(accumulateTime));
+    ui->textGating1->setEnabled(enableGating[0]);
+    ui->textGating2->setEnabled(enableGating[1]);
+    ui->textGating3->setEnabled(enableGating[2]);
+    ui->textGating4->setEnabled(enableGating[3]);
+    ui->textGating5->setEnabled(enableGating[4]);
+    ui->textGating6->setEnabled(enableGating[5]);
+    ui->textGating1->setText(QString::number(gatingTime[0]));
+    ui->textGating2->setText(QString::number(gatingTime[1]));
+    ui->textGating3->setText(QString::number(gatingTime[2]));
+    ui->textGating4->setText(QString::number(gatingTime[3]));
+    ui->textGating5->setText(QString::number(gatingTime[4]));
+    ui->textGating6->setText(QString::number(gatingTime[5]));
+    ui->spinBoxCn1->setValue(int(20000.0*ui->textDelayCN1->text().toDouble()));
+    ui->spinBoxCn2->setValue(int(20000.0*ui->textDelayCN2->text().toDouble()));
+    ui->spinBoxCn3->setValue(int(20000.0*ui->textDelayCN3->text().toDouble()));
+    ui->spinBoxCn4->setValue(int(20000.0*ui->textDelayCN4->text().toDouble()));
+    ui->spinBoxCn5->setValue(int(20000.0*ui->textDelayCN5->text().toDouble()));
+    ui->spinBoxCn6->setValue(int(20000.0*ui->textDelayCN6->text().toDouble()));
 
     // 数据保存设置
     ui->textDataDirectory->setCurrentText(pathName);
@@ -172,6 +276,11 @@ void Widget::saveToIni()
 
     //    configure single count
     configIni->setValue("计数/accumulateTime",accumulateTime);
+    for(int i = 0; i < 6; i++)
+    {
+        configIni->setValue("计数/enableGating"+QString::number(i),enableGating[i]);
+        configIni->setValue("计数/gatingTime"+QString::number(i),gatingTime[i]);
+    }
 
     //    configure data saving
     configIni->setValue("保存数据/pathName",pathName);
@@ -206,6 +315,11 @@ void Widget::loadFromIni()
 
 //    configure single count
     accumulateTime = configIni->value("计数/accumulateTime").toDouble();
+    for(int i = 0; i < 6; i++)
+    {
+        enableGating[i] = configIni->value("计数/enableGating"+QString::number(i)).toBool();
+        gatingTime[i] = configIni->value("计数/gatingTime"+QString::number(i)).toDouble();
+    }
 
 //    configure data saving
     pathName = configIni->value("保存数据/pathName").toString();
