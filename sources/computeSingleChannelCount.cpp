@@ -27,7 +27,8 @@
 void computeSingleChannelCount
     (int* nbrSCC, int* nbrSCCfuture,
      AqT3DataDescriptor* dataDescPtr,
-     double *delayCN, int freqCOM, int countEvents)
+     double *delayCN, double freqCOM, int countEvents,
+     bool *enableGating, double *gatingTime)
 {
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     int nbrCOMdelay[6] = {0};
@@ -37,11 +38,6 @@ void computeSingleChannelCount
         nbrCOMdelay[i] = floor(delayCN[i]/timeCOM);
         delayInCOM[i] = int(20*1000.0*delayCN[i] - timeCOM*nbrCOMdelay[i]);
     }
-
-//    AqT3DataDescriptor *dataDescPtr = dataPtrList.last();
-
-    double gatetime = 1.0;
-    double period = 1000.0/99.73;
 
     long nbrSamples = dataDescPtr->nbrSamples;
     int nCOM = 0;
@@ -60,8 +56,11 @@ void computeSingleChannelCount
         }
         else
         {
-            if (fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, period) > gatetime)
-                continue;
+            if (enableGating[channel-1])     // 后处理门控模式
+            {
+                if (fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, 1000.0*timeCOM) > gatingTime[channel-1])
+                    continue;
+            }
             if (nCOM + nbrCOMdelay[channel-1] < countEvents)
             {
                     nbrSCC[channel-1]++;
