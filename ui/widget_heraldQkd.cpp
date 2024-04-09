@@ -19,6 +19,8 @@ void Widget::on_buttonQkd_released()
         connect(this,&Widget::qkdParamReady,qkdW,&HeraldQkdWidget::dealQkdParamReceived);
         connect(qkdW,&HeraldQkdWidget::heraldQkdRequestSync,this,&Widget::dealHeraldQkdRequestSync);
         connect(qkdW,&HeraldQkdWidget::heraldQkdRequestStopSync,this,&Widget::dealHeraldQkdRequestStopSync);
+        connect(qkdW,&HeraldQkdWidget::requestErrorFeedback,extAppW,&ExternalApplicationsWidget::dealHeraldQkdErrorFeedback);
+        connect(qkdW,&HeraldQkdWidget::requestStopErrorFeedback,extAppW,&ExternalApplicationsWidget::dealHeraldQkdStopErrorFeedback);
 
         qkdW->show();
         qkdWidgetLaunched = true;

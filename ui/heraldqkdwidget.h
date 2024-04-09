@@ -25,6 +25,12 @@ private slots:
     void on_buttonStop_released();
     void on_buttonReturn_released();
 
+    void on_checkBoxErrorFeedback_stateChanged(int arg1);
+
+    void on_radioButtonErrorSame_clicked();
+
+    void on_radioButtonErrorOppo_clicked();
+
 private:
     Ui::HeraldQkdWidget *ui;
 
@@ -56,6 +62,9 @@ signals:
     void heraldQkdRequestParam();
     void heraldQkdRequestSync();
     void heraldQkdRequestStopSync();
+    void requestErrorFeedback(long long *errorCountPtr[2],
+                              long long *correctCountPtr[2]);
+    void requestStopErrorFeedback();
 
 public slots:
     void dealQkdParamReceived(double *m_delayCN, double m_freqCOM);
@@ -68,6 +77,7 @@ public:
     void pushUiData();
     void saveToIni();
     void loadFromIni();
+    void dealErrorFeedback();
 };
 
 #endif // HERALDQKDWIDGET_H

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>474</width>
-    <height>503</height>
+    <height>637</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -572,7 +572,14 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_6">
        <item>
-        <layout class="QFormLayout" name="formLayout_3">
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_28">
+           <property name="text">
+            <string>通道</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="0">
           <widget class="QLabel" name="label_31">
            <property name="text">
@@ -589,13 +596,6 @@
            </item>
           </widget>
          </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_28">
-           <property name="text">
-            <string>通道</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="0">
           <widget class="QLabel" name="label_29">
            <property name="text">
@@ -610,7 +610,14 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0" colspan="2">
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="textSmcAddr">
+           <property name="text">
+            <string>1</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2" rowspan="3">
           <layout class="QGridLayout" name="gridLayout_6">
            <item row="1" column="0">
             <widget class="QPushButton" name="buttonSmcOpenPort">
@@ -642,13 +649,6 @@
            </item>
           </layout>
          </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="textSmcAddr">
-           <property name="text">
-            <string>1</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
        <item>
@@ -657,10 +657,36 @@
           <string>根据单道计数进行泵浦功率反馈</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="2">
-           <widget class="QLabel" name="label_32">
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="textAngleAdj">
             <property name="text">
-             <string>偏离10%时角度调整量</string>
+             <string>1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="buttonAngleFeedbackStop">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>结束</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="textAngleAverageRounds">
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="3">
+           <widget class="QLabel" name="label_36">
+            <property name="text">
+             <string>注：每隔 n 次单道计数刷新后进行单道计数的均值计算，
+根据单道计数的变化方向调整一定的角度量。 
+角度量的最小值为 0.001 度</string>
             </property>
            </widget>
           </item>
@@ -671,10 +697,10 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="1">
-           <widget class="QPushButton" name="buttonAngleFeedbackAdd">
+          <item row="3" column="1">
+           <widget class="QPushButton" name="buttonAngleFeedbackStart">
             <property name="text">
-             <string>添加</string>
+             <string>开始</string>
             </property>
            </widget>
           </item>
@@ -714,27 +740,6 @@
             </item>
            </layout>
           </item>
-          <item row="3" column="1">
-           <widget class="QPushButton" name="buttonAngleFeedbackStart">
-            <property name="text">
-             <string>开始</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="textAngleAdj">
-            <property name="text">
-             <string>1</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="textAngleAverageRounds">
-            <property name="text">
-             <string>10</string>
-            </property>
-           </widget>
-          </item>
           <item row="2" column="2">
            <widget class="QPushButton" name="buttonAngleFeedbackRemove">
             <property name="text">
@@ -742,22 +747,68 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
-           <widget class="QPushButton" name="buttonAngleFeedbackStop">
-            <property name="enabled">
-             <bool>false</bool>
-            </property>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="buttonAngleFeedbackAdd">
             <property name="text">
-             <string>结束</string>
+             <string>添加</string>
             </property>
            </widget>
           </item>
-          <item row="4" column="0" colspan="3">
-           <widget class="QLabel" name="label_36">
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_32">
             <property name="text">
-             <string>注：每隔 n 次单道计数刷新后进行单道计数的均值计算，
-根据单道计数的变化方向调整一定的角度量。 
-角度量的最小值为 0.001 度</string>
+             <string>偏离10%时角度调整量</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string>根据标记 QKD 面板计数进行误码反馈</string>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_38">
+            <property name="text">
+             <string>波片通道号</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinBoxErrorFeedbackChannel">
+            <property name="value">
+             <number>3</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_39">
+            <property name="text">
+             <string>角度调整间隔轮数</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_40">
+            <property name="text">
+             <string>角度调整量</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="textErrorFeedbackRounds">
+            <property name="text">
+             <string>10</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="textErrorFeedbackAngle">
+            <property name="text">
+             <string>1</string>
             </property>
            </widget>
           </item>

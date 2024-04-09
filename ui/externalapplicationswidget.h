@@ -106,6 +106,12 @@ private:
     QList<double> smcCountCurrent;
     int smcCurrentRound;
 
+    bool enableErrorFeedback = false;
+    long long *errorCountPtr[2], *correctCountPtr[2];
+    double errorRateCurrent, errorRateBefore;
+    int errorCurrentRound;
+    int errorFeedbackDirection;
+
 signals:
     void requestAngleFeedback();
     void requestStopAngleFeedback();
@@ -113,6 +119,9 @@ signals:
 public slots:
     void dealAngleFeedbackDataReceived(int* m_nbrSCC);
     void doSmcSingleCountTimeoutFeedback();
+    void dealHeraldQkdErrorFeedback(long long *m_errorCountPtr[2],
+                                    long long *m_correctCountPtr[2]);
+    void dealHeraldQkdStopErrorFeedback();
 
     // 通用
 private:

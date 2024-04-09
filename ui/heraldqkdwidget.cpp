@@ -157,3 +157,48 @@ void HeraldQkdWidget::dealTimeOut()
 
     ui->lcdTimeElapsed->display(currentSeconds);
 }
+
+void HeraldQkdWidget::on_checkBoxErrorFeedback_stateChanged(int enableFeedback)
+{
+    ui->radioButtonErrorSame->setEnabled(enableFeedback);
+    ui->radioButtonErrorOppo->setEnabled(enableFeedback);
+
+    dealErrorFeedback();
+}
+
+void HeraldQkdWidget::dealErrorFeedback()
+{
+    if (ui->checkBoxErrorFeedback->isChecked())
+    {
+        long long *errorCountPtr[2], *correctCountPtr[2];
+        if (ui->radioButtonErrorSame->isChecked())
+        {
+            errorCountPtr[0] = vCounts[1];
+            errorCountPtr[1] = vCounts[1] + 1;
+            correctCountPtr[0] = vCounts[1] + 2;
+            correctCountPtr[1] = vCounts[1] + 3;
+        }
+        else
+        {
+            errorCountPtr[0] = vCounts[1] + 2;
+            errorCountPtr[1] = vCounts[1] + 3;
+            correctCountPtr[0] = vCounts[1];
+            correctCountPtr[1] = vCounts[1] + 1;
+        }
+        emit requestErrorFeedback(errorCountPtr,correctCountPtr);
+    }
+    else
+        emit requestStopErrorFeedback();
+}
+
+void HeraldQkdWidget::on_radioButtonErrorSame_clicked()
+{
+    dealErrorFeedback();
+}
+
+
+void HeraldQkdWidget::on_radioButtonErrorOppo_clicked()
+{
+    dealErrorFeedback();
+}
+
