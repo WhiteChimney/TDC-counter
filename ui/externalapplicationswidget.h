@@ -111,6 +111,8 @@ private:
     double errorRateCurrent, errorRateBefore;
     int errorCurrentRound;
     int errorFeedbackDirection;
+    double correctCountCurrent, correctCountBefore;
+    double errorCountCurrent, errorCountBefore;
 
 signals:
     void requestAngleFeedback();

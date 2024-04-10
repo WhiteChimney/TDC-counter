@@ -124,9 +124,11 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
     if (enableErrorFeedback)
     {
         errorCurrentRound++;
-        double errorRateNow = double(*(correctCountPtr[0]) + *(correctCountPtr[0]))
-                / (*(errorCountPtr[0]) + *(errorCountPtr[0]));
-        errorRateNow = 1.0/(1+errorRateNow);
+        correctCountCurrent = *(correctCountPtr[0]) + *(correctCountPtr[0]);
+        errorCountCurrent = *(errorCountPtr[0]) + *(errorCountPtr[0]);
+        double correctCountNow = correctCountCurrent - correctCountBefore;
+        double errorCountNow = errorCountCurrent - errorCountBefore;
+        double errorRateNow = 1.0 / (1 + correctCountNow / errorCountNow);
         errorRateCurrent = (1-1.0/errorCurrentRound)*errorRateCurrent
                 + errorRateNow/errorCurrentRound;
         if (errorCurrentRound >= ui->textErrorFeedbackRounds->text().toInt())
@@ -139,6 +141,8 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
             errorRateCurrent = 0.0;
             errorCurrentRound = 0;
         }
+        correctCountBefore = correctCountCurrent;
+        errorCountBefore = errorCountCurrent;
     }
 }
 
@@ -158,6 +162,10 @@ void ExternalApplicationsWidget::dealHeraldQkdErrorFeedback(long long *m_errorCo
     correctCountPtr[0] = m_correctCountPtr[0];
     correctCountPtr[1] = m_correctCountPtr[1];
     errorCurrentRound = 0;
+    errorCountCurrent = 0.0;
+    correctCountCurrent = 0.0;
+    errorCountBefore = 0.0;
+    correctCountBefore = 0.0;
     errorRateCurrent = 0.0;
     errorRateBefore = 0.0;
     errorFeedbackDirection = 1;
