@@ -273,6 +273,7 @@ void Widget::saveToIni()
     configIni->setValue("TDC配置/freqCOM",freqCOM);
     configIni->setValue("TDC配置/enableCountEvents",enableCountEvents);
     configIni->setValue("TDC配置/countEvents",countEvents);
+    configIni->setValue("TDC配置/freqSignal",ui->textFreqSignal->text().toDouble());
     for(int i = 0; i < 7; i++)
     {
         configIni->setValue("TDC配置/channelConfig"+QString::number(i),channelConfig[i]);
@@ -312,6 +313,7 @@ void Widget::loadFromIni()
     freqCOM = configIni->value("TDC配置/freqCOM").toDouble();
     enableCountEvents = configIni->value("TDC配置/enableCountEvents").toBool();
     countEvents = configIni->value("TDC配置/countEvents").toInt();
+    ui->textFreqSignal->setText(QString::number(configIni->value("TDC配置/freqSignal").toDouble()));
     for(int i = 0; i < 7; i++)
     {
         channelConfig[i] = configIni->value("TDC配置/channelConfig"+QString::number(i)).toBool();

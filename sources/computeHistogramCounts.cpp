@@ -38,7 +38,7 @@ void countSingle(AqT3DataDescriptor* dataDescPtr,
         }
         else if (channel == 0 or channel == 7)
         {
-            for (int i = 0; i < timeSeq1.size(); i++)
+            for (int i = 0; i < timeSeq1[*COM_HEAD].size(); i++)
             {
                 int index = int((timeSeq1[*COM_HEAD][i]-timeStart)/binWidth);
                 if (index >= 0 and index < nbrIntervals)

@@ -39,7 +39,7 @@ void computeSingleChannelCount
         (int* nbrSCC, int* nbrSCCfuture,
          AqT3DataDescriptor* dataDescPtr,
          double *delayCN,
-         double freqCOM, int countEvents,
+         double freqCOM, int countEvents, double freqSignal,
          bool *enableGating, double *gatingTime);
 
 void computeCoincidenceCount

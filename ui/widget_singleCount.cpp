@@ -18,7 +18,9 @@ void Widget::on_buttonStartCount_released()
 
 void Widget::dealAcqThreadBankSwitchSCC(AqT3DataDescriptor* dataDescPtr)
 {
-    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataDescPtr,delayCN,freqCOM,countEvents,enableGating,gatingTime);
+    computeSingleChannelCount(nbrSCC,nbrSCCfuture,dataDescPtr,delayCN,
+                              freqCOM,countEvents,1e6*ui->textFreqSignal->text().toDouble(),
+                              enableGating,gatingTime);
 }
 
 void Widget::dealCountTimeOut()

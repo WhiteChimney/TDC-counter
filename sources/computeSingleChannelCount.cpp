@@ -1,5 +1,6 @@
 #include <QVector>
 #include <QtMath>
+#include <QDebug>
 #include "AcqirisImport.h"
 #include "AcqirisT3Import.h"
 
@@ -27,17 +28,19 @@
 void computeSingleChannelCount
     (int* nbrSCC, int* nbrSCCfuture,
      AqT3DataDescriptor* dataDescPtr,
-     double *delayCN, double freqCOM, int countEvents,
+     double *delayCN, double freqCOM, int countEvents, double freqSignal,
      bool *enableGating, double *gatingTime)
 {
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
+    double period = 1e9/freqSignal;               // 单位为 ns
     int nbrCOMdelay[6] = {0};
     int delayInCOM[6] = {0};                  // 以 TDC 最小时间为单位，50 ps
     for (int i = 0; i < 6; i++)
     {
         nbrCOMdelay[i] = floor(delayCN[i]/timeCOM);
-        delayInCOM[i] = int(20*1000.0*delayCN[i] - timeCOM*nbrCOMdelay[i]);
+        delayInCOM[i] = int(20*1000.0*(delayCN[i] - timeCOM*nbrCOMdelay[i]));
     }
+
 
     long nbrSamples = dataDescPtr->nbrSamples;
     int nCOM = 0;
@@ -58,7 +61,19 @@ void computeSingleChannelCount
         {
             if (enableGating[channel-1])     // 后处理门控模式
             {
-                if (fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, 1000.0*timeCOM) > gatingTime[channel-1])
+                // if (channel == 3)
+                // {
+                //     static int ii = 0;
+                //     if (ii++ % 1000 == 0)
+                //     {
+                //         qDebug() << "ii = " << ii
+                //                  << TimeOfFlight
+                //                  << abs(TimeOfFlight - delayInCOM[channel-1])/20.0
+                //                  << fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, period);
+                //     }
+                // }
+                double timeDiff = fmod((TimeOfFlight - delayInCOM[channel-1])/20.0 + 1000*timeCOM, period);
+                if (abs(timeDiff - period) > gatingTime[channel-1])
                     continue;
             }
             if (nCOM + nbrCOMdelay[channel-1] < countEvents)
