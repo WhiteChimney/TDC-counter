@@ -61,24 +61,13 @@ void computeSingleChannelCount
         {
             if (enableGating[channel-1])     // 后处理门控模式
             {
-                // if (channel == 3)
-                // {
-                //     static int ii = 0;
-                //     if (ii++ % 1000 == 0)
-                //     {
-                //         qDebug() << "ii = " << ii
-                //                  << TimeOfFlight
-                //                  << abs(TimeOfFlight - delayInCOM[channel-1])/20.0
-                //                  << fmod(abs(TimeOfFlight - delayInCOM[channel-1])/20.0, period);
-                //     }
-                // }
                 double timeDiff = fmod((TimeOfFlight - delayInCOM[channel-1])/20.0 + 1000*timeCOM, period);
                 if (abs(timeDiff - period) > gatingTime[channel-1])
                     continue;
             }
             if (nCOM + nbrCOMdelay[channel-1] < countEvents)
             {
-                    nbrSCC[channel-1]++;
+                nbrSCC[channel-1]++;
             }
             else
             {
