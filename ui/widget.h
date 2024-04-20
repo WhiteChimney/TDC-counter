@@ -175,7 +175,7 @@ signals:
     void countParamReady(bool*, int*);
     void coinParamReady(int index, double *delayCN, double freqCOM);
     void histParamReady(int index, double *delayCN, double freqCOM);
-    void qkdParamReady(double *delayCN, double freqCOM);
+    void qkdParamReady(double *delayCN, double freqCOM, int *nbrSCC);
 
 public:
     void setupAcqIndicator();

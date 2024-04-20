@@ -110,7 +110,7 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
     {
         for (int i = 0; i < smcCountChannelList.size(); i++)
         {
-            double countDiff = 1-smcCountCurrent[i]/smcTargetCountList[i]->text().toDouble();
+            double countDiff = 1-smcCountCurrent[i]/(1000*smcTargetCountList[i]->text().toDouble());
             double angleAdj =                                               // 计算角度调整量
                     countDiff/0.1*ui->textAngleAdj->text().toDouble()       // 调整量为 偏移百分比是 10% 的多少倍，就把 10% 角度偏移量乘多少倍
                     *smcAngleDirList[i]->currentText().toInt();             // 再乘上提前试好的角度调节方向
@@ -124,8 +124,8 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
     if (enableErrorFeedback)
     {
         errorCurrentRound++;
-        correctCountCurrent = *(correctCountPtr[0]) + *(correctCountPtr[0]);
-        errorCountCurrent = *(errorCountPtr[0]) + *(errorCountPtr[0]);
+        correctCountCurrent = *(correctCountPtr[0]) + *(correctCountPtr[1]);
+        errorCountCurrent = *(errorCountPtr[0]) + *(errorCountPtr[1]);
         double correctCountNow = correctCountCurrent - correctCountBefore;
         double errorCountNow = errorCountCurrent - errorCountBefore;
         double errorRateNow = 1.0 / (1 + correctCountNow / errorCountNow);
@@ -140,6 +140,8 @@ void ExternalApplicationsWidget::doSmcSingleCountTimeoutFeedback()
             errorRateBefore = errorRateCurrent;
             errorRateCurrent = 0.0;
             errorCurrentRound = 0;
+            ui->labelErrorRate->setText(QString::number(errorRateBefore));
+            smc->getAbsoluteAngle(ui->spinBoxErrorFeedbackChannel->value());
         }
         correctCountBefore = correctCountCurrent;
         errorCountBefore = errorCountCurrent;

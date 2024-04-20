@@ -55,7 +55,10 @@ private:
     QString fileName;
     QFile *fSave = new QFile();
     QTextStream fStream;
+    int *nbrSCC;
 
+    double errorCountBefore = 0.0,
+        correctCountBefore = 0.0;
 
 signals:
     void sendReturnSignal();
@@ -67,7 +70,7 @@ signals:
     void requestStopErrorFeedback();
 
 public slots:
-    void dealQkdParamReceived(double *m_delayCN, double m_freqCOM);
+    void dealQkdParamReceived(double *m_delayCN, double m_freqCOM, int *m_nbrSCC);
     void dealDataReturned(AqT3DataDescriptor *dataDescPtr);
     void dealTimeOut();
 

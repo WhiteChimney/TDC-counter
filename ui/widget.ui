@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>744</width>
-    <height>511</height>
+    <height>549</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageSettings">
       <attribute name="title">
@@ -673,7 +673,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="segmentStyle">
             <enum>QLCDNumber::Flat</enum>
@@ -695,7 +695,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="segmentStyle">
             <enum>QLCDNumber::Flat</enum>
@@ -848,7 +848,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="segmentStyle">
             <enum>QLCDNumber::Flat</enum>
@@ -873,7 +873,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="mode">
             <enum>QLCDNumber::Dec</enum>
@@ -905,7 +905,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="segmentStyle">
             <enum>QLCDNumber::Flat</enum>
@@ -982,7 +982,7 @@
             <string notr="true">background-color: rgb(255, 255, 255);</string>
            </property>
            <property name="digitCount">
-            <number>13</number>
+            <number>9</number>
            </property>
            <property name="segmentStyle">
             <enum>QLCDNumber::Flat</enum>

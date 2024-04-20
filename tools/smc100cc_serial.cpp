@@ -75,6 +75,7 @@ QString SMC100CC_Serial::readReply()
         QByteArray buffer = serial->readAll();
         if (buffer.size() > 0)
             buffer = buffer.remove(buffer.size()-1,1);
+        qDebug() << buffer;
         return buffer;
     }
     else
@@ -106,7 +107,7 @@ double SMC100CC_Serial::getAbsoluteAngle(int address)
 {
     QString command = QString::number(address) + "PA?";
     sendCommand(command);
-    return readReply().toDouble();
+    return readReply().remove(0,3).toDouble();
 }
 
 bool SMC100CC_Serial::setAbsoluteAngle(int address, double angle)

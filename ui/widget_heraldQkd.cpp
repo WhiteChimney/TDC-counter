@@ -36,7 +36,7 @@ void Widget::dealHeraldQkdReturn()
 
 void Widget::dealHeraldQkdRequestParam()
 {
-    emit qkdParamReady(delayCN, freqCOM);
+    emit qkdParamReady(delayCN, freqCOM, nbrSCC);
 }
 
 void Widget::dealHeraldQkdRequestSync()

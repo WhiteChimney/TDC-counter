@@ -78,11 +78,12 @@ void HeraldQkdWidget::on_buttonStop_released()
     emit heraldQkdRequestStopSync();
 }
 
-void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
+void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, int *m_nbrSCC)
 {
     for (int i = 0; i < 6; i++)
         delayCN[i] = m_delayCN[i];
     freqCOM = m_freqCOM;
+    nbrSCC = m_nbrSCC;
 
     //    预处理 TDC 参数
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
@@ -123,6 +124,7 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM)
     fStream.setDevice(fSave);
 
     fStream << "Time (s)\t"
+            << "S1\t" << "S2\t" << "S3\t" << "S4\t" << "S5\t" << "S6\t"
             << "AB12\t" << "AB34\t" << "AB14\t" << "AB23\t"
             << "12\t" << "34\t" << "14\t" << "23\t"
             << "A12\t" << "A34\t" << "A14\t" << "A23\t"
@@ -141,6 +143,10 @@ void HeraldQkdWidget::dealTimeOut()
     int currentSeconds = ui->lcdTimeElapsed->intValue()+1;
 
     fStream << QString::number(currentSeconds);
+
+    for (int i = 0; i < 6; i++)
+        fStream << "\t" << QString::number(nbrSCC[i]);
+
     // 更新计数显示
     for (int i = 0; i < 4; i++)
     {
@@ -155,13 +161,33 @@ void HeraldQkdWidget::dealTimeOut()
     }
     fStream << "\n";
 
+    double errorRate;
+    double errorCount, correctCount;
+    double errorCountNow, correctCountNow;
+    if (ui->radioButtonErrorSame->isChecked())
+    {
+        errorCountNow = vCounts[1][0] + vCounts[1][1];
+        correctCountNow = vCounts[1][2] + vCounts[1][3];
+    }
+    else
+    {
+        errorCountNow = vCounts[1][2] + vCounts[1][3];
+        correctCountNow = vCounts[1][0] + vCounts[1][1];
+    }
+    errorCount = errorCountNow - errorCountBefore;
+    correctCount = correctCountNow - correctCountBefore;
+    errorRate = errorCount / (errorCount + correctCount);
+    ui->labelErrorRate->setText(QString::number(errorRate));
+    errorCountBefore = errorCountNow;
+    correctCountBefore = correctCountNow;
+
     ui->lcdTimeElapsed->display(currentSeconds);
 }
 
 void HeraldQkdWidget::on_checkBoxErrorFeedback_stateChanged(int enableFeedback)
 {
-    ui->radioButtonErrorSame->setEnabled(enableFeedback);
-    ui->radioButtonErrorOppo->setEnabled(enableFeedback);
+    // ui->radioButtonErrorSame->setEnabled(enableFeedback);
+    // ui->radioButtonErrorOppo->setEnabled(enableFeedback);
 
     dealErrorFeedback();
 }
