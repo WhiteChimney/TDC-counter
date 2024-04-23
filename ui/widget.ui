@@ -15,6 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
+    <spacer name="verticalSpacer_12">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>3</number>
@@ -1216,7 +1229,7 @@
       <widget class="QPushButton" name="buttonStarteff">
        <property name="geometry">
         <rect>
-         <x>150</x>
+         <x>220</x>
          <y>280</y>
          <width>133</width>
          <height>82</height>
@@ -1235,7 +1248,7 @@
       <widget class="QPushButton" name="buttonStopCount_2">
        <property name="geometry">
         <rect>
-         <x>320</x>
+         <x>400</x>
          <y>280</y>
          <width>133</width>
          <height>81</height>
@@ -1249,32 +1262,6 @@
        </property>
        <property name="text">
         <string>停止计数</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="levelTextgatenum">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>30</y>
-         <width>108</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>10</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_24">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>10</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>第几个门</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_25">
@@ -1319,45 +1306,6 @@
        </property>
        <property name="intValue" stdset="0">
         <number>0</number>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="pushButtongatenum">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>110</y>
-         <width>75</width>
-         <height>23</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>确认</string>
-       </property>
-      </widget>
-      <widget class="QLineEdit" name="levelTextfreq">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>80</y>
-         <width>108</width>
-         <height>21</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>100</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_26">
-       <property name="geometry">
-        <rect>
-         <x>30</x>
-         <y>60</y>
-         <width>81</width>
-         <height>16</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>开门周期 MHz</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_27">
@@ -1448,21 +1396,59 @@
         <number>0</number>
        </property>
       </widget>
+      <widget class="QWidget" name="verticalLayoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>30</x>
+         <y>30</y>
+         <width>121</width>
+         <height>321</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_5">
+        <item>
+         <widget class="QLabel" name="label_24">
+          <property name="text">
+           <string>第几个门</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="spinBoxGatenumber"/>
+        </item>
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>脉冲周期（MHz）</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="textPulsePeriod">
+          <property name="text">
+           <string>10</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_26">
+          <property name="text">
+           <string>开门周期是
+脉冲周期的多少倍</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="textGatePeriodTimes">
+          <property name="text">
+           <string>100</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer_12">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
    <item>
     <widget class="QGroupBox" name="groupBox_2">

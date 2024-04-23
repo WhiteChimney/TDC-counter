@@ -109,7 +109,7 @@ private slots:
 
     void on_buttonStopCount_2_released();
 
-    void on_pushButtongatenum_released();
+    void on_spinBoxGatenumber_valueChanged(int arg1);
 
 private:
     Ui::Widget *ui;
@@ -166,7 +166,9 @@ private:
     int nbrAP=0;
     int nbrcount = 0;
     int numphoton = 0;   //光子在第几个门
-    int periodeff = 200;   //开门重复频率
+    int periodeff = 200;   //开门周期，单位 50 ps
+    int periodPulse = 2000;  // 脉冲周期
+    int gatePeriodTimes = 10; // 开门重复频率是脉冲重复频率的多少倍
 
 public:
     void dealEffTimeOut();

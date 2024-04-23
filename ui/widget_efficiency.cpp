@@ -43,7 +43,7 @@ void Widget::computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr)
                                                 // Channel=7 is for marker data.
          {
             nbrcount ++;
-            if((TimeOfFlight/periodeff)%(2000/periodeff)== (numphoton-1))    // 200为开门周期，
+            if( (TimeOfFlight/periodeff) % gatePeriodTimes == (numphoton-1))    // 200为开门周期，
             nbrPhoton ++;    // 光子计数
             else
             nbrAP ++;     //后脉冲计数
@@ -51,25 +51,10 @@ void Widget::computeSingleChannelEff(AqT3DataDescriptor* dataDescPtr)
     }
 }
 
-
-
-
 void Widget::dealAcqThreadBankSwitchEff(AqT3DataDescriptor* dataDescPtr)
 {
     computeSingleChannelEff(dataDescPtr);
 }
-
-
-void Widget::on_pushButtongatenum_released()
-{
-    numphoton = int(ui->levelTextgatenum-> text().toDouble());
-    periodeff = int(20000/ui->levelTextfreq ->text().toDouble());
-    ui->levelTextgatenum->setText(QString::number(numphoton));
-    ui->levelTextfreq->setText(QString::number(20000/periodeff));
-
-}
-
-
 
 void Widget::dealEffTimeOut()
 {
@@ -79,12 +64,19 @@ void Widget::dealEffTimeOut()
     ui->lcdSPC1_photoncount->display(nbrPhoton);
     ui->lcdSPC1_apcount_3->display(nbrAP);
 
-
     memset(&nbrPhoton,0,sizeof(nbrPhoton));
     memset(&nbrAP, 0, sizeof(nbrAP));
     memset(&nbrcount, 0, sizeof(nbrcount));
 
 }
 
+void Widget::on_spinBoxGatenumber_valueChanged(int arg1)
+{
+    numphoton = arg1;
+    gatePeriodTimes = ui->textGatePeriodTimes->text().toInt();
+    periodPulse = int(20*1000.0/ui->textPulsePeriod->text().toDouble());
+    periodeff = int(periodPulse / gatePeriodTimes);
+    ui->textPulsePeriod->setText(QString::number(20*1000.0/periodPulse));
+}
 
 
