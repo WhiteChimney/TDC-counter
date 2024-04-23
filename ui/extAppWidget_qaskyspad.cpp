@@ -33,6 +33,8 @@ void ExternalApplicationsWidget::on_buttonQskySpadDelayFeedbackStart_released()
     fSave->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream.setDevice(fSave);
 
+    fStream << "Delay (ns)\tCount\n";
+
     emit requestDelayFeedback2();
 }
 
@@ -65,12 +67,11 @@ void ExternalApplicationsWidget::doSingleCountTimeoutFeedback2()
         delayNow += delayAdjDirection*ui->textQskySpadDelayAdj->text().toDouble()/1000.0;
         qskyspad->set_delay(delayNow);
         ui->textQskySpadDelay->setText(QString::number(delayNow));
-        // qDebug() << countBefore2 << countCurrent2 << delayAdjDirection;
         countBefore2 = countCurrent2;
         countCurrent2 = 0;
         currentRound2 = 0;
 
-        fStream << delayNow << "\n";
+        fStream << delayNow << "\t" << countBefore2 << "\n";
     }
 }
 

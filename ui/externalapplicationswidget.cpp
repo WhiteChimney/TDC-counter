@@ -34,7 +34,7 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
     smc = new SMC100CC_Serial(this);
     qskyspad = new Spd300Qsky(this);
     QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
-    fileName = iniPath + "/Data/qskyspad_delay_feedback.txt";
+    fileName = iniPath + "/Configurations/qskyspad_delay_feedback_data.txt";
     fSave->setFileName(fileName);
 }
 
