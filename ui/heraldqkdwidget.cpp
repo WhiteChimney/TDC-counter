@@ -21,7 +21,7 @@ HeraldQkdWidget::HeraldQkdWidget(QWidget *parent) :
     else
         saveToIni();
 
-    fileName = iniPath + "/Configurations/heraldQkd_data.txt";
+    fileName = iniPath + "/Data/heraldQkd.txt";
     fSave->setFileName(fileName);
 }
 

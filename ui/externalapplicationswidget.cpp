@@ -32,7 +32,10 @@ ExternalApplicationsWidget::ExternalApplicationsWidget(QWidget *parent) :
 
     delayBoard = new QaskyDelayBoard(this);
     smc = new SMC100CC_Serial(this);
-
+    qskyspad = new Spd300Qsky(this);
+    QString iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation) + "/AcqirisTDC_qt";
+    fileName = iniPath + "/Data/qskyspad_delay_feedback.txt";
+    fSave->setFileName(fileName);
 }
 
 ExternalApplicationsWidget::~ExternalApplicationsWidget()
@@ -85,4 +88,3 @@ void ExternalApplicationsWidget::on_checkboxSPcustomize_stateChanged(int checkSt
         ui->buttonStop->setEnabled(false);
     }
 }
-

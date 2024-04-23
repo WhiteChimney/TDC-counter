@@ -268,11 +268,14 @@ public slots:
     void dealExtAppStopped();
     void dealExtAppRequestDelayFeedback();
     void dealExtAppStopRequestDelayFeedback();
+    void dealExtAppRequestDelayFeedback2();
+    void dealExtAppStopRequestDelayFeedback2();
     void dealExtAppRequestAngleFeedback();
     void dealExtAppStopRequestAngleFeedback();
 signals:
     void sendExtAppRequestedData(int* nbrSCC, QVector<int*> vNbrCoin);
     void sendExtAppDelayFeedbackData(int* nbrSCC);
+    void sendExtAppDelayFeedbackData2(int* nbrSCC);
     void sendExtAppAngleFeedbackData(int* nbrSCC);
     void mainAppClosing();
 

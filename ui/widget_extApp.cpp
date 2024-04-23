@@ -12,6 +12,10 @@ void Widget::setupExtAppWidget()
     connect(this,&Widget::sendExtAppDelayFeedbackData,extAppW,&ExternalApplicationsWidget::dealDelayFeedbackDataReceived);
     connect(extAppW,&ExternalApplicationsWidget::requestStopDelayFeedback,this,&Widget::dealExtAppStopRequestDelayFeedback);
 
+    connect(extAppW,&ExternalApplicationsWidget::requestDelayFeedback2,this,&Widget::dealExtAppRequestDelayFeedback2);
+    connect(this,&Widget::sendExtAppDelayFeedbackData2,extAppW,&ExternalApplicationsWidget::dealDelayFeedbackDataReceived2);
+    connect(extAppW,&ExternalApplicationsWidget::requestStopDelayFeedback2,this,&Widget::dealExtAppStopRequestDelayFeedback2);
+
     connect(extAppW,&ExternalApplicationsWidget::requestAngleFeedback,this,&Widget::dealExtAppRequestAngleFeedback);
     connect(this,&Widget::sendExtAppAngleFeedbackData,extAppW,&ExternalApplicationsWidget::dealAngleFeedbackDataReceived);
     connect(extAppW,&ExternalApplicationsWidget::requestStopAngleFeedback,this,&Widget::dealExtAppStopRequestAngleFeedback);
@@ -66,6 +70,19 @@ void Widget::dealExtAppRequestDelayFeedback()
 void Widget::dealExtAppStopRequestDelayFeedback()
 {
     disconnect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::doSingleCountTimeoutFeedback);
+}
+
+void Widget::dealExtAppRequestDelayFeedback2()
+{
+    emit sendExtAppDelayFeedbackData2(nbrSCC);
+    disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+    connect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::doSingleCountTimeoutFeedback2);
+    connect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
+}
+
+void Widget::dealExtAppStopRequestDelayFeedback2()
+{
+    disconnect(timerCount, &QTimer::timeout, extAppW, &ExternalApplicationsWidget::doSingleCountTimeoutFeedback2);
 }
 
 void Widget::dealExtAppRequestAngleFeedback()

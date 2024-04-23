@@ -27,6 +27,7 @@ SOURCES += \
     tools/dp832a_usb.cpp \
     tools/qaskydelayboard.cpp \
     tools/smc100cc_serial.cpp \
+    tools/spd300qsky.cpp \
     tools/statisticschannel.cpp \
     tools/tsp01.cpp \
     ui/coincidencewidget.cpp \
@@ -34,6 +35,7 @@ SOURCES += \
     ui/coincidencewidget_ui.cpp \
     ui/extAppWidget_dp832a_usb.cpp \
     ui/extAppWidget_qasky_delayboard.cpp \
+    ui/extAppWidget_qaskyspad.cpp \
     ui/extAppWidget_serial_port.cpp \
     ui/extAppWidget_smc100cc.cpp \
     ui/extAppWidget_tsp01.cpp \
@@ -79,6 +81,7 @@ HEADERS += \
     tools/dp832a_usb.h \
     tools/qaskydelayboard.h \
     tools/smc100cc_serial.h \
+    tools/spd300qsky.h \
     tools/statisticschannel.h \
     tools/tsp01.h \
     ui/coincidencewidget.h \

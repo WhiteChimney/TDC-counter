@@ -19,6 +19,7 @@
 #include "dp832a_usb.h"
 #include "smc100cc_serial.h"
 #include "qaskydelayboard.h"
+#include "spd300qsky.h"
 
 namespace Ui {
 class ExternalApplicationsWidget;
@@ -85,13 +86,30 @@ private:
     QList<double> countCurrent;
     int currentRound;
 
+    // Spd300Qsky
+private:
+    Spd300Qsky *qskyspad;
+    int delayAdjDirection;
+    double countBefore2;
+    double countCurrent2;
+    int currentRound2;
+
+    QString iniName;
+    QString fileName;
+    QFile *fSave = new QFile();
+    QTextStream fStream;
+
 signals:
     void requestDelayFeedback();
     void requestStopDelayFeedback();
+    void requestDelayFeedback2();
+    void requestStopDelayFeedback2();
 
 public slots:
     void dealDelayFeedbackDataReceived(int* m_nbrSCC);
     void doSingleCountTimeoutFeedback();
+    void dealDelayFeedbackDataReceived2(int* m_nbrSCC);
+    void doSingleCountTimeoutFeedback2();
 
 
     // qasky_delayboard
@@ -179,6 +197,10 @@ private slots:
     void on_buttonSmcOpenPort_released();
     void on_buttonSmcClosePort_released();
     void on_buttonSmcHoming_released();
+    void on_comboQskySpadSpList_activated(int index);
+    void on_buttonQskySpadSetDelay_released();
+    void on_buttonQskySpadDelayFeedbackStart_released();
+    void on_buttonQskySpadDelayFeedbackStop_released();
 };
 
 #endif // EXTERNALAPPLICATIONSWIDGET_H
