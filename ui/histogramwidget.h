@@ -65,6 +65,9 @@ private:
 
     // 配置文件
     QString iniPath, iniName;
+    QString fileName;
+    QFile *fSave = new QFile();
+    QTextStream fStream;
 
 public:
     void fetchUiData(), pushUiData(); // 获取与推送 ui 数据

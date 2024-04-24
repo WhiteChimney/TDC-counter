@@ -25,6 +25,9 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
         loadFromIni();
     else
         saveToIni();
+
+    fileName = iniPath + "/AcqirisTDC_qt/Configurations/histogram_data.txt";
+    fSave->setFileName(fileName);
 }
 
 HistogramWidget::~HistogramWidget()
@@ -113,6 +116,10 @@ void HistogramWidget::on_buttonStart_released()
         histIntervals[i] = QwtInterval(intervalStart,intervalStart+binWidth);
     }
     timerHist->start(1000.0*accumulateTime);
+
+    fSave->open(QIODevice::WriteOnly | QIODevice::Text);
+    fStream.setDevice(fSave);
+
     emit requestHistParam(index);
 }
 
@@ -122,7 +129,9 @@ void HistogramWidget::dealTimeOut()
     for (int i = 0; i < nbrIntervals; i++)
     {
         histSamples[i] = QwtIntervalSample(binHeight[i],histIntervals[i]);
+        fStream << binHeight[i] << "\t";
     }
+    fStream << "\n";
     qwtHistPlot->setSamples(histSamples);
     ui->qwtPlot->replot();
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
@@ -183,6 +192,7 @@ void HistogramWidget::dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPt
 
 void HistogramWidget::on_buttonStop_released()
 {
+    fSave->close();
     emit askStopDealAcqBankSwitchHist(index);
     timerHist->stop();
 }
