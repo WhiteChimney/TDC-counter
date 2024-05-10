@@ -128,7 +128,10 @@ void HistogramWidget::dealTimeOut()
     QVector<QwtIntervalSample> histSamples(nbrIntervals);
     for (int i = 0; i < nbrIntervals; i++)
     {
-        histSamples[i] = QwtIntervalSample(binHeight[i],histIntervals[i]);
+        if (ui->checkBoxLogY->isChecked())
+            histSamples[i] = QwtIntervalSample(log10(1+double(binHeight[i])),histIntervals[i]);
+        else
+            histSamples[i] = QwtIntervalSample(binHeight[i],histIntervals[i]);
         fStream << binHeight[i] << "\t";
     }
     fStream << "\n";

@@ -208,6 +208,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QCheckBox" name="checkBoxLogY">
+        <property name="text">
+         <string>对数坐标</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
