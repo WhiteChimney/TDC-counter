@@ -285,14 +285,14 @@
       <item row="6" column="4">
        <widget class="QLabel" name="label_36">
         <property name="text">
-         <string>B34</string>
+         <string>B23</string>
         </property>
        </widget>
       </item>
       <item row="4" column="4">
        <widget class="QLabel" name="label_16">
         <property name="text">
-         <string>A34</string>
+         <string>A23</string>
         </property>
        </widget>
       </item>

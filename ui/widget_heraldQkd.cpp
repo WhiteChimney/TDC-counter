@@ -41,8 +41,10 @@ void Widget::dealHeraldQkdRequestParam()
 
 void Widget::dealHeraldQkdRequestSync()
 {
+    disconnect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
     connect(acqThread,&AcquisitionThread::acqThreadBankSwitch,qkdW,&HeraldQkdWidget::dealDataReturned);
     connect(timerCount,&QTimer::timeout,qkdW,&HeraldQkdWidget::dealTimeOut);
+    connect(timerCount,&QTimer::timeout,this,&Widget::dealCountTimeOut);
 }
 
 void Widget::dealHeraldQkdRequestStopSync()
