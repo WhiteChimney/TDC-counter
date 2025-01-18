@@ -159,6 +159,8 @@ private slots:
 
     void on_textDelayCN6_editingFinished();
 
+    void on_buttonSaveConfig_clicked();
+
 private:
     Ui::Widget *ui;
     // 测试子窗口（序列）

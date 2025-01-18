@@ -88,3 +88,9 @@ Widget::~Widget()
     tempDataPath.mkdir(iniPath + "/Data");
     delete ui;
 }
+
+void Widget::on_buttonSaveConfig_clicked()
+{
+    this->saveToIni();
+}
+
