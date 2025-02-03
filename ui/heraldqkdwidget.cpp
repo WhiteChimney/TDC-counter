@@ -7,7 +7,8 @@ HeraldQkdWidget::HeraldQkdWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowFlags(Qt::Window);        // 在父窗口上显示独立的子窗口
-    this->setWindowTitle(tr("标记 MDI 计数器"));
+    // this->setWindowTitle(tr("标记 MDI 计数器"));
+    this->setWindowTitle(QString::fromUtf8("ABC\u2081C\u2082A\u0305B\u0305C\u0305\u2081C\u0305\u2082A\u0332B\u0332C\u0332\u2081C\u0332\u2082"));
 
     this->setupLcdCounts();
 
@@ -134,8 +135,8 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
 void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
 {
     // 对每个响应事件进行分类累积
-    computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
-        tolerance, deadTime, nbrCOMdelay, delayInCOM, timeCOMunit, &COM_HEAD);
+    // computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
+    //     tolerance, deadTime, nbrCOMdelay, delayInCOM, timeCOMunit, &COM_HEAD);
 }
 
 void HeraldQkdWidget::dealTimeOut()
@@ -161,70 +162,5 @@ void HeraldQkdWidget::dealTimeOut()
     }
     fStream << "\n";
 
-    double errorRate;
-    double errorCount, correctCount;
-    double errorCountNow, correctCountNow;
-    if (ui->radioButtonErrorSame->isChecked())
-    {
-        errorCountNow = vCounts[1][0] + vCounts[1][1];
-        correctCountNow = vCounts[1][2] + vCounts[1][3];
-    }
-    else
-    {
-        errorCountNow = vCounts[1][2] + vCounts[1][3];
-        correctCountNow = vCounts[1][0] + vCounts[1][1];
-    }
-    errorCount = errorCountNow - errorCountBefore;
-    correctCount = correctCountNow - correctCountBefore;
-    errorRate = errorCount / (errorCount + correctCount);
-    ui->labelErrorRate->setText(QString::number(errorRate));
-    errorCountBefore = errorCountNow;
-    correctCountBefore = correctCountNow;
-
     ui->lcdTimeElapsed->display(currentSeconds);
 }
-
-void HeraldQkdWidget::on_checkBoxErrorFeedback_stateChanged(int enableFeedback)
-{
-    // ui->radioButtonErrorSame->setEnabled(enableFeedback);
-    // ui->radioButtonErrorOppo->setEnabled(enableFeedback);
-
-    dealErrorFeedback();
-}
-
-void HeraldQkdWidget::dealErrorFeedback()
-{
-    if (ui->checkBoxErrorFeedback->isChecked())
-    {
-        long long *errorCountPtr[2], *correctCountPtr[2];
-        if (ui->radioButtonErrorSame->isChecked())
-        {
-            errorCountPtr[0] = vCounts[1];
-            errorCountPtr[1] = vCounts[1] + 1;
-            correctCountPtr[0] = vCounts[1] + 2;
-            correctCountPtr[1] = vCounts[1] + 3;
-        }
-        else
-        {
-            errorCountPtr[0] = vCounts[1] + 2;
-            errorCountPtr[1] = vCounts[1] + 3;
-            correctCountPtr[0] = vCounts[1];
-            correctCountPtr[1] = vCounts[1] + 1;
-        }
-        emit requestErrorFeedback(errorCountPtr,correctCountPtr);
-    }
-    else
-        emit requestStopErrorFeedback();
-}
-
-void HeraldQkdWidget::on_radioButtonErrorSame_clicked()
-{
-    dealErrorFeedback();
-}
-
-
-void HeraldQkdWidget::on_radioButtonErrorOppo_clicked()
-{
-    dealErrorFeedback();
-}
-

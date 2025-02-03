@@ -14,8 +14,6 @@ void HeraldQkdWidget::fetchUiData()
 
     tolerance = int(20*ui->textTolerance->text().toDouble());
 
-    deadTime = int(20*ui->textDeadTime->text().toDouble());
-
     pushUiData();
 }
 
@@ -28,7 +26,6 @@ void HeraldQkdWidget::pushUiData()
     ui->textDelay5->setText(QString::number(delayCN[4]/20.0));
     ui->textDelay6->setText(QString::number(delayCN[5]/20.0));
     ui->textTolerance->setText(QString::number(tolerance/20.0));
-    ui->textDeadTime->setText(QString::number(deadTime/20.0));
 }
 
 void HeraldQkdWidget::saveToIni()
@@ -43,7 +40,6 @@ void HeraldQkdWidget::saveToIni()
     configIni->setValue("标记 QKD 配置/delay5",delayCN[4]);
     configIni->setValue("标记 QKD 配置/delay6",delayCN[5]);
     configIni->setValue("标记 QKD 配置/tolerance",tolerance);
-    configIni->setValue("标记 QKD 配置/deadTime",deadTime);
 
     delete configIni;
 }
@@ -58,7 +54,6 @@ void HeraldQkdWidget::loadFromIni()
     delayCN[4] = configIni->value("标记 QKD 配置/delay5").toInt();
     delayCN[5] = configIni->value("标记 QKD 配置/delay6").toInt();
     tolerance = configIni->value("标记 QKD 配置/tolerance").toInt();
-    deadTime = configIni->value("标记 QKD 配置/deadTime").toInt();
     delete configIni;
 
     pushUiData();
