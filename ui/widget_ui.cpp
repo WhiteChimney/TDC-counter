@@ -344,6 +344,17 @@ void Widget::loadFromIni()
     pushUiData();
 }
 
+void Widget::on_buttonSaveConfig_clicked()
+{
+    this->saveToIni();
+
+    for (int i = 0; i < vCoinWidget.size(); i++)
+        vCoinWidget.at(i)->saveToIni();
+
+    for (int i = 0; i < vHistWidget.size(); i++)
+        vHistWidget.at(i)->saveToIni();
+}
+
 void Widget::on_buttonTempFilePath_released()
 {
     QDesktopServices::openUrl(QUrl::fromLocalFile(iniPath));
