@@ -127,6 +127,7 @@ void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
 void HeraldQkdWidget::dealTimeOut()
 {
     int currentSeconds = ui->lcdTimeElapsed->intValue()+1;
+    int countTotal = 0;
 
     fStream << QString::number(currentSeconds);
 
@@ -143,9 +144,13 @@ void HeraldQkdWidget::dealTimeOut()
                                        vLcdCounts[i][j]->intValue());
             vLcdCounts[i][j]->display(
                         double(vCounts[i][j]));
+            countTotal += vCounts[i][j];
         }
     }
     fStream << "\n";
+
+    lcdMainPeak->display(double(vCounts[4][1]));
+    lcdSidePeak->display(double(countTotal-vCounts[4][1]));
 
     ui->lcdTimeElapsed->display(currentSeconds);
 }

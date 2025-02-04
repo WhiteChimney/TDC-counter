@@ -18,7 +18,7 @@ int findHeraldCoincidence
     for (int i = start; i <= end; i++)
         channelMark += pow(2,channelSeq[i]);
 
-    // 接下来仅筛选出标记 QKD 中所需要的几种响应组合
+    // 接下来仅筛选出 relay 中所需要的几种响应组合
     // 注：上单引号为 C++14 引入的新特性，为数字分隔符
     switch (channelMark) {
     case 0b000000'010000'101100: nbrCounts[0][0]++; break; // B- A  2- 1-
