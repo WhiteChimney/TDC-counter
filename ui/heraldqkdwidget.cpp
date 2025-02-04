@@ -76,30 +76,22 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
     //    预处理 TDC 参数
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
-    double delayTotal[6] = {0.0}, delayTotalPre[6] = {0.0}, delayTotalAft[6] = {0.0};
+    double delayTotal[6] = {0.0};
     double minDelay = delayCN[0];
     for (int i = 0; i < 6; i++)
     {
-        delayTotalPre[i] = delayCN[i] + delayUi[i]/20.0/1000.0;
-        delayTotal[i] = delayTotalPre[i] + extraDelay/20.0/1000.0;
-        delayTotalAft[i] = delayTotal[i] + extraDelay/20.0/1000.0;
-        if (delayTotalPre[i] < minDelay)
-            minDelay = delayTotalPre[i];
+        delayTotal[i] = delayCN[i] + delayUi[i]/20.0/1000.0;
+        if (delayTotal[i] < minDelay)
+            minDelay = delayTotal[i];
     }
     int maxNbrCOMdelay = 0;
     for (int i = 0; i < 6; i++)
     {
-        delayTotalPre[i] -= minDelay;
         delayTotal[i] -= minDelay;             // 保证所有延时均为非负
-        delayTotalAft[i] -= minDelay;
-        nbrCOMdelayPre[i] = floor(delayTotalPre[i]/timeCOM);
         nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
-        nbrCOMdelayAft[i] = floor(delayTotalAft[i]/timeCOM);
-        if (nbrCOMdelayAft[i] > maxNbrCOMdelay)
-            maxNbrCOMdelay = nbrCOMdelayAft[i];
-        delayInCOMPre[i] = int(20*1000.0*(delayTotalPre[i] - timeCOM*nbrCOMdelayPre[i]));
+        if (nbrCOMdelay[i] > maxNbrCOMdelay)
+            maxNbrCOMdelay = nbrCOMdelay[i];
         delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
-        delayInCOMAft[i] = int(20*1000.0*(delayTotalAft[i] - timeCOM*nbrCOMdelayAft[i]));
     }
 
 //    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2 再乘 3
@@ -129,8 +121,7 @@ void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
 {
     // 对每个响应事件进行分类累积
     computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
-        tolerance, nbrCOMdelayPre, delayInCOMPre, nbrCOMdelay,
-        delayInCOM, nbrCOMdelayAft, delayInCOMAft, timeCOMunit, &COM_HEAD);
+        tolerance, nbrCOMdelay, delayInCOM, extraDelay, timeCOMunit, &COM_HEAD);
 }
 
 void HeraldQkdWidget::dealTimeOut()

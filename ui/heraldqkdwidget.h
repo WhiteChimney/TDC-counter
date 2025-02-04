@@ -29,9 +29,9 @@ private:
     Ui::HeraldQkdWidget *ui;
 
     double delayCN[6] = {0.0};
-    int nbrCOMdelay[6] = {0}, nbrCOMdelayPre[6] = {0}, nbrCOMdelayAft[6] = {0};
+    int nbrCOMdelay[6] = {0};
     int maxNbrCOMdelay = 0;
-    int delayInCOM[6] = {0}, delayInCOMPre[6] = {0}, delayInCOMAft[6] = {0};
+    int delayInCOM[6] = {0};
     int timeCOMunit;
     int COM_HEAD = 0;
 

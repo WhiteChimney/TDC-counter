@@ -85,9 +85,9 @@ void computeHeraldMdiCounts
          QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
          long long nbrCounts[][3],
          int tolerance,
-         int *nbrCOMdelayPre, int *delayInCOMPre,
-         int *nbrCOMdelay, int *delayInCOM,
-         int *nbrCOMdelayAft, int *delayInCOMAft,
+         int *nbrCOMdelay,
+         int *delayInCOM,
+         int extraDelay,
          int timeCOMunit,
          int *COM_HEAD);
 

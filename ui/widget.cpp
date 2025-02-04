@@ -56,6 +56,7 @@ Widget::Widget(QWidget *parent)
     //                           QMessageBox::Ok);
     // }
 
+
 //    数据采集线程
     acqThread = new AcquisitionThread();
     connect(acqThread,&AcquisitionThread::acqThreadStarted,this,&Widget::dealAcqThreadStarted);
