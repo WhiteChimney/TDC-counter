@@ -32,7 +32,7 @@ void HeraldQkdWidget::setupLcdCounts()
     l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     ui->gridLayoutTotalCounts->addWidget(l,0,0,1,1);
 
-    l = new QLabel("主峰",this);
+    l = new QLabel("主峰（"+aList[1]+bList[1]+c1List[1]+c2List[1]+"）",this);
     l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     ui->gridLayoutTotalCounts->addWidget(l,1,0,1,1);
 
@@ -41,7 +41,7 @@ void HeraldQkdWidget::setupLcdCounts()
     lcdMainPeak->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
     lcdMainPeak->setStyleSheet("background-color: skyblue;");
 
-    l = new QLabel("侧峰（之和）",this);
+    l = new QLabel("侧峰（其他计数之和）",this);
     l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     ui->gridLayoutTotalCounts->addWidget(l,4,0,1,1);
 
@@ -54,12 +54,13 @@ void HeraldQkdWidget::setupLcdCounts()
 void HeraldQkdWidget::fetchUiData()
 {
 
-    delayCN[0] = int(20*ui->textDelay1->text().toDouble());
-    delayCN[1] = int(20*ui->textDelay2->text().toDouble());
-    delayCN[2] = int(20*ui->textDelay3->text().toDouble());
-    delayCN[3] = int(20*ui->textDelay4->text().toDouble());
-    delayCN[4] = int(20*ui->textDelay5->text().toDouble());
-    delayCN[5] = int(20*ui->textDelay6->text().toDouble());
+    delayUi[0] = int(20*ui->textDelay1->text().toDouble());
+    delayUi[1] = int(20*ui->textDelay2->text().toDouble());
+    delayUi[2] = int(20*ui->textDelay3->text().toDouble());
+    delayUi[3] = int(20*ui->textDelay4->text().toDouble());
+    delayUi[4] = int(20*ui->textDelay5->text().toDouble());
+    delayUi[5] = int(20*ui->textDelay6->text().toDouble());
+    extraDelay = int(20*ui->textExtraDelay->text().toDouble());
 
     tolerance = int(20*ui->textTolerance->text().toDouble());
 
@@ -68,12 +69,13 @@ void HeraldQkdWidget::fetchUiData()
 
 void HeraldQkdWidget::pushUiData()
 {
-    ui->textDelay1->setText(QString::number(delayCN[0]/20.0));
-    ui->textDelay2->setText(QString::number(delayCN[1]/20.0));
-    ui->textDelay3->setText(QString::number(delayCN[2]/20.0));
-    ui->textDelay4->setText(QString::number(delayCN[3]/20.0));
-    ui->textDelay5->setText(QString::number(delayCN[4]/20.0));
-    ui->textDelay6->setText(QString::number(delayCN[5]/20.0));
+    ui->textDelay1->setText(QString::number(delayUi[0]/20.0));
+    ui->textDelay2->setText(QString::number(delayUi[1]/20.0));
+    ui->textDelay3->setText(QString::number(delayUi[2]/20.0));
+    ui->textDelay4->setText(QString::number(delayUi[3]/20.0));
+    ui->textDelay5->setText(QString::number(delayUi[4]/20.0));
+    ui->textDelay6->setText(QString::number(delayUi[5]/20.0));
+    ui->textExtraDelay->setText(QString::number(extraDelay/20.0));
     ui->textTolerance->setText(QString::number(tolerance/20.0));
 }
 
@@ -82,12 +84,13 @@ void HeraldQkdWidget::saveToIni()
     fetchUiData();
 
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
-    configIni->setValue("标记 QKD 配置/delay1",delayCN[0]);
-    configIni->setValue("标记 QKD 配置/delay2",delayCN[1]);
-    configIni->setValue("标记 QKD 配置/delay3",delayCN[2]);
-    configIni->setValue("标记 QKD 配置/delay4",delayCN[3]);
-    configIni->setValue("标记 QKD 配置/delay5",delayCN[4]);
-    configIni->setValue("标记 QKD 配置/delay6",delayCN[5]);
+    configIni->setValue("标记 QKD 配置/delay1",delayUi[0]);
+    configIni->setValue("标记 QKD 配置/delay2",delayUi[1]);
+    configIni->setValue("标记 QKD 配置/delay3",delayUi[2]);
+    configIni->setValue("标记 QKD 配置/delay4",delayUi[3]);
+    configIni->setValue("标记 QKD 配置/delay5",delayUi[4]);
+    configIni->setValue("标记 QKD 配置/delay6",delayUi[5]);
+    configIni->setValue("标记 QKD 配置/extraDelay",extraDelay);
     configIni->setValue("标记 QKD 配置/tolerance",tolerance);
 
     delete configIni;
@@ -96,12 +99,13 @@ void HeraldQkdWidget::saveToIni()
 void HeraldQkdWidget::loadFromIni()
 {
     QSettings *configIni = new QSettings(iniName, QSettings::IniFormat);
-    delayCN[0] = configIni->value("标记 QKD 配置/delay1").toInt();
-    delayCN[1] = configIni->value("标记 QKD 配置/delay2").toInt();
-    delayCN[2] = configIni->value("标记 QKD 配置/delay3").toInt();
-    delayCN[3] = configIni->value("标记 QKD 配置/delay4").toInt();
-    delayCN[4] = configIni->value("标记 QKD 配置/delay5").toInt();
-    delayCN[5] = configIni->value("标记 QKD 配置/delay6").toInt();
+    delayUi[0] = configIni->value("标记 QKD 配置/delay1").toInt();
+    delayUi[1] = configIni->value("标记 QKD 配置/delay2").toInt();
+    delayUi[2] = configIni->value("标记 QKD 配置/delay3").toInt();
+    delayUi[3] = configIni->value("标记 QKD 配置/delay4").toInt();
+    delayUi[4] = configIni->value("标记 QKD 配置/delay5").toInt();
+    delayUi[5] = configIni->value("标记 QKD 配置/delay6").toInt();
+    extraDelay = configIni->value("标记 QKD 配置/extraDelay").toInt();
     tolerance = configIni->value("标记 QKD 配置/tolerance").toInt();
     delete configIni;
 

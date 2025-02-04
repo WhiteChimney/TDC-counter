@@ -83,11 +83,11 @@ void computeHeraldMdiCounts
         (AqT3DataDescriptor *dataDescPtr,
          QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
          QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         long long nbrCounts[][4],
+         long long nbrCounts[][3],
          int tolerance,
-         int deadTime,
-         int *nbrCOMdelay,
-         int *delayInCOM,
+         int *nbrCOMdelayPre, int *delayInCOMPre,
+         int *nbrCOMdelay, int *delayInCOM,
+         int *nbrCOMdelayAft, int *delayInCOMAft,
          int timeCOMunit,
          int *COM_HEAD);
 

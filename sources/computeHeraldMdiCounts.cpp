@@ -9,7 +9,7 @@ int findInsertPosition(QVector<int> timeSeq, int TimeOfFlight);
 int findSpacing(QVector<int> timeSeq, int i, int toleranceMulti);
 
 int findHeraldCoincidence
-    (QVector<int> channelSeq, int start, int end, long long nbrCounts[][4])
+    (QVector<int> channelSeq, int start, int end, long long nbrCounts[][3])
 {
     // 使用六位的十进制数 channelMark 来表示所有通道的存在性
     // 最低位表示通道 1，最高位表示通道 6
@@ -23,19 +23,15 @@ int findHeraldCoincidence
     case 110011: nbrCounts[0][0]++; break; // AB12
     case 111100: nbrCounts[0][1]++; break; // AB34
     case 111001: nbrCounts[0][2]++; break; // AB14
-    case 110110: nbrCounts[0][3]++; break; // AB23
     case     11: nbrCounts[1][0]++; break; //   12
     case   1100: nbrCounts[1][1]++; break; //   34
     case   1001: nbrCounts[1][2]++; break; //   14
-    case    110: nbrCounts[1][3]++; break; //   23
     case  10011: nbrCounts[2][0]++; break; // A 12
     case  11100: nbrCounts[2][1]++; break; // A 34
     case  11001: nbrCounts[2][2]++; break; // A 14
-    case  10110: nbrCounts[2][3]++; break; // A 23
     case 100011: nbrCounts[3][0]++; break; //  B12
     case 101100: nbrCounts[3][1]++; break; //  B34
     case 101001: nbrCounts[3][2]++; break; //  B14
-    case 100110: nbrCounts[3][3]++; break; //  B23
     default:      channelMark = -1; break;
     }
 
@@ -46,11 +42,11 @@ void computeHeraldMdiCounts
         (AqT3DataDescriptor *dataDescPtr,
          QList<QVector<int>> &timeSeq,       // 用于存储按时间顺序排列后的通道编号（0-5 对应实际的 1-6）
          QList<QVector<int>> &channelSeq,    // 升序排列后的时间，与通道编号一一对应
-         long long nbrCounts[][4],
+         long long nbrCounts[][3],
          int tolerance,
-         int deadTime,
-         int *nbrCOMdelay,
-         int *delayInCOM,
+         int *nbrCOMdelayPre, int *delayInCOMPre,
+         int *nbrCOMdelay, int *delayInCOM,
+         int *nbrCOMdelayAft, int *delayInCOMAft,
          int timeCOMunit,
          int *COM_HEAD)
 {
@@ -99,11 +95,6 @@ void computeHeraldMdiCounts
                         findHeraldCoincidence
                                 (channelSeq[*COM_HEAD], i, i+spacing, nbrCounts);
                         i = i+spacing;                                     // 计算过符合的区间可以跳过
-                        int endIndex = i;
-                        // 跳过死时间内的计数
-                        while (timeSeq[*COM_HEAD][i] - timeSeq[*COM_HEAD][endIndex] < deadTime
-                               and i < timeSeq[*COM_HEAD].size()-1)
-                            i++;
                     }
                 }
             }

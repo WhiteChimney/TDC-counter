@@ -28,18 +28,20 @@ private slots:
 private:
     Ui::HeraldQkdWidget *ui;
 
-    int nbrCOMdelay[6] = {0};
+    double delayCN[6] = {0.0};
+    int nbrCOMdelay[6] = {0}, nbrCOMdelayPre[6] = {0}, nbrCOMdelayAft[6] = {0};
     int maxNbrCOMdelay = 0;
-    int delayInCOM[6] = {0};
+    int delayInCOM[6] = {0}, delayInCOMPre[6] = {0}, delayInCOMAft[6] = {0};
     int timeCOMunit;
     int COM_HEAD = 0;
 
+    int delayUi[6] = {0};
+    int extraDelay = 0;
     int tolerance;
-    double delayCN[6] = {0.0};
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;
     ClipLcdNumber *lcdMainPeak, *lcdSidePeak;
-    long long vCounts[4][4] = {{0}};
+    long long vCounts[9][3] = {{0}};
     QList<QVector<int>> timeSeq;       // 用于存放时间序列
     QList<QVector<int>> channelSeq; // 用于存放通道序列
     double freqCOM;

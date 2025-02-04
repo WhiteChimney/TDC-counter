@@ -45,14 +45,17 @@ void HeraldQkdWidget::on_buttonStart_released()
 
     ui->lcdTimeElapsed->display(0);
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 3; j++)
         {
             vCounts[i][j] = 0;
             vLcdCounts[i][j]->display(0);
         }
     }
+
+    lcdMainPeak->display(0);
+    lcdSidePeak->display(0);
 
     emit heraldQkdRequestParam();
 }
@@ -73,34 +76,35 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
     //    预处理 TDC 参数
     double timeCOM = 1000000.0/freqCOM;           // 单位为 us
     timeCOMunit = int(20*1000.0*timeCOM);         // TDC 内部单位，50 ps
-    double delayUi[6] = {0.0};
-    delayUi[0] = ui->textDelay1->text().toDouble();
-    delayUi[1] = ui->textDelay2->text().toDouble();
-    delayUi[2] = ui->textDelay3->text().toDouble();
-    delayUi[3] = ui->textDelay4->text().toDouble();
-    delayUi[4] = ui->textDelay5->text().toDouble();
-    delayUi[5] = ui->textDelay6->text().toDouble();
-    double delayTotal[6] = {0.0};
+    double delayTotal[6] = {0.0}, delayTotalPre[6] = {0.0}, delayTotalAft[6] = {0.0};
     double minDelay = delayCN[0];
     for (int i = 0; i < 6; i++)
     {
-        delayTotal[i] = delayCN[i] + delayUi[i]/1000.0;
-        if (delayTotal[i] < minDelay)
-            minDelay = delayTotal[i];
+        delayTotalPre[i] = delayCN[i] + delayUi[i]/20.0/1000.0;
+        delayTotal[i] = delayTotalPre[i] + extraDelay/20.0/1000.0;
+        delayTotalAft[i] = delayTotal[i] + extraDelay/20.0/1000.0;
+        if (delayTotalPre[i] < minDelay)
+            minDelay = delayTotalPre[i];
     }
     int maxNbrCOMdelay = 0;
     for (int i = 0; i < 6; i++)
     {
+        delayTotalPre[i] -= minDelay;
         delayTotal[i] -= minDelay;             // 保证所有延时均为非负
+        delayTotalAft[i] -= minDelay;
+        nbrCOMdelayPre[i] = floor(delayTotalPre[i]/timeCOM);
         nbrCOMdelay[i] = floor(delayTotal[i]/timeCOM);
-        if (nbrCOMdelay[i] > maxNbrCOMdelay)
-            maxNbrCOMdelay = nbrCOMdelay[i];
+        nbrCOMdelayAft[i] = floor(delayTotalAft[i]/timeCOM);
+        if (nbrCOMdelayAft[i] > maxNbrCOMdelay)
+            maxNbrCOMdelay = nbrCOMdelayAft[i];
+        delayInCOMPre[i] = int(20*1000.0*(delayTotalPre[i] - timeCOM*nbrCOMdelayPre[i]));
         delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
+        delayInCOMAft[i] = int(20*1000.0*(delayTotalAft[i] - timeCOM*nbrCOMdelayAft[i]));
     }
 
-//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2
-    resizeSeqLength(&timeSeq, maxNbrCOMdelay+2);
-    resizeSeqLength(&channelSeq, maxNbrCOMdelay+2);
+//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2 再乘 3
+    resizeSeqLength(&timeSeq, 3*(maxNbrCOMdelay+2));
+    resizeSeqLength(&channelSeq, 3*(maxNbrCOMdelay+2));
     COM_HEAD = 0;
 
     emit heraldQkdRequestSync();
@@ -110,17 +114,23 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
 
     fStream << "Time (s)\t"
             << "S1\t" << "S2\t" << "S3\t" << "S4\t" << "S5\t" << "S6\t"
-            << "AB12\t" << "AB34\t" << "AB14\t" << "AB23\t"
-            << "12\t" << "34\t" << "14\t" << "23\t"
-            << "A12\t" << "A34\t" << "A14\t" << "A23\t"
-            << "B12\t" << "B34\t" << "B14\t" << "B23\n";
+            << "C11\t" << "C12\t" << "C13\t"
+            << "C21\t" << "C22\t" << "C23\t"
+            << "C31\t" << "C32\t" << "C33\t"
+            << "C41\t" << "C42\t" << "C43\t"
+            << "C51\t" << "C52\t" << "C53\t"
+            << "C61\t" << "C62\t" << "C63\t"
+            << "C71\t" << "C72\t" << "C73\t"
+            << "C81\t" << "C82\t" << "C83\t"
+            << "C91\t" << "C92\t" << "C93\t";
 }
 
 void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
 {
     // 对每个响应事件进行分类累积
-    // computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
-    //     tolerance, deadTime, nbrCOMdelay, delayInCOM, timeCOMunit, &COM_HEAD);
+    computeHeraldMdiCounts(dataDescPtr, timeSeq, channelSeq, vCounts,
+        tolerance, nbrCOMdelayPre, delayInCOMPre, nbrCOMdelay,
+        delayInCOM, nbrCOMdelayAft, delayInCOMAft, timeCOMunit, &COM_HEAD);
 }
 
 void HeraldQkdWidget::dealTimeOut()
@@ -133,9 +143,9 @@ void HeraldQkdWidget::dealTimeOut()
         fStream << "\t" << QString::number(nbrSCC[i]);
 
     // 更新计数显示
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 9; i++)
     {
-        for (int j = 0; j < 4; j++)
+        for (int j = 0; j < 3; j++)
         {
             fStream << "\t"
                     << QString::number(vCounts[i][j] -
