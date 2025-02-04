@@ -45,16 +45,16 @@ Widget::Widget(QWidget *parent)
                 tr("默认为 COM 频率的 1/100"));
 
 //     初始化设备
-    status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,
-            VI_FALSE, "CAL=0", &idInstr);
+    // status = Acqrs_InitWithOptions((ViRsrc)"PCI::INSTR0", VI_FALSE,
+    //         VI_FALSE, "CAL=0", &idInstr);
 
-    if (status != VI_SUCCESS)
-    {
-        QMessageBox::critical(this,
-                              QString("警告"),
-                              QString("未发现可操控设备"),
-                              QMessageBox::Ok);
-    }
+    // if (status != VI_SUCCESS)
+    // {
+    //     QMessageBox::critical(this,
+    //                           QString("警告"),
+    //                           QString("未发现可操控设备"),
+    //                           QMessageBox::Ok);
+    // }
 
 //    数据采集线程
     acqThread = new AcquisitionThread();

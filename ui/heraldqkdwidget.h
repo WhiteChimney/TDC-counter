@@ -38,6 +38,7 @@ private:
     double delayCN[6] = {0.0};
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;
+    ClipLcdNumber *lcdMainPeak, *lcdSidePeak;
     long long vCounts[4][4] = {{0}};
     QList<QVector<int>> timeSeq;       // 用于存放时间序列
     QList<QVector<int>> channelSeq; // 用于存放通道序列
@@ -49,7 +50,6 @@ private:
     QFile *fSave = new QFile();
     QTextStream fStream;
     int *nbrSCC;
-
 
 signals:
     void sendReturnSignal();

@@ -1,6 +1,55 @@
 #include "heraldqkdwidget.h"
 #include "ui_heraldqkdwidget.h"
 
+void HeraldQkdWidget::setupLcdCounts()
+{
+    // 特殊字符串
+    // 第 1、2、3 个字符分别为上划线、无、下划线
+    // c1、c2 添加了下标
+    QStringList aList = { QString::fromUtf8("A\u0305 "), QString::fromUtf8("A "), QString::fromUtf8("A\u0332 ")};
+    QStringList bList = { QString::fromUtf8("B\u0305 "), QString::fromUtf8("B "), QString::fromUtf8("B\u0332 ")};
+    QStringList c1List = { QString::fromUtf8("C\u0305\u2081 "), QString::fromUtf8("C\u2081 "), QString::fromUtf8("C\u0332\u2081 ")};
+    QStringList c2List = { QString::fromUtf8("C\u0305\u2082"), QString::fromUtf8("C\u2082"), QString::fromUtf8("C\u0332\u2082")};
+
+    QLabel *l;
+    ClipLcdNumber *c;
+    for (int i = 0; i < 9; i++)
+    {
+        QList<ClipLcdNumber*> v;
+        vLcdCounts.append(v);
+        for (int j = 0; j < 3; j++)
+        {
+            l = new QLabel(aList[1]+bList[j]+c1List[i/3]+c2List[i%3],this);
+            l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+            ui->layoutYields->addWidget(l,i,2*j+1,1,1);
+            c = new ClipLcdNumber(9,this);
+            vLcdCounts[i].append(c);
+            ui->layoutYields->addWidget(c,i,2*j+2,1,1);
+        }
+    }
+
+    l = new QLabel("累积计数",this);
+    l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+    ui->gridLayoutTotalCounts->addWidget(l,0,0,1,1);
+
+    l = new QLabel("主峰",this);
+    l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+    ui->gridLayoutTotalCounts->addWidget(l,1,0,1,1);
+
+    lcdMainPeak = new ClipLcdNumber(9,this);
+    ui->gridLayoutTotalCounts->addWidget(lcdMainPeak,2,0,2,1);
+    lcdMainPeak->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+    lcdMainPeak->setStyleSheet("background-color: skyblue;");
+
+    l = new QLabel("侧峰（之和）",this);
+    l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+    ui->gridLayoutTotalCounts->addWidget(l,4,0,1,1);
+
+    lcdSidePeak = new ClipLcdNumber(9,this);
+    ui->gridLayoutTotalCounts->addWidget(lcdSidePeak,5,0,2,1);
+    lcdSidePeak->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Preferred);
+    lcdSidePeak->setStyleSheet("background-color: skyblue;");
+}
 
 void HeraldQkdWidget::fetchUiData()
 {

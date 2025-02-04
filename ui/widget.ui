@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>744</width>
-    <height>549</height>
+    <height>553</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -1059,7 +1059,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>标记 QKD</string>
+          <string>Relay 面板</string>
          </property>
         </widget>
        </item>
