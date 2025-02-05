@@ -86,7 +86,7 @@ void computeHeraldMdiCounts
             index = findInsertPosition(timeSeq[indexCOM], TimeOfFlightP);        // 按时间升序排列
             timeSeq[indexCOM].insert(index, TimeOfFlightP);
             channelSeq[indexCOM].insert(index, channel-1+6);      // 通道号加 6
-            if (channel == 5 or channel == 6) continue;          // 如果是通道 5/6，即 A/B 的信号，则无需继续做延时差
+            if (channel == 3 or channel == 4) continue;          // 如果是通道 5/6，即 A/B 的信号，则无需继续做延时差
 
             // 插入未加 extraDelay 的，作为减少延时的信号
             if (TimeOfFlight > timeCOMunit)
