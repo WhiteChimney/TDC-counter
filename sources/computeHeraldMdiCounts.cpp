@@ -22,31 +22,31 @@ int findHeraldCoincidence
     // 注：上单引号为 C++14 引入的新特性，为数字分隔符
     switch (channelMark) {
     case 0b000000'010000'101100: nbrCounts[0][0]++; break; // B- A  2- 1-
-    case 0b000000'010100'101000: nbrCounts[1][0]++; break; // B- A  2- 1
-    case 0b000100'010000'101000: nbrCounts[2][0]++; break; // B- A  2- 1+
-    case 0b000000'011000'100100: nbrCounts[3][0]++; break; // B- A  2  1-
+    case 0b000000'011000'100100: nbrCounts[1][0]++; break; // B- A  2  1-
+    case 0b001000'010000'100100: nbrCounts[2][0]++; break; // B- A  2+ 1-
+    case 0b000000'010100'101000: nbrCounts[3][0]++; break; // B- A  2- 1
     case 0b000000'011100'100000: nbrCounts[4][0]++; break; // B- A  2  1
-    case 0b000100'011000'100000: nbrCounts[5][0]++; break; // B- A  2  1+
-    case 0b001000'010000'100100: nbrCounts[6][0]++; break; // B- A  2+ 1-
-    case 0b001000'010100'100000: nbrCounts[7][0]++; break; // B- A  2+ 1
+    case 0b001000'010100'100000: nbrCounts[5][0]++; break; // B- A  2+ 1
+    case 0b000100'010000'101000: nbrCounts[6][0]++; break; // B- A  2- 1+
+    case 0b000100'011000'100000: nbrCounts[7][0]++; break; // B- A  2  1+
     case 0b001100'010000'100000: nbrCounts[8][0]++; break; // B- A  2+ 1+
     case 0b000000'110000'001100: nbrCounts[0][1]++; break; // B  A  2- 1-
-    case 0b000000'110100'001000: nbrCounts[1][1]++; break; // B  A  2- 1
-    case 0b000100'110000'001000: nbrCounts[2][1]++; break; // B  A  2- 1+
-    case 0b000000'111000'000100: nbrCounts[3][1]++; break; // B  A  2  1-
+    case 0b000000'111000'000100: nbrCounts[1][1]++; break; // B  A  2  1-
+    case 0b001000'110000'000100: nbrCounts[2][1]++; break; // B  A  2+ 1-
+    case 0b000000'110100'001000: nbrCounts[3][1]++; break; // B  A  2- 1
     case 0b000000'111100'000000: nbrCounts[4][1]++; break; // B  A  2  1
-    case 0b000100'111000'000000: nbrCounts[5][1]++; break; // B  A  2  1+
-    case 0b001000'110000'000100: nbrCounts[6][1]++; break; // B  A  2+ 1-
-    case 0b001000'110100'000000: nbrCounts[7][1]++; break; // B  A  2+ 1
+    case 0b001000'110100'000000: nbrCounts[5][1]++; break; // B  A  2+ 1
+    case 0b000100'110000'001000: nbrCounts[6][1]++; break; // B  A  2- 1+
+    case 0b000100'111000'000000: nbrCounts[7][1]++; break; // B  A  2  1+
     case 0b001100'110000'000000: nbrCounts[8][1]++; break; // B  A  2+ 1+
     case 0b100000'010000'001100: nbrCounts[0][2]++; break; // B+ A  2- 1-
-    case 0b100000'010100'001000: nbrCounts[1][2]++; break; // B+ A  2- 1
-    case 0b100100'010000'001000: nbrCounts[2][2]++; break; // B+ A  2- 1+
-    case 0b100000'011000'000100: nbrCounts[3][2]++; break; // B+ A  2  1-
+    case 0b100000'011000'000100: nbrCounts[1][2]++; break; // B+ A  2  1-
+    case 0b101000'010000'000100: nbrCounts[2][2]++; break; // B+ A  2+ 1-
+    case 0b100000'010100'001000: nbrCounts[3][2]++; break; // B+ A  2- 1
     case 0b100000'011100'000000: nbrCounts[4][2]++; break; // B+ A  2  1
-    case 0b100100'011000'000000: nbrCounts[5][2]++; break; // B+ A  2  1+
-    case 0b101000'010000'000100: nbrCounts[6][2]++; break; // B+ A  2+ 1-
-    case 0b101000'010100'000000: nbrCounts[7][2]++; break; // B+ A  2+ 1
+    case 0b101000'010100'000000: nbrCounts[5][2]++; break; // B+ A  2+ 1
+    case 0b100100'010000'001000: nbrCounts[6][2]++; break; // B+ A  2- 1+
+    case 0b100100'011000'000000: nbrCounts[7][2]++; break; // B+ A  2  1+
     case 0b101100'010000'000000: nbrCounts[8][2]++; break; // B+ A  2+ 1+
     default:      channelMark = -1; break;
     }

@@ -114,7 +114,7 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
             << "C61\t" << "C62\t" << "C63\t"
             << "C71\t" << "C72\t" << "C73\t"
             << "C81\t" << "C82\t" << "C83\t"
-            << "C91\t" << "C92\t" << "C93\t";
+            << "C91\t" << "C92\t" << "C93\t" << "\n";
 }
 
 void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)

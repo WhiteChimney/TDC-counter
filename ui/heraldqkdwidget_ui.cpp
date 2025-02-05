@@ -21,10 +21,10 @@ void HeraldQkdWidget::setupLcdCounts()
         {
             l = new QLabel(aList[1]+bList[j]+c1List[i/3]+c2List[i%3],this);
             l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
-            ui->layoutYields->addWidget(l,i,2*j+1,1,1);
+            ui->layoutYields->addWidget(l,i,2*j,1,1);
             c = new ClipLcdNumber(9,this);
             vLcdCounts[i].append(c);
-            ui->layoutYields->addWidget(c,i,2*j+2,1,1);
+            ui->layoutYields->addWidget(c,i,2*j+1,1,1);
         }
     }
 
