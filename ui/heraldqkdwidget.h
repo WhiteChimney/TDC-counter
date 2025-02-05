@@ -41,7 +41,7 @@ private:
 
     QList<QList<ClipLcdNumber*>> vLcdCounts;
     ClipLcdNumber *lcdMainPeak, *lcdSidePeak;
-    long long vCounts[9][3] = {{0}};
+    long long vCounts[3][3] = {{0}};
     QList<QVector<int>> timeSeq;       // 用于存放时间序列
     QList<QVector<int>> channelSeq; // 用于存放通道序列
     double freqCOM;

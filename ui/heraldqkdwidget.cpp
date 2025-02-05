@@ -45,7 +45,7 @@ void HeraldQkdWidget::on_buttonStart_released()
 
     ui->lcdTimeElapsed->display(0);
 
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
@@ -94,9 +94,9 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
         delayInCOM[i] = int(20*1000.0*(delayTotal[i] - timeCOM*nbrCOMdelay[i]));
     }
 
-//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +2 再乘 3
-    resizeSeqLength(&timeSeq, 3*(maxNbrCOMdelay+2));
-    resizeSeqLength(&channelSeq, 3*(maxNbrCOMdelay+2));
+//    时间序列所需要保存的 COM 周期数量为 nbrCOMdelay 中的最大值 +3
+    resizeSeqLength(&timeSeq, maxNbrCOMdelay+3);
+    resizeSeqLength(&channelSeq, maxNbrCOMdelay+3);
     COM_HEAD = 0;
 
     emit heraldQkdRequestSync();
@@ -108,13 +108,7 @@ void HeraldQkdWidget::dealQkdParamReceived(double *m_delayCN, double m_freqCOM, 
             << "S1\t" << "S2\t" << "S3\t" << "S4\t" << "S5\t" << "S6\t"
             << "C11\t" << "C12\t" << "C13\t"
             << "C21\t" << "C22\t" << "C23\t"
-            << "C31\t" << "C32\t" << "C33\t"
-            << "C41\t" << "C42\t" << "C43\t"
-            << "C51\t" << "C52\t" << "C53\t"
-            << "C61\t" << "C62\t" << "C63\t"
-            << "C71\t" << "C72\t" << "C73\t"
-            << "C81\t" << "C82\t" << "C83\t"
-            << "C91\t" << "C92\t" << "C93\t" << "\n";
+            << "C31\t" << "C32\t" << "C33\t" << "\n";
 }
 
 void HeraldQkdWidget::dealDataReturned(AqT3DataDescriptor *dataDescPtr)
@@ -135,7 +129,7 @@ void HeraldQkdWidget::dealTimeOut()
         fStream << "\t" << QString::number(nbrSCC[i]);
 
     // 更新计数显示
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
         {
@@ -149,8 +143,8 @@ void HeraldQkdWidget::dealTimeOut()
     }
     fStream << "\n";
 
-    lcdMainPeak->display(double(vCounts[4][1]));
-    lcdSidePeak->display(double(countTotal-vCounts[4][1]));
+    lcdMainPeak->display(double(vCounts[1][1]));
+    lcdSidePeak->display(double(countTotal-vCounts[1][1]));
 
     ui->lcdTimeElapsed->display(currentSeconds);
 }

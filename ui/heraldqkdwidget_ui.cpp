@@ -7,19 +7,19 @@ void HeraldQkdWidget::setupLcdCounts()
     // 第 1、2、3 个字符分别为上划线、无、下划线
     // c1、c2 添加了下标
     QStringList aList = { QString::fromUtf8("A\u0305 "), QString::fromUtf8("A "), QString::fromUtf8("A\u0332 ")};
-    QStringList bList = { QString::fromUtf8("B\u0305 "), QString::fromUtf8("B "), QString::fromUtf8("B\u0332 ")};
+    QStringList bList = { QString::fromUtf8("B\u0305"), QString::fromUtf8("B"), QString::fromUtf8("B\u0332")};
     QStringList c1List = { QString::fromUtf8("C\u0305\u2081 "), QString::fromUtf8("C\u2081 "), QString::fromUtf8("C\u0332\u2081 ")};
-    QStringList c2List = { QString::fromUtf8("C\u0305\u2082"), QString::fromUtf8("C\u2082"), QString::fromUtf8("C\u0332\u2082")};
+    QStringList c2List = { QString::fromUtf8("C\u0305\u2082 "), QString::fromUtf8("C\u2082 "), QString::fromUtf8("C\u0332\u2082 ")};
 
     QLabel *l;
     ClipLcdNumber *c;
-    for (int i = 0; i < 9; i++)
+    for (int i = 0; i < 3; i++)
     {
         QList<ClipLcdNumber*> v;
         vLcdCounts.append(v);
         for (int j = 0; j < 3; j++)
         {
-            l = new QLabel(aList[1]+bList[j]+c1List[i/3]+c2List[i%3],this);
+            l = new QLabel(c1List[1]+c2List[1]+aList[i]+bList[j],this);
             l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
             ui->layoutYields->addWidget(l,i,2*j,1,1);
             c = new ClipLcdNumber(9,this);
@@ -32,7 +32,7 @@ void HeraldQkdWidget::setupLcdCounts()
     l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     ui->gridLayoutTotalCounts->addWidget(l,0,0,1,1);
 
-    l = new QLabel("主峰（"+aList[1]+bList[1]+c1List[1]+c2List[1]+"）",this);
+    l = new QLabel("主峰（"+c1List[1]+c2List[1]+aList[1]+bList[1]+"）",this);
     l->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
     ui->gridLayoutTotalCounts->addWidget(l,1,0,1,1);
 
