@@ -147,4 +147,7 @@ void HeraldQkdWidget::dealTimeOut()
     lcdSidePeak->display(double(countTotal-vCounts[1][1]));
 
     ui->lcdTimeElapsed->display(currentSeconds);
+
+    if (currentSeconds >= abs(ui->textMaxTime->text().toInt()))
+        this->on_buttonStop_released();
 }
