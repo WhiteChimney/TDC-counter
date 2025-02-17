@@ -2,12 +2,12 @@
 *.slo
 *.lo
 *.o
-*.a
+# *.a
 *.la
 *.lai
 *.so
 *.so.*
-*.dylib
+# *.dylib
 
 # Qt-es
 object_script.*.Release
