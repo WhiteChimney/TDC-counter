@@ -106,12 +106,14 @@ FORMS += \
 
 INCLUDEPATH += $$PWD/include/
 INCLUDEPATH += $$PWD/include/Acqiris/
+INCLUDEPATH += $$PWD/include/QwtPlot/
 INCLUDEPATH += $$PWD/include/VISA/
 INCLUDEPATH += $$PWD/include/Thorlabs/
 INCLUDEPATH += $$PWD/ui/
 INCLUDEPATH += $$PWD/tools/
 
 LIBS += -L$$PWD/lib/ -lAqDrv4_x64
+LIBS += -L$$PWD/lib/ -lqwt
 LIBS += -L$$PWD/lib/ -lTLTSP_64
 LIBS += -L$$PWD/lib/ -lvisa64
 #LIBS += -L$$PWD/lib/ -lAqDrv4
