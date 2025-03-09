@@ -111,22 +111,28 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
                            int timeCOMunit,
                            int *COM_HEAD)
 {
-    if (channel1 == channel2)
-        countSingle(dataDescPtr,
-                    timeSeq1,
-                    channel1,
-                    timeStart,binWidth,nbrIntervals,binHeight,
-                    nbrCOMdelay,
-                    delayInCOM,
-                    timeCOMunit,
-                    COM_HEAD);
-    else
-        countDifference(dataDescPtr,
-                         timeSeq1,timeSeq2,
-                         channel1,channel2,delay,
-                         timeStart,binWidth,nbrIntervals,binHeight,
-                         nbrCOMdelay,
-                         delayInCOM,
-                         timeCOMunit,
-                         COM_HEAD);
+    long nbrSamples = dataDescPtr->nbrSamples;
+    int TOF1 = 0, TOF2 = 0;
+    for (long n = 0 ; n < nbrSamples ; ++n)
+    {
+        int sample = ((long *)dataDescPtr->dataPtr)[n];  //dataPtr指向time value data buffer
+        int channel = (sample & 0x70000000) >> 28;   //右移28位为channel位
+
+        if (channel == channel1)
+        {
+            TOF2 = sample & 0x0FFFFFFF;             //最右侧28位为计数值
+            if (TOF1 > 0)
+            {
+                double timeDiff = TOF2 - TOF1;
+                int index = int(timeDiff/binWidth);
+                if (index >= 0 and index < nbrIntervals)
+                    binHeight[index]++;
+            }
+            TOF1 = TOF2;
+        }
+        else if (channel == 0 or channel == 7)
+        {
+            TOF1 = 0;
+        }
+    }
 }

@@ -27,6 +27,7 @@ signals:
 
 public slots:
     void dealTimeOut();                           // 时间到刷新图
+    void dealRefreshTimeOut();                           // 时间到刷新图
     void dealRequestHistParam(int index, double *delayCN, double freqCOM);
     void dealAcqThreadBankSwitchHist(AqT3DataDescriptor* dataDescPtr); // 内存切换时累计计数
 
@@ -59,7 +60,7 @@ private:
     int nbrIntervals;              // 区间个数
     QwtPlotHistogram* qwtHistPlot; // 直方图
     QwtInterval* histIntervals;
-    QTimer* timerHist;
+    QTimer* timerHist, *timerRefresh;
     void setupPlotStyle();         // 设置画图样式
     void testPlot();               // 画图样式测试
 

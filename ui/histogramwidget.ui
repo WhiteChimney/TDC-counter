@@ -120,6 +120,20 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>刷新时间(s)</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="textRefreshTime">
+        <property name="text">
+         <string>1</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QLabel" name="label">
         <property name="text">
          <string>累计时间(s)</string>
@@ -129,7 +143,7 @@
       <item>
        <widget class="QLineEdit" name="textAccumlateTime">
         <property name="text">
-         <string>1</string>
+         <string>10</string>
         </property>
        </widget>
       </item>
@@ -176,7 +190,7 @@
       <item>
        <widget class="QLineEdit" name="textTimeStart">
         <property name="text">
-         <string>-100</string>
+         <string>0</string>
         </property>
        </widget>
       </item>
@@ -190,7 +204,7 @@
       <item>
        <widget class="QLineEdit" name="textTimeStop">
         <property name="text">
-         <string>100</string>
+         <string>1000</string>
         </property>
        </widget>
       </item>
@@ -216,6 +230,13 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>注：看死时间用的，通道 2 废弃。时间零点废弃。</string>
+     </property>
     </widget>
    </item>
    <item>

@@ -17,6 +17,8 @@ HistogramWidget::HistogramWidget(QWidget *parent, int index0) :
 
     timerHist = new QTimer(this);
     connect(timerHist,&QTimer::timeout,this,&HistogramWidget::dealTimeOut);
+    timerRefresh = new QTimer(this);
+    connect(timerRefresh,&QTimer::timeout,this,&HistogramWidget::dealRefreshTimeOut);
 
     iniPath = QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
     iniName = iniPath + "/AcqirisTDC_qt/Configurations/histogram" + QString::number(index) +".ini";
@@ -116,6 +118,7 @@ void HistogramWidget::on_buttonStart_released()
         histIntervals[i] = QwtInterval(intervalStart,intervalStart+binWidth);
     }
     timerHist->start(1000.0*accumulateTime);
+    timerRefresh->start(1000.0*ui->textRefreshTime->text().toDouble());
 
     fSave->open(QIODevice::WriteOnly | QIODevice::Text);
     fStream.setDevice(fSave);
@@ -138,6 +141,20 @@ void HistogramWidget::dealTimeOut()
     qwtHistPlot->setSamples(histSamples);
     ui->qwtPlot->replot();
     memset(binHeight,0,nbrIntervals*sizeof(binHeight[0]));
+}
+
+void HistogramWidget::dealRefreshTimeOut()
+{
+    QVector<QwtIntervalSample> histSamples(nbrIntervals);
+    for (int i = 0; i < nbrIntervals; i++)
+    {
+        if (ui->checkBoxLogY->isChecked())
+            histSamples[i] = QwtIntervalSample(log10(1+double(binHeight[i])),histIntervals[i]);
+        else
+            histSamples[i] = QwtIntervalSample(binHeight[i],histIntervals[i]);
+    }
+    qwtHistPlot->setSamples(histSamples);
+    ui->qwtPlot->replot();
 }
 
 void HistogramWidget::dealRequestHistParam(int index0, double *delayCN0, double freqCOM0)
@@ -197,6 +214,7 @@ void HistogramWidget::on_buttonStop_released()
 {
     fSave->close();
     emit askStopDealAcqBankSwitchHist(index);
+    timerRefresh->stop();
     timerHist->stop();
 }
 
