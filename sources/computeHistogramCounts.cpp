@@ -123,7 +123,7 @@ void computeHistogramCount(AqT3DataDescriptor* dataDescPtr,
             TOF2 = sample & 0x0FFFFFFF;             //最右侧28位为计数值
             if (TOF1 > 0)
             {
-                double timeDiff = TOF2 - TOF1;
+                double timeDiff = (TOF2 - TOF1)/20.0;
                 int index = int(timeDiff/binWidth);
                 if (index >= 0 and index < nbrIntervals)
                     binHeight[index]++;
